@@ -1,1 +1,61 @@
-<p>login works!</p>
+<div class="login-page">
+  <div class="login-container">
+
+    <app-nav></app-nav>
+    <app-img-login></app-img-login>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+
+      <div *ngIf="errorMessage" class="alert-error">
+        {{ errorMessage }}
+      </div>
+
+      <div class="form-group">
+        <label for="usuario">Usuário / Matrícula</label>
+        <input
+          id="usuario"
+          type="text"
+          formControlName="usuario"
+          placeholder="Digite seu usuário"
+          required
+        >
+        <div
+          *ngIf="loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched"
+          class="validation-message"
+        >
+          O campo usuário é obrigatório.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="senha">Senha</label>
+        <input
+          id="senha"
+          type="password"
+          formControlName="senha"
+          placeholder="Digite sua senha"
+          required
+        >
+        <div
+          *ngIf="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched"
+          class="validation-message"
+        >
+          O campo senha é obrigatório.
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="btn-login"
+      >
+        Entrar
+      </button>
+    </form>
+
+    <div class="login-links">
+      <a href="#">Esqueci minha senha</a>
+    </div>
+
+  </div>
+</div>

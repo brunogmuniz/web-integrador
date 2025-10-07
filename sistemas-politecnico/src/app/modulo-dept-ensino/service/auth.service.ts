@@ -20,43 +20,36 @@ export class AuthService {
 
   login(usuario: string, senha: string): Observable<any> {
 
-    // --- LÓGICA MOCKADA ---
-    // No ambiente real, faríamos:
     // return this.http.post('http://api.seuprojeto.com/login', { usuario, senha });
 
-    // Simulação de que, ao logar, o usuário é 'ROLE_DEPT_ENSINO'
+    // simulação de token
     const mockTokenDeptEnsino = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoibGVnYWwiLCJyb2xlIjoiUk9MRV9ERVBUX0VOU0lOTyIsImlhdCI6MTUxNjIzOTA1MH0.XgW87N9H1jA2rS4eI8mR0k7zD3qP6D2LpL5E_5oF5Qk';
 
-    // O 'of()' simula o retorno bem-sucedido de uma requisição HTTP
+    // caso feliz
     return of({ token: mockTokenDeptEnsino }).pipe(
       tap((response: any) => {
-        // Armazena o token após a "resposta" da API
+        // guarda o token
         this.setToken(response.token);
       })
     );
   }
 
-  /** * Verifica se o usuário tem um token (está logado).
-   * Este é o método que o AuthGuard irá chamar.
-   */
+ //verificação se o usuario tem token
   public isAuthenticated(): boolean {
     const token = localStorage.getItem(this.TOKEN_KEY);
-    // Retorna true se o token existe (!!) e é uma string válida
     return !!token;
   }
 
-  /** * Simula a extração do papel (role) do usuário a partir do token.
-   * Usado para redirecionamento após o login.
-   */
+  //ver se ele tem autorização pra entrar no portal
   public getUserRole(): string | null {
     const token = localStorage.getItem(this.TOKEN_KEY);
     if (!token) return null;
 
-    // MOCK: Retornamos o papel fixo que definimos para este cenário
+    // no caso so tem o role ensino
     return 'ROLE_DEPT_ENSINO';
   }
 
-  /** Remove o token e redireciona para a tela de login. */
+  //logout
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     this.router.navigate(['/login']);
