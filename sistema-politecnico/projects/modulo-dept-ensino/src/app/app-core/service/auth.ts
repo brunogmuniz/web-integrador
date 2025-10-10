@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
-// >> IMPORTAÇÃO CORRETA: map É ESSENCIAL PARA RESOLVER O ERRO TS2322
+
 import { delay, tap, map } from 'rxjs/operators';
 
 // Tipos Mockados
@@ -29,7 +29,6 @@ export class AuthService {
     }
   }
 
-  // MÉTODO LOGIN CORRIGIDO: Agora retorna Observable<void> corretamente.
   login(usuario: string, senha: string): Observable<void> {
 
     const MOCK_CREDENTIALS: { [key: string]: MockUser } = {
@@ -51,7 +50,7 @@ export class AuthService {
           localStorage.setItem('mockUserToken', loggedInUser.token);
         }),
 
-        // CORREÇÃO FINAL: Mapeia o MockUser para 'void', resolvendo o TS2322.
+
         map(() => {})
       );
     } else {

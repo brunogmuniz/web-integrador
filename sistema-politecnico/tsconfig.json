@@ -49,6 +49,9 @@
     },
     {
       "path": "./projects/shared-core/tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/modulo-admin/tsconfig.app.json"
     }
   ]
 }

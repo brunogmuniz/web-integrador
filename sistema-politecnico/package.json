@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "start root": "ng serve modulo-root --o --port 4206",
+    "start dept": "ng serve modulo-dept-ensino --o --port 4201",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

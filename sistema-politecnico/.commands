@@ -1,7 +1,0 @@
-
-
-Criar MODULOS:
-ng generate module components --project={modulo} --routing --route= --module=app
-
-Criar COMPONENTES
-ng generate component NOME --project={projeto}

@@ -3,3 +3,19 @@
   margin: 0;
   box-sizing: border-box;
 }
+.login-container{
+  display: flex;
+  justify-content: center;
+
+  margin: 0;
+}
+app-form-login{
+  width: 100%;
+}
+
+.imgLogin{
+  height: 875px;
+  width: 100%;
+  margin:0;
+  padding:0;
+}

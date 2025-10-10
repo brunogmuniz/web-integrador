@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import {NavLogin} from './components/nav/nav';
+import {FormLoginComponent} from './components/form-login/form-login';
 
 
 @Component({
@@ -12,7 +14,7 @@ import {CommonModule} from '@angular/common';
   standalone: true,
   templateUrl: './login.html',
   styleUrl: './login.scss',
-  imports: [ReactiveFormsModule, CommonModule]
+  imports: [ReactiveFormsModule, CommonModule, NavLogin, ReactiveFormsModule, ReactiveFormsModule, FormLoginComponent],
 })
 
 export class LoginComponent implements OnInit {
@@ -57,6 +59,11 @@ export class LoginComponent implements OnInit {
         console.error('Erro de Login:', err);
       }
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }
