@@ -17,12 +17,6 @@
           placeholder="Matrícula"
           required
         />
-        <div
-          *ngIf="loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched"
-          class="validation-message"
-        >
-          O campo Matrícula é obrigatório.
-        </div>
       </div>
 
       <div class="form-group password-group">
@@ -33,7 +27,7 @@
           placeholder="Senha"
           required
         />
-        <span class="toggle-password" (click)="togglePasswordVisibility()"><img src="/shared-assets/togglePassword.svg" alt=""></span>
+        <span class="toggle-password" (click)="togglePasswordVisibility()"><img src="/shared-assets/icons/togglePassword.svg" alt=""></span>
       </div>
 
 
@@ -48,7 +42,7 @@
       <br>
       <a href="#" class="govbr-login">
         Entrar com o
-        <img src="/shared-assets/logo-govbr.png" alt="gov.br" class="govbr-logo" />
+        <img src="/shared-assets/images/logos/logo-govbr.png" alt="gov.br" class="govbr-logo" />
       </a>
     </div>
   </div>

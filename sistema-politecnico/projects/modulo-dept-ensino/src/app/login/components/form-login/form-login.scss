@@ -11,15 +11,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
-  background-color: #fff;
+  min-height: 89vh;
+  background-color: #ffffff;
 }
 
 .login-container {
   width: 100%;
   max-width: 480px;
   text-align: center;
-  padding-top: 175px;
+  padding-top: 200px;
 }
 
 h1 {
@@ -50,7 +50,7 @@ h1 {
 }
 
 .form-group input:focus {
-  border-color: #007bff;
+  border-color: #cb6e0b;
 }
 
 .password-group .toggle-password {
