@@ -7,6 +7,7 @@
     "build": "ng build",
     "start root": "ng serve modulo-root --o --port 4206",
     "start dept": "ng serve modulo-dept-ensino --o --port 4201",
+    "start admin": "ng serve modulo-admin --o --port 4203",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -31,6 +32,7 @@
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
     "rxjs": "~7.8.0",
+    "shared-core": "^1.0.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

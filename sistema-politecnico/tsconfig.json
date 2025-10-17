@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -11,9 +12,13 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
+
     "paths": {
       "shared-core": [
-        "./dist/shared-core"
+        "projects/shared-core/src/public-api.ts"
+      ],
+      "shared-core/*": [
+        "projects/shared-core/*"
       ]
     },
     "importHelpers": true,

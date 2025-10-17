@@ -1,0 +1,54 @@
+
+$cor-borda: #ccc;
+$cor-fundo: #f8f8f8;
+$cor-texto: #333;
+$cor-suporte: #888;
+$radius: 8px;
+$padding-vertical: 12px;
+$padding-horizontal: 16px;
+
+.input-container {
+  display: block;
+  margin-bottom: 1.5rem;
+  width: 100%;
+
+  .form-input {
+
+    width: 100%;
+    padding: $padding-vertical $padding-horizontal;
+
+    background-color: $cor-fundo;
+    border: 1px solid $cor-borda;
+    border-radius: $radius;
+    color: $cor-texto;
+    font-size: 16px;
+    line-height: 1.5;
+
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+    &:focus {
+      border-color: #007bff; // Cor de foco azul
+      box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+      outline: none; // Remove o outline padrão do navegador
+    }
+
+
+    &::placeholder {
+      color: $cor-suporte;
+      opacity: 1;
+    }
+  }
+
+  .support-text {
+
+    font-size: 13px;
+    color: $cor-suporte;
+    margin-top: 4px;
+    padding-left: 2px;
+  }
+}
+
+.form-input.ng-invalid.ng-touched {
+  border-color: #dc3545; // Borda vermelha
+  box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.25);
+}
