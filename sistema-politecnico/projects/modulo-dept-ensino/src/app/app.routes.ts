@@ -1,7 +1,7 @@
 
 import { Routes } from '@angular/router';
 
-import { LoginComponent } from './login/login';
+import { LoginComponent } from './components/login/login';
 import { AuthGuard } from './app-core/service/auth.guard';
 import {LAYOUT_DEPT_ENSINO_ROUTES} from './layout/layout.routes';
 

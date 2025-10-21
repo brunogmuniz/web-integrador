@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import {AuthService} from '../app-core/service/auth';
+import {AuthService} from '../../app-core/service/auth';
 import {Router} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {Validators} from '@angular/forms';
 import {CommonModule} from '@angular/common';
-import {NavLogin} from './components/nav/nav';
-import {FormLoginComponent} from './components/form-login/form-login';
+import {NavLogin} from './nav/nav';
+import {FormLoginComponent} from './form-login/form-login';
 
 
 @Component({

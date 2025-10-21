@@ -41,7 +41,7 @@ export class FormLoginComponent implements OnInit {
     const { usuario, senha } = this.loginForm.value;
 
     this.authService.login(usuario, senha).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
+      next: () => this.router.navigate(['/layout']),
       error: (err) => {
         this.errorMessage = err.error?.message || 'Falha no login. Verifique suas credenciais.';
       }

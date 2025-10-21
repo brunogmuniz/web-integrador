@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+// 💥 Importamos AbstractControl (o tipo genérico)
+import { AbstractControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
 @Component({
@@ -10,8 +11,11 @@ import {CommonModule} from '@angular/common';
   styleUrl: './form-input-padrao.scss'
 })
 export class FormInput {
- @Input() label: string = 'Campo';
- @Input({required: true}) control!: FormControl;
- @Input() type: String = 'text';
- @Input() supportText: string = 'Support Text';
+  @Input() label: string = 'Campo';
+
+  @Input({required: true}) control: any;
+
+  @Input() type: string = 'text';
+
+  @Input() supportText: string = 'Support Text';
 }

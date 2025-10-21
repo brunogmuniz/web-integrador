@@ -1,11 +1,18 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { App } from './app/app';
+import { KeycloakService } from 'shared-core';
 import { provideRouter } from '@angular/router';
-import { App } from './app/app'; //
 import { routes } from './app/app.routes';
+import { provideHttpClient } from '@angular/common/http';
 
-bootstrapApplication(App, {
-  providers: [
+const keycloak = new KeycloakService();
 
-    provideRouter(routes),
-  ]
-}).catch(err => console.error(err));
+keycloak.init(true).then(() => {
+  bootstrapApplication(App, {
+    providers: [
+      provideRouter(routes),
+      provideHttpClient(),
+      { provide: KeycloakService, useValue: keycloak }
+    ]
+  });
+});
