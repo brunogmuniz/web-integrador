@@ -1,0 +1,12 @@
+<div class="input-container">
+  <input
+    class="form-input"
+    [type]="type"
+    [formControl]="control"
+    [placeholder]="label"
+  />
+
+  <div *ngIf="supportText" class="support-text">
+    {{ supportText }}
+  </div>
+</div>
