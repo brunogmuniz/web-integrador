@@ -3,6 +3,12 @@
  */
 export * from './lib/shared-core';
 
+// APARTIR DA LINHA 10, EXPORT DOS COMPONENTES, APARTIR DA LINHA 21 KEYCLOACK, APARTIR DA LINHA 33 EXPORTS DOS DTOs
+
+
+
+//EXPORT DOS COMPONENTES
+
 
 //import { Loader } from 'shared-core'; LOADER
 export * from './lib/components/loader/loader';
@@ -11,4 +17,36 @@ export * from './lib/components/loader/loader';
 export * from './lib/components/form-input-padrao/form-input-padrao'
 
 
+//EXPORT DO KEYCLOACK
+//import { Keycloack } from 'shared-core';
 export * from './lib/auth/keycloack'
+
+//EXPORT DOS SERVCES
+export * from './lib/services/curso-service'
+
+export * from './lib/services/area-conhecimento-service'
+
+export * from './lib/services/departamento-service'
+
+export * from './lib/services/subarea-conhecimento-service'
+
+export * from './lib/services/disciplina-service'
+
+export * from './lib/services/docente-service'
+
+export * from './lib/services/estrutura-curricular-service'
+//EXPORT DOS DTOS
+export * from './lib/dto/AreaConhecimento.dto'
+
+//import {CursoDTO} from 'shared-core'
+export * from './lib/dto/Curso.dto';
+
+//import {DisciplinaDTO} from 'shared-core'
+export * from './lib/dto/Disciplina.dto';
+
+//import {OfertaDTO} from 'shared-core'
+export * from './lib/dto/Oferta.dto';
+export * from './lib/dto/Docente.dto';
+export * from './lib/dto/Departamento.dto';
+export * from './lib/dto/EstruturaCurricular.dto';
+

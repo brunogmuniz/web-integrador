@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-// 💥 Importamos AbstractControl (o tipo genérico)
 import { AbstractControl, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 
