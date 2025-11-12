@@ -1,6 +1,5 @@
 
-
-<form [formGroup]="disciplinaForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="cursoForm" (ngSubmit)="onSubmit()">
   <div class="form-card">
 
     <div class="form-row">
@@ -49,8 +48,50 @@
     </div>
 
     <div class="form-actions">
-      <button type="submit" [disabled]="disciplinaForm.invalid">Inserir</button>
+      <button type="submit" [disabled]="cursoForm.invalid">Inserir</button>
     </div>
 
   </div>
 </form>
+
+
+<!-- AQUI COMEÇA O READ -->
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Nome</th>
+    <th scope="col">Sigla</th>
+    <th scope="col">CH</th>
+    <th scope="col">Ano</th>
+    <th scope="col">Editar</th>
+    <th scope="col">Excluir</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (curso of cursos; track curso.id) {
+      <tr class="align-middle">
+        <th scope="row">{{ curso.id }}</th>
+        <td>{{ curso.nome }}</td>
+        <td>{{ curso.sigla }}</td>
+        <td>{{ curso.anoCurriculo }}</td>
+        <td>{{ curso.cargaHorariaTotal }}</td>
+        <td>{{ curso.nivel }}</td>
+        <td class="text-end">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" (click)="onDelete(curso.id)">
+              Excluir
+            </button>
+          </div>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          Nenhum curso cadastrado.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

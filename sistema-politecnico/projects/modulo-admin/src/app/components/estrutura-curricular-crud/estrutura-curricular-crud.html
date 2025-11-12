@@ -1,0 +1,95 @@
+
+<form [formGroup]="estruturaForm" (ngSubmit)="onSubmit()">
+  <div class="form-card">
+
+    <div class="form-row">
+      <div class="col-8">
+        <lib-form-input-padrao
+          [label]="'Nome'"
+          [control]="c['nome']"
+          [supportText]="''">
+        </lib-form-input-padrao>
+      </div>
+
+      <div class="col-4">
+        <lib-form-input-padrao
+          [label]="'Sigla'"
+          [control]="c['sigla']"
+          [supportText]="''">
+        </lib-form-input-padrao>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <lib-form-input-padrao
+        [label]="'Curso Id'"
+        [control]="c['curso_id']"
+        [type]="'number'"
+        [supportText]="''">
+      </lib-form-input-padrao>
+    </div>
+
+    <div class="form-row">
+      <lib-form-input-padrao
+        [label]="'Disciplina'"
+        [control]="c['disciplina']"
+        [type]="'string'"
+        [supportText]="''">
+      </lib-form-input-padrao>
+    </div>
+
+    <div class="form-row">
+      <lib-form-input-padrao
+        [label]="'Semestre'"
+        [control]="c['semestreDoCurso']"
+        [type]="'number'"
+        [supportText]="''">
+      </lib-form-input-padrao>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="estruturaForm.invalid">Inserir</button>
+    </div>
+
+  </div>
+</form>
+
+
+<!-- AQUI COMEÇA O READ -->
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Id</th>
+    <th scope="col">Nome</th>
+    <th scope="col">CursoId</th>
+    <th scope="col">disciplina</th>
+    <th scope="col">SemestreDoCurso</th>
+    <th scope="col">Editar</th>
+    <th scope="col">Excluir</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (estrutura of estruturas; track estrutura.id) {
+      <tr class="align-middle">
+        <th scope="row">{{ estrutura.id }}</th>
+        <td>{{ estrutura.curso_id }}</td>
+        <td>{{ estrutura.disciplina }}</td>
+        <td>{{ estrutura.semestreDoCurso }}</td>
+        <td class="text-end">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-danger" (click)="onDelete(estrutura.id)">
+              Excluir
+            </button>
+          </div>
+        </td>
+      </tr>
+    } @empty {
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          Nenhum curso cadastrado.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

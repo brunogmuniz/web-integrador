@@ -60,7 +60,8 @@
               }
             ],
             "styles": [
-              "projects/modulo-dept-ensino/src/styles.scss"
+              "projects/modulo-dept-ensino/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ]
           },
           "configurations": {
@@ -123,7 +124,8 @@
               }
             ],
             "styles": [
-              "projects/modulo-dept-ensino/src/styles.scss"
+              "projects/modulo-dept-ensino/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ]
           }
         }
@@ -183,7 +185,8 @@
               }
             ],
             "styles": [
-              "projects/modulo-root/src/styles.scss"
+              "projects/modulo-root/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ]
           },
           "configurations": {
@@ -331,7 +334,12 @@
               }
             ],
             "styles": [
-              "projects/modulo-admin/src/styles.scss"
+              "projects/modulo-admin/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           },
           "configurations": {
@@ -389,7 +397,11 @@
               }
             ],
             "styles": [
-              "projects/modulo-admin/src/styles.scss"
+              "projects/modulo-admin/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],"scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
           }
         }

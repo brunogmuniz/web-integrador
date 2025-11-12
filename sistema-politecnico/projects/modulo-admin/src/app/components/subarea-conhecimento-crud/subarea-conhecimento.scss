@@ -1,0 +1,121 @@
+$cor-primaria: #1a6bac;
+$espacamento-vertical: 1rem;
+$borda-radius: 8px;
+
+/* FORMULÁRIO */
+.form-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: $borda-radius;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: $espacamento-vertical;
+
+  > * {
+    flex-grow: 1;
+  }
+}
+
+.col-8 {
+  flex-basis: 70%;
+}
+
+.col-4 {
+  flex-basis: 30%;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+
+  .custom-select {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #f8f8f8;
+    border: 1px solid #ccc;
+    border-radius: $borda-radius;
+    font-size: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &:focus {
+      border-color: $cor-primaria;
+      box-shadow: 0 0 0 0.15rem rgba(26, 107, 172, 0.25);
+      outline: none;
+    }
+  }
+
+  .select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #555;
+  }
+}
+
+.form-actions {
+  margin-top: $espacamento-vertical;
+  width: 100%;
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: $cor-primaria;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: $borda-radius;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: darken($cor-primaria, 8%);
+    }
+
+    &:disabled {
+      background-color: lighten(gray, 20%);
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* TABELA */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+
+  th, td {
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: $cor-primaria;
+    color: #fff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: rgba(26, 107, 172, 0.1);
+  }
+}

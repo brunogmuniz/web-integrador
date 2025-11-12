@@ -6,7 +6,9 @@
     [placeholder]="label"
   />
 
-  <div *ngIf="supportText" class="support-text">
-    {{ supportText }}
-  </div>
+  @if (supportText) {
+    <div class="support-text">
+      {{ supportText }}
+    </div>
+  }
 </div>
