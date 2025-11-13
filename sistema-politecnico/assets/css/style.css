@@ -1,0 +1,16 @@
+body {
+   color: #666 !important;
+}
+
+label {
+   font-weight: 500 !important;
+   color: #444 !important;
+}
+
+.table td, .table th {
+   vertical-align: middle !important;
+}
+
+:root {
+   --bg-color-menu-lateral: linear-gradient(to left bottom, rgb(58, 146, 77) 20%, rgb(51, 182, 51) 100%);
+}
