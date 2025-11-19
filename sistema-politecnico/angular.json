@@ -43,40 +43,42 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/modulo-dept-ensino/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/modulo-dept-ensino/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-dept-ensino/public"
-              },
-              {
-                "glob": "**/*",
-                "input": "shared-assets",
-                "output": "/shared-assets/"
-              }
+              {"glob": "**/*", "input": "projects/modulo-dept-ensino/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
               "projects/modulo-dept-ensino/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           },
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
+                {"type": "initial", "maximumWarning": "500kB", "maximumError": "1MB"},
+                {"type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB"}
               ],
               "outputHashing": "all"
             },
@@ -91,74 +93,61 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "modulo-dept-ensino:build:production"
-            },
-            "development": {
-              "buildTarget": "modulo-dept-ensino:build:development"
-            }
+            "production": {"buildTarget": "modulo-dept-ensino:build:production"},
+            "development": {"buildTarget": "modulo-dept-ensino:build:development"}
           },
           "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
+        "extract-i18n": {"builder": "@angular/build:extract-i18n"},
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/modulo-dept-ensino/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-dept-ensino/public"
-              },
-              {
-                "glob": "**/*",
-                "input": "shared-assets",
-                "output": "/shared-assets/"
-              }
+              {"glob": "**/*", "input": "projects/modulo-dept-ensino/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
               "projects/modulo-dept-ensino/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           }
         }
       }
     },
+
     "modulo-root": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true
-        },
-        "@schematics/angular:class": {
-          "skipTests": true
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
-        }
+        "@schematics/angular:component": {"style": "scss", "skipTests": true},
+        "@schematics/angular:class": {"skipTests": true},
+        "@schematics/angular:directive": {"skipTests": true},
+        "@schematics/angular:guard": {"skipTests": true},
+        "@schematics/angular:interceptor": {"skipTests": true},
+        "@schematics/angular:pipe": {"skipTests": true},
+        "@schematics/angular:resolver": {"skipTests": true},
+        "@schematics/angular:service": {"skipTests": true}
       },
       "root": "projects/modulo-root",
       "sourceRoot": "projects/modulo-root/src",
@@ -168,40 +157,42 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/modulo-root/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/modulo-root/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-root/public"
-              },
-              {
-                "glob": "**/*",
-                "input": "shared-assets",
-                "output": "/shared-assets/"
-              }
+              {"glob": "**/*", "input": "projects/modulo-root/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
               "projects/modulo-root/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css",
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           },
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
+                {"type": "initial", "maximumWarning": "500kB", "maximumError": "1MB"},
+                {"type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB"}
               ],
               "outputHashing": "all"
             },
@@ -216,103 +207,61 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "modulo-root:build:production"
-            },
-            "development": {
-              "buildTarget": "modulo-root:build:development"
-            }
+            "production": {"buildTarget": "modulo-root:build:production"},
+            "development": {"buildTarget": "modulo-root:build:development"}
           },
           "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
+        "extract-i18n": {"builder": "@angular/build:extract-i18n"},
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/modulo-root/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-root/public"
-              },
-              {
-                "glob": "**/*",
-                "input": "shared-assets",
-                "output": "/shared-assets/"
-              }
+              {"glob": "**/*", "input": "projects/modulo-root/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
-              "projects/modulo-root/src/styles.scss"
+              "projects/modulo-root/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css"
+            ],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           }
         }
       }
     },
-    "shared-core": {
-      "projectType": "library",
-      "root": "projects/shared-core",
-      "sourceRoot": "projects/shared-core/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular/build:ng-packagr",
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/shared-core/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/shared-core/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular/build:karma",
-          "options": {
-            "tsConfig": "projects/shared-core/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
-          }
-        }
-      }
-    },
+
     "modulo-admin": {
       "projectType": "application",
       "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true
-        },
-        "@schematics/angular:class": {
-          "skipTests": true
-        },
-        "@schematics/angular:directive": {
-          "skipTests": true
-        },
-        "@schematics/angular:guard": {
-          "skipTests": true
-        },
-        "@schematics/angular:interceptor": {
-          "skipTests": true
-        },
-        "@schematics/angular:pipe": {
-          "skipTests": true
-        },
-        "@schematics/angular:resolver": {
-          "skipTests": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
-        }
+        "@schematics/angular:component": {"style": "scss", "skipTests": true},
+        "@schematics/angular:class": {"skipTests": true},
+        "@schematics/angular:directive": {"skipTests": true},
+        "@schematics/angular:guard": {"skipTests": true},
+        "@schematics/angular:interceptor": {"skipTests": true},
+        "@schematics/angular:pipe": {"skipTests": true},
+        "@schematics/angular:resolver": {"skipTests": true},
+        "@schematics/angular:service": {"skipTests": true}
       },
       "root": "projects/modulo-admin",
       "sourceRoot": "projects/modulo-admin/src",
@@ -322,39 +271,42 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "projects/modulo-admin/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/modulo-admin/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-admin/public"
-              }
+              {"glob": "**/*", "input": "projects/modulo-admin/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
               "projects/modulo-admin/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css"
             ],
             "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           },
           "configurations": {
             "production": {
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
+                {"type": "initial", "maximumWarning": "500kB", "maximumError": "1MB"},
+                {"type": "anyComponentStyle", "maximumWarning": "4kB", "maximumError": "8kB"}
               ],
               "outputHashing": "all"
             },
@@ -369,46 +321,49 @@
         "serve": {
           "builder": "@angular/build:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "modulo-admin:build:production"
-            },
-            "development": {
-              "buildTarget": "modulo-admin:build:development"
-            }
+            "production": {"buildTarget": "modulo-admin:build:production"},
+            "development": {"buildTarget": "modulo-admin:build:development"}
           },
           "defaultConfiguration": "development"
         },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
-        },
+        "extract-i18n": {"builder": "@angular/build:extract-i18n"},
         "test": {
           "builder": "@angular/build:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/modulo-admin/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "projects/modulo-admin/public"
-              }
+              {"glob": "**/*", "input": "projects/modulo-admin/public"},
+              {"glob": "**/*", "input": "assets", "output": "/assets/"}
             ],
             "styles": [
               "projects/modulo-admin/src/styles.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
-            ],"scripts": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "assets/css/demo-12/style.bundle.min.css",
+              "assets/css/demo-12/wizard-2.min.css",
+              "assets/icons/line-awesome/css/line-awesome.css",
+            ],
+            "scripts": [
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/jquery-1.12.4.min.js",
+              "assets/js/vendors/jquery/dist/jquery.js",
+              "assets/js/vendors/popper.js/dist/umd/popper.js",
+              "assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "assets/js/vendors/js-cookie/src/js.cookie.js",
+              "assets/js/vendors/moment/min/moment.min.js",
+              "assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "assets/js/vendors/wnumb/wNumb.js",
+              "assets/js/demo-9/login-1.min.js",
+              "assets/js/vendors/sweetalert/sweetalert2.min.js"
             ]
           }
         }
       }
     }
   },
-  "cli": {
-    "analytics": false
-  }
+  "cli": {"analytics": false}
 }

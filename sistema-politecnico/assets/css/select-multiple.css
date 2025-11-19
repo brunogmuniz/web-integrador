@@ -1,0 +1,22 @@
+.ng-select .ng-select-container {
+   border-radius: 0px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-placeholder {
+   top: 6px;
+   font-size: 12px;
+}
+
+.ng-select .ng-select-container {
+   border: 1px solid #e2e5ec;
+   min-height: 29px;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value {
+   background-color: #ececec;
+   white-space: normal !important;
+}
+
+.ng-select.ng-select-multiple .ng-select-container .ng-value-container .ng-value .ng-value-icon.left {
+   border-right: 1px solid #cecece;
+}
