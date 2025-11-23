@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {CursoDTO} from 'shared-core';
 import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import { catchError, tap} from 'rxjs/operators';
 import {SubareaConhecimentoDTO} from 'shared-core/src/lib/dto/SubareaConhecimento.dto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubareaConhecimentoService {
-  private apiUrl = 'http://localhost:8080/subareas';
+  private apiUrl = 'http://localhost:8080/subareas-conhecimento';
 
   constructor(private http: HttpClient) {}
 
@@ -24,11 +23,11 @@ export class SubareaConhecimentoService {
   }
 
   listarTodos(): Observable<SubareaConhecimentoDTO[]> {
-    return this.http.get<SubareaConhecimentoDTO[]>(this.apiUrl).pipe(
-      tap(() => console.log('SubareaConhecimento lidos com sucesso')),
+    return this.http.get<SubareaConhecimentoDTO[]>(`${this.apiUrl}/all`).pipe(
+      tap(() => console.log('Todas as Subareas lidas com sucesso')),
       catchError(error => {
-        console.error('Erro ao ler SubareaConhecimento', error);
-        return of(error);
+        console.error('Erro ao ler Subareas', error);
+        return of([]);
       })
     );
   }
@@ -54,5 +53,4 @@ export class SubareaConhecimentoService {
       })
     );
   }
-
 }
