@@ -1,95 +1,212 @@
-
-<form [formGroup]="estruturaForm" (ngSubmit)="onSubmit()">
-  <div class="form-card">
-
-    <div class="form-row">
-      <div class="col-8">
-        <lib-form-input-padrao
-          [label]="'Nome'"
-          [control]="c['nome']"
-          [supportText]="''">
-        </lib-form-input-padrao>
-      </div>
-
-      <div class="col-4">
-        <lib-form-input-padrao
-          [label]="'Sigla'"
-          [control]="c['sigla']"
-          [supportText]="''">
-        </lib-form-input-padrao>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <lib-form-input-padrao
-        [label]="'Curso Id'"
-        [control]="c['curso_id']"
-        [type]="'number'"
-        [supportText]="''">
-      </lib-form-input-padrao>
-    </div>
-
-    <div class="form-row">
-      <lib-form-input-padrao
-        [label]="'Disciplina'"
-        [control]="c['disciplina']"
-        [type]="'string'"
-        [supportText]="''">
-      </lib-form-input-padrao>
-    </div>
-
-    <div class="form-row">
-      <lib-form-input-padrao
-        [label]="'Semestre'"
-        [control]="c['semestreDoCurso']"
-        [type]="'number'"
-        [supportText]="''">
-      </lib-form-input-padrao>
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" [disabled]="estruturaForm.invalid">Inserir</button>
-    </div>
-
+<div class="card card-custom">
+  <div class="card-header">
+    <h3 class="card-title">Nova Estrutura Curricular</h3>
   </div>
-</form>
 
+  <form [formGroup]="estruturaForm" (ngSubmit)="onSubmit()" class="form">
+    <div class="card-body">
 
-<!-- AQUI COMEÇA O READ -->
+      <h5 class="font-weight-bold mb-4">Dados da Estrutura</h5>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label required">Curso *</label>
+          <select [formControl]="c['idCurso']" class="form-select">
+            <option [ngValue]="null" disabled>Selecione o Curso...</option>
+            @for (curso of cursosDisponiveis; track curso.id) {
+              <option [value]="curso.id">{{ curso.nome }}</option>
+            }
+          </select>
+        </div>
 
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th scope="col">Id</th>
-    <th scope="col">Nome</th>
-    <th scope="col">CursoId</th>
-    <th scope="col">disciplina</th>
-    <th scope="col">SemestreDoCurso</th>
-    <th scope="col">Editar</th>
-    <th scope="col">Excluir</th>
-  </tr>
-  </thead>
-  <tbody>
-    @for (estrutura of estruturas; track estrutura.id) {
-      <tr class="align-middle">
-        <th scope="row">{{ estrutura.id }}</th>
-        <td>{{ estrutura.curso_id }}</td>
-        <td>{{ estrutura.disciplina }}</td>
-        <td>{{ estrutura.semestreDoCurso }}</td>
-        <td class="text-end">
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-danger" (click)="onDelete(estrutura.id)">
-              Excluir
+        <div class="col-md-8">
+          <lib-form-input-padrao
+            [label]="'Nome do Currículo'"
+            [control]="c['codigo']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Ano'"
+            [control]="c['ano']"
+            [type]="'number'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="separator separator-dashed my-5"></div>
+
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="font-weight-bold m-0">Ofertas de Disciplinas</h5>
+        <button type="button" class="btn btn-sm btn-light-primary" (click)="iniciarNovaOferta()">
+          <i class="fa fa-plus"></i> Adicionar Oferta
+        </button>
+      </div>
+
+      @if (ofertasAdicionadas.length > 0) {
+        <div class="table-responsive mb-5 border rounded">
+          <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3 m-0">
+            <thead class="bg-light">
+            <tr class="fw-bolder text-muted">
+              <th class="ps-4 min-w-150px">Disciplina</th>
+              <th class="min-w-100px">Períodos Vinculados</th>
+              <th class="text-end pe-4">Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (oferta of ofertasAdicionadas; track $index) {
+                <tr>
+                  <td class="ps-4 fw-bold">{{ oferta.disciplinaNome }}</td>
+                  <td>
+                    @for (p of oferta.periodosLista; track p) {
+                      <span class="badge badge-light-primary me-1 mb-1">
+                        {{ p.periodos }} Créditos ({{ p.semestre }}º Sem)
+                      </span>
+                    }
+                  </td>
+                  <td class="text-end pe-4">
+                    <button type="button" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm" (click)="removerOferta($index)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      @if (exibirFormOferta) {
+        <div class="card card-body bg-light mb-5 border border-dashed">
+          <h6 class="mb-3 text-primary fw-bold">Nova Oferta de Disciplina</h6>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="form-label required">Selecione a Disciplina</label>
+              <select [formControl]="ofertaAtualControl" class="form-select">
+                <option [ngValue]="null" disabled>Selecione...</option>
+                @for (disc of listaDisciplinas; track disc.id) {
+                  <option [ngValue]="disc">{{ disc.codigoDisciplina }} - {{ disc.nome }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <label class="form-label fw-bold mb-0">Períodos/Semestres</label>
+                <button type="button"
+                        class="btn btn-sm btn-outline btn-outline-primary active"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalPeriodo"
+                        (click)="prepararModalPeriodo()"
+                        [disabled]="!ofertaAtualControl.value">
+                  <i class="fa fa-calendar-plus"></i> Add Período
+                </button>
+              </div>
+
+              <div class="table-responsive bg-white rounded p-3 border">
+                <table class="table table-sm table-row-bordered align-middle mb-0">
+                  <thead>
+                  <tr class="text-muted fw-bold">
+                    <th>Períodos (Numérico)</th>
+                    <th>Semestre</th>
+                    <th class="text-end">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    @for (item of periodosTemporarios; track $index) {
+                      <tr>
+                        <td>{{ item.periodos }}</td>
+                        <td>{{ item.semestre }}º Semestre</td>
+                        <td class="text-end">
+                          <button type="button" class="btn btn-icon btn-sm btn-active-light-danger" (click)="removerPeriodoTemporario($index)">
+                            <i class="fa fa-times"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                    @if (periodosTemporarios.length === 0) {
+                      <tr><td colspan="3" class="text-center text-muted small fst-italic">Nenhum período adicionado ainda.</td></tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mt-4">
+            <button type="button" class="btn btn-sm btn-light me-2" (click)="cancelarOferta()">Cancelar</button>
+            <button type="button" class="btn btn-sm btn-primary"
+                    (click)="confirmarOferta()"
+                    [disabled]="!ofertaAtualControl.value || periodosTemporarios.length === 0">
+              Confirmar Oferta
             </button>
           </div>
-        </td>
-      </tr>
-    } @empty {
-      <tr>
-        <td colspan="7" class="text-center text-muted">
-          Nenhum curso cadastrado.
-        </td>
-      </tr>
-    }
-  </tbody>
-</table>
+        </div>
+      }
+
+    </div>
+
+    <div class="card-footer d-flex justify-content-end">
+      <button type="button" class="btn btn-secondary me-2" (click)="voltar()">Cancelar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="estruturaForm.invalid || ofertasAdicionadas.length === 0">
+        <i class="fa fa-check"></i> Salvar Estrutura
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="modal fade" id="modalPeriodo" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Adicionar Período</h5>
+        <button type="button" class="btn-close" id="btn-close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="periodoForm">
+
+          <div class="mb-3">
+            <lib-form-input-padrao
+              [label]="'Períodos (Carga)'"
+              [control]="p['periodos']"
+              [type]="'number'"
+              [supportText]="'Apenas números inteiros'">
+            </lib-form-input-padrao>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label required">Semestre</label>
+            <select [formControl]="p['semestre']" class="form-select">
+              <option [ngValue]="null" disabled>Selecione...</option>
+              <option [value]="1">1º Semestre</option>
+              <option [value]="2">2º Semestre</option>
+              <option [value]="3">3º Semestre</option>
+              <option [value]="4">4º Semestre</option>
+              <option [value]="5">5º Semestre</option>
+              <option [value]="6">6º Semestre</option>
+              <option [value]="7">7º Semestre</option>
+              <option [value]="8">8º Semestre</option>
+            </select>
+            @if (erroSemestreDuplicado) {
+              <div class="alert alert-danger d-flex align-items-center p-2 mt-2 mb-0 small">
+                <i class="fa fa-exclamation-triangle me-2"></i>
+                <div>Este semestre já foi adicionado para esta disciplina.</div>
+              </div>
+            }
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" (click)="adicionarPeriodoAoGrid()" [disabled]="periodoForm.invalid">
+          Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

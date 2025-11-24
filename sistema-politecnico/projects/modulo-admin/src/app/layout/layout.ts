@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import {FormInput} from 'shared-core';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { RouterOutlet } from '@angular/router';
+import {ReactiveFormsModule} from '@angular/forms';
+import { NavbarComponent } from './navbar/navbar';
 
 @Component({
   selector: 'app-layout',
-  imports: [FormInput, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterOutlet, NavbarComponent],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
   standalone: true
 })
 export class Layout {
-  public campoTeste = new FormControl("Campo Teste");
   protected readonly ReactiveFormsModule = ReactiveFormsModule;
 }

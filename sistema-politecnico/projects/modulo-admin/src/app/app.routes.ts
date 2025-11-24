@@ -17,6 +17,7 @@ export const routes: Routes = [
   { path: 'disciplina', component: DisciplinaCrud },
   { path: 'docente', component: DocenteCrud },
   { path: 'estrutura', component: EstruturaCurricularCrud },
+  { path: 'estrutura-curricular', component: EstruturaCurricularCrud },
 
   { path: '**', component: Layout },
 ];
