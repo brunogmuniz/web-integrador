@@ -8,7 +8,6 @@ import {HttpClientModule} from '@angular/common/http';
   selector: 'app-estrutura-curricular-crud',
     imports: [
         FormInput,
-        NgForOf,
         ReactiveFormsModule,
       HttpClientModule
     ],

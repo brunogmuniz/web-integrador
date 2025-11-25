@@ -10,7 +10,6 @@ import {DepartamentoDTO} from 'shared-core/src/lib/dto/Departamento.dto';
   selector: 'app-departamento-crud',
   imports: [
     FormInput,
-    NgForOf,
     ReactiveFormsModule,
     HttpClientModule,
   ],

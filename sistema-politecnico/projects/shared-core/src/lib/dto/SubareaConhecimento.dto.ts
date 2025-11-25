@@ -6,5 +6,5 @@ export interface SubareaConhecimentoDTO {
   nome: string;
   sigla: string;
   cargaHorariaTotal: number;
-  areaConhecimento: AreaConhecimentoDTO;
+  area: AreaConhecimentoDTO;
 }
