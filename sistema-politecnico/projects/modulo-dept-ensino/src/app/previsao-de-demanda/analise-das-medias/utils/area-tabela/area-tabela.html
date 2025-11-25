@@ -1,0 +1,71 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__body">
+
+    <input type="text"
+           class="form-control mb-2"
+           placeholder="Pesquisar código ou nome"
+           [(ngModel)]="inputBusca" /> <span><img src="assets" alt=""></span>
+
+
+    <div class="table-responsive">
+      <table class="table table-condensed table-bordered table-striped ">
+        <thead class="thead-light text-center">
+        <tr class="active">
+          <th rowspan="2" style="width: 5%;">CÓDIGO / AREA</th>
+          <th rowspan="2" style="width: 10%;">MÉDIA</th>
+          <th rowspan="2" style="width: 5%;">NR DOCENTES / AREA</th>
+          <th colspan="2" style="width: 5%;">2024</th>
+          <th colspan="2" style="width: 5%;">2025</th>
+          <th colspan="2" style="width: 5%;">2026</th>
+          <th colspan="2" style="width: 5%;">2027</th>
+          <th rowspan="2" style="width: 7%;">Opções</th>
+        </tr>
+        <tr class="active">
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+        </tr>        </thead>
+        <tbody>
+        <tr *ngFor="let area of areasFiltradas" class="text-center">
+          <td>{{ area.codigo }}</td>
+          <td [ngClass]="{
+          'pessimo': area.media >= 20,
+          'cuidado': area.media >= 15 && area.media < 20,
+          'bom': area.media >= 8 && area.media < 15,
+          'excelente': area.media < 8
+          }">{{ area.media }}</td>
+          <td>{{ area.nrDocentes }} </td>
+          <td>{{ area.ano2024s1 }} </td>
+          <td>{{ area.ano2024s2 }}</td>
+          <td>{{ area.ano2025s1 }}</td>
+          <td>{{ area.ano2025s2 }}</td>
+          <td>{{ area.ano2026s1 }}</td>
+          <td>{{ area.ano2026s2 }}</td>
+          <td>{{ area.ano2027s1 }}</td>
+          <td>{{ area.ano2027s2 }}</td>
+          <td>
+            <a [routerLink]="'./' + area.id"
+               class="btn btn-primary btn-sm btn-icon"
+               title="Adcionar Docente">
+              <i class="fa fa-cogs"></i>
+              Adcionar Docente
+            </a>
+            <a [routerLink]="'./' + area.id"
+               class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
+               title="Adcionar Ano">
+              <i class="fa fa-cogs"></i>
+              Adcionar Ano
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
