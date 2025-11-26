@@ -1,11 +1,8 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CursoDTO } from 'shared-core';
-import { of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-
+import { CursoDTO } from '../dto/Curso.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -21,17 +18,17 @@ export class CursoService {
       tap(() => console.log('Curso criado com sucesso')),
       catchError(error => {
         console.error('Erro ao criar curso', error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
 
-  listarTodos(): Observable<CursoDTO[]> {
+  findAll(): Observable<CursoDTO[]> {
     return this.http.get<CursoDTO[]>(this.apiUrl).pipe(
       tap(() => console.log('Cursos lidos com sucesso')),
       catchError(error => {
         console.error('Erro ao ler cursos', error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
@@ -42,7 +39,7 @@ export class CursoService {
       tap(() => console.log(`Curso ${id} editado com sucesso`)),
       catchError(error => {
         console.error(`Erro ao editar curso ${id}`, error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
@@ -53,10 +50,8 @@ export class CursoService {
       tap(() => console.log(`Curso ${id} excluído com sucesso`)),
       catchError(error => {
         console.error(`Erro ao excluir curso ${id}`, error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
-
-
 }
