@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {CursoDTO} from 'shared-core';
 import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import {DepartamentoDTO} from 'shared-core/src/lib/dto/Departamento.dto';
 
 @Injectable({
@@ -23,21 +22,22 @@ export class DepartamentoService {
     );
   }
   getAll(): Observable<DepartamentoDTO[]> {
-    return this.http.get<DepartamentoDTO[]>(this.apiUrl).pipe(
-      tap(() => console.log('Derpartamentos lidos com sucesso')),
+    return this.http.get<any>(`${this.apiUrl}?size=2000`).pipe(
+      map(response => response.content),
+      tap(() => console.log('Departamentos lidos com sucesso')),
       catchError(error => {
         console.error('Erro ao ler Departamento', error);
-        return of(error);
+        return of([]);
       })
     );
   }
 
-  delete(id: number): Observable<void> { //
+  delete(id: number): Observable<void> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url).pipe(
       tap(() => console.log(`Departamento ${id} excluído com sucesso`)),
       catchError(error => {
-          console.error(`Erro ao excluir Departamento ${id}`, error);
+        console.error(`Erro ao excluir Departamento ${id}`, error);
         return of(error);
       })
     );

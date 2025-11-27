@@ -50,3 +50,8 @@ export * from './lib/dto/Docente.dto';
 export * from './lib/dto/Departamento.dto';
 export * from './lib/dto/EstruturaCurricular.dto';
 
+export * from './lib/dto/DocenteSubArea.dto';
+export * from './lib/dto/DocenteSubAreaPercentual.dto';
+export * from './lib/dto/DocenteDetalhe.dto';
+export * from './lib/dto/SubareaConhecimento.dto';
+

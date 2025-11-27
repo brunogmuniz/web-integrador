@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {DisciplinaDTO} from 'shared-core/src/lib/dto/Disciplina.dto';
 import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {DocenteDTO} from 'shared-core/src/lib/dto/Docente.dto'
+import { DocenteDetalheDTO } from '../dto/DocenteDetalhe.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +12,46 @@ export class DocenteService {
   private apiUrl = 'http://localhost:8080/docentes';
 
   constructor(private http: HttpClient) {}
-  create(dto: DocenteDTO): Observable<DisciplinaDTO> {
+
+  create(dto: DocenteDTO): Observable<DocenteDTO> {
     return this.http.post<DocenteDTO>(this.apiUrl, dto).pipe(
       tap(() => console.log('Docente criada com sucesso')),
       catchError(error => {
         console.error('Erro ao criar Docente', error);
-        return of(error);
+        throw error;
       })
     );
   }
+
   listarTodos(): Observable<DocenteDTO[]> {
-    return this.http.get<DocenteDTO[]>(this.apiUrl).pipe(
-      tap(() => console.log('Docente lidas com sucesso')),
+    return this.http.get<any>(`${this.apiUrl}?size=2000`).pipe(
+      map(response => response.content),
+      tap(() => console.log('Docentes lidos com sucesso')),
       catchError(error => {
         console.error('Erro ao ler Docente', error);
-        return of(error);
+        return of([]);
+      })
+    );
+  }
+
+  findById(id: number): Observable<DocenteDetalheDTO> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<DocenteDetalheDTO>(url).pipe(
+      tap(() => console.log(`Detalhes do Docente ${id} lidos com sucesso`)),
+      catchError(error => {
+        console.error(`Erro ao ler detalhes do Docente ${id}`, error);
+        return of(null as any);
+      })
+    );
+  }
+
+  getById(id: number): Observable<DocenteDTO> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<DocenteDTO>(url).pipe(
+      tap(() => console.log(`Docente ${id} lido com sucesso`)),
+      catchError(error => {
+        console.error(`Erro ao ler Docente ${id}`, error);
+        throw error;
       })
     );
   }
@@ -37,11 +62,20 @@ export class DocenteService {
       tap(() => console.log(`Docente ${id} excluída com sucesso`)),
       catchError(error => {
         console.error(`Erro ao excluir Docente${id}`, error);
-        return of(error);
+        throw error;
       })
     );
   }
-
+  listarTodosDetalhado(): Observable<DocenteDetalheDTO[]> {
+    const url = `${this.apiUrl}/detalhes/all`;
+    return this.http.get<DocenteDetalheDTO[]>(url).pipe(
+      tap(() => console.log('Detalhes dos Docentes lidos com sucesso (rota otimizada)')),
+      catchError(error => {
+        console.error('Erro ao ler detalhes dos Docentes', error);
+        return of([]);
+      })
+    );
+  }
   update(id: number, dto: DocenteDTO): Observable<DocenteDTO> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.put<DocenteDTO>(url, dto).pipe(
@@ -53,4 +87,14 @@ export class DocenteService {
     );
   }
 
+  atualizarEncargos(docenteId: number, encargos: any[]): Observable<void> {
+    const url = `${this.apiUrl}/${docenteId}/encargos`;
+    return this.http.put<void>(url, encargos).pipe(
+      tap(() => console.log(`Encargos atualizados`)),
+      catchError(error => {
+        console.error('Erro ao atualizar encargos', error);
+        throw error;
+      })
+    );
+  }
 }

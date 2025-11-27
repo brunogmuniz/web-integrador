@@ -1,14 +1,11 @@
-
-import { DepartamentoDTO } from './Departamento.dto';
-
 export interface DocenteDTO {
   id: number;
+  uuid?: string;
   nome: string;
   matricula: string;
-  cargaHorariaSemestral: number;
   tipoVaga: string;
   tipoFormacao: string;
-  licenciatura: string;
+  licenciatura: boolean;
   origemVaga: string;
-  departamento: DepartamentoDTO;
+  departamento: string;
 }

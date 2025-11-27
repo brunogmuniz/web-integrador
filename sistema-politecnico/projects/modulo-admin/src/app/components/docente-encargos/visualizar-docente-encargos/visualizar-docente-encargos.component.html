@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+        <thead>
+        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+          <th class="min-w-200px">Docente</th>
+          <th class="min-w-150px">Departamento</th>
+          <th class="min-w-200px">Áreas de Atuação</th>
+          <th class="min-w-100px text-center">Carga (%)</th>
+          <th class="min-w-120px text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody class="fs-6">
+          @for (item of listaDocentesDetalhados; track item.idDocente) {
+            <tr>
+              <td>
+                <div class="d-flex flex-column">
+                  <span class="text-gray-800 fw-bold">{{ item.nome }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="text-gray-700">{{ item.nomeDepartamento || item.departamento }}</span>
+              </td>
+              <td>
+                <div class="d-flex flex-wrap gap-1">
+                  @for (area of getNomesAreas(item.subAreas); track area) {
+                    <span class="badge badge-light-primary text-dark fw-semibold fs-8">{{ area }}</span>
+                  }
+                </div>
+              </td>
+              <td class="text-center">
+                <span class="badge fw-bold text-dark"
+                      [ngClass]="{
+                        'badge-light-success': item.totalEncargos == 100,
+                        'badge-light-danger': item.totalEncargos > 100,
+                        'badge-light-warning': item.totalEncargos < 100
+                      }">
+                  {{ item.totalEncargos }}%
+                </span>
+              </td>
+              <td class="text-center">
+                <a [routerLink]="['../editar', item.idDocente]"
+                   class="btn btn-icon btn-light-primary btn-sm"
+                   title="Editar Encargos">
+                  <i class="la la-edit fs-3"></i>
+                </a>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="5" class="text-center py-10">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
+                  <span class="text-gray-600 fw-semibold fs-5">
+                    Nenhum registro encontrado.
+                  </span>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
