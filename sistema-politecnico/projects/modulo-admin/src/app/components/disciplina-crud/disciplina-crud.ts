@@ -1,40 +1,39 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+
 import {
-  CursoDTO,
-  CursoService,
   FormInput,
   DisciplinaService,
   DisciplinaDTO,
   SubareaConhecimentoService
 } from "shared-core";
-
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {SubareaConhecimentoDTO} from 'shared-core/src/lib/dto/SubareaConhecimento.dto';
+import { SubareaConhecimentoDTO } from 'shared-core/src/lib/dto/SubareaConhecimento.dto';
 
 @Component({
   selector: 'app-disciplina-crud',
-    imports: [
-        FormInput,
-        ReactiveFormsModule,
-        FormInput,
-        CommonModule,
-         HttpClientModule,
-    ],
-  providers:[DisciplinaService, SubareaConhecimentoService],
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    FormInput,
+    CommonModule,
+    HttpClientModule,
+  ],
+  providers: [DisciplinaService, SubareaConhecimentoService],
   templateUrl: './disciplina-crud.html',
   styleUrl: './disciplina-crud.scss'
 })
 export class DisciplinaCrud implements OnInit {
   disciplinaForm!: FormGroup;
-
   subAreas: SubareaConhecimentoDTO[] = [];
-
   disciplinas: DisciplinaDTO[] = [];
 
-  constructor(public fb: FormBuilder, private disciplinaService: DisciplinaService, private subAreaService: SubareaConhecimentoService) {
-  }
+  constructor(
+    public fb: FormBuilder,
+    private disciplinaService: DisciplinaService,
+    private subAreaService: SubareaConhecimentoService
+  ) {}
 
   ngOnInit(): void {
     this.disciplinaForm = this.fb.group({
@@ -43,17 +42,20 @@ export class DisciplinaCrud implements OnInit {
       cargaHoraria: ['', Validators.required],
       subArea: ['', Validators.required]
     });
-    this.loadCursos();
+    this.loadDisciplinas();
+    this.loadSubAreas();
   }
-  loadCursos(): void {
-    this.disciplinaService.listarTodos().subscribe(data => {
-      this.disciplinas = data as DisciplinaDTO[];
-    })
+
+  loadDisciplinas(): void {
+    this.disciplinaService.findAll().subscribe((data: any) => {
+      this.disciplinas = data.content || data;
+    });
   }
+
   loadSubAreas(): void {
-    this.subAreaService.listarTodos().subscribe(data => {
-      this.subAreas = data as SubareaConhecimentoDTO[];
-    })
+    this.subAreaService.listarTodos().subscribe((data: any) => {
+      this.subAreas = data.content || data;
+    });
   }
 
   get c() {
@@ -61,10 +63,8 @@ export class DisciplinaCrud implements OnInit {
   }
 
   onDelete(id: number): void {
-    this.disciplinaService.delete(id).subscribe(res => {})
+    this.disciplinaService.delete(id).subscribe(res => {});
   }
-
-
 
   onSubmit(): void {
     if (this.disciplinaForm.valid) {

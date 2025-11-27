@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {CursoDTO, FormInput} from 'shared-core';
+import { CursoDTO, FormInput } from 'shared-core';
 import { CommonModule } from '@angular/common';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {CursoService} from 'shared-core'
-
+import { HttpClientModule } from '@angular/common/http';
+import { CursoService } from 'shared-core';
 
 @Component({
   selector: 'app-curso-crud',
@@ -34,21 +33,20 @@ export class CursoCRUD implements OnInit {
     });
     this.loadCursos();
   }
-   loadCursos(): void {
-    this.cursoService.listarTodos().subscribe(data => {
-      this.cursos = data as CursoDTO[];
-    })
-   }
+
+  loadCursos(): void {
+    this.cursoService.findAll().subscribe((data: any) => {
+      this.cursos = data.content || data;
+    });
+  }
 
   get c() {
     return this.cursoForm.controls as { [key: string]: FormControl };
   }
 
   onDelete(id: number): void {
-    this.cursoService.delete(id).subscribe(res => {})
+    this.cursoService.delete(id).subscribe(res => {});
   }
-
-
 
   onSubmit(): void {
     if (this.cursoForm.valid) {
