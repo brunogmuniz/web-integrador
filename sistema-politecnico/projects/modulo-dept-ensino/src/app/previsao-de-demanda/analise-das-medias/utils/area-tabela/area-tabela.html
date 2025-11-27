@@ -88,9 +88,9 @@
                   <table class="table table-sm table-striped">
                     <thead class="thead-light">
                     <tr class="text-center" style="font-size: 12px">
-                      <th rowspan="2" style="width: 5%;">CÓDIGO / AREA</th>
+                      <th rowspan="2" style="width: 5%;">CÓDIGO / SUBAREA</th>
                       <th rowspan="2" style="width: 10%;">MÉDIA</th>
-                      <th rowspan="2" style="width: 5%;">NR DOCENTES / AREA</th>
+                      <th rowspan="2" style="width: 5%;">NR DOCENTES / SUBAREA</th>
                       <th colspan="2" style="width: 5%;">2024 </th>
                       <th colspan="2" style="width: 5%;">2025</th>
                       <th colspan="2" style="width: 5%;">2026</th>
@@ -102,10 +102,10 @@
                     <tr *ngFor="let sub of area.subareas">
                       <td class="text-center">{{ sub.codigo }}</td>
                       <td [ngClass]="{
-                    'pessimo': area.media >= 20,
-                    'cuidado': area.media >= 15 && area.media < 20,
-                    'bom': area.media >= 8 && area.media < 15,
-                    'excelente': area.media < 8
+                    'pessimo': sub.media >= 20,
+                    'cuidado': sub.media >= 15 && sub.media < 20,
+                    'bom': sub.media >= 8 && sub.media < 15,
+                    'excelente': sub.media < 8
                     }">{{ sub.media }}
                       </td>
                       <td class="text-center">{{ sub.nrDocentes }}</td>
