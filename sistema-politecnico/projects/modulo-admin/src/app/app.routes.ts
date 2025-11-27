@@ -1,15 +1,12 @@
 import { Routes } from '@angular/router';
 import { Layout } from './layout/layout';
-
 import { PaginaInicialComponent } from './components/pagina-inicial/pagina-inicial';
-
-
 import { AreaConhecimentoCrud } from './components/area-conhecimento-crud/area-conhecimento-crud';
 import { CursoCRUD } from './components/curso-crud/curso-crud';
 import { DepartamentoCrud } from './components/departamento-crud/departamento-crud';
 import { SubareaConhecimento } from './components/subarea-conhecimento-crud/subarea-conhecimento';
 import { DisciplinaCrud } from './components/disciplina-crud/disciplina-crud';
-import { EstruturaCurricularCrud } from './components/estrutura-curricular-crud/estrutura-curricular-crud';
+import { EstruturaCurricularComponent } from './components/estrutura-curricular/estrutura-curricular';
 
 // --- DOCENTE ---
 import { DocenteComponent } from './components/docente/docente.component';
@@ -35,7 +32,11 @@ export const routes: Routes = [
       { path: 'departamento', component: DepartamentoCrud },
       { path: 'subarea', component: SubareaConhecimento },
       { path: 'disciplina', component: DisciplinaCrud },
-      { path: 'estrutura', component: EstruturaCurricularCrud },
+
+      // Rota do arquivo 1 (Antiga)
+      { path: 'estrutura', component: EstruturaCurricularComponent },
+      // Rota do arquivo 2 (Nova alteração)
+      { path: 'estrutura-curricular', component: EstruturaCurricularComponent },
 
       {
         path: 'docente',

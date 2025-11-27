@@ -16,7 +16,7 @@ export class NavbarComponent {
     { path: '/subarea', label: 'Subáreas' },
     { path: '/curso', label: 'Cursos' },
     { path: '/disciplina', label: 'Disciplinas' },
-    { path: '/estrutura', label: 'Estruturas' },
+    { path: '/estrutura-curricular', label: 'Estruturas' },
     { path: '/docente', label: 'Docentes' },
     { path: '/docente-encargos', label: 'Encargos' },
     { path: '/departamento', label: 'Departamentos' },

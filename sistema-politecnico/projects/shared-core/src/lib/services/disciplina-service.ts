@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {DepartamentoDTO} from 'shared-core/src/lib/dto/Departamento.dto';
-import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
-import {DisciplinaDTO} from 'shared-core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs'; // Importe throwError
+import { catchError, tap } from 'rxjs/operators';
+import { DisciplinaDTO } from 'shared-core'; // Verifique se o caminho está certo
 
 @Injectable({
   providedIn: 'root'
@@ -18,27 +17,28 @@ export class DisciplinaService {
       tap(() => console.log('Disciplina criada com sucesso')),
       catchError(error => {
         console.error('Erro ao criar Disciplina', error);
-        return of(error);
-      })
-    );
-  }
-  listarTodos(): Observable<DisciplinaDTO[]> {
-    return this.http.get<DisciplinaDTO[]>(this.apiUrl).pipe(
-      tap(() => console.log('Disciplinas lidas com sucesso')),
-      catchError(error => {
-        console.error('Erro ao ler Disciplina', error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
 
-  delete(id: number): Observable<void> { //
+  findAll(): Observable<DisciplinaDTO[]> {
+    return this.http.get<DisciplinaDTO[]>(this.apiUrl).pipe(
+      tap(() => console.log('Disciplinas lidas com sucesso')),
+      catchError(error => {
+        console.error('Erro ao ler Disciplina', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  delete(id: number): Observable<void> {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete<void>(url).pipe(
       tap(() => console.log(`Disciplina ${id} excluída com sucesso`)),
       catchError(error => {
-        console.error(`Erro ao excluir Disciplina${id}`, error);
-        return of(error);
+        console.error(`Erro ao excluir Disciplina ${id}`, error);
+        return throwError(() => error);
       })
     );
   }
@@ -49,7 +49,7 @@ export class DisciplinaService {
       tap(() => console.log(`Disciplina ${id} editado com sucesso`)),
       catchError(error => {
         console.error(`Erro ao editar Disciplina ${id}`, error);
-        return of(error);
+        return throwError(() => error);
       })
     );
   }
