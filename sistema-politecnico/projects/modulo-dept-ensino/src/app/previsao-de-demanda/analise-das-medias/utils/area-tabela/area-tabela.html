@@ -1,0 +1,146 @@
+<div class="kt-portlet">
+  <div class="kt-portlet__body">
+
+    <div class="search-wrapper">
+    <span class="search-icon">
+      <img src="assets/icons/lupa_icon.png" alt="buscar">
+    </span>
+      <input type="text"
+             class="form-control kt-form__input"
+             placeholder="Buscar por área"
+             [(ngModel)]="inputBusca"/>
+    </div>
+    <br>
+
+    <div class="table-responsive" style="background-color: #ffffff">
+      <table class="table " >
+        <thead class="thead-light text-center">
+        <tr class="active">
+          <th rowspan="2" style="width: 5%;">CÓDIGO / AREA</th>
+          <th rowspan="2" style="width: 10%;">MÉDIA</th>
+          <th rowspan="2" style="width: 5%;">NR DOCENTES / AREA</th>
+          <th colspan="2" style="width: 5%;">2024</th>
+          <th colspan="2" style="width: 5%;">2025</th>
+          <th colspan="2" style="width: 5%;">2026</th>
+          <th colspan="2" style="width: 5%;">2027</th>
+          <th rowspan="2" style="width: 7%;">Opções</th>
+        </tr>
+        <tr class="active">
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+          <th>1</th>
+          <th>2</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <ng-container *ngFor="let area of areasFiltradas; let i = index">
+          <tr
+            class="text-center table-cursor"
+            data-toggle="collapse"
+            [attr.data-target]="'#subareas-' + i">
+            <td>{{ area.codigo }}</td>
+            <td [ngClass]="{
+          'pessimo': area.media >= 20,
+          'cuidado': area.media >= 15 && area.media < 20,
+          'bom': area.media >= 8 && area.media < 15,
+          'excelente': area.media < 8
+          }">{{ area.media }}
+            </td>
+
+            <td>{{ area.nrDocentes }}</td>
+            <td>{{ area.ano2024s1 }}</td>
+            <td>{{ area.ano2024s2 }}</td>
+            <td>{{ area.ano2025s1 }}</td>
+            <td>{{ area.ano2025s2 }}</td>
+            <td>{{ area.ano2026s1 }}</td>
+            <td>{{ area.ano2026s2 }}</td>
+            <td>{{ area.ano2027s1 }}</td>
+            <td>{{ area.ano2027s2 }}</td>
+
+            <td>
+              <a [routerLink]="'./' + area.id"
+                 class="btn btn-primary btn-sm btn-icon"
+                 title="Adcionar Docente">
+                <i class="fa fa-cogs"></i>
+                Adcionar Docente
+              </a>
+              <a [routerLink]="'./' + area.id"
+                 class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
+                 title="Adcionar Ano">
+                <i class="fa fa-cogs"></i>
+                Adcionar Ano
+              </a>
+            </td>
+
+          </tr>
+
+          <tr class="collapse-row">
+            <td colspan="12" class="p-0 border-0">
+              <div class="collapse" [id]="'subareas-' + i">
+                <div class="p-4" style="background: #ffffff;">
+
+                  <!-- TABELA DE SUBAREAS -->
+                  <table class="table table-sm table-striped">
+                    <thead class="thead-light">
+                    <tr class="text-center" style="font-size: 12px">
+                      <th rowspan="2" style="width: 5%;">CÓDIGO / SUBAREA</th>
+                      <th rowspan="2" style="width: 10%;">MÉDIA</th>
+                      <th rowspan="2" style="width: 5%;">NR DOCENTES / SUBAREA</th>
+                      <th colspan="2" style="width: 5%;">2024 </th>
+                      <th colspan="2" style="width: 5%;">2025</th>
+                      <th colspan="2" style="width: 5%;">2026</th>
+                      <th colspan="2" style="width: 5%;">2027</th>
+                    </tr>
+
+                    <tr class="active text-center" style="font-size: 12px">
+                      <th>1</th>
+                      <th>2</th>
+                      <th>1</th>
+                      <th>2</th>
+                      <th>1</th>
+                      <th>2</th>
+                      <th>1</th>
+                      <th>2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let sub of area.subareas">
+                      <td class="text-center">{{ sub.codigo }}</td>
+                      <td [ngClass]="{
+                    'pessimo': sub.media >= 20,
+                    'cuidado': sub.media >= 15 && sub.media < 20,
+                    'bom': sub.media >= 8 && sub.media < 15,
+                    'excelente': sub.media < 8
+                    }">{{ sub.media }}
+                      </td>
+                      <td class="text-center">{{ sub.nrDocentes }}</td>
+                      <td class="text-center">{{ sub.ano2024s1 }}</td>
+                      <td class="text-center">{{ sub.ano2024s2 }}</td>
+                      <td class="text-center">{{ sub.ano2024s1 }}</td>
+                      <td class="text-center">{{ sub.ano2024s2 }}</td>
+                      <td class="text-center">{{ sub.ano2024s1 }}</td>
+                      <td class="text-center">{{ sub.ano2024s2 }}</td>
+                      <td class="text-center">{{ sub.ano2024s1 }}</td>
+                      <td class="text-center">{{ sub.ano2024s2 }}</td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

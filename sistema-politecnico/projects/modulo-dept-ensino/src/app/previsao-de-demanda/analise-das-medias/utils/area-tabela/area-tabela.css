@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+  font-family: "Barlow", sans-serif;
+}
+
+.search-wrapper {position: relative;width: 500px;}
+.search-icon img {position: absolute;left: 0;bottom: 8px;width: 18px;opacity: 0.5;pointer-events: none;}
+
+.form-control,
+.kt-form__input {
+  border: none !important;
+  border-bottom: 1px solid #dfdfdf !important;
+  border-radius: 0 !important;
+  padding: 0.3rem 0.5rem 0.5rem 30px !important;
+  background-color: transparent !important;
+  width: 100%;
+  font-size: 0.9rem !important;
+  color: #555555;
+}
+
+.form-control:focus,
+.kt-form__input:focus {
+  outline: none !important;
+  border-bottom: 2px solid #005290 !important;
+}
+
+
+
+.table thead.thead-light th,
+.kt-portlet__head .kt-portlet__head-label {
+  background-color: #ffffff !important;
+  color: #1c1c1c !important;
+  text-transform: uppercase !important;
+  font-family: "Barlow", sans-serif;
+  font-weight: 700;
+}
+
+
+
+.kt-portlet__body > .table-responsive > .table > tbody > tr > td {
+  font-size: 16px !important;
+  background-color: #f4f4f4 !important;
+}
+
+
+.kt-portlet__body > .table-responsive > .table > tbody > tr:nth-of-type(4n+3) > td,
+.kt-portlet__body > .table-responsive > .table > tbody > tr:nth-of-type(4n) > td {
+  background-color: #ffffff !important;
+}
+
+
+
+
+.btn-action-primary,
+.btn.btn-primary.btn-sm.btn-icon {
+  background-color: #005290;
+  border-color: #ffffff;
+  color: #fff !important;
+  font-size: 0.7rem !important;
+  border-radius: 32px !important;
+  text-transform: uppercase !important;
+  width: 100px;
+  white-space: nowrap !important;
+}
+
+
+.btn-action-primary:hover,
+.btn.btn-primary.btn-sm.btn-icon:hover {
+  background-color: #005a96 !important;
+  border-color: #005a96 !important;
+}
+
+.btn-action-secondary,
+.btn.btn-secondary.btn-sm.btn-icon {
+  background-color: #ffffff !important;
+  border-color: #032947;
+  color: #032947 !important;
+  font-size: 0.7rem !important;
+  border-radius: 32px !important;
+  text-transform: uppercase !important;
+  width: 100px;
+  white-space: nowrap !important;
+}
+
+.table-cursor{
+  cursor: pointer !important;
+}
+
+.excelente{
+  color: #0076e8 !important;
+  font-weight: 500 !important;
+  text-align: center;
+}
+.bom{
+  color: #5cb104 !important;
+  font-weight: 700 !important;
+  text-align: center;
+}
+.cuidado{
+  color: #eacb02 !important;
+  font-weight: 700 !important;
+  text-align: center;
+}
+.pessimo{
+  color: #ff0000 !important;
+  font-weight: 700 !important;
+  text-align: center;
+}

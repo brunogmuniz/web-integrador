@@ -1,20 +1,9 @@
 
 import { Routes } from '@angular/router';
-
-import { LoginComponent } from './components/login/login';
-import { AuthGuard } from './app-core/service/auth.guard';
-import {LAYOUT_DEPT_ENSINO_ROUTES} from './layout/layout.routes';
+import {AnaliseDasMedias} from './previsao-de-demanda/analise-das-medias/analise-das-medias';
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
-
-  {path: 'login', component: LoginComponent},
-
-  {
-    path: 'dept-ensino',
-    canActivate: [AuthGuard],
-    loadChildren: () => import('./layout/layout.routes').then(m => m.LAYOUT_DEPT_ENSINO_ROUTES),
-  },
+  { path: '**', component: AnaliseDasMedias },
 
 
 ];

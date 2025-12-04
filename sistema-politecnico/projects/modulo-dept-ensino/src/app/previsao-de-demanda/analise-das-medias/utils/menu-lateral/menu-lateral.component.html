@@ -1,0 +1,50 @@
+<button class="kt-aside-close" id="kt_aside_close_btn" style="background-color: #377838;">
+  <i class="la la-close text-white"></i>
+</button>
+
+<div class="kt-aside kt-aside--fixed kt-grid__item" id="kt_aside">
+
+
+  <div class="kt-aside__brand kt-grid__item" id="kt_aside_brand" kt-hidden-height="65">
+    <div class="kt-aside__brand-logo text-center">
+      <h1 class="navbar_brand">Departamento de Ensino</h1>
+    </div>
+
+    <div class="kt-aside__brand-tools">
+      <button class="kt-aside__brand-aside-toggler" id="kt_aside_toggler">
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+
+  <div class="kt-aside-menu-wrapper kt-grid__item" id="kt_aside_menu_wrapper">
+
+    <div id="kt_aside_menu"
+         class="kt-aside-menu bg-color-menu"
+         data-ktmenu-vertical="1"
+         data-ktmenu-scroll="1">
+
+      <ul class="kt-menu__nav">
+
+
+        <li class="kt-menu__item" routerLinkActive="kt-menu__item--active">
+          <a class="kt-menu__link" [routerLink]="['/principal']">
+            <i class="kt-menu__link-icon flaticon2-architecture-and-city"></i>
+            <span class="kt-menu__link-text">Página Inicial</span>
+          </a>
+        </li>
+
+
+        <li class="kt-menu__item" routerLinkActive="kt-menu__item--active">
+          <a class="kt-menu__link" [routerLink]="['/previsao-de-demanda/analise-das-medias']">
+            <i class="kt-menu__link-icon la la-chart-line" style="font-size: x-large;"></i>
+            <span class="kt-menu__link-text">Análise das Médias</span>
+          </a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</div>

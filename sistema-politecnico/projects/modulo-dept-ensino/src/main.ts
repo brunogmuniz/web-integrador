@@ -7,12 +7,10 @@ import { provideHttpClient } from '@angular/common/http';
 
 const keycloak = new KeycloakService();
 
-keycloak.init(true).then(() => {
-  bootstrapApplication(App, {
-    providers: [
-      provideRouter(routes),
-      provideHttpClient(),
-      { provide: KeycloakService, useValue: keycloak }
-    ]
-  });
+bootstrapApplication(App, {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+    { provide: KeycloakService, useValue: keycloak }
+  ]
 });
