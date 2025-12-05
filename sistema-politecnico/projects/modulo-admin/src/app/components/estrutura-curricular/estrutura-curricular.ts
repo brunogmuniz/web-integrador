@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { EstruturaCurricularService } from 'projects/shared-core/src/lib/services/estrutura-curricular-service';
 import { CursoService } from 'projects/shared-core/src/lib/services/curso-service';
-import { SubareaConhecimentoService} from 'shared-core/src/lib/services/subarea-conhecimento-service';
+import { SubareaConhecimentoService } from 'shared-core/src/lib/services/subarea-conhecimento-service';
 
 @Component({
   standalone: true,
@@ -114,29 +114,55 @@ export class EstruturaCurricularComponent implements OnInit {
   salvar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
-    const dto = this.form.value;
-    dto.ano = dto.ano.toString();
+    const formValue = this.form.value;
+
+    const dto = {
+      ...formValue,
+      ano: formValue.ano.toString(),
+      ofertas: formValue.ofertas.map((oferta: any) => ({
+        id: oferta.id,
+        nome: oferta.nome,
+        codigoDisciplina: oferta.codigoDisciplina,
+        cargaHoraria: oferta.cargaHoraria,
+        tipoDisciplina: oferta.tipoDisciplina,
+        idSubarea: oferta.idSubarea,
+
+        semestre: oferta.periodos ? oferta.periodos.map((p: number) => p.toString()) : [],
+
+        periodos: oferta.periodos ? oferta.periodos.length : 0
+      }))
+    };
+
+    console.log('Enviando DTO:', dto);
 
     if (dto.id) {
       this.service.update(dto.id, dto).subscribe({
         next: () => {
-          alert('Atualizado com sucesso!');
+          alert('Estrutura Curricular atualizada com sucesso!');
           this.carregarEstruturas();
         },
-        error: err => console.error(err)
+        error: err => {
+          console.error('Erro ao atualizar:', err);
+          alert('Erro ao atualizar. Verifique o console.');
+        }
       });
     } else {
       this.service.save(dto).subscribe({
         next: () => {
-          alert('Salvo com sucesso!');
+          alert('Estrutura Curricular cadastrada com sucesso!');
           this.carregarEstruturas();
+
           this.form.reset({ ativo: true });
           this.form.setControl('ofertas', this.fb.array([]));
         },
-        error: err => console.error(err)
+        error: err => {
+          console.error('Erro ao salvar:', err);
+          alert('Erro ao salvar. Verifique o console.');
+        }
       });
     }
   }
