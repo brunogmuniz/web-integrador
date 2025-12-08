@@ -10,6 +10,7 @@ import { PrincipalComponent } from './principal/principal.component';
 import { AnaliseDasMedias } from './principal/analise-das-medias/analise-das-medias';
 import { AreaTabelaComponent } from './principal/analise-das-medias/utils/area-tabela/area-tabela';
 import { MenuLateralComponent } from './principal/analise-das-medias/utils/menu-lateral/menu-lateral.component';
+import { HeaderComponent } from './principal/analise-das-medias/utils/header/header.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { MenuLateralComponent } from './principal/analise-das-medias/utils/menu-
     PrincipalComponent,
     AnaliseDasMedias,
     AreaTabelaComponent,
-    MenuLateralComponent
+    MenuLateralComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

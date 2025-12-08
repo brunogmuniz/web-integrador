@@ -15,6 +15,16 @@ export class AreaTabelaComponent {
         { id: 102, codigo: 'EST', nome: 'Estatística', media: 25.3, nrDocentes: 5, ano2024s1: 60, ano2024s2: 65, ano2025s1: 70, ano2025s2: 75, ano2026s1: 68, ano2026s2: 70, ano2027s1: 73, ano2027s2: 75 }
       ]
     },
+    {id: 85, codigo: 'CTA', nome: 'Ciência e Tecnologia de Alimentos', media: 22, nrDocentes: 90, ano2024s1: 75, ano2024s2: 78, ano2025s1: 82, ano2025s2: 85, ano2026s1: 88, ano2026s2: 90, ano2027s1: 52, ano2027s2: 52,
+      subareas: [
+        { id: 851, codigo: 'CALI', nome: 'Ciência de Alimentos', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+      ]
+    },
+    {id: 85, codigo: 'EST', nome: 'Estatística', media: 17, nrDocentes: 2, ano2024s1: 75, ano2024s2: 78, ano2025s1: 82, ano2025s2: 85, ano2026s1: 88, ano2026s2: 90, ano2027s1: 52, ano2027s2: 52,
+      subareas: [
+        { id: 851, codigo: 'ESTA', nome: 'Estatística Geral', media: 16, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+      ]
+    },
 
     {id: 2, codigo: 'CCO', nome: 'Ciência da Computação', media: 15.22, nrDocentes: 10, ano2024s1: 100, ano2024s2: 100, ano2025s1: 100, ano2025s2: 130, ano2026s1: 130, ano2026s2: 120, ano2027s1: 120, ano2027s2: 130,
       subareas: [
@@ -61,7 +71,23 @@ export class AreaTabelaComponent {
         { id: 809, codigo: 'HISANT', nome: 'História Antiga', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
         { id: 810, codigo: 'HISMOD', nome: 'História Moderna', media: 2.4, nrDocentes: 2, ano2024s1: 18, ano2024s2: 19, ano2025s1: 21, ano2025s2: 23, ano2026s1: 25, ano2026s2: 26, ano2027s1: 27, ano2027s2: 28 }
       ]
+    },
+    {id: 26, codigo: 'DIR', nome: 'Direito', media: 0.9, nrDocentes: 9, ano2024s1: 75, ano2024s2: 78, ano2025s1: 82, ano2025s2: 85, ano2026s1: 88, ano2026s2: 90, ano2027s1: 94, ano2027s2: 97,
+      subareas: [
+        { id: 260, codigo: 'DIRE', nome: 'Direito', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+      ]
+    },
+    {id: 27, codigo: 'SAÚ', nome: 'Saúde', media: 0.1, nrDocentes: 90, ano2024s1: 75, ano2024s2: 78, ano2025s1: 82, ano2025s2: 85, ano2026s1: 88, ano2026s2: 90, ano2027s1: 52, ano2027s2: 52,
+      subareas: [
+        { id: 271, codigo: 'ENMC', nome: 'Enfermagem Médico-Cirúrgica', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+        { id: 272, codigo: 'ENSC', nome: 'Enfermagem em Saúde Coletiva', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+        { id: 273, codigo: 'GERO', nome: 'Gerontologia', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+        { id: 274, codigo: 'SABA', nome: 'Saúde Básica', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+        { id: 275, codigo: 'FATC', nome: 'Farmacotécnica', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+        { id: 276, codigo: 'FARM', nome: 'Farmácia', media: 1.6, nrDocentes: 3, ano2024s1: 22, ano2024s2: 24, ano2025s1: 26, ano2025s2: 27, ano2026s1: 29, ano2026s2: 30, ano2027s1: 31, ano2027s2: 33 },
+      ]
     }
+
 
 
   ];
