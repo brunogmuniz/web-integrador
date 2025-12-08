@@ -58,11 +58,11 @@
   background-color: #005290;
   border-color: #ffffff;
   color: #fff !important;
-  font-size: 0.7rem !important;
+  font-size: 0.6rem !important;
   border-radius: 32px !important;
   text-transform: uppercase !important;
   width: 100px;
-  white-space: nowrap !important;
+  white-space: wrap !important;
 }
 
 
