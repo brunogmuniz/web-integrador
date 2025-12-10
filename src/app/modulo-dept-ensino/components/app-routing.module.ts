@@ -5,7 +5,8 @@ import {PrincipalComponent} from "./principal/principal.component";
 
 const routes: Routes = [
   { path: '', component: PrincipalComponent },
-  { path: 'media', component: AnaliseDasMedias }
+  { path: 'media', component: AnaliseDasMedias },
+  { path: 'principal', component: PrincipalComponent },
 ];
 
 @NgModule({
