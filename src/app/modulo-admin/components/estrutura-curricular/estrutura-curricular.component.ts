@@ -39,7 +39,18 @@ export class EstruturaCurricularComponent implements OnInit {
   ngOnInit(): void {
     this.carregarDependencias();
   }
+  carregarOfertas(ofertas: any[]) {
+    this.ofertas.clear(); // limpa ofertas atuais
 
+    ofertas.forEach(oferta => {
+      const ofertaGroup = this.fb.group({
+        idDisciplina: [oferta.idDisciplina, Validators.required],
+        periodos: [oferta.periodos || []]
+      });
+
+      this.ofertas.push(ofertaGroup);
+    });
+  }
   carregarDependencias() {
     this.cursoService.findAll().subscribe((res: any) => {
       this.listaCursos = res.content || res;

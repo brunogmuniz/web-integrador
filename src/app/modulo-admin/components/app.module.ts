@@ -18,6 +18,10 @@ import { VisualizarDocenteEncargosComponent } from './docente-encargos/visualiza
 import { SubareaConhecimentoComponent } from './subarea-conhecimento/subarea-conhecimento.component';
 import { AreaConhecimentoComponent } from './area-conhecimento/area-conhecimento.component';
 import { EstruturaCurricularComponent } from './estrutura-curricular/estrutura-curricular.component';
+import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component";
+import {HeaderComponent} from "./utils/header/header.component";
+import { VisualizarEstruturaCurricularComponent } from './estrutura-curricular/visualizar-estrutura/visualizar-estrutura.component';
+import { CadastrarEstruturaComponent } from './estrutura-curricular/cadastrar-estrutura/cadastrar-estrutura.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +36,11 @@ import { EstruturaCurricularComponent } from './estrutura-curricular/estrutura-c
     VisualizarDocenteEncargosComponent,
     SubareaConhecimentoComponent,
     AreaConhecimentoComponent,
-    EstruturaCurricularComponent
+    EstruturaCurricularComponent,
+    MenuLateralComponent,
+    HeaderComponent,
+    VisualizarEstruturaCurricularComponent,
+    CadastrarEstruturaComponent
   ],
   imports: [
     BrowserModule,

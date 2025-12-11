@@ -17,6 +17,10 @@ import {
 import {SubareaConhecimentoComponent} from "./subarea-conhecimento/subarea-conhecimento.component";
 import {AreaConhecimentoComponent} from "./area-conhecimento/area-conhecimento.component";
 import {EstruturaCurricularComponent} from "./estrutura-curricular/estrutura-curricular.component";
+import {
+  VisualizarEstruturaCurricularComponent
+} from "./estrutura-curricular/visualizar-estrutura/visualizar-estrutura.component";
+import {CadastrarEstruturaComponent} from "./estrutura-curricular/cadastrar-estrutura/cadastrar-estrutura.component";
 
 const routes: Routes = [
   {
@@ -31,7 +35,16 @@ const routes: Routes = [
   },
   { path: 'subarea', component: SubareaConhecimentoComponent },
   { path: 'area', component: AreaConhecimentoComponent },
-  { path: 'estrutura', component: EstruturaCurricularComponent },
+
+  {
+    path: 'estrutura',
+    component: EstruturaCurricularComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
+      { path: 'novo', component: CadastrarEstruturaComponent }
+    ]
+  },
   {
     path: 'docente-encargos',
     component: DocenteEncargosComponent,
