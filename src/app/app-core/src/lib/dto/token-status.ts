@@ -1,7 +1,6 @@
 export class TokenStatus {
 
-   email: string;
-   status: Status;
+   status: Status | undefined;
 
    constructor() {
    }

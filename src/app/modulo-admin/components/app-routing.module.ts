@@ -21,8 +21,22 @@ import {
   VisualizarEstruturaCurricularComponent
 } from "./estrutura-curricular/visualizar-estrutura/visualizar-estrutura.component";
 import {CadastrarEstruturaComponent} from "./estrutura-curricular/cadastrar-estrutura/cadastrar-estrutura.component";
+import {
+  VisualizarAreaConhecimentoComponent
+} from "./area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component";
+import {
+  CadastrarAreaConhecimentoComponent
+} from "./area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component";
+import {PrincipalComponent} from "./principal/principal.component";
+import {
+  VisualizarSubareaConhecimentoComponent
+} from "./subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component";
+import {
+  CadastrarSubareaConhecimentoComponent
+} from "./subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component";
 
 const routes: Routes = [
+  {path: 'principal', component: PrincipalComponent},
   {
     path: 'docente',
     component: DocenteComponent,
@@ -33,9 +47,24 @@ const routes: Routes = [
       { path: 'editar/:id', component: EditarDocenteComponent }
     ]
   },
-  { path: 'subarea', component: SubareaConhecimentoComponent },
-  { path: 'area', component: AreaConhecimentoComponent },
-
+  {
+    path: 'sub-area',
+    component: DocenteComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarSubareaConhecimentoComponent },
+      { path: 'novo', component: CadastrarSubareaConhecimentoComponent },
+    ]
+  },
+  {
+    path: 'area',
+    component: AreaConhecimentoComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
+      { path: 'novo', component: CadastrarAreaConhecimentoComponent }
+    ]
+  },
   {
     path: 'estrutura',
     component: EstruturaCurricularComponent,

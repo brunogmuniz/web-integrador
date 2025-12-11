@@ -1,0 +1,48 @@
+<div class="card mt-3">
+  <div class="card-header bg-navy-custom text-white">
+    <h5 class="mb-0">Cadastrar Área de Conhecimento</h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="areaForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-row mb-3">
+        <div class="col-md-8">
+          <lib-form-input-padrao
+            [label]="'Nome'"
+            [control]="c['nome']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Sigla'"
+            [control]="c['sigla']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-3">
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Carga Horária'"
+            [control]="c['cargaHoraria']"
+            [type]="'number'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-actions text-right">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="areaForm.invalid">
+          Inserir
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -22,6 +22,11 @@ import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component"
 import {HeaderComponent} from "./utils/header/header.component";
 import { VisualizarEstruturaCurricularComponent } from './estrutura-curricular/visualizar-estrutura/visualizar-estrutura.component';
 import { CadastrarEstruturaComponent } from './estrutura-curricular/cadastrar-estrutura/cadastrar-estrutura.component';
+import { VisualizarAreaConhecimentoComponent } from './area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component';
+import { CadastrarAreaConhecimentoComponent } from './area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
+import { PrincipalComponent } from './principal/principal.component';
+import { VisualizarSubareaConhecimentoComponent } from './subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component';
+import { CadastrarSubareaConhecimentoComponent } from './subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +45,12 @@ import { CadastrarEstruturaComponent } from './estrutura-curricular/cadastrar-es
     MenuLateralComponent,
     HeaderComponent,
     VisualizarEstruturaCurricularComponent,
-    CadastrarEstruturaComponent
+    CadastrarEstruturaComponent,
+    VisualizarAreaConhecimentoComponent,
+    CadastrarAreaConhecimentoComponent,
+    PrincipalComponent,
+    VisualizarSubareaConhecimentoComponent,
+    CadastrarSubareaConhecimentoComponent
   ],
   imports: [
     BrowserModule,

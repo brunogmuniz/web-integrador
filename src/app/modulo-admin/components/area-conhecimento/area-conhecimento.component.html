@@ -1,74 +1,19 @@
-<form [formGroup]="areaForm" (ngSubmit)="onSubmit()">
-  <div class="form-card">
-    <div class="form-row">
-      <div class="col-8">
-        <lib-form-input-padrao
-          [label]="'Nome'"
-          [control]="c['nome']"
-          [supportText]="''">
-        </lib-form-input-padrao>
-      </div>
-
-      <div class="col-4">
-        <lib-form-input-padrao
-          [label]="'Sigla'"
-          [control]="c['sigla']"
-          [supportText]="''">
-        </lib-form-input-padrao>
-      </div>
+<div class="kt-portlet kt-portlet--tabs m-0">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="flaticon2-analytics-2 text-success"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">Gerenciar Area Conhecimento</h3>
     </div>
-
-    <div class="form-row">
-      <lib-form-input-padrao
-        [label]="'Carga Horaria'"
-        [control]="c['cargaHoraria']"
-        [type]="'number'"
-        [supportText]="''">
-      </lib-form-input-padrao>
+    <div class="kt-portlet__head-toolbar">
+      <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-success" role="tablist">
+        <li class="nav-item">
+        </li>
+      </ul>
     </div>
-
-    <div class="form-actions">
-      <button type="submit" [disabled]="areaForm.invalid">Inserir</button>
-    </div>
-
   </div>
-</form>
-
-<!-- AQUI EM BAIXO COMEÇA O READ -->
-
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th scope="col">Id</th>
-    <th scope="col">Nome</th>
-    <th scope="col">Sigla</th>
-    <th scope="col">CH</th>
-    <th scope="col">Excluir</th>
-  </tr>
-  </thead>
-  <tbody>
-  <ng-container *ngIf="(areas ?? []).length > 0; else emptyList">
-
-    <tr *ngFor="let area of areas; trackBy: trackByAreaId" class="align-middle">
-      <th scope="row">{{ area.id }}</th>
-      <td>{{ area.nome }}</td>
-      <td>{{ area.sigla }}</td>
-      <td class="text-end">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-danger" (click)="onDelete(area.id)">
-            Excluir
-          </button>
-        </div>
-      </td>
-    </tr>
-  </ng-container>
-
-  <ng-template #emptyList>
-    <tr>
-      <td colspan="5" class="text-center text-muted">
-        Nenhuma area cadastrado.
-      </td>
-    </tr>
-  </ng-template>
-  </tbody>
-</table>
+  <div class="kt-portlet__body">
+    <router-outlet></router-outlet>
+  </div>
+</div>

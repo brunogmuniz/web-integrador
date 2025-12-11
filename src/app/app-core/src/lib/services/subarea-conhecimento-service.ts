@@ -53,4 +53,8 @@ export class SubareaConhecimentoService {
       })
     );
   }
+
+  findById(id: number): Observable<SubareaConhecimentoDTO> {
+    return this.http.get<SubareaConhecimentoDTO>(`${this.apiUrl}/${id}`);
+  }
 }
