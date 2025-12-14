@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
+import { catchError, tap, map } from 'rxjs/operators';
 import { Observable, throwError, of } from 'rxjs';
 import { EstruturaCurricularDto } from '../dto/EstruturaCurricular.dto';
 import {catchError, map, tap} from "rxjs/operators";

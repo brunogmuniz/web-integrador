@@ -1,4 +1,13 @@
 import { Injectable } from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
+import { catchError, tap} from 'rxjs/operators';
+import {SubareaConhecimentoDTO} from '../dto/SubareaConhecimento.dto';
+import {DocenteDTO} from "../dto/Docente.dto";
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { SubareaConhecimentoDTO } from '../dto/SubareaConhecimento.dto';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';

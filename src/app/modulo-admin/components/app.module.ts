@@ -24,6 +24,20 @@ import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplin
 import { EditarDisciplinaComponent } from './disciplina/editar-disciplina/editar-disciplina.component';
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import {HeaderComponent} from "./utils/header/header.component";
+import { VisualizarEstruturaCurricularComponent } from './estrutura-curricular/visualizar-estrutura/visualizar-estrutura.component';
+import { CadastrarEstruturaComponent } from './estrutura-curricular/cadastrar-estrutura/cadastrar-estrutura.component';
+import { VisualizarAreaConhecimentoComponent } from './area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component';
+import { CadastrarAreaConhecimentoComponent } from './area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
+import { PrincipalComponent } from './principal/principal.component';
+import { VisualizarSubareaConhecimentoComponent } from './subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component';
+import { CadastrarSubareaConhecimentoComponent } from './subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component';
+import { CadastrarEstruturaCurricularComponent } from './estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component';
+import { EditarEstruturaCurricularComponent } from './estrutura-curricular/editar-estrutura-curricular/editar-estrutura-curricular.component';
+import { VisualizarEstruturaCurricularComponent } from './estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
+import { DisciplinaComponent } from './disciplina/disciplina.component';
+import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplina/visualizar-disciplina.component';
+import { EditarDisciplinaComponent } from './disciplina/editar-disciplina/editar-disciplina.component';
+import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component";
 
 @NgModule({
@@ -41,6 +55,20 @@ import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component"
     CadastrarEstruturaCurricularComponent,
     EditarEstruturaCurricularComponent,
     VisualizarEstruturaCurricularComponent,
+    CadastrarEstruturaComponent,
+    VisualizarAreaConhecimentoComponent,
+    CadastrarAreaConhecimentoComponent,
+    PrincipalComponent,
+    VisualizarSubareaConhecimentoComponent,
+    CadastrarSubareaConhecimentoComponent
+    EstruturaCurricularComponent,
+    CadastrarEstruturaCurricularComponent,
+    EditarEstruturaCurricularComponent,
+    VisualizarEstruturaCurricularComponent,
+    DisciplinaComponent,
+    VisualizarDisciplinaComponent,
+    EditarDisciplinaComponent,
+    CadastrarDisciplinaComponent
     DisciplinaComponent,
     VisualizarDisciplinaComponent,
     EditarDisciplinaComponent,

@@ -82,6 +82,18 @@ const routes: Routes = [
       { path: 'form/editar/:id', component: CadastrarEstruturaComponent }
     ]
   },
+  { path: 'subarea', component: SubareaConhecimentoComponent },
+  { path: 'area', component: AreaConhecimentoComponent },
+  {
+    path: 'estrutura-curricular',
+    component: EstruturaCurricularComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
+      { path: 'novo', component: CadastrarEstruturaCurricularComponent },
+      { path: 'editar/:id', component: EditarEstruturaCurricularComponent }
+    ]
+  },
   {
     path: 'docente-encargos',
     component: DocenteEncargosComponent,
@@ -90,6 +102,16 @@ const routes: Routes = [
       { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
       { path: 'form/novo', component: CadastrarDocentesEncargosComponent },
       { path: 'form/editar/:id', component: CadastrarDocentesEncargosComponent }
+    ]
+  },
+  {
+    path: 'disciplina',
+    component: DisciplinaComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarDisciplinaComponent },
+      { path: 'novo', component: CadastrarDisciplinaComponent },
+      { path: 'editar/:id', component: EditarDisciplinaComponent }
     ]
   },
 
