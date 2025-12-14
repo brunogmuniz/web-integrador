@@ -17,6 +17,19 @@ import {
 import {SubareaConhecimentoComponent} from "./subarea-conhecimento/subarea-conhecimento.component";
 import {AreaConhecimentoComponent} from "./area-conhecimento/area-conhecimento.component";
 import {EstruturaCurricularComponent} from "./estrutura-curricular/estrutura-curricular.component";
+import {
+  VisualizarEstruturaCurricularComponent
+} from "./estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component";
+import {
+  CadastrarEstruturaCurricularComponent
+} from "./estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component";
+import {
+  EditarEstruturaCurricularComponent
+} from "./estrutura-curricular/editar-estrutura-curricular/editar-estrutura-curricular.component";
+import { DisciplinaComponent } from './disciplina/disciplina.component';
+import {VisualizarDisciplinaComponent} from "./disciplina/visualizar-disciplina/visualizar-disciplina.component";
+import {CadastrarDisciplinaComponent} from "./disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
+import {EditarDisciplinaComponent} from "./disciplina/editar-disciplina/editar-disciplina.component";
 
 const routes: Routes = [
   {
@@ -31,7 +44,16 @@ const routes: Routes = [
   },
   { path: 'subarea', component: SubareaConhecimentoComponent },
   { path: 'area', component: AreaConhecimentoComponent },
-  { path: 'estrutura', component: EstruturaCurricularComponent },
+  {
+    path: 'estrutura-curricular',
+    component: EstruturaCurricularComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
+      { path: 'novo', component: CadastrarEstruturaCurricularComponent },
+      { path: 'editar/:id', component: EditarEstruturaCurricularComponent }
+    ]
+  },
   {
     path: 'docente-encargos',
     component: DocenteEncargosComponent,
@@ -40,6 +62,16 @@ const routes: Routes = [
       { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
       { path: 'novo', component: CadastrarDocentesEncargosComponent },
       { path: 'editar/:id', component: EditarDocenteEncargosComponent }
+    ]
+  },
+  {
+    path: 'disciplina',
+    component: DisciplinaComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarDisciplinaComponent },
+      { path: 'novo', component: CadastrarDisciplinaComponent },
+      { path: 'editar/:id', component: EditarDisciplinaComponent }
     ]
   },
 

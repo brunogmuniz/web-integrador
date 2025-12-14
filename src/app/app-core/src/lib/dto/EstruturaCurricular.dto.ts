@@ -1,8 +1,11 @@
-
 export interface OfertaDisciplinaDto {
   idDisciplina: number;
   nomeDisciplina?: string;
-  periodos: number[];
+  semestre: number;
+  tutoria: boolean;
+  numProfessoresTeorica?: number;
+  numProfessoresPratica?: number;
+  ead: boolean;
 }
 
 export interface EstruturaCurricularDto {

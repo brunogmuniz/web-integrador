@@ -1,0 +1,58 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+        <thead>
+        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+          <th class="min-w-100px">Código</th>
+          <th class="min-w-200px">Nome</th>
+          <th class="min-w-150px">Subárea</th>
+          <th class="min-w-100px text-center">Teórica</th>
+          <th class="min-w-100px text-center">Prática</th>
+          <th class="min-w-100px text-center">Total</th>
+          <th class="min-w-50px text-center">EAD</th>
+          <th class="min-w-100px text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody class="fs-6">
+        <tr *ngFor="let item of disciplinas">
+          <td><span class="text-gray-800 fw-bold">{{ item.codigoDisciplina }}</span></td>
+          <td>{{ item.nome }}</td>
+          <td>
+            <span class="text-dark fw-semibold fs-8" *ngIf="item.nomeSubarea">
+              {{ item.nomeSubarea }}
+            </span>
+          </td>
+          <td class="text-center">{{ item.cargaHorariaTeorica }}h</td>
+          <td class="text-center">{{ item.cargaHorariaPratica }}h</td>
+          <td class="text-center fw-bold">{{ item.cargaHoraria }}h</td>
+          <td class="text-center">
+            <span *ngIf="item.ead">Sim</span>
+            <span *ngIf="!item.ead">Não</span>
+          </td>
+          <td class="text-center">
+            <a [routerLink]="['../editar', item.id]"
+               class="btn btn-icon btn-light-primary btn-sm me-2"
+               title="Editar">
+              <i class="la la-edit fs-3"></i>
+            </a>
+            <button (click)="confirmarExclusao(item.id)"
+                    class="btn btn-icon btn-light-danger btn-sm"
+                    title="Excluir">
+              <i class="la la-trash fs-3"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="disciplinas.length === 0">
+          <td colspan="8" class="text-center py-10">
+            <div class="d-flex flex-column align-items-center">
+              <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
+              <span class="text-gray-600 fw-semibold fs-5">Nenhum registro encontrado.</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

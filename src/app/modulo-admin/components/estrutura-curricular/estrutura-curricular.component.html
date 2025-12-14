@@ -1,185 +1,34 @@
-<div class="card card-custom">
-  <div class="card-header">
-    <h3 class="card-title">Cadastro de Estrutura Curricular</h3>
-  </div>
-
-  <div class="card-body">
-    <form [formGroup]="form">
-
-      <div class="row g-4 mb-6">
-
-        <div class="col-lg-6">
-          <label class="form-label text-gray-700 fw-semibold required">Nome do Currículo</label>
-          <input
-            type="text"
-            class="form-control form-control-solid"
-            placeholder="Ex: Engenharia de Software 2025/1"
-            formControlName="codigo"
-            [class.is-invalid]="form.get('codigo')?.invalid && form.get('codigo')?.touched"
-          />
-          <div *ngIf="form.get('codigo')?.invalid && form.get('codigo')?.touched" class="invalid-feedback d-block">
-            O nome é obrigatório
-          </div>
-        </div>
-
-        <div class="col-lg-2">
-          <label class="form-label text-gray-700 fw-semibold required">Ano</label>
-          <input
-            type="number"
-            class="form-control form-control-solid"
-            placeholder="2025"
-            formControlName="ano"
-            [class.is-invalid]="form.get('ano')?.invalid && form.get('ano')?.touched"
-          />
-          <div *ngIf="form.get('ano')?.invalid && form.get('ano')?.touched" class="invalid-feedback d-block">
-            Ano inválido (Ex: 2025)
-          </div>
-        </div>
-
-        <div class="col-lg-4">
-          <label class="form-label text-gray-700 fw-semibold required">Curso</label>
-          <select
-            class="form-select form-select-solid"
-            formControlName="idCurso"
-            [class.is-invalid]="form.get('idCurso')?.invalid && form.get('idCurso')?.touched"
-          >
-            <option [ngValue]="null" disabled>Selecione o Curso...</option>
-            <option *ngFor="let curso of listaCursos; trackBy: trackByCursoId" [value]="curso.id">
-              {{ curso.nome }}
-            </option>
-          </select>
-          <div *ngIf="form.get('idCurso')?.invalid && form.get('idCurso')?.touched" class="invalid-feedback d-block">
-            Selecione um curso
-          </div>
-        </div>
-      </div>
-
-    </form>
-
-    <div class="separator separator-dashed my-6"></div>
-
-    <div class="d-flex flex-stack mb-5">
-      <h3 class="text-gray-800 fw-bold m-0">
-        <i class="la la-book text-primary fs-2 me-2"></i>
-        Oferta de Disciplinas
-      </h3>
-      <button type="button" class="btn btn-sm btn-light-primary" (click)="adicionarOferta()">
-        <i class="la la-plus"></i> Adicionar Disciplina
-      </button>
+<div class="kt-portlet kt-portlet--tabs m-0">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="flaticon2-analytics-2 text-success"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">Gerenciar Estruturas Curriculares</h3>
     </div>
-
-    <form [formGroup]="form">
-      <div formArrayName="ofertas">
-
-        <ng-container *ngIf="ofertas.controls.length > 0; else nenhumaOferta">
-          <div *ngFor="let oferta of ofertas.controls; let i = index" [formGroupName]="i"
-               class="p-5 bg-light-primary border border-primary border-dashed rounded mb-4">
-
-            <div class="row align-items-center g-3">
-
-              <div class="col-md-5">
-                <label class="form-label text-gray-700 fw-semibold required">Disciplina</label>
-                <select
-                  class="form-select form-select-solid"
-                  formControlName="idDisciplina"
-                  [class.is-invalid]="oferta.get('idDisciplina')?.invalid && oferta.get('idDisciplina')?.touched"
-                >
-                  <option [ngValue]="null">Selecione a disciplina...</option>
-                  <option *ngFor="let disc of listaDisciplinas; trackBy: trackByDisciplinaId" [value]="disc.id">
-                    {{ disc.codigoDisciplina }} - {{ disc.nome }}
-                  </option>
-                </select>
-                <div *ngIf="oferta.get('idDisciplina')?.invalid && oferta.get('idDisciplina')?.touched"
-                     class="invalid-feedback d-block">
-                  Campo obrigatório
-                </div>
-              </div>
-
-              <div class="col-md-6">
-                <label class="form-label text-gray-700 fw-semibold d-block">Semestres Ofertados</label>
-
-                <div class="d-flex flex-wrap align-items-center gap-2">
-                  <span *ngFor="let p of oferta.get('periodos')?.value" class="badge badge-primary fs-7 d-flex align-items-center gap-1 p-2">
-                    {{ p }}º Semestre
-                    <i class="la la-times text-white cursor-pointer ms-1 fs-5" (click)="removerPeriodoDeOferta(i, p)" title="Remover semestre"></i>
-                  </span>
-
-                  <button type="button" class="btn btn-sm btn-icon btn-light-primary w-30px h-30px" (click)="abrirModalPeriodo(i)" title="Adicionar Semestre">
-                    <i class="la la-plus fs-4"></i>
-                  </button>
-                </div>
-
-                <div *ngIf="oferta.get('periodos')?.touched && oferta.get('periodos')?.value?.length === 0" class="invalid-feedback d-block mt-2">
-                  Adicione pelo menos um semestre
-                </div>
-              </div>
-
-              <div class="col-md-1 text-end">
-                <button type="button" class="btn btn-icon btn-light-danger btn-sm mt-md-6" (click)="removerOferta(i)" title="Remover Oferta">
-                  <i class="la la-trash fs-3"></i>
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </ng-container>
-
-        <ng-template #nenhumaOferta>
-          <div class="alert alert-dismissible bg-light-secondary border border-secondary border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-            <i class="la la-info-circle fs-2hx text-secondary me-4 mb-5 mb-sm-0"></i>
-            <div class="d-flex flex-column pe-0 pe-sm-10">
-              <h5 class="mb-1">Nenhuma oferta cadastrada</h5>
-              <span>Clique no botão "Adicionar Disciplina" acima para começar a compor a estrutura.</span>
-            </div>
-          </div>
-        </ng-template>
-
-      </div>
-    </form>
-
-  </div>
-
-  <div class="card-footer d-flex justify-content-between">
-    <button type="button" class="btn btn-light-secondary">
-      <i class="la la-times"></i> Cancelar
-    </button>
-
-    <button type="button" class="btn btn-primary" (click)="salvar()" [disabled]="form.invalid">
-      <i class="la la-check"></i> Salvar Estrutura
-    </button>
-  </div>
-
-</div>
-
-<div *ngIf="mostrarModalPeriodo" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5)">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title fw-bold">Adicionar Semestre</h5>
-        <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" (click)="fecharModalPeriodo()">
-          <i class="la la-times fs-4"></i>
-        </div>
-      </div>
-
-      <div class="modal-body">
-        <div class="mb-5">
-          <label class="form-label required fw-semibold">Selecione o Semestre</label>
-          <select class="form-select form-select-solid" [(ngModel)]="periodoSelecionado">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let num of listaOpcoesSemestre; trackBy: trackByNumero" [value]="num">
-              {{ num }}º Semestre
-            </option>
-          </select>
-          <div class="form-text mt-2">Indique em qual etapa do curso a disciplina será ofertada.</div>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" (click)="fecharModalPeriodo()">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="adicionarPeriodoNaOferta()" [disabled]="!periodoSelecionado">
-          Adicionar
-        </button>
-      </div>
+    <div class="kt-portlet__head-toolbar">
+      <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-success" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link"
+             [routerLink]="['novo']"
+             routerLinkActive="active"
+             role="tab">
+            <i class="flaticon2-add-1"></i> Nova Estrutura
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"
+             [routerLink]="['visualizar']"
+             routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: false}"
+             role="tab">
+            <i class="flaticon2-gear"></i> Visualizar/Editar
+          </a>
+        </li>
+      </ul>
     </div>
+  </div>
+  <div class="kt-portlet__body">
+    <router-outlet></router-outlet>
   </div>
 </div>

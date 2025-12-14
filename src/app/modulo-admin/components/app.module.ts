@@ -9,7 +9,6 @@ import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FormInput} from "../../app-core/src/lib/components/form-input-padrao/form-input-padrao";
 import {VisualizarDocenteComponent} from "./docente/visualizar-docente/visualizar-docente.component";
-import {DocenteService} from "../../app-core/src/lib/services/docente-service";
 import {HttpClientModule} from "@angular/common/http";
 import { DocenteEncargosComponent } from './docente-encargos/docente-encargos.component';
 import { CadastrarDocentesEncargosComponent } from './docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component';
@@ -18,6 +17,13 @@ import { VisualizarDocenteEncargosComponent } from './docente-encargos/visualiza
 import { SubareaConhecimentoComponent } from './subarea-conhecimento/subarea-conhecimento.component';
 import { AreaConhecimentoComponent } from './area-conhecimento/area-conhecimento.component';
 import { EstruturaCurricularComponent } from './estrutura-curricular/estrutura-curricular.component';
+import { CadastrarEstruturaCurricularComponent } from './estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component';
+import { EditarEstruturaCurricularComponent } from './estrutura-curricular/editar-estrutura-curricular/editar-estrutura-curricular.component';
+import { VisualizarEstruturaCurricularComponent } from './estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
+import { DisciplinaComponent } from './disciplina/disciplina.component';
+import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplina/visualizar-disciplina.component';
+import { EditarDisciplinaComponent } from './disciplina/editar-disciplina/editar-disciplina.component';
+import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +38,14 @@ import { EstruturaCurricularComponent } from './estrutura-curricular/estrutura-c
     VisualizarDocenteEncargosComponent,
     SubareaConhecimentoComponent,
     AreaConhecimentoComponent,
-    EstruturaCurricularComponent
+    EstruturaCurricularComponent,
+    CadastrarEstruturaCurricularComponent,
+    EditarEstruturaCurricularComponent,
+    VisualizarEstruturaCurricularComponent,
+    DisciplinaComponent,
+    VisualizarDisciplinaComponent,
+    EditarDisciplinaComponent,
+    CadastrarDisciplinaComponent
   ],
   imports: [
     BrowserModule,
