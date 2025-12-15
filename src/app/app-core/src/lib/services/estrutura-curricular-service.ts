@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
 import { EstruturaCurricularDto } from '../dto/EstruturaCurricular.dto';
-import {DocenteDTO} from "../dto/Docente.dto";
 import {catchError, map, tap} from "rxjs/operators";
 
 @Injectable({
@@ -72,16 +70,6 @@ export class EstruturaCurricularService {
       catchError(error => {
         console.error('Erro ao ler Estruturas', error);
         return of([]);
-      })
-    );
-  }
-  delete(id: number): Observable<void> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.delete<void>(url).pipe(
-      tap(() => console.log(`Docente ${id} excluída com sucesso`)),
-      catchError(error => {
-        console.error(`Erro ao excluir Docente${id}`, error);
-        throw error;
       })
     );
   }

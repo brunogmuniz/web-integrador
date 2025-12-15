@@ -30,6 +30,7 @@ import { DisciplinaComponent } from './disciplina/disciplina.component';
 import {VisualizarDisciplinaComponent} from "./disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import {CadastrarDisciplinaComponent} from "./disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
 import {EditarDisciplinaComponent} from "./disciplina/editar-disciplina/editar-disciplina.component";
+import {PrincipalComponent} from "./principal/principal.component";
 
 const routes: Routes = [
   {path: 'principal', component: PrincipalComponent},

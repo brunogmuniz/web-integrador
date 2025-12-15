@@ -24,6 +24,8 @@ import { DisciplinaComponent } from './disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplina/visualizar-disciplina.component';
 import { EditarDisciplinaComponent } from './disciplina/editar-disciplina/editar-disciplina.component';
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
+import {HeaderComponent} from "./utils/header/header.component";
+import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component";
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/
     DisciplinaComponent,
     VisualizarDisciplinaComponent,
     EditarDisciplinaComponent,
-    CadastrarDisciplinaComponent
+    CadastrarDisciplinaComponent,
+    HeaderComponent,
+    MenuLateralComponent
   ],
   imports: [
     BrowserModule,
