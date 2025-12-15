@@ -32,6 +32,7 @@ import {CadastrarDisciplinaComponent} from "./disciplina/cadastrar-disciplina/ca
 import {EditarDisciplinaComponent} from "./disciplina/editar-disciplina/editar-disciplina.component";
 
 const routes: Routes = [
+  {path: 'principal', component: PrincipalComponent},
   {
     path: 'docente',
     component: DocenteComponent,

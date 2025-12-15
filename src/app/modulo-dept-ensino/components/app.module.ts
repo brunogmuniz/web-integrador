@@ -29,6 +29,9 @@ import { HeaderComponent } from './principal/analise-das-medias/utils/header/hea
     FormsModule
   ],
   providers: [],
+  exports: [
+    MenuLateralComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
