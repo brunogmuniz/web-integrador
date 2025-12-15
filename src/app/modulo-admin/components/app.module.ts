@@ -38,6 +38,8 @@ import { DisciplinaComponent } from './disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplina/visualizar-disciplina.component';
 import { EditarDisciplinaComponent } from './disciplina/editar-disciplina/editar-disciplina.component';
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
+import {HeaderComponent} from "./utils/header/header.component";
+import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component";
 import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component";
 
 @NgModule({
@@ -68,6 +70,9 @@ import {MenuLateralComponent} from "./utils/menu-lateral/menu-lateral.component"
     DisciplinaComponent,
     VisualizarDisciplinaComponent,
     EditarDisciplinaComponent,
+    CadastrarDisciplinaComponent,
+    HeaderComponent,
+    MenuLateralComponent
     CadastrarDisciplinaComponent
     DisciplinaComponent,
     VisualizarDisciplinaComponent,
