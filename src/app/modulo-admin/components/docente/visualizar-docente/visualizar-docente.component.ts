@@ -1,16 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import Swal from "sweetalert2";
-import {DocenteDTO} from "../../../../app-core/src/lib/dto/Docente.dto";
-import {DocenteService} from "../../../../app-core/src/lib/services/docente-service";
+import { Component, OnInit } from '@angular/core';
+import Swal from 'sweetalert2';
+import { DocenteDTO } from "../../../../app-core/src/lib/dto/Docente.dto";
+import { DocenteService } from "../../../../app-core/src/lib/services/docente-service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-visualizar-docente',
   templateUrl: './visualizar-docente.component.html',
 })
 export class VisualizarDocenteComponent implements OnInit {
+
   docentes: DocenteDTO[] = [];
 
-  constructor(private docenteService: DocenteService) {}
+  constructor(
+    private docenteService: DocenteService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.carregarDocentes();
@@ -21,6 +26,10 @@ export class VisualizarDocenteComponent implements OnInit {
       next: (data) => this.docentes = data,
       error: (err) => console.error('Erro ao carregar docentes', err)
     });
+  }
+
+  editar(id: number): void {
+    this.router.navigate(['/docente/editar', id]);
   }
 
   onDelete(id: number): void {
@@ -45,9 +54,17 @@ export class VisualizarDocenteComponent implements OnInit {
           },
           error: (err) => {
             if (err.status === 500 || err.status === 409) {
-              void Swal.fire('Atenção', 'Não é possível excluir este docente pois ele possui encargos ou vínculos ativos.', 'warning');
+              void Swal.fire(
+                'Atenção',
+                'Não é possível excluir este docente pois ele possui encargos ou vínculos ativos.',
+                'warning'
+              );
             } else {
-              void Swal.fire('Erro', 'Não foi possível excluir o docente. Tente novamente mais tarde.', 'error');
+              void Swal.fire(
+                'Erro',
+                'Não foi possível excluir o docente. Tente novamente mais tarde.',
+                'error'
+              );
             }
             console.error(err);
           }

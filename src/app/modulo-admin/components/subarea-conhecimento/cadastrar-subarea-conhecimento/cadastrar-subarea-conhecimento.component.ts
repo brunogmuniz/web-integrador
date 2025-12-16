@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
-import {AreaConhecimentoDTO} from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
-import {SubareaConhecimentoDTO} from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
-import {AreaConhecimentoService} from "../../../../app-core/src/lib/services/area-conhecimento-service";
-import {SubareaConhecimentoService} from "../../../../app-core/src/lib/services/subarea-conhecimento-service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { SubareaConhecimentoService } from "../../../../app-core/src/lib/services/subarea-conhecimento-service";
+import { AreaConhecimentoService } from "../../../../app-core/src/lib/services/area-conhecimento-service";
+import { SubareaConhecimentoDTO } from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
+import { AreaConhecimentoDTO } from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
+import Swal from 'sweetalert2';
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',
@@ -15,72 +16,100 @@ import {Router} from "@angular/router";
 export class CadastrarSubareaConhecimentoComponent implements OnInit {
   subAreaForm!: FormGroup;
   areasDeConhecimento$!: Observable<AreaConhecimentoDTO[]>;
-  subAreas: SubareaConhecimentoDTO[] = [];
+  modoEdicao = false;
+  subAreaId: number | null = null;
 
   constructor(
     private fb: FormBuilder,
     private subAreaService: SubareaConhecimentoService,
     private areaService: AreaConhecimentoService,
-  private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
+    this.loadAreas();
+
+    // Verifica se existe id na rota para modo edição
+    this.subAreaId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.subAreaId) {
+      this.modoEdicao = true;
+      this.loadSubArea(this.subAreaId);
+    }
+  }
+
+  private initForm(): void {
     this.subAreaForm = this.fb.group({
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
-      cargaHoraria: ['', [Validators.required, Validators.min(1)]],
-      areaConhecimentoId: [null, Validators.required]
+      cargaHoraria: [null, [Validators.required, Validators.min(1)]],
+      areaConhecimentoId: [null, Validators.required],
     });
+  }
 
+  private loadAreas(): void {
     this.areasDeConhecimento$ = this.areaService.listarTodos();
+  }
 
-    this.loadSubAreas();
+  private loadSubArea(id: number): void {
+    this.subAreaService.buscarPorId(id).subscribe({
+      next: (sub: SubareaConhecimentoDTO) => {
+        this.subAreaForm.patchValue({
+          nome: sub.nome,
+          sigla: sub.sigla,
+          cargaHoraria: sub.cargaHorariaTotal,
+          areaConhecimentoId: sub.area
+        });
+      },
+      error: (err) => console.error('Erro ao carregar subárea:', err)
+    });
   }
 
   get c(): { [key: string]: FormControl } {
     return this.subAreaForm.controls as { [key: string]: FormControl };
   }
 
-  trackBySubAreaId(index: number, item: SubareaConhecimentoDTO) {
-    return item.id;
-  }
-
-  loadSubAreas(): void {
-    this.subAreaService.listarTodos().subscribe({
-      next: (data) => this.subAreas = data,
-      error: (err) => console.error('Erro ao carregar subáreas:', err)
-    });
-  }
-
-  onDelete(id: number): void {
-    if (confirm('Tem certeza que deseja excluir esta subárea?')) {
-      this.subAreaService.delete(id).subscribe({
-        next: () => this.subAreas = this.subAreas.filter(s => s.id !== id),
-        error: (err) => console.error('Erro ao deletar subárea:', err)
-      });
-    }
-  }
-  cancelar(): void {
-    void this.router.navigate(['/sub-area']);
-  }
   onSubmit(): void {
-    if (this.subAreaForm.valid) {
-      this.subAreaService.create(this.subAreaForm.value).subscribe({
-        next: (resposta) => {
-          console.log('Subárea cadastrada com sucesso:', resposta);
-          this.subAreaForm.reset();
-          this.loadSubAreas();
+    if (this.subAreaForm.invalid) {
+      this.subAreaForm.markAllAsTouched();
+      void Swal.fire('Atenção', 'Preencha todos os campos obrigatórios.', 'warning');
+      return;
+    }
+
+    const payload = {
+      ...this.subAreaForm.value,
+      cargaHorariaTotal: this.subAreaForm.value.cargaHoraria
+    };
+
+    if (this.modoEdicao && this.subAreaId) {
+
+      this.subAreaService.update(this.subAreaId, payload).subscribe({
+        next: () => {
+          void Swal.fire('Sucesso', 'Subárea atualizada com sucesso!', 'success');
+          void this.router.navigate(['/sub-area']);
         },
-        error: (erro) => {
-          console.error('Erro ao criar subárea:', erro);
+        error: (err) => {
+          console.error('Erro ao atualizar subárea:', err);
+          void Swal.fire('Erro', 'Não foi possível atualizar a subárea.', 'error');
         }
       });
     } else {
-      console.warn('Formulário inválido. Verifique os campos.');
-      this.subAreaForm.markAllAsTouched();
+
+      this.subAreaService.create(payload).subscribe({
+        next: () => {
+          void Swal.fire('Sucesso', 'Subárea criada com sucesso!', 'success');
+          void this.router.navigate(['/sub-area']);
+        },
+        error: (err) => {
+          console.error('Erro ao criar subárea:', err);
+          void Swal.fire('Erro', 'Não foi possível criar a subárea.', 'error');
+        }
+      });
     }
   }
 
-
-
+  cancelar(): void {
+    void this.router.navigate(['/sub-area']);
+  }
 }

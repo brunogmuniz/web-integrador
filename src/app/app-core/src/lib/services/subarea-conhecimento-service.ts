@@ -10,6 +10,11 @@ import { SubareaConhecimentoDTO } from '../dto/SubareaConhecimento.dto';
 export class SubareaConhecimentoService {
   private apiUrl = 'http://localhost:8080/subareas-conhecimento';
 
+
+  buscarPorId(id: number) {
+    return this.http.get<SubareaConhecimentoDTO>(`${this.apiUrl}/${id}`);
+  }
+
   constructor(private http: HttpClient) {}
 
   create(dto: SubareaConhecimentoDTO): Observable<SubareaConhecimentoDTO> {

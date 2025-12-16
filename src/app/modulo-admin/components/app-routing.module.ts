@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import {DocenteComponent} from "./docente/docente.component";
 import {VisualizarDocenteComponent} from "./docente/visualizar-docente/visualizar-docente.component";
 import {CadastrarDocenteComponent} from "./docente/cadastrar-docente/cadastrar-docente.component";
-import {EditarDocenteComponent} from "./docente/editar-docente/editar-docente.component";
 import {DocenteEncargosComponent} from "./docente-encargos/docente-encargos.component";
 import {
   CadastrarDocentesEncargosComponent
@@ -33,19 +32,37 @@ import {EditarDisciplinaComponent} from "./disciplina/editar-disciplina/editar-d
 import {PrincipalComponent} from "./principal/principal.component";
 
 const routes: Routes = [
-  {path: 'principal', component: PrincipalComponent},
+  {path: '', component: PrincipalComponent},
   {
     path: 'docente',
     component: DocenteComponent,
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarDocenteComponent },
-      { path: 'novo', component: CadastrarDocenteComponent },
-      { path: 'editar/:id', component: EditarDocenteComponent }
+      { path: 'form/novo', component: CadastrarDocenteComponent },
+      { path: 'form/editar/:id', component: CadastrarDocenteComponent }
     ]
   },
-  { path: 'subarea', component: SubareaConhecimentoComponent },
-  { path: 'area', component: AreaConhecimentoComponent },
+  {
+    path: 'sub-area',
+    component: SubareaConhecimentoComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarSubareaConhecimentoComponent },
+      { path: 'form/novo', component: CadastrarSubareaConhecimentoComponent },
+      { path: 'form/editar/:id', component: CadastrarSubareaConhecimentoComponent }
+    ]
+  },
+  {
+    path: 'area',
+    component: AreaConhecimentoComponent,
+    children: [
+      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+      { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
+      { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
+      { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
+    ]
+  },
   {
     path: 'estrutura-curricular',
     component: EstruturaCurricularComponent,

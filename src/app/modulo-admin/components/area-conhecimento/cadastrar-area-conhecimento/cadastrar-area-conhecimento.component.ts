@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AreaConhecimentoDTO} from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AreaConhecimentoService} from "../../../../app-core/src/lib/services/area-conhecimento-service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { AreaConhecimentoDTO } from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AreaConhecimentoService } from "../../../../app-core/src/lib/services/area-conhecimento-service";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-cadastrar-area-conhecimento',
@@ -10,21 +10,40 @@ import {Router} from "@angular/router";
   styleUrls: ['./cadastrar-area-conhecimento.component.scss']
 })
 export class CadastrarAreaConhecimentoComponent implements OnInit {
+
   areaForm!: FormGroup;
   areas: AreaConhecimentoDTO[] = [];
 
+  areaId?: number;
+  modoEdicao = false;
 
   constructor(
     private fb: FormBuilder,
     private areaService: AreaConhecimentoService,
-  private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.areaForm = this.fb.group({
+      id: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
       cargaHoraria: ['', [Validators.required, Validators.min(1)]],
+    });
+
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+
+      if (idParam) {
+        this.areaId = Number(idParam);
+        this.modoEdicao = true;
+        this.carregarArea(this.areaId);
+      } else {
+        this.modoEdicao = false;
+        this.areaId = undefined;
+        this.areaForm.reset();
+      }
     });
 
     this.loadAreas();
@@ -45,6 +64,15 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
     });
   }
 
+  carregarArea(id: number): void {
+    this.areaService.buscarPorId(id).subscribe({
+      next: (area) => {
+        this.areaForm.patchValue(area);
+      },
+      error: (err) => console.error('Erro ao carregar área:', err)
+    });
+  }
+
   onDelete(id: number): void {
     if (confirm('Tem certeza que deseja excluir esta área?')) {
       this.areaService.delete(id).subscribe({
@@ -57,24 +85,33 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.areaForm.valid) {
+    if (this.areaForm.invalid) {
+      this.areaForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.modoEdicao && this.areaId) {
+      this.areaService.update(this.areaId, this.areaForm.value).subscribe({
+        next: () => {
+          console.log('Área atualizada com sucesso');
+          this.router.navigate(['/area/visualizar']);
+        },
+        error: (err) => console.error('Erro ao atualizar área:', err)
+      });
+    } else {
+
       this.areaService.create(this.areaForm.value).subscribe({
-        next: (resposta) => {
-          console.log('Área cadastrada com sucesso:', resposta);
-          // Limpar formulário e atualizar lista
+        next: () => {
+          console.log('Área cadastrada com sucesso');
           this.areaForm.reset();
           this.loadAreas();
         },
-        error: (erro) => {
-          console.error('Erro ao criar área:', erro);
-        }
+        error: (err) => console.error('Erro ao criar área:', err)
       });
-    } else {
-      console.warn('Formulário inválido. Verifique os campos.');
-      this.areaForm.markAllAsTouched();
     }
   }
+
   cancelar(): void {
-    void this.router.navigate(['/sub-area']);
+    void this.router.navigate(['/area/visualizar']);
   }
 }
