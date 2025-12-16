@@ -22,7 +22,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
   encargoForm!: FormGroup;
   subForm!: FormGroup;
   docentesDisponiveis: DocenteDTO[] = [];
-
+  modoEdicao: boolean = false;
   areasAgrupadas: AreaAgrupadaView[] = [];
 
   encargosAtuais: DocenteSubAreaPercentualDTO[] = [];

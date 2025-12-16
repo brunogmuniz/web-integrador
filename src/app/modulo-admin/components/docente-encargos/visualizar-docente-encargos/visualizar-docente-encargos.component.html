@@ -37,11 +37,20 @@
               </span>
           </td>
           <td class="text-center">
-            <a [routerLink]="['../editar', item.idDocente]"
-               class="btn btn-icon btn-light-primary btn-sm"
-               title="Editar Encargos">
-              <i class="la la-edit fs-3"></i>
-            </a>
+            <div class="d-flex justify-content-center gap-2">
+              <button
+                class="btn btn-icon btn-light-primary btn-sm me-2"
+                [routerLink]="['/docente/form/editar', item.idDocente]"
+              >
+                <i class="la la-edit fs-3"></i>
+              </button>
+              <button type="button"
+                      class="btn btn-icon btn-light-danger btn-sm"
+                      (click)="onDelete(item.idDocente)"
+                      title="Excluir">
+                <i class="la la-trash fs-3"></i>
+              </button>
+            </div>
           </td>
         </tr>
         <ng-template #emptyList>
