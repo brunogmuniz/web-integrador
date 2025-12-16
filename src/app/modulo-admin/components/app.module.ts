@@ -8,11 +8,10 @@ import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {FormInput} from "../../app-core/src/lib/components/form-input-padrao/form-input-padrao";
 import {VisualizarDocenteComponent} from "./docente/visualizar-docente/visualizar-docente.component";
-import {DocenteService} from "../../app-core/src/lib/services/docente-service";
+
 import {HttpClientModule} from "@angular/common/http";
 import { DocenteEncargosComponent } from './docente-encargos/docente-encargos.component';
 import { CadastrarDocentesEncargosComponent } from './docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component';
-import { EditarDocenteEncargosComponent } from './docente-encargos/editar-docente-encargos/editar-docente-encargos.component';
 import { VisualizarDocenteEncargosComponent } from './docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component';
 import { SubareaConhecimentoComponent } from './subarea-conhecimento/subarea-conhecimento.component';
 import { AreaConhecimentoComponent } from './area-conhecimento/area-conhecimento.component';
@@ -35,7 +34,6 @@ import { CadastrarSubareaConhecimentoComponent } from './subarea-conhecimento/ca
     VisualizarDocenteComponent,
     DocenteEncargosComponent,
     CadastrarDocentesEncargosComponent,
-    EditarDocenteEncargosComponent,
     VisualizarDocenteEncargosComponent,
     SubareaConhecimentoComponent,
     AreaConhecimentoComponent,

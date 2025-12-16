@@ -28,9 +28,6 @@ export class VisualizarDocenteComponent implements OnInit {
     });
   }
 
-  editar(id: number): void {
-    this.router.navigate(['/docente/editar', id]);
-  }
 
   onDelete(id: number): void {
     void Swal.fire({

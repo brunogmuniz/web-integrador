@@ -68,6 +68,15 @@ export class PrincipalComponent {
       svgIcon: '<i class="la la-sitemap la-3x"></i> '
     });
 
+    this.modulos.push({
+      title: 'GERENCIAR DISCIPLINAS',
+      sectionView: 'disciplinas/visualizar',
+      pageGo: 'disciplina/visualizar/',
+      pages: ['Disciplinas'],
+      info: 'Operações referentes a gerenciamento das Disciplinas',
+      svgIcon: '<i class="la la-paperclip la-3x"></i> '
+    });
+
   }
   navegar(rota: string) {
     if (rota) {

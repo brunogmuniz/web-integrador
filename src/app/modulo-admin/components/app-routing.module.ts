@@ -8,9 +8,6 @@ import {
   CadastrarDocentesEncargosComponent
 } from "./docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component";
 import {
-  EditarDocenteEncargosComponent
-} from "./docente-encargos/editar-docente-encargos/editar-docente-encargos.component";
-import {
   VisualizarDocenteEncargosComponent
 } from "./docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component";
 import {SubareaConhecimentoComponent} from "./subarea-conhecimento/subarea-conhecimento.component";
@@ -66,6 +63,16 @@ const routes: Routes = [
       { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
     ]
   },
+  // {
+  //   path: 'disciplina',
+  //   component: DisciplinaComponent,
+  //   children: [
+  //     { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+  //     { path: 'visualizar', component: VisualizarDisciplinaComponent },
+  //     { path: 'form/novo', component: CadastrarDisciplinaComponent },
+  //     { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
+  //   ]
+  // },
   {
     path: 'estrutura',
     component: EstruturaCurricularComponent,
@@ -81,8 +88,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
-      { path: 'novo', component: CadastrarDocentesEncargosComponent },
-      { path: 'editar/:id', component: EditarDocenteEncargosComponent }
+      { path: 'form/novo', component: CadastrarDocentesEncargosComponent },
+      { path: 'form/editar/:id', component: CadastrarDocentesEncargosComponent }
     ]
   },
 

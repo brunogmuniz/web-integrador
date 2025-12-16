@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {DocenteDTO} from '../dto/Docente.dto'
 import { DocenteDetalheDTO } from '../dto/DocenteDetalhe.dto';
 import {AreaConhecimentoDTO} from "../dto/AreaConhecimento.dto";
+import {DocenteSubAreaPercentualDTO} from "../dto/DocenteSubAreaPercentual.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +39,13 @@ export class DocenteService {
       })
     );
   }
+
+  buscarEncargos(idDocente: number): Observable<DocenteSubAreaPercentualDTO[]> {
+    return this.http.get<DocenteSubAreaPercentualDTO[]>(
+      `${this.apiUrl}/${idDocente}/encargos`
+    );
+  }
+
 
   findById(id: number): Observable<DocenteDetalheDTO> {
     const url = `${this.apiUrl}/${id}`;
