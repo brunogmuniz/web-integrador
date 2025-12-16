@@ -79,7 +79,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
-      { path: 'novo', component: CadastrarEstruturaComponent }
+      { path: 'form/novo', component: CadastrarEstruturaComponent },
+      { path: 'form/editar/:id', component: CadastrarEstruturaComponent }
     ]
   },
   {
