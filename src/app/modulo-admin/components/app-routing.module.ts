@@ -60,16 +60,16 @@ const routes: Routes = [
       { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
     ]
   },
-  // {
-  //   path: 'disciplina',
-  //   component: DisciplinaComponent,
-  //   children: [
-  //     { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
-  //     { path: 'visualizar', component: VisualizarDisciplinaComponent },
-  //     { path: 'form/novo', component: CadastrarDisciplinaComponent },
-  //     { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
-  //   ]
-  // },
+   {
+     path: 'disciplina',
+     component: DisciplinaComponent,
+     children: [
+       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+       { path: 'visualizar', component: VisualizarDisciplinaComponent },
+       { path: 'form/novo', component: CadastrarDisciplinaComponent },
+       { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
+     ]
+   },
   {
     path: 'estrutura-curricular',
     component: EstruturaCurricularComponent,
@@ -78,6 +78,8 @@ const routes: Routes = [
       { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
       { path: 'novo', component: CadastrarEstruturaCurricularComponent },
       { path: 'editar/:id', component: EditarEstruturaCurricularComponent }
+      { path: 'form/novo', component: CadastrarEstruturaComponent },
+      { path: 'form/editar/:id', component: CadastrarEstruturaComponent }
     ]
   },
   {
@@ -88,16 +90,6 @@ const routes: Routes = [
       { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
       { path: 'form/novo', component: CadastrarDocentesEncargosComponent },
       { path: 'form/editar/:id', component: CadastrarDocentesEncargosComponent }
-    ]
-  },
-  {
-    path: 'disciplina',
-    component: DisciplinaComponent,
-    children: [
-      { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
-      { path: 'visualizar', component: VisualizarDisciplinaComponent },
-      { path: 'novo', component: CadastrarDisciplinaComponent },
-      { path: 'editar/:id', component: EditarDisciplinaComponent }
     ]
   },
 
