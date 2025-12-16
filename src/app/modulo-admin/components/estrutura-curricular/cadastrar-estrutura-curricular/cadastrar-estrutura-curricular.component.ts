@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ActivatedRoute, Router} from "@angular/router";
 import {EstruturaCurricularService} from "../../../../app-core/src/lib/services/estrutura-curricular-service";
 import {CursoService} from "../../../../app-core/src/lib/services/curso-service";
 import {DisciplinaService} from "../../../../app-core/src/lib/services/disciplina-service";
-import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 
 @Component({
@@ -17,13 +17,15 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
   listaCursos: any[] = [];
   listaDisciplinas: any[] = [];
   listaOpcoesSemestre = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  isEdicao = false;
 
   constructor(
     private fb: FormBuilder,
     private service: EstruturaCurricularService,
     private cursoService: CursoService,
     private disciplinaService: DisciplinaService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
       id: [null],
@@ -37,6 +39,12 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarDependencias();
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEdicao = true;
+      this.carregarEstrutura(Number(id));
+    }
   }
 
   carregarDependencias() {
@@ -49,17 +57,47 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
     });
   }
 
+  carregarEstrutura(id: number) {
+    this.service.findById(id).subscribe({
+      next: (res) => {
+        this.form.patchValue({
+          id: res.id,
+          codigo: res.codigo,
+          ano: res.ano,
+          idCurso: res.idCurso,
+          ativo: res.ativo
+        });
+
+        if (res.ofertas && res.ofertas.length > 0) {
+          this.ofertas.clear();
+          res.ofertas.forEach(oferta => {
+            this.adicionarOfertaComDados(oferta);
+          });
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        void Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error');
+        this.cancelar();
+      }
+    });
+  }
+
   get ofertas(): FormArray {
     return this.form.get('ofertas') as FormArray;
   }
 
   adicionarOferta() {
+    this.adicionarOfertaComDados(null);
+  }
+
+  adicionarOfertaComDados(dados: any | null) {
     const ofertaGroup = this.fb.group({
-      idDisciplina: [null, Validators.required],
-      semestre: [null, Validators.required],
-      numProfessoresPratica: [1],
-      numProfessoresTeorica: [1],
-      tutoria: [false]
+      idDisciplina: [dados ? dados.idDisciplina : null, Validators.required],
+      semestre: [dados ? dados.semestre : null, Validators.required],
+      numProfessoresPratica: [dados ? dados.numProfessoresPratica : 1],
+      numProfessoresTeorica: [dados ? dados.numProfessoresTeorica : 1],
+      tutoria: [dados ? dados.tutoria : false]
     });
     this.ofertas.push(ofertaGroup);
   }
@@ -86,17 +124,31 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
     const dto = this.form.value;
     dto.ano = dto.ano.toString();
 
-    this.service.save(dto).subscribe({
-      next: () => {
-        void Swal.fire('Sucesso', 'Estrutura Curricular cadastrada com sucesso!', 'success').then(() => {
-          void this.router.navigate(['/estrutura-curricular/visualizar']);
-        });
-      },
-      error: (err) => {
-        console.error(err);
-        void Swal.fire('Erro', 'Erro ao salvar.', 'error');
-      }
-    });
+    if (this.isEdicao && dto.id) {
+      this.service.update(dto.id, dto).subscribe({
+        next: () => {
+          void Swal.fire('Sucesso', 'Estrutura Curricular atualizada com sucesso!', 'success').then(() => {
+            void this.router.navigate(['/estrutura-curricular/visualizar']);
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          void Swal.fire('Erro', 'Erro ao atualizar.', 'error');
+        }
+      });
+    } else {
+      this.service.save(dto).subscribe({
+        next: () => {
+          void Swal.fire('Sucesso', 'Estrutura Curricular cadastrada com sucesso!', 'success').then(() => {
+            void this.router.navigate(['/estrutura-curricular/visualizar']);
+          });
+        },
+        error: (err) => {
+          console.error(err);
+          void Swal.fire('Erro', 'Erro ao salvar.', 'error');
+        }
+      });
+    }
   }
 
   cancelar() {
