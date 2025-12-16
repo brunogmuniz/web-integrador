@@ -14,19 +14,28 @@ import {SubareaConhecimentoComponent} from "./subarea-conhecimento/subarea-conhe
 import {AreaConhecimentoComponent} from "./area-conhecimento/area-conhecimento.component";
 import {EstruturaCurricularComponent} from "./estrutura-curricular/estrutura-curricular.component";
 import {
+  VisualizarAreaConhecimentoComponent
+} from "./area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component";
+import {
+  CadastrarAreaConhecimentoComponent
+} from "./area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component";
+import {
+  VisualizarSubareaConhecimentoComponent
+} from "./subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component";
+import {
+  CadastrarSubareaConhecimentoComponent
+} from "./subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component";
+import {
+  VisualizarEstruturaCurricularComponent
   VisualizarEstruturaCurricularComponent
 } from "./estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component";
-import {
-  CadastrarEstruturaCurricularComponent
-} from "./estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component";
-import {
-  EditarEstruturaCurricularComponent
-} from "./estrutura-curricular/editar-estrutura-curricular/editar-estrutura-curricular.component";
 import { DisciplinaComponent } from './disciplina/disciplina.component';
 import {VisualizarDisciplinaComponent} from "./disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import {CadastrarDisciplinaComponent} from "./disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-import {EditarDisciplinaComponent} from "./disciplina/editar-disciplina/editar-disciplina.component";
 import {PrincipalComponent} from "./principal/principal.component";
+import {
+  CadastrarEstruturaCurricularComponent
+} from "./estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component";
 
 const routes: Routes = [
   {path: '', component: PrincipalComponent},
@@ -60,6 +69,16 @@ const routes: Routes = [
       { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
     ]
   },
+    {
+     path: 'disciplina',
+     component: DisciplinaComponent,
+     children: [
+       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+       { path: 'visualizar', component: VisualizarDisciplinaComponent },
+       { path: 'form/novo', component: CadastrarDisciplinaComponent },
+       { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
+     ]
+   },
    {
      path: 'disciplina',
      component: DisciplinaComponent,
@@ -90,8 +109,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
-      { path: 'novo', component: CadastrarEstruturaCurricularComponent },
-      { path: 'editar/:id', component: EditarEstruturaCurricularComponent }
+      { path: 'form/novo', component: CadastrarEstruturaCurricularComponent },
+      { path: 'form/editar/:id', component: CadastrarEstruturaCurricularComponent }
     ]
   },
   {
@@ -110,8 +129,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarDisciplinaComponent },
-      { path: 'novo', component: CadastrarDisciplinaComponent },
-      { path: 'editar/:id', component: EditarDisciplinaComponent }
+      { path: 'form/novo', component: CadastrarDisciplinaComponent },
+      { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
     ]
   },
 

@@ -9,7 +9,7 @@ import {CursoDTO} from '../dto/Curso.dto';
   providedIn: 'root'
 })
 export class AreaConhecimentoService {
-  private apiUrl = 'http://localhost:8080/areaconhecimentos';
+  private apiUrl = 'http://localhost:8080/areas-conhecimento';
 
   constructor(private http: HttpClient) {}
   buscarPorId(id: number) {
