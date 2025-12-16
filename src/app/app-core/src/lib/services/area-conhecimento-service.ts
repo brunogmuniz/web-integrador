@@ -12,7 +12,9 @@ export class AreaConhecimentoService {
   private apiUrl = 'http://localhost:8080/areaconhecimentos';
 
   constructor(private http: HttpClient) {}
-
+  buscarPorId(id: number) {
+    return this.http.get<AreaConhecimentoDTO>(`${this.apiUrl}/${id}`);
+  }
   create(dto: AreaConhecimentoDTO): Observable<AreaConhecimentoDTO> {
     return this.http.post<AreaConhecimentoDTO>(this.apiUrl, dto).pipe(
       tap(() => console.log('Area criada com sucesso')),

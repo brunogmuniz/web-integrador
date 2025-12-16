@@ -3,12 +3,18 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import { catchError, tap} from 'rxjs/operators';
 import {SubareaConhecimentoDTO} from '../dto/SubareaConhecimento.dto';
+import {DocenteDTO} from "../dto/Docente.dto";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubareaConhecimentoService {
   private apiUrl = 'http://localhost:8080/subareas-conhecimento';
+
+
+  buscarPorId(id: number) {
+    return this.http.get<SubareaConhecimentoDTO>(`${this.apiUrl}/${id}`);
+  }
 
   constructor(private http: HttpClient) {}
 

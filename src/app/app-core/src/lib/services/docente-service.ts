@@ -4,6 +4,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {DocenteDTO} from '../dto/Docente.dto'
 import { DocenteDetalheDTO } from '../dto/DocenteDetalhe.dto';
+import {AreaConhecimentoDTO} from "../dto/AreaConhecimento.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,10 @@ export class DocenteService {
   private apiUrl = 'http://localhost:8080/docentes';
 
   constructor(private http: HttpClient) {}
+
+  buscarPorId(id: number) {
+    return this.http.get<DocenteDTO>(`${this.apiUrl}/${id}`);
+  }
 
   create(dto: DocenteDTO): Observable<DocenteDTO> {
     return this.http.post<DocenteDTO>(this.apiUrl, dto).pipe(

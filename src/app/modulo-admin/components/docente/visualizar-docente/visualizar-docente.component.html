@@ -35,11 +35,12 @@
           </td>
           <td class="text-center">
             <div class="d-flex justify-content-center gap-2">
-              <a [routerLink]="['../editar', docente.id]"
-                 class="btn btn-icon btn-light-primary btn-sm"
-                 title="Editar">
+              <button
+                class="btn btn-icon btn-light-primary btn-sm me-2"
+                [routerLink]="['/docente/form/editar', docente.id]"
+              >
                 <i class="la la-edit fs-3"></i>
-              </a>
+              </button>
               <button type="button"
                       class="btn btn-icon btn-light-danger btn-sm"
                       (click)="onDelete(docente.id)"

@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import {DocenteComponent} from "./docente/docente.component";
 import {VisualizarDocenteComponent} from "./docente/visualizar-docente/visualizar-docente.component";
 import {CadastrarDocenteComponent} from "./docente/cadastrar-docente/cadastrar-docente.component";
-import {EditarDocenteComponent} from "./docente/editar-docente/editar-docente.component";
 import {DocenteEncargosComponent} from "./docente-encargos/docente-encargos.component";
 import {
   CadastrarDocentesEncargosComponent
@@ -36,24 +35,25 @@ import {
 } from "./subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component";
 
 const routes: Routes = [
-  {path: 'principal', component: PrincipalComponent},
+  {path: '', component: PrincipalComponent},
   {
     path: 'docente',
     component: DocenteComponent,
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarDocenteComponent },
-      { path: 'novo', component: CadastrarDocenteComponent },
-      { path: 'editar/:id', component: EditarDocenteComponent }
+      { path: 'form/novo', component: CadastrarDocenteComponent },
+      { path: 'form/editar/:id', component: CadastrarDocenteComponent }
     ]
   },
   {
     path: 'sub-area',
-    component: DocenteComponent,
+    component: SubareaConhecimentoComponent,
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarSubareaConhecimentoComponent },
-      { path: 'novo', component: CadastrarSubareaConhecimentoComponent },
+      { path: 'form/novo', component: CadastrarSubareaConhecimentoComponent },
+      { path: 'form/editar/:id', component: CadastrarSubareaConhecimentoComponent }
     ]
   },
   {
@@ -62,7 +62,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
       { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
-      { path: 'novo', component: CadastrarAreaConhecimentoComponent }
+      { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
+      { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
     ]
   },
   {

@@ -33,11 +33,18 @@
           </td>
 
           <td class="text-center">
-            <a [routerLink]="['../editar', sub.id]"
-               class="btn btn-icon btn-light-primary btn-sm"
-               title="Editar Encargos">
+            <button
+              class="btn btn-icon btn-light-primary btn-sm me-2"
+              [routerLink]="['/sub-area/form/editar', sub.id]"
+            >
               <i class="la la-edit fs-3"></i>
-            </a>
+            </button>
+            <button type="button"
+                    class="btn btn-icon btn-light-danger btn-sm"
+                    (click)="onDelete(sub.id)"
+                    title="Excluir">
+              <i class="la la-trash fs-3"></i>
+            </button>
           </td>
         </tr>
         <ng-template #emptyList>

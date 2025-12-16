@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody class="fs-6">
-        <tr *ngFor="let area of areas; else emptyAreas">
+        <tr *ngFor="let area of areas">
           <td>
             <span class="text-gray-800 fw-bold">{{ area.id }}</span>
           </td>
@@ -29,9 +29,17 @@
             <span class="text-gray-700 fw-semibold">{{ area.cargaHorariaTotal }}h</span>
           </td>
           <td class="text-center">
-            <button class="btn btn-icon btn-light-danger btn-sm"
-                    (click)="onDelete(area.id)"
-                    title="Excluir Área">
+            <button
+              class="btn btn-icon btn-light-primary btn-sm me-2"
+              [routerLink]="['/area/form/editar', area.id]"
+              title="Editar Área">
+              <i class="la la-edit fs-3"></i>
+            </button>
+
+            <button
+              class="btn btn-icon btn-light-danger btn-sm"
+              (click)="onDelete(area.id)"
+              title="Excluir Área">
               <i class="la la-trash fs-3"></i>
             </button>
           </td>
