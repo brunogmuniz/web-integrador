@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AreaConhecimentoDTO} from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
 import {AreaConhecimentoService} from "../../../../app-core/src/lib/services/area-conhecimento-service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-visualizar-area-conhecimento',
@@ -28,13 +29,39 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
   }
 
   onDelete(id: number): void {
-    if (confirm('Tem certeza que deseja excluir esta área?')) {
-      this.areaService.delete(id).subscribe({
-        next: () => {
-          this.areas = this.areas.filter(a => a.id !== id);
-        },
-        error: (err) => console.error('Erro ao deletar área:', err)
-      });
-    }
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Essa área de conhecimento será excluída permanentemente.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, excluir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.areaService.delete(id).subscribe({
+          next: () => {
+            this.areas = this.areas.filter(a => a.id !== id);
+
+            Swal.fire({
+              title: 'Excluída!',
+              text: 'Área removida com sucesso.',
+              icon: 'success',
+              timer: 1800,
+              showConfirmButton: false
+            });
+          },
+          error: () => {
+            Swal.fire({
+              title: 'Erro!',
+              text: 'Não foi possível excluir a área.',
+              icon: 'error'
+            });
+          }
+        });
+      }
+    });
   }
+
 }

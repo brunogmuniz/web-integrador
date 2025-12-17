@@ -19,11 +19,11 @@
             </div>
           </td>
           <td>
-            <span class="text-gray-700">{{ item.nomeDepartamento || item.departamento }}</span>
+            <span class="text-gray-800">{{ item.nomeDepartamento || item.departamento }}</span>
           </td>
           <td>
-            <div class="d-flex flex-wrap gap-1">
-              <span *ngFor="let area of getNomesAreas(item.subAreas)" class="badge badge-light-primary text-dark fw-semibold fs-8">{{ area }}</span>
+            <div class="d-flex flex-wrap gap-1 ">
+              <span *ngFor="let area of getNomesAreas(item.subAreas)" class="text-gray-700 fw-semibold">{{ area }}</span>
             </div>
           </td>
           <td class="text-center">
@@ -45,7 +45,7 @@
                 <i class="la la-edit fs-3"></i>
               </button>
               <button type="button"
-                      class="btn btn-icon btn-light-danger btn-sm"
+                      class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
                       (click)="onDelete(item.idDocente)"
                       title="Excluir">
                 <i class="la la-trash fs-3"></i>

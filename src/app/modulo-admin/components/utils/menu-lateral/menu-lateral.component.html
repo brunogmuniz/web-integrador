@@ -44,7 +44,8 @@
           </h4>
         </li>
 
-        <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
+        <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'"
+            [routerLinkActiveOptions]="{ exact: true }">
           <a class="kt-menu__link" routerLink="">
             <i class="kt-menu__link-icon la la-home text-white" style="font-size: x-large;"></i>
             <span class="kt-menu__link-text text-white">Página Inicial</span>
@@ -174,6 +175,35 @@
         </li>
 
         <li class="kt-menu__item kt-menu__item--submenu"
+            [class.kt-menu__item--open]="menuAberto === 'disciplina'"
+            [routerLinkActive]="'kt-menu__item--open'">
+
+          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('disciplina')">
+            <i class="kt-menu__link-icon la la-paperclip text-white" style="font-size: x-large;"></i>
+            <span class="kt-menu__link-text text-white">Disciplinas</span>
+            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
+          </a>
+
+          <div class="kt-menu__submenu">
+            <span class="kt-menu__arrow"></span>
+            <ul class="kt-menu__subnav">
+              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
+                <a routerLink="/disciplina/visualizar" class="kt-menu__link">
+                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                  <span class="kt-menu__link-text text-white">Listar Disciplinas</span>
+                </a>
+              </li>
+              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
+                <a routerLink="/disciplina/form/novo" class="kt-menu__link">
+                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                  <span class="kt-menu__link-text text-white">Cadastrar Disciplinas</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="kt-menu__item kt-menu__item--submenu"
             [class.kt-menu__item--open]="menuAberto === 'estrutura-curricular'"
             [routerLinkActive]="'kt-menu__item--open'">
 
@@ -203,34 +233,7 @@
         </li>
 
 
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'disciplina'"
-            [routerLinkActive]="'kt-menu__item--open'">
 
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('disciplina')">
-            <i class="kt-menu__link-icon la la-paperclip text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Disciplinas</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/disciplina/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Listar Disciplinas</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/disciplina/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Disciplinas</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
       </ul>
     </div>
   </div>

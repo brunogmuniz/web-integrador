@@ -3,6 +3,7 @@ import { AreaConhecimentoDTO } from "../../../../app-core/src/lib/dto/AreaConhec
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AreaConhecimentoService } from "../../../../app-core/src/lib/services/area-conhecimento-service";
 import { ActivatedRoute, Router } from "@angular/router";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cadastrar-area-conhecimento',
@@ -29,7 +30,7 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
       id: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
-      cargaHoraria: ['', [Validators.required, Validators.min(1)]],
+      cargaHorariaTotal: ['', [Validators.required, Validators.min(1)]],
     });
 
     this.route.paramMap.subscribe(params => {
@@ -93,23 +94,47 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
     if (this.modoEdicao && this.areaId) {
       this.areaService.update(this.areaId, this.areaForm.value).subscribe({
         next: () => {
-          console.log('Área atualizada com sucesso');
+          Swal.fire({
+            title: 'Atualizada!',
+            text: 'Área atualizada com sucesso.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+          });
           this.router.navigate(['/area/visualizar']);
         },
-        error: (err) => console.error('Erro ao atualizar área:', err)
+        error: () => {
+          Swal.fire({
+            title: 'Erro!',
+            text: 'Não foi possível atualizar a área.',
+            icon: 'error'
+          });
+        }
       });
     } else {
-
       this.areaService.create(this.areaForm.value).subscribe({
         next: () => {
-          console.log('Área cadastrada com sucesso');
+          Swal.fire({
+            title: 'Cadastrada!',
+            text: 'Área cadastrada com sucesso.',
+            icon: 'success',
+            timer: 1800,
+            showConfirmButton: false
+          });
           this.areaForm.reset();
           this.loadAreas();
         },
-        error: (err) => console.error('Erro ao criar área:', err)
+        error: () => {
+          Swal.fire({
+            title: 'Erro!',
+            text: 'Não foi possível cadastrar a área.',
+            icon: 'error'
+          });
+        }
       });
     }
   }
+
 
   cancelar(): void {
     void this.router.navigate(['/area/visualizar']);

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {catchError, tap} from 'rxjs/operators';
+import {catchError, map, tap} from 'rxjs/operators';
 import {AreaConhecimentoDTO} from '../dto/AreaConhecimento.dto';
 import {CursoDTO} from '../dto/Curso.dto';
 
@@ -26,14 +26,16 @@ export class AreaConhecimentoService {
   }
 
   listarTodos(): Observable<AreaConhecimentoDTO[]> {
-    return this.http.get<AreaConhecimentoDTO[]>(this.apiUrl).pipe(
-      tap(() => console.log('Areas lidas com sucesso')),
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(res => res.content),
+      tap(() => console.log('Áreas lidas com sucesso')),
       catchError(error => {
-        console.error('Erro ao ler Areas', error);
-        return of(error);
+        console.error('Erro ao ler Áreas', error);
+        return of([]);
       })
     );
   }
+
 
   update(id: number, dto: AreaConhecimentoDTO): Observable<AreaConhecimentoDTO> {
     const url = `${this.apiUrl}/${id}`;

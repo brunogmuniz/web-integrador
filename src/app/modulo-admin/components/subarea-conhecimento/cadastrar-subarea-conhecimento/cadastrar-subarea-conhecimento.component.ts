@@ -31,7 +31,6 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
     this.initForm();
     this.loadAreas();
 
-    // Verifica se existe id na rota para modo edição
     this.subAreaId = Number(this.route.snapshot.paramMap.get('id'));
     if (this.subAreaId) {
       this.modoEdicao = true;
@@ -43,7 +42,7 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
     this.subAreaForm = this.fb.group({
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
-      cargaHoraria: [null, [Validators.required, Validators.min(1)]],
+      cargaHorariaTotal: [null, [Validators.required, Validators.min(1)]],
       areaConhecimentoId: [null, Validators.required],
     });
   }
@@ -58,7 +57,7 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
         this.subAreaForm.patchValue({
           nome: sub.nome,
           sigla: sub.sigla,
-          cargaHoraria: sub.cargaHorariaTotal,
+          cargaHorariaTotal: sub.cargaHorariaTotal,
           areaConhecimentoId: sub.area
         });
       },
