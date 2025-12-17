@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map} from 'rxjs/operators';
 import { DisciplinaDTO } from '../dto/Disciplina.dto';
 
 @Injectable({
@@ -23,10 +23,22 @@ export class DisciplinaService {
   }
 
   findAll(): Observable<DisciplinaDTO[]> {
-    return this.http.get<DisciplinaDTO[]>(this.apiUrl).pipe(
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(response => response.content),
       tap(() => console.log('Disciplinas lidas com sucesso')),
       catchError(error => {
         console.error('Erro ao ler Disciplina', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  findById(id: number): Observable<DisciplinaDTO> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<DisciplinaDTO>(url).pipe(
+      tap(() => console.log(`Disciplina ${id} recuperada com sucesso`)),
+      catchError(error => {
+        console.error(`Erro ao recuperar Disciplina ${id}`, error);
         return throwError(() => error);
       })
     );

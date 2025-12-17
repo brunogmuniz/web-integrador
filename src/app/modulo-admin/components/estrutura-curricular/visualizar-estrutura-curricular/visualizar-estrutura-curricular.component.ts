@@ -1,0 +1,66 @@
+import {Component, OnInit} from '@angular/core';
+import {EstruturaCurricularService} from "../../../../app-core/src/lib/services/estrutura-curricular-service";
+import {EstruturaCurricularDto} from "../../../../app-core/src/lib/dto/EstruturaCurricular.dto";
+import Swal from 'sweetalert2';
+
+@Component({
+  selector: 'app-visualizar-estrutura-curricular',
+  templateUrl: './visualizar-estrutura-curricular.component.html',
+  styleUrls: ['../estrutura-curricular.component.scss']
+})
+export class VisualizarEstruturaCurricularComponent implements OnInit {
+
+  listaEstruturas: EstruturaCurricularDto[] = [];
+
+  constructor(
+    private service: EstruturaCurricularService,
+  ) {}
+
+  ngOnInit(): void {
+    this.carregarEstruturas();
+  }
+
+  carregarEstruturas() {
+    this.service.findAll().subscribe({
+      next: (res) => {
+        this.listaEstruturas = res;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar Estruturas Curriculares', err);
+      }
+    });
+  }
+
+  onDelete(id: number, nome: string) {
+    void Swal.fire({
+      title: 'Tem certeza?',
+      text: `Deseja realmente excluir a estrutura "${nome}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-danger',
+        cancelButton: 'btn btn-primary me-3'
+      }
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        this.service.delete(id).subscribe({
+          next: () => {
+            void Swal.fire('Sucesso', 'Estrutura Curricular excluída com sucesso!', 'success');
+            this.carregarEstruturas();
+          },
+          error: (err) => {
+            console.error(err);
+            void Swal.fire('Erro', 'Não foi possível excluir a Estrutura Curricular. Verifique se há vínculos ativos.', 'error');
+          }
+        });
+      }
+    });
+  }
+
+  trackByEstruturaId(_index: number, item: EstruturaCurricularDto) {
+    return item.id;
+  }
+}

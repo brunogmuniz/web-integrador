@@ -1,10 +1,12 @@
-import {SubareaConhecimentoDTO} from './SubareaConhecimento.dto'
-
 export interface DisciplinaDTO{
   id: number;
   nome: string;
   codigoDisciplina: string;
   cargaHoraria: number;
-
-  subarea: SubareaConhecimentoDTO;
+  idSubarea: number;
+  nomeSubarea: string;
+  tipoDisciplina?: string;
+  ead: boolean;
+  cargaHorariaTeorica: number;
+  cargaHorariaPratica: number;
 }
