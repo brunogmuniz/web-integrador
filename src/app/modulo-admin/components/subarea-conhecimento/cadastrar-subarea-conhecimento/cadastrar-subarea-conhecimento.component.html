@@ -1,54 +1,52 @@
 <div class="card mt-3">
-  <div class="card-header bg-navy-custom text-black">
-    <h5 class="mb-0">
+  <div class="card-header bg-navy-custom text-white">
+    <h5 class="mb-0 text-white">
       {{ modoEdicao ? 'Editar Subárea de Conhecimento' : 'Cadastrar Subárea de Conhecimento' }}
     </h5>
   </div>
   <div class="card-body">
-    <form [formGroup]="subAreaForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="subAreaForm" (ngSubmit)="onSubmit()" *ngIf="subAreaForm">
 
-      <div class="form-row mb-3">
+      <div class="row mb-3">
         <div class="col-md-8">
           <lib-form-input-padrao
             [label]="'Nome'"
-            [control]="c['nome']"
-            [supportText]="''">
+            [control]="c['nome']">
           </lib-form-input-padrao>
         </div>
 
         <div class="col-md-4">
           <lib-form-input-padrao
             [label]="'Sigla'"
-            [control]="c['sigla']"
-            [supportText]="''">
+            [control]="c['sigla']">
           </lib-form-input-padrao>
         </div>
       </div>
 
-      <div class="form-row mb-3">
-        <div class="col-md-4">
-          <lib-form-input-padrao
-            [label]="'Carga Horária'"
-            [control]="c['cargaHorariaTotal']"
-            [type]="'number'"
-            [supportText]="''">
-          </lib-form-input-padrao>
-        </div>
-      </div>
-
-      <div class="form-row mb-3">
+      <div class="row mb-3">
         <div class="col-md-6">
-          <label for="areaConhecimento" class="form-label">Área de Conhecimento</label>
-          <select id="areaConhecimento" class="form-select" formControlName="areaConhecimentoId">
+          <label class="form-label">Área de Conhecimento</label>
+          <select class="form-select" formControlName="areaConhecimentoId">
             <option [ngValue]="null" disabled>Selecione uma área...</option>
             <option *ngFor="let area of areasDeConhecimento$ | async" [value]="area.id">
-              {{ area.nome }}
+              {{ area.nome }} ({{ area.sigla }})
             </option>
           </select>
+          <div *ngIf="c['areaConhecimentoId'].touched && c['areaConhecimentoId'].invalid" class="text-danger small mt-1">
+            A área é obrigatória.
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <lib-form-input-padrao
+            [label]="'Carga Horária Total'"
+            [control]="c['cargaHorariaTotal']"
+            [type]="'number'">
+          </lib-form-input-padrao>
         </div>
       </div>
 
-      <div class="form-actions text-right">
+      <div class="form-actions d-flex justify-content-end mt-4">
         <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
           Cancelar
         </button>

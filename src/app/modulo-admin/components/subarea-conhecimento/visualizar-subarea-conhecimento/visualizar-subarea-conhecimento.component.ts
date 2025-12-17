@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SubareaConhecimentoDTO } from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
-import { ActivatedRoute, Router } from "@angular/router";
 import { SubareaConhecimentoService } from "../../../../app-core/src/lib/services/subarea-conhecimento-service";
-import Swal from 'sweetalert2';
+import { SubareaConhecimentoDTO } from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-visualizar-subarea-conhecimento',
@@ -10,60 +9,62 @@ import Swal from 'sweetalert2';
   styleUrls: ['./visualizar-subarea-conhecimento.component.scss']
 })
 export class VisualizarSubareaConhecimentoComponent implements OnInit {
-  subArea: SubareaConhecimentoDTO | null = null;
   subAreas: SubareaConhecimentoDTO[] = [];
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private subAreaService: SubareaConhecimentoService
-  ) {}
+  constructor(private subareaService: SubareaConhecimentoService) {}
 
   ngOnInit(): void {
-    this.carregarDados();
+    this.carregarSubAreas();
   }
 
-  trackBySubId(index: number, sub: SubareaConhecimentoDTO) {
-    return sub.id;
-  }
-
-  carregarDados(): void {
-    this.subAreaService.listarTodos().subscribe({
-      next: (detalhes) => {
-        this.subAreas = detalhes.filter(d => !!d);
-      },
-      error: (err) => console.error('Erro ao carregar subÁreas:', err)
+  carregarSubAreas(): void {
+    this.subareaService.listarTodos().subscribe({
+      next: (res) => this.subAreas = res,
+      error: (err) => {
+        console.error('Erro ao carregar subáreas', err);
+        this.notificarErro('Não foi possível carregar a lista de subáreas.');
+      }
     });
   }
-
 
   onDelete(id: number): void {
     void Swal.fire({
       title: 'Tem certeza?',
-      text: 'Deseja realmente excluir esta subárea?',
+      text: "Deseja excluir esta subárea? Esta ação pode afetar disciplinas vinculadas.",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sim, excluir!',
       cancelButtonText: 'Cancelar',
-      buttonsStyling: false,
       customClass: {
         confirmButton: 'btn btn-danger',
-        cancelButton: 'btn btn-light-secondary me-3'
-      }
-    }).then((result: any) => {
+        cancelButton: 'btn btn-light'
+      },
+      buttonsStyling: false
+    }).then((result) => {
       if (result.isConfirmed) {
-        this.subAreaService.delete(id).subscribe({
-          next: () => {
-            void Swal.fire('Sucesso', 'Subárea excluída com sucesso!', 'success');
-            this.carregarDados();
-          },
-          error: (err) => {
-            console.error('Erro ao excluir subárea:', err);
-            void Swal.fire('Erro', 'Não foi possível excluir a subárea. Tente novamente mais tarde.', 'error');
-          }
-        });
+        this.executarExclusao(id);
       }
     });
   }
 
+  private executarExclusao(id: number): void {
+    this.subareaService.delete(id).subscribe({
+      next: () => {
+        void Swal.fire('Sucesso', 'Subárea removida com sucesso.', 'success');
+        this.carregarSubAreas();
+      },
+      error: (err) => {
+        const msg = err.status === 409 ? 'Existem vínculos ativos para esta subárea.' : 'Erro ao tentar excluir.';
+        this.notificarErro(msg);
+      }
+    });
+  }
+
+  trackBySubId(_index: number, item: SubareaConhecimentoDTO): number {
+    return item.id;
+  }
+
+  private notificarErro(msg: string): void {
+    void Swal.fire('Erro', msg, 'error');
+  }
 }
