@@ -8,7 +8,7 @@ import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FormInput } from "../../app-core/src/lib/components/form-input-padrao/form-input-padrao";
 import { VisualizarDocenteComponent } from "./docente/visualizar-docente/visualizar-docente.component";
-import { HttpClientModule } from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import { DocenteEncargosComponent } from './docente-encargos/docente-encargos.component';
 import { CadastrarDocentesEncargosComponent } from './docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component';
 import { VisualizarDocenteEncargosComponent } from './docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component';
@@ -27,6 +27,8 @@ import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplin
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import { HeaderComponent } from './utils/header/header.component';
 import { MenuLateralComponent } from './utils/menu-lateral/menu-lateral.component';
+import {OAuthModule} from "angular-oauth2-oidc";
+import {environment} from "../../../environments/enviroment";
 
 @NgModule({
   declarations: [
@@ -60,9 +62,14 @@ import { MenuLateralComponent } from './utils/menu-lateral/menu-lateral.componen
     ReactiveFormsModule,
     FormInput,
     FormsModule,
-    HttpClientModule
+    OAuthModule.forRoot({
+      resourceServer: {
+        allowedUrls: [environment.apiUrl],
+        sendAccessToken: true,
+      },
+    })
   ],
-  providers: [],
+  providers: [ provideHttpClient(withInterceptorsFromDi())],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
