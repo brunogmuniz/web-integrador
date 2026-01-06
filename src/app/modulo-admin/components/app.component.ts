@@ -18,7 +18,6 @@ export class AppComponent {
       scope: 'openid profile email offline_access',
       showDebugInformation: true,
       timeoutFactor: 0.01,
-      checkOrigin: false,
     })
     this.oauthService.loadDiscoveryDocumentAndLogin();
   }
