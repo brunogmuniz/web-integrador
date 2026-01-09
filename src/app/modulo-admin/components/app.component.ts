@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
-import {OAuthService} from "angular-oauth2-oidc";
+import { Component, OnInit } from '@angular/core';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'modulo-admin';
-
+  isAuthenticated = false;
   constructor(private oauthService: OAuthService) {
-    this.oauthService.configure({
-      issuer: 'http://localhost:8081/realms/ufsm',
-      clientId: 'webClient',
-      redirectUri: window.location.origin + '/',
-      responseType: 'code',
-      scope: 'openid profile email offline_access',
-      showDebugInformation: true,
-      timeoutFactor: 0.01,
-    })
-    this.oauthService.loadDiscoveryDocumentAndLogin();
+  }
+
+  ngOnInit() {
+    this.isAuthenticated = this.oauthService.hasValidAccessToken();
+    this.oauthService.events
+      .pipe(filter(e => e.type === 'token_received' || e.type === 'logout'))
+      .subscribe(() => {
+        this.isAuthenticated = this.oauthService.hasValidAccessToken();
+      });
   }
 }

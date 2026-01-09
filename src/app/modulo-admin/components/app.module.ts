@@ -1,4 +1,3 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,8 +26,20 @@ import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplin
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import { HeaderComponent } from './utils/header/header.component';
 import { MenuLateralComponent } from './utils/menu-lateral/menu-lateral.component';
-import {OAuthModule} from "angular-oauth2-oidc";
 import {environment} from "../../../environments/enviroment";
+import { APP_AUTH_CONFIG, initializeAppFactory } from "../../app-core/src/public-api";
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { AuthConfig, OAuthModule, OAuthService } from "angular-oauth2-oidc";
+import {LayoutComponent} from "./layout/layout.component";
+
+const authConfig: AuthConfig = {
+  issuer: 'http://localhost:8081/realms/ufsm',
+  clientId: 'webClient',
+  redirectUri: 'http://localhost:4200/',
+  responseType: 'code',
+  scope: 'openid profile email offline_access',
+  showDebugInformation: !environment.production,
+};
 
 @NgModule({
   declarations: [
@@ -53,7 +64,8 @@ import {environment} from "../../../environments/enviroment";
     VisualizarDisciplinaComponent,
     CadastrarDisciplinaComponent,
     HeaderComponent,
-    MenuLateralComponent
+    MenuLateralComponent,
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +74,7 @@ import {environment} from "../../../environments/enviroment";
     ReactiveFormsModule,
     FormInput,
     FormsModule,
+    HttpClientModule,
     OAuthModule.forRoot({
       resourceServer: {
         allowedUrls: [environment.apiUrl],
@@ -69,7 +82,22 @@ import {environment} from "../../../environments/enviroment";
       },
     })
   ],
-  providers: [ provideHttpClient(withInterceptorsFromDi())],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+
+    {
+      provide: APP_AUTH_CONFIG,
+      useValue: authConfig
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (oauthService: OAuthService, config: AuthConfig) =>
+        initializeAppFactory(oauthService, config),
+      deps: [OAuthService, APP_AUTH_CONFIG],
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

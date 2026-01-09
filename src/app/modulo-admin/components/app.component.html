@@ -1,9 +1,9 @@
-<div class="layout">
-  <app-header></app-header>
-  <menu-lateral></menu-lateral>
-  <div class="content">
-    <router-outlet></router-outlet>
+<ng-container *ngIf="!isAuthenticated">
+  <div style="display: flex; height: 100vh; justify-content: center; align-items: center;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Carregando...</span>
+    </div>
   </div>
-</div>
+</ng-container>
 
-
+<router-outlet *ngIf="isAuthenticated"></router-outlet>

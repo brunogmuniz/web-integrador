@@ -18,6 +18,11 @@ export * from './lib/components/form-input-padrao/form-input-padrao'
 //EXPORT DO KEYCLOACK
 //import { Keycloack } from 'shared-core';
 
+//export auth
+export * from './lib/auth/auth.config';
+export * from './lib/auth/auth.factory';
+export * from './lib/auth/auth.guard';
+
 //EXPORT DOS SERVCES
 export * from './lib/services/curso-service'
 
