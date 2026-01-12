@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start root": "ng serve modulo-root --port 4201",
-    "start admin": "ng serve modulo-admin --port 4202",
+    "start admin": "ng serve modulo-admin --port 4200",
     "start dept": "ng serve modulo-dept-ensino --port 4203"
   },
   "private": true,
