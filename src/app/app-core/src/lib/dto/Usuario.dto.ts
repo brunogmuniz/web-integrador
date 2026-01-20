@@ -1,8 +1,15 @@
+import { TipoPerfil } from '../model/usuario.model';
+
 export interface UsuarioDto {
   id: number;
   nome: string;
   matricula: string;
-  senha: string;
+  email: string;
+  cpf?: string | null;
+  tipoPerfil?: TipoPerfil | null;
+  telefone?: string | null;
+  senha?: string | null;
   ativo: boolean;
-  uiid: string;
+  uuid?: string | null;
+  ultimaAtualizacaoCadastro?: string | null;
 }

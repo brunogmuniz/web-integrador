@@ -1,0 +1,58 @@
+.card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  .card-header {
+    padding: 1.5rem;
+    h4 {
+      margin: 0;
+      font-weight: 500;
+    }
+  }
+
+  .card-body {
+    padding: 2rem;
+  }
+}
+
+.form-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.btn-group {
+  width: 100%;
+
+  .btn-outline-primary {
+    border-color: #dee2e6;
+    color: #555;
+
+    &:hover {
+      background-color: #f8f9fa;
+      color: #0d6efd;
+      border-color: #0d6efd;
+    }
+  }
+
+  .btn-check:checked + .btn-outline-primary {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  }
+}
+
+.text-danger {
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}
+
+.btn-success {
+  transition: all 0.3s ease;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
