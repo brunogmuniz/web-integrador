@@ -2,7 +2,7 @@ import { Injectable, Inject, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { Usuario } from '../model/usuario.model';
 import { API_URL } from './usuario.service';
 import { StorageService } from './storage.service';
@@ -28,10 +28,8 @@ export class LoginService {
 
   public sincronizarUsuarioComBanco(): Observable<Usuario> {
     return this.http.get<Usuario>(`${this.baseUrl}/me`).pipe(
-      tap(usuarioCompleto => this.atualizarSessaoUsuario(usuarioCompleto)),
-      catchError(err => {
-        console.error('Erro na sincronização:', err);
-        throw err;
+      tap(usuario => {
+        this.atualizarSessaoUsuario(usuario);
       })
     );
   }
@@ -43,5 +41,10 @@ export class LoginService {
 
   public estaAutenticado(): boolean {
     return this.oauthService.hasValidAccessToken();
+  }
+  public logout(): void {
+    this.storage.removeItem(this.STORAGE_KEY);
+    this.userSubject.next(null);
+    this.oauthService.logOut();
   }
 }

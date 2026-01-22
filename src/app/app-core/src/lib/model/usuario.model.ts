@@ -10,6 +10,7 @@ export interface Usuario {
   permissoes?: string[];
   uuid?: string | null;
   ultimaAtualizacaoCadastro?: string | null;
+  pendenciaAtualizacao?: boolean;
 }
 
 export enum TipoPerfil {

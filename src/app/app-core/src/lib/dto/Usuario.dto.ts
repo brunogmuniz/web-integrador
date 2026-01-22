@@ -12,4 +12,5 @@ export interface UsuarioDto {
   ativo: boolean;
   uuid?: string | null;
   ultimaAtualizacaoCadastro?: string | null;
+  pendenciaAtualizacao?: boolean;
 }

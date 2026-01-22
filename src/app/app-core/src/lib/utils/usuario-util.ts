@@ -1,19 +1,12 @@
-import { TipoPerfil, Usuario } from '../model/usuario.model';
+import { TipoPerfil } from '../model/usuario.model';
 
 export class UsuarioUtil {
-  static isCadastroIncompleto(u: Usuario | null | undefined): boolean {
-    return !u?.cpf || !u?.tipoPerfil;
-  }
-
-  static isCadastroExpirado(dataIso?: string | Date | null): boolean {
-    if (!dataIso) return true;
-
-    const dataUltima = new Date(dataIso);
-    const hoje = new Date();
-    const diffMeses = (hoje.getFullYear() - dataUltima.getFullYear()) * 12 +
-      (hoje.getMonth() - dataUltima.getMonth());
-
-    return diffMeses >= 6;
+  static isCadastroExpirado(dataUltimaAtualizacao: string | null | undefined): boolean {
+    if (!dataUltimaAtualizacao) return true;
+    const dataRef = new Date(dataUltimaAtualizacao);
+    const umAnoAtras = new Date();
+    umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1);
+    return dataRef < umAnoAtras;
   }
 
   static sugerirPerfilPorMatricula(matricula: string | null | undefined): TipoPerfil {

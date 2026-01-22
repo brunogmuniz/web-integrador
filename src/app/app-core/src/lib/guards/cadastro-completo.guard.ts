@@ -13,7 +13,7 @@ export const cadastroCompletoGuard: CanActivateFn = (): boolean | UrlTree => {
 
   const usuario = loginService.getUsuarioLogado();
   const precisaAtualizar = !usuario ||
-    UsuarioUtil.isCadastroIncompleto(usuario) ||
+    usuario.pendenciaAtualizacao === true ||
     UsuarioUtil.isCadastroExpirado(usuario.ultimaAtualizacaoCadastro);
 
   return precisaAtualizar

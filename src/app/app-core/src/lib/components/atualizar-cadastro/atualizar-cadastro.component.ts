@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { UsuarioService } from '../../services/usuario.service';
 import { LoginService } from '../../services/login.service';
 import { UsuarioUtil } from '../../utils/usuario-util';
-import { TipoPerfil, Usuario } from '../../model/usuario.model';
+import { TipoPerfil } from '../../model/usuario.model';
 import { UsuarioDto } from '../../dto/Usuario.dto';
 
 interface CadastroForm {
@@ -92,10 +92,16 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
     this.usuarioService.completarCadastro(usuarioAtual.id, payload)
       .pipe(finalize(() => this.loading = false))
       .subscribe({
-        next: (res: UsuarioDto) => {
-          this.loginService.atualizarSessaoUsuario(res as Usuario);
-          void this.router.navigate(['/']);
-          void Swal.fire('Sucesso', 'Cadastro atualizado com sucesso!', 'success');
+        next: () => {
+          void Swal.fire({
+            title: 'Cadastro Atualizado!',
+            text: 'Suas permissões foram alteradas. Por favor, realize o login novamente para aplicar as mudanças.',
+            icon: 'success',
+            confirmButtonText: 'Ir para Login',
+            allowOutsideClick: false
+          }).then(() => {
+            this.loginService.logout();
+          });
         },
         error: (err) => {
           const msg = err.status === 409 ? 'CPF ou Matrícula já em uso.' : 'Ocorreu um erro ao salvar os dados.';
