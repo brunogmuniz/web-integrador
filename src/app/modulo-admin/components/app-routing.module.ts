@@ -24,6 +24,7 @@ import { CadastrarDisciplinaComponent } from "./disciplina/cadastrar-disciplina/
 import { AuthGuard } from '../../app-core/src/public-api';
 import {LayoutComponent} from "./layout/layout.component";
 
+
 const routes: Routes = [
   {
     path: '',
@@ -45,6 +46,7 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
+
 
       {
         path: 'sub-area',

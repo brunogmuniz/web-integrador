@@ -27,10 +27,11 @@ import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/
 import { HeaderComponent } from './utils/header/header.component';
 import { MenuLateralComponent } from './utils/menu-lateral/menu-lateral.component';
 import {environment} from "../../../environments/enviroment";
-import { APP_AUTH_CONFIG, initializeAppFactory } from "../../app-core/src/public-api";
+import {APP_AUTH_CONFIG, ImageProfileComponent, initializeAppFactory} from "../../app-core/src/public-api";
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AuthConfig, OAuthModule, OAuthService } from "angular-oauth2-oidc";
 import {LayoutComponent} from "./layout/layout.component";
+import { OAuthStorage } from 'angular-oauth2-oidc';
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -39,6 +40,7 @@ const authConfig: AuthConfig = {
   responseType: 'code',
   scope: 'openid profile email offline_access',
   showDebugInformation: !environment.production,
+
 };
 
 @NgModule({
@@ -65,7 +67,8 @@ const authConfig: AuthConfig = {
     CadastrarDisciplinaComponent,
     HeaderComponent,
     MenuLateralComponent,
-    LayoutComponent
+    LayoutComponent,
+    ImageProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +82,7 @@ const authConfig: AuthConfig = {
       resourceServer: {
         allowedUrls: [environment.apiUrl],
         sendAccessToken: true,
+
       },
     })
   ],
@@ -88,6 +92,10 @@ const authConfig: AuthConfig = {
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
+    },
+    {
+      provide: OAuthStorage,
+      useValue: localStorage
     },
 
     {
