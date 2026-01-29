@@ -14,6 +14,8 @@
 //import { FormInput } from 'shared-core';  INPUT PADRAO
 export * from './lib/components/form-input-padrao/form-input-padrao'
 
+//import { FormInput } from 'shared-core';  INPUT PADRAO
+export * from './lib/components/image-profile/image-profile.component'
 
 //EXPORT DO KEYCLOACK
 //import { Keycloack } from 'shared-core';

@@ -11,6 +11,7 @@ import { AnaliseDasMedias } from './principal/analise-das-medias/analise-das-med
 import { AreaTabelaComponent } from './principal/analise-das-medias/utils/area-tabela/area-tabela';
 import { MenuLateralComponent } from './principal/analise-das-medias/utils/menu-lateral/menu-lateral.component';
 import { HeaderComponent } from './principal/analise-das-medias/utils/header/header.component';
+import {ImageProfileComponent} from "../../app-core/src/lib/components/image-profile/image-profile.component";
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { HeaderComponent } from './principal/analise-das-medias/utils/header/hea
     AnaliseDasMedias,
     AreaTabelaComponent,
     MenuLateralComponent,
-    HeaderComponent
+    HeaderComponent,
+    ImageProfileComponent
   ],
   imports: [
     BrowserModule,
