@@ -4,6 +4,8 @@ export * from './lib/components/form-input-padrao/form-input-padrao';
 //Atualizar Cadastro
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.component';
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
+//import { FormInput } from 'shared-core';  INPUT PADRAO
+export * from './lib/components/image-profile/image-profile.component'
 
 //App Core
 export * from './lib/app-core.module';

@@ -22,6 +22,7 @@ import { VisualizarDisciplinaComponent } from "./disciplina/visualizar-disciplin
 import { CadastrarDisciplinaComponent } from "./disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
 import { cadastroCompletoGuard, authGuard } from 'app-core';
 
+
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
@@ -49,6 +50,7 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
+
 
       {
         path: 'sub-area',

@@ -16,12 +16,13 @@
     <div id="kt_aside_menu" class="kt-aside-menu bg-navy-custom" data-ktmenu-vertical="1" data-ktmenu-scroll="1">
 
       <div class="sidebar-user-profile text-center mt-4 mb-4">
-        <div class="user-avatar mb-2">
-          <img [src]="'assets/img/mocks/userMock.png'" class="rounded-circle" alt="Foto Perfil">
-        </div>
+        <div class="sidebar-user-profile text-center mt-4 mb-4">
+          <div class="user-avatar mb-2 align-items-center">
+            <lib-image-profile></lib-image-profile>
+          </div>
         <div class="user-info">
           <h5 class="text-white font-weight-bold mb-0">
-            {{ 'Berenice Santini ' }}
+            {{ nome ? nome : 'Admin' }}
             <i class="fa fa-pencil-alt text-white-50" style="font-size: 0.8rem; cursor: pointer;"></i>
           </h5>
           <span class="d-block text-warning small font-weight-bold mt-1">

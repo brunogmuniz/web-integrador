@@ -62,7 +62,7 @@ export class PrincipalComponent {
     this.modulos.push({
       title: 'GERENCIAR ESTRUTURAS CURRICULARES',
       sectionView: 'estrutura-curricular/visualizar',
-      pageGo: 'estrutura/visualizar/',
+      pageGo: 'estrutura-curricular/visualizar/',
       pages: ['Estrutura Curricular'],
       info: 'Operações referentes a gerenciamento das Estruturas Curriculares',
       svgIcon: '<i class="la la-sitemap la-3x"></i> '
