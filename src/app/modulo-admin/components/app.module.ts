@@ -29,7 +29,7 @@ import { DisciplinaComponent } from './disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from './disciplina/visualizar-disciplina/visualizar-disciplina.component';
 import { CadastrarDisciplinaComponent } from './disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import {environment} from "../../../environments/enviroment";
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, ImageProfileComponent} from 'app-core';
+import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService} from 'app-core';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 
 const authConfig: AuthConfig = {
@@ -68,8 +68,7 @@ const authConfig: AuthConfig = {
     VisualizarDisciplinaComponent,
     HeaderComponent,
     MenuLateralComponent,
-    LayoutComponent,
-    ImageProfileComponent
+    LayoutComponent
   ],
   imports: [
     BrowserModule,
