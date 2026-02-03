@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AuthConfig, OAuthModule, OAuthService } from "angular-oauth2-oidc";
+import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './utils/header/header.component';
@@ -93,6 +93,10 @@ const authConfig: AuthConfig = {
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
+    },
+    {
+      provide: OAuthStorage,
+      useValue: localStorage
     },
     {
       provide: APP_INITIALIZER,
