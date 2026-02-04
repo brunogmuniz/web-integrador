@@ -324,6 +324,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "sweetalert2",
+              "fast-sha256"
+            ],
             "outputPath": "dist/modulo-admin",
             "index": "src/app/modulo-admin/index.html",
             "main": "src/app/modulo-admin/main.ts",

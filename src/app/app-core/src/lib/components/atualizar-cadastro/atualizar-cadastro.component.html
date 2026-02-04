@@ -1,0 +1,130 @@
+<div class="kt-container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-6">
+      <div class="kt-portlet kt-portlet--mobile neutral-white shadow-sm">
+        <div class="kt-portlet__head">
+          <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+              <i class="flaticon-user-settings text-success"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+              Identificação
+              <small>Dados Cadastrais e Perfil</small>
+            </h3>
+          </div>
+        </div>
+
+        <div class="kt-portlet__body">
+          <div class="alert alert-light alert-elevate fade show" role="alert">
+            <div class="alert-icon"><i class="flaticon-info text-info"></i></div>
+            <div class="alert-text">
+              Por favor, confirme seus dados para acessar o sistema.
+              <br>
+              <small class="text-muted">Campos identificados pelo asterisco (<span class="text-danger">*</span>) são obrigatórios.</small>
+            </div>
+          </div>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-group row">
+              <div class="col-lg-12">
+                <label>Nome Completo <span class="text-danger">*</span></label>
+                <input type="text"
+                       class="form-control"
+                       formControlName="nome"
+                       placeholder="Seu nome completo"
+                       [class.is-invalid]="form.get('nome')?.touched && form.get('nome')?.invalid">
+                <div *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="invalid-feedback">
+                  Nome é obrigatório (min. 5 caracteres).
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-lg-12">
+                <label>E-mail <span class="text-danger">*</span></label>
+                <input type="email"
+                       class="form-control"
+                       formControlName="email"
+                       placeholder="exemplo@dominio.com"
+                       [class.is-invalid]="form.get('email')?.touched && form.get('email')?.invalid">
+                <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="invalid-feedback">
+                  Por favor, insira um e-mail válido.
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label>CPF <span class="text-danger">*</span></label>
+                  <input type="text"
+                         class="form-control"
+                         formControlName="cpf"
+                         placeholder="000.000.000-00"
+                         mask="000.000.000-00"
+                         [class.is-invalid]="form.get('cpf')?.touched && form.get('cpf')?.invalid">
+                  <div *ngIf="form.get('cpf')?.touched && form.get('cpf')?.invalid" class="invalid-feedback">
+                    CPF inválido.
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label>Matrícula <span class="text-danger">*</span></label>
+                  <input type="text"
+                         class="form-control"
+                         formControlName="matricula"
+                         placeholder="Digite sua matrícula"
+                         [class.is-invalid]="form.get('matricula')?.touched && form.get('matricula')?.invalid">
+                  <div *ngIf="form.get('matricula')?.touched && form.get('matricula')?.invalid" class="invalid-feedback">
+                    Matrícula obrigatória.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-lg-12">
+                <label class="d-block text-center mb-3">Identifique seu perfil <span class="text-danger">*</span></label>
+
+                <div class="btn-group w-100" role="group">
+                  <label class="btn btn-outline-success" [class.active]="form.get('tipoPerfil')?.value === 'docente'">
+                    <input type="radio" formControlName="tipoPerfil" value="docente" hidden> Docente
+                  </label>
+
+                  <label class="btn btn-outline-success" [class.active]="form.get('tipoPerfil')?.value === 'tae'">
+                    <input type="radio" formControlName="tipoPerfil" value="tae" hidden> TAE
+                  </label>
+
+                  <label class="btn btn-outline-success" [class.active]="form.get('tipoPerfil')?.value === 'aluno'">
+                    <input type="radio" formControlName="tipoPerfil" value="aluno" hidden> Aluno
+                  </label>
+                </div>
+
+                <div *ngIf="form.get('tipoPerfil')?.touched && form.get('tipoPerfil')?.invalid" class="text-danger small mt-2 text-center">
+                  A seleção do perfil é obrigatória.
+                </div>
+              </div>
+            </div>
+
+            <div class="kt-portlet__foot mt-4" style="padding: 20px 0 0 0;">
+              <div class="kt-form__actions">
+                <div class="row">
+                  <div class="col-lg-12 text-right">
+                    <button type="submit"
+                            class="btn btn-success btn-elevate btn-pill btn-wide"
+                            [disabled]="form.invalid || loading">
+                      <i class="fa" [ngClass]="{'fa-spinner fa-spin': loading, 'fa-save': !loading}"></i>
+                      Salvar e Continuar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

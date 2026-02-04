@@ -1,9 +1,1 @@
-<ng-container *ngIf="!isAuthenticated">
-  <div style="display: flex; height: 100vh; justify-content: center; align-items: center;">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Carregando...</span>
-    </div>
-  </div>
-</ng-container>
-
-<router-outlet *ngIf="isAuthenticated"></router-outlet>
+<router-outlet></router-outlet>

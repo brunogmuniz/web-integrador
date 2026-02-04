@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { LayoutComponent } from "./layout/layout.component";
 import { PrincipalComponent } from "./principal/principal.component";
 import { DocenteComponent } from "./docente/docente.component";
 import { VisualizarDocenteComponent } from "./docente/visualizar-docente/visualizar-docente.component";
@@ -20,16 +20,20 @@ import { CadastrarDocentesEncargosComponent } from "./docente-encargos/cadastrar
 import { DisciplinaComponent } from './disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from "./disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import { CadastrarDisciplinaComponent } from "./disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-
-import { AuthGuard } from '../../app-core/src/public-api';
-import {LayoutComponent} from "./layout/layout.component";
+import { cadastroCompletoGuard, authGuard } from 'app-core';
 
 
 const routes: Routes = [
   {
+    path: 'atualizar-cadastro',
+    loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
+    canActivate: [authGuard]
+  },
+
+  {
     path: '',
     component: LayoutComponent,
-    canActivate: [AuthGuard],
+    canActivate: [authGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
