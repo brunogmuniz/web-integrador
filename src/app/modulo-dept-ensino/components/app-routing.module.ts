@@ -7,10 +7,13 @@ const routes: Routes = [
   { path: '', component: PrincipalComponent },
   { path: 'media', component: AnaliseDasMedias },
   { path: 'principal', component: PrincipalComponent },
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+
+}

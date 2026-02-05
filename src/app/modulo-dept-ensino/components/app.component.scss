@@ -1,4 +1,4 @@
-* {
+*{
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -18,6 +18,24 @@ app-header {
   height: 70px;
   width: 100%;
 }
+
+
+menu-lateral {
+  grid-row: 2;
+  background: #f5f5f5;
+  overflow-y: auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  grid-row: 2;
+  padding: 20px;
+  overflow: auto;
+  background: #fff;
+}
+
 
 
 menu-lateral {

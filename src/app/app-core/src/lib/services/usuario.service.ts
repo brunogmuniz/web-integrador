@@ -40,7 +40,7 @@ export class UsuarioService {
   }
 
   getUsuarioLogado(): Usuario | null {
-    const user = localStorage.getItem('usuario');
+    const user = localStorage.getItem('usuario_logado');
     return user ? JSON.parse(user) : null;
   }
 
@@ -55,6 +55,15 @@ export class UsuarioService {
     }
     const user = this.getUsuarioLogado();
     return user ? user.nome : '';
+  }
+
+  getCargoLogado(): string {
+    const claims = this.oauthService.getIdentityClaims() as any;
+    if (claims && claims.tipoPerfil) {
+      return claims.tipoPerfil;
+    }
+    const user = this.getUsuarioLogado();
+    return user?.tipoPerfil ?? '';
   }
 
   hasPermission(permission: string[]): boolean {
