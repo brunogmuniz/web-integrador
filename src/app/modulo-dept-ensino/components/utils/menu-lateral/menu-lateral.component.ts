@@ -11,21 +11,34 @@ import {Router} from "@angular/router";
 })
 export class MenuLateralComponent implements OnInit {
 
+
   nome: string = '';
-  cargo: string = '';
 
-  constructor(private usuarioService: UsuarioService, private router: Router) { }
-
-  ngOnInit(): void {
-    this.nome = this.usuarioService.getNomeLogado();
-    this.cargo = this.usuarioService.getCargoLogado();
-  }
 
   ngAfterViewInit() {
     setTimeout(() => {
       (window as any).KTLayout?.init();
       (window as any).KTMenu?.init();
     }, 50);
+  }
+  menuAberto: string = '';
+
+  constructor(private usuarioService: UsuarioService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.nome = this.usuarioService.getNomeLogado();
+  }
+
+  toggleMenu(nomeMenu: string): void {
+    if (this.menuAberto === nomeMenu) {
+      this.menuAberto = '';
+    } else {
+      this.menuAberto = nomeMenu;
+    }
+  }
+
+  isOpen(nomeMenu: string): boolean {
+    return this.menuAberto === nomeMenu;
   }
 
 }

@@ -108,8 +108,6 @@ const routes: Routes = [
       }
     ]
   },
-
-  { path: 'subarea', redirectTo: 'sub-area', pathMatch: 'full' },
   { path: '**', redirectTo: '' }
 ];
 
