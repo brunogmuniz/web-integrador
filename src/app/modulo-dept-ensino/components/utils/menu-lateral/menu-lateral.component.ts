@@ -13,7 +13,7 @@ export class MenuLateralComponent implements OnInit {
 
 
   nome: string = '';
-
+  cargo: string = '';
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -27,6 +27,7 @@ export class MenuLateralComponent implements OnInit {
 
   ngOnInit(): void {
     this.nome = this.usuarioService.getNomeLogado();
+    this.cargo = this.usuarioService.getCargoLogado();
   }
 
   toggleMenu(nomeMenu: string): void {

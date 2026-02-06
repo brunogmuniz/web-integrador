@@ -12,7 +12,7 @@ import {Router} from "@angular/router";
 export class MenuLateralComponent implements OnInit {
 
   nome: string = '';
-
+  cargo: string = '';
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -22,10 +22,12 @@ export class MenuLateralComponent implements OnInit {
   }
   menuAberto: string = '';
 
+
   constructor(private usuarioService: UsuarioService, private router: Router) { }
 
   ngOnInit(): void {
         this.nome = this.usuarioService.getNomeLogado();
+        this.cargo = this.usuarioService.getCargoLogado();
     }
 
   toggleMenu(nomeMenu: string): void {

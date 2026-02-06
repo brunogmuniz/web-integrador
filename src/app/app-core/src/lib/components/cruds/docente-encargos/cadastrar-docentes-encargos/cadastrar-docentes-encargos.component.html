@@ -147,9 +147,11 @@
 
   <div class="card-footer d-flex justify-content-end">
     <button class="btn btn-secondary me-2" type="button" (click)="cancelar()">
+      <i class="la la-times"></i>
       Cancelar
     </button>
     <button class="btn btn-primary" type="button" (click)="onSubmit()">
+      <i class="la la-check"></i>
       {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
     </button>
   </div>

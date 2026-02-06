@@ -38,9 +38,11 @@
 
       <div class="form-actions text-right">
         <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+          <i class="la la-times"></i>
           Cancelar
         </button>
         <button type="submit" class="btn btn-primary" [disabled]="areaForm.invalid">
+          <i class="la la-check"></i>
           {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
         </button>
       </div>

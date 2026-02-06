@@ -11,14 +11,16 @@
         <div class="col-md-8">
           <lib-form-input-padrao
             [label]="'Nome'"
-            [control]="c['nome']">
+            [control]="c['Nome']"
+            [supportText]="''">
           </lib-form-input-padrao>
         </div>
 
         <div class="col-md-4">
           <lib-form-input-padrao
             [label]="'Sigla'"
-            [control]="c['sigla']">
+            [control]="c['Sigla']"
+            [supportText]="''">
           </lib-form-input-padrao>
         </div>
       </div>
@@ -41,6 +43,7 @@
           <lib-form-input-padrao
             [label]="'Carga Horária Total'"
             [control]="c['cargaHorariaTotal']"
+            [supportText]="''"
             [type]="'number'">
           </lib-form-input-padrao>
         </div>
@@ -48,9 +51,11 @@
 
       <div class="form-actions d-flex justify-content-end mt-4">
         <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+          <i class="la la-times"></i>
           Cancelar
         </button>
         <button type="submit" class="btn btn-primary" [disabled]="subAreaForm.invalid">
+          <i class="la la-check"></i>
           {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
         </button>
       </div>

@@ -78,10 +78,11 @@
     </div>
     <div class="card-footer d-flex justify-content-end">
       <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+        <i class="la la-times"></i>
         Cancelar
       </button>
       <button type="submit" class="btn btn-primary" [disabled]="docenteForm.invalid">
-        <i class="fa fa-check"></i> {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
+        <i class="la la-check"></i> {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
       </button>
     </div>
   </form>
