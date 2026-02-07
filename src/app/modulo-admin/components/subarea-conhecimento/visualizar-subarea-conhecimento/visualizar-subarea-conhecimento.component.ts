@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SubareaConhecimentoService } from "../../../../app-core/src/lib/services/subarea-conhecimento-service";
-import { SubareaConhecimentoDTO } from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
+import { SubareaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -21,13 +20,13 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
     this.subareaService.listarTodos().subscribe({
       next: (res) => this.subAreas = res,
       error: (err) => {
-        console.error('Erro ao carregar subáreas', err);
+        console.error(err);
         this.notificarErro('Não foi possível carregar a lista de subáreas.');
       }
     });
   }
 
-  onDelete(id: number): void {
+  onDelete(uuid: string): void {
     void Swal.fire({
       title: 'Tem certeza?',
       text: "Deseja excluir esta subárea? Esta ação pode afetar disciplinas vinculadas.",
@@ -42,13 +41,13 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
       buttonsStyling: false
     }).then((result) => {
       if (result.isConfirmed) {
-        this.executarExclusao(id);
+        this.executarExclusao(uuid);
       }
     });
   }
 
-  private executarExclusao(id: number): void {
-    this.subareaService.delete(id).subscribe({
+  private executarExclusao(uuid: string): void {
+    this.subareaService.delete(uuid).subscribe({
       next: () => {
         void Swal.fire('Sucesso', 'Subárea removida com sucesso.', 'success');
         this.carregarSubAreas();
@@ -60,8 +59,8 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
     });
   }
 
-  trackBySubId(_index: number, item: SubareaConhecimentoDTO): number {
-    return item.id;
+  trackBySubUuid(_index: number, item: SubareaConhecimentoDTO): string | undefined {
+    return item.uuid;
   }
 
   private notificarErro(msg: string): void {

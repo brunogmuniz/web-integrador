@@ -1,16 +1,8 @@
-import { OfertaDTO } from './Oferta.dto';
-import { DocenteDTO } from './Docente.dto';
+import {DocenteDTO, OfertaDTO} from "app-core";
 
 export interface DistribuicaoAulaDTO {
-
-  id: number;
-
-
+  uuid?: string | null;
   oferta: OfertaDTO;
-
-
   docente: DocenteDTO;
-
-
   cargaHorariaOfertada: number;
 }

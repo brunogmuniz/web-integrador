@@ -1,19 +1,20 @@
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UsuarioDto } from '../dto/Usuario.dto';
+import { UsuarioDTO } from '../dto/Usuario.dto';
 import { ResponseDto } from '../dto/response.dto';
 import { Usuario } from '../model/usuario.model';
 import { Mensagem } from '../model/mensagem.model';
 import { TokenStatus } from '../dto/token-status';
 import { OAuthService } from 'angular-oauth2-oidc';
+import {environment} from "../../../../../environments/enviroment";
 
 export const API_URL = new InjectionToken<string>('API_URL');
 
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
 
-  private readonly baseUrl: string = 'http://localhost:8080/usuarios';
+  private readonly apiUrl = `${environment.apiUrl}/usuarios`;
 
   constructor(
     private http: HttpClient,
@@ -21,12 +22,12 @@ export class UsuarioService {
     @Optional() @Inject(API_URL) apiUrl?: string
   ) {
     if (apiUrl) {
-      this.baseUrl = `${apiUrl}/usuarios`;
+      this.apiUrl = `${apiUrl}/usuarios`;
     }
   }
 
   login(email: string, senha: string): Observable<ResponseDto> {
-    return this.http.post<ResponseDto>(`${this.baseUrl}/auth/login`, { email, senha });
+    return this.http.post<ResponseDto>(`${this.apiUrl}/auth/login`, { email, senha });
   }
 
   logout(): void {
@@ -64,18 +65,18 @@ export class UsuarioService {
   }
 
   statusToken(token: string): Observable<TokenStatus> {
-    return this.http.get<TokenStatus>(`${this.baseUrl}/redefinir-senha/${token}`);
+    return this.http.get<TokenStatus>(`${this.apiUrl}/redefinir-senha/${token}`);
   }
 
   editarNome(usuario: Usuario): Observable<Mensagem> {
-    return this.http.post<Mensagem>(`${this.baseUrl}/editarNome`, usuario);
+    return this.http.post<Mensagem>(`${this.apiUrl}/editarNome`, usuario);
   }
 
   alterarSenha(usuario: Usuario): Observable<Mensagem> {
-    return this.http.post<Mensagem>(`${this.baseUrl}/alterarSenha`, usuario);
+    return this.http.post<Mensagem>(`${this.apiUrl}/alterarSenha`, usuario);
   }
 
-  completarCadastro(id: number, dados: Partial<UsuarioDto>): Observable<UsuarioDto> {
-    return this.http.put<UsuarioDto>(`${this.baseUrl}/${id}/completar-cadastro`, dados);
+  completarCadastro(uuid: string, dados: Partial<UsuarioDTO>): Observable<UsuarioDTO> {
+    return this.http.put<UsuarioDTO>(`${this.apiUrl}/${uuid}/completar-cadastro`, dados);
   }
 }

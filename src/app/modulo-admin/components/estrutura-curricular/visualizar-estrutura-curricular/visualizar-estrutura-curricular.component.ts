@@ -26,12 +26,12 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
         this.listaEstruturas = res;
       },
       error: (err) => {
-        console.error('Erro ao carregar Estruturas Curriculares', err);
+        console.error(err);
       }
     });
   }
 
-  onDelete(id: number, nome: string) {
+  onDelete(uuid: string, nome: string) {
     void Swal.fire({
       title: 'Tem certeza?',
       text: `Deseja realmente excluir a estrutura "${nome}"?`,
@@ -46,13 +46,13 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
       }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.service.delete(id).subscribe({
+        this.service.delete(uuid).subscribe({
           next: () => {
             void Swal.fire('Sucesso', 'Estrutura Curricular excluída com sucesso!', 'success');
             this.carregarEstruturas();
           },
           error: (err) => {
-            console.error(err);
+            console.error();
             void Swal.fire('Erro', 'Não foi possível excluir a Estrutura Curricular. Verifique se há vínculos ativos.', 'error');
           }
         });
@@ -60,7 +60,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
     });
   }
 
-  trackByEstruturaId(_index: number, item: EstruturaCurricularDto) {
-    return item.id;
+  trackByEstruturaUuid(_index: number, item: EstruturaCurricularDto) {
+    return item.uuid;
   }
 }

@@ -39,15 +39,15 @@
             <label class="form-label text-gray-700 fw-semibold required">Curso</label>
             <select
               class="form-select form-select-solid"
-              formControlName="idCurso"
-              [class.is-invalid]="form.get('idCurso')?.invalid && form.get('idCurso')?.touched"
+              formControlName="uuidCurso"
+              [class.is-invalid]="form.get('uuidCurso')?.invalid && form.get('uuidCurso')?.touched"
             >
               <option [ngValue]="null" disabled>Selecione o Curso...</option>
-              <option *ngFor="let curso of listaCursos; trackBy: trackByCursoId" [value]="curso.id">
+              <option *ngFor="let curso of listaCursos; trackBy: trackByCursoUuid" [value]="curso.uuid">
                 {{ curso.nome }}
               </option>
             </select>
-            <div *ngIf="form.get('idCurso')?.invalid && form.get('idCurso')?.touched" class="invalid-feedback d-block">
+            <div *ngIf="form.get('uuidCurso')?.invalid && form.get('uuidCurso')?.touched" class="invalid-feedback d-block">
               Selecione um curso
             </div>
           </div>
@@ -84,10 +84,10 @@
             <td>
               <select
                 class="form-select form-select-solid"
-                formControlName="idDisciplina"
-                [class.is-invalid]="oferta.get('idDisciplina')?.invalid && oferta.get('idDisciplina')?.touched">
+                formControlName="uuidDisciplina"
+                [class.is-invalid]="oferta.get('uuidDisciplina')?.invalid && oferta.get('uuidDisciplina')?.touched">
                 <option [ngValue]="null">Selecione...</option>
-                <option *ngFor="let disc of listaDisciplinas; trackBy: trackByDisciplinaId" [value]="disc.id">
+                <option *ngFor="let disc of listaDisciplinas; trackBy: trackByDisciplinaUuid" [value]="disc.uuid">
                   {{ disc.codigoDisciplina }} - {{ disc.nome }}
                 </option>
               </select>

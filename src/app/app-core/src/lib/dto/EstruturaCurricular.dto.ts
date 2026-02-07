@@ -1,5 +1,5 @@
 export interface OfertaDisciplinaDto {
-  idDisciplina: number;
+  uuidDisciplina: string;
   nomeDisciplina?: string;
   semestre: number;
   tutoria: boolean;
@@ -9,11 +9,10 @@ export interface OfertaDisciplinaDto {
 }
 
 export interface EstruturaCurricularDto {
-  id?: number;
-  uuid?: string;
+  uuid?: string | null;
   ano: string;
   codigo: string;
-  idCurso: number;
+  uuidCurso: string;
   nomeCurso?: string;
   ativo: boolean;
   ofertas: OfertaDisciplinaDto[];

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DocenteDTO } from "../../../../app-core/src/lib/dto/Docente.dto";
-import { DocenteService } from "../../../../app-core/src/lib/services/docente-service";
+import { DocenteDTO } from "app-core";
+import { DocenteService } from "app-core";
 import { Router } from '@angular/router';
 
 @Component({
@@ -24,12 +24,17 @@ export class VisualizarDocenteComponent implements OnInit {
   carregarDocentes(): void {
     this.docenteService.listarTodos().subscribe({
       next: (data) => this.docentes = data,
-      error: (err) => console.error('Erro ao carregar docentes', err)
+      error: (err) => console.error(err)
     });
   }
 
 
-  onDelete(id: number): void {
+  onDelete(uuid: string | undefined): void {
+    if (!uuid) {
+      void Swal.fire('Erro', 'Identificador do docente inválido.', 'error');
+      return;
+    }
+
     void Swal.fire({
       title: 'Tem certeza?',
       text: 'Deseja realmente excluir este docente?',
@@ -44,29 +49,22 @@ export class VisualizarDocenteComponent implements OnInit {
       }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.docenteService.delete(id).subscribe({
+        this.docenteService.delete(uuid).subscribe({
           next: () => {
             void Swal.fire('Sucesso', 'Docente excluído com sucesso!', 'success');
             this.carregarDocentes();
           },
-          error: (err) => {
-            if (err.status === 500 || err.status === 409) {
-              void Swal.fire(
-                'Atenção',
-                'Não é possível excluir este docente pois ele possui encargos ou vínculos ativos.',
-                'warning'
-              );
-            } else {
-              void Swal.fire(
-                'Erro',
-                'Não foi possível excluir o docente. Tente novamente mais tarde.',
-                'error'
-              );
-            }
-            console.error(err);
-          }
+          error: (err) => this.handleDeleteError(err)
         });
       }
     });
+  }
+  private handleDeleteError(err: any): void {
+    const isConflict = err.status === 500 || err.status === 409;
+    void Swal.fire(
+      isConflict ? 'Atenção' : 'Erro',
+      isConflict ? 'Não é possível excluir este docente pois ele possui encargos ou vínculos ativos.' : 'Erro ao excluir o docente.',
+      isConflict ? 'warning' : 'error'
+    );
   }
 }

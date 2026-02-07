@@ -1,5 +1,5 @@
 export interface DepartamentoDTO {
-  id: number;
+  uuid?: string | null;
   nome: string;
   sigla: string;
 }

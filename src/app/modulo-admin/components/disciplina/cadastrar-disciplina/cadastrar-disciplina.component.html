@@ -21,7 +21,9 @@
 
         <div class="col-md-3">
           <label class="form-label required">Subárea</label>
-          <select class="form-select form-select-solid" formControlName="subarea"
+          <select class="form-select form-select-solid"
+                  formControlName="subarea"
+                  [compareWith]="compararSubareas"
                   [class.is-invalid]="form.get('subarea')?.invalid && (form.get('subarea')?.touched || form.get('subarea')?.dirty)">
             <option [ngValue]="null">Selecione...</option>
             <option *ngFor="let s of subareas" [ngValue]="s">{{ s.nome }}</option>

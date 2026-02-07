@@ -1,5 +1,6 @@
 export interface CursoDTO {
   id: number;
+  uuid?: string | null;
   nome: string;
   sigla: string;
   anoCurriculo: number;

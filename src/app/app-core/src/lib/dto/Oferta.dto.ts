@@ -2,7 +2,7 @@ import {DisciplinaDTO} from './Disciplina.dto';
 import {PeriodoLetivoDTO} from './PeriodoLetivo.dto';
 
 export interface OfertaDTO {
-  id: number;
+  uuid?: string | null;
   disciplina: DisciplinaDTO;
   periodoLetivo: PeriodoLetivoDTO;
 }

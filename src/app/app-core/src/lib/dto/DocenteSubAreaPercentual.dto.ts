@@ -1,8 +1,10 @@
 export interface DocenteSubAreaPercentualDTO {
-  id: number;
-  idSubarea: number;
+  uuid?: string | null;
+  uuidSubarea?: string;
+  subareaUuid?: string;
   nomeSubarea: string;
-  idArea: number;
+  uuidArea?: string;
+  areaUuid?: string;
   nomeArea: string;
   percentual: number;
 }
