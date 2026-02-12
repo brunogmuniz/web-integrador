@@ -44,12 +44,12 @@
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-icon btn-light-primary btn-sm me-2"
-                        [routerLink]="['/docente-encargos/form/editar', item.uuidDocente]">
+                        [routerLink]="['/docente-encargos/form/editar', item.uuid]">
                   <i class="la la-edit fs-3"></i>
                 </button>
                 <button type="button"
                         class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
-                        (click)="onDelete(item.uuidDocente)"
+                        (click)="onDelete(item.uuid)"
                         title="Excluir">
                   <i class="la la-trash fs-3"></i>
                 </button>

@@ -31,42 +31,37 @@
               [class.is-invalid]="form.get('ano')?.invalid && form.get('ano')?.touched"
             />
             <div *ngIf="form.get('ano')?.invalid && form.get('ano')?.touched" class="invalid-feedback d-block">
-              Ano inválido
+              Ano inválido (4 dígitos)
             </div>
           </div>
 
           <div class="col-lg-4">
             <label class="form-label text-gray-700 fw-semibold required">Curso</label>
-            <select
-              class="form-select form-select-solid"
-              formControlName="uuidCurso"
-              [class.is-invalid]="form.get('uuidCurso')?.invalid && form.get('uuidCurso')?.touched"
-            >
-              <option [ngValue]="null" disabled>Selecione o Curso...</option>
-              <option *ngFor="let curso of listaCursos; trackBy: trackByCursoUuid" [value]="curso.uuid">
+            <select [compareWith]="compararCursos" formControlName="curso" class="form-select form-select-solid">
+              <option [ngValue]="null">Selecione...</option>
+              <option *ngFor="let curso of listaCursos" [ngValue]="curso">
                 {{ curso.nome }}
               </option>
             </select>
-            <div *ngIf="form.get('uuidCurso')?.invalid && form.get('uuidCurso')?.touched" class="invalid-feedback d-block">
-              Selecione um curso
+            <div *ngIf="form.get('curso')?.invalid && form.get('curso')?.touched" class="invalid-feedback d-block">
+              Selecione um curso válido
             </div>
           </div>
         </div>
       </div>
-    </form>
 
-    <div class="separator separator-dashed my-6"></div>
-    <div class="d-flex flex-stack mb-5">
-      <h3 class="text-gray-800 fw-bold m-0">
-        <i class="la la-book text-primary fs-2 me-2"></i>
-        Oferta de Disciplinas
-      </h3>
-      <button type="button" class="btn btn-sm btn-light-primary" (click)="adicionarOferta()">
-        <i class="la la-plus"></i> Adicionar Disciplina
-      </button>
-    </div>
+      <div class="separator separator-dashed my-6"></div>
 
-    <form [formGroup]="form">
+      <div class="d-flex flex-stack mb-5">
+        <h3 class="text-gray-800 fw-bold m-0">
+          <i class="la la-book text-primary fs-2 me-2"></i>
+          Oferta de Disciplinas
+        </h3>
+        <button type="button" class="btn btn-sm btn-light-primary" (click)="$event.preventDefault(); adicionarOferta()">
+          <i class="la la-plus"></i> Adicionar Disciplina
+        </button>
+      </div>
+
       <div class="table-responsive" formArrayName="ofertas">
         <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4" *ngIf="ofertas.controls.length > 0; else nenhumaOferta">
           <thead>
@@ -82,39 +77,27 @@
           <tbody class="fs-6">
           <tr *ngFor="let oferta of ofertas.controls; let i = index" [formGroupName]="i">
             <td>
-              <select
-                class="form-select form-select-solid"
-                formControlName="uuidDisciplina"
-                [class.is-invalid]="oferta.get('uuidDisciplina')?.invalid && oferta.get('uuidDisciplina')?.touched">
+              <select [compareWith]="compararDisciplinas" formControlName="disciplina" class="form-select form-select-solid">
                 <option [ngValue]="null">Selecione...</option>
-                <option *ngFor="let disc of listaDisciplinas; trackBy: trackByDisciplinaUuid" [value]="disc.uuid">
-                  {{ disc.codigoDisciplina }} - {{ disc.nome }}
+                <option *ngFor="let disc of listaDisciplinas" [ngValue]="disc">
+                  {{ disc.nome }}
                 </option>
               </select>
             </td>
 
             <td>
-              <select
-                class="form-select form-select-solid"
-                formControlName="semestre"
-                [class.is-invalid]="oferta.get('semestre')?.invalid && oferta.get('semestre')?.touched">
+              <select class="form-select form-select-solid" formControlName="semestre">
                 <option [ngValue]="null">...</option>
-                <option *ngFor="let sem of listaOpcoesSemestre" [value]="sem">{{ sem }}º Semestre</option>
+                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ sem }}º Semestre</option>
               </select>
             </td>
 
             <td>
-              <input type="number"
-                     class="form-control form-control-solid text-center"
-                     formControlName="numProfessoresTeorica"
-                     min="1" />
+              <input type="number" class="form-control form-control-solid text-center" formControlName="numProfessoresTeorica" min="1" />
             </td>
 
             <td>
-              <input type="number"
-                     class="form-control form-control-solid text-center"
-                     formControlName="numProfessoresPratica"
-                     min="1" />
+              <input type="number" class="form-control form-control-solid text-center" formControlName="numProfessoresPratica" min="1" />
             </td>
 
             <td class="text-center">
@@ -124,10 +107,7 @@
             </td>
 
             <td class="text-center">
-              <button type="button"
-                      class="btn btn-icon btn-light-danger btn-sm"
-                      (click)="removerOferta(i)"
-                      title="Remover">
+              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerOferta(i)">
                 <i class="la la-trash fs-3"></i>
               </button>
             </td>
@@ -136,8 +116,8 @@
         </table>
 
         <ng-template #nenhumaOferta>
-          <div class="alert alert-dismissible bg-light-warning border border-warning border-dashed d-flex flex-column flex-sm-row w-100 p-5 mb-10">
-            <div class="d-flex flex-column pe-0 pe-sm-10">
+          <div class="alert alert-dismissible bg-light-warning border border-warning border-dashed d-flex flex-column p-5 mb-10">
+            <div class="d-flex flex-column">
               <h5 class="mb-1 text-warning">Nenhuma disciplina adicionada</h5>
               <span class="text-gray-600">Clique em "Adicionar Disciplina" para compor a estrutura curricular.</span>
             </div>

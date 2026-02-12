@@ -50,10 +50,9 @@ export class AreaConhecimentoService {
   delete(uuid: string): Observable<void> {
     const url = `${this.apiUrl}/${uuid}`;
     return this.http.delete<void>(url).pipe(
-      tap(() => console.log(`Area ${uuid} excluída com sucesso`)),
+      tap(() => console.log(`Area ${uuid} excluída`)),
       catchError(error => {
-        console.error(error);
-        return of(error);
+        return throwError(() => new Error(error.message || 'Erro interno no servidor ao deletar'));
       })
     );
   }

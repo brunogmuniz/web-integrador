@@ -1,9 +1,10 @@
-export interface DisciplinaDTO{
+export interface DisciplinaDTO {
+  id?: number;
   uuid?: string;
   nome: string;
   codigoDisciplina: string;
   cargaHoraria: number;
-  uuidSubarea: string;
+  subareaId: number;
   nomeSubarea: string;
   tipoDisciplina?: string;
   ead: boolean;

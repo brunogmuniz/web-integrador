@@ -1,8 +1,11 @@
-import {DisciplinaDTO} from './Disciplina.dto';
-import {PeriodoLetivoDTO} from './PeriodoLetivo.dto';
-
 export interface OfertaDTO {
-  uuid?: string | null;
-  disciplina: DisciplinaDTO;
-  periodoLetivo: PeriodoLetivoDTO;
+  id?: number;
+  disciplinaUuid: string;
+  disciplinaId?: number;
+  nomeDisciplina?: string;
+  semestre: number;
+  numProfessoresPratica: number;
+  numProfessoresTeorica: number;
+  tutoria: boolean;
+  ead?: boolean;
 }

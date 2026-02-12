@@ -1,9 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EstruturaCurricularService} from "app-core";
-import {CursoService} from "app-core";
-import {DisciplinaService} from "app-core";
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { EstruturaCurricularService, CursoService, DisciplinaService, EstruturaCurricularDto } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -12,7 +10,6 @@ import Swal from "sweetalert2";
   styleUrls: ['../estrutura-curricular.component.scss']
 })
 export class CadastrarEstruturaCurricularComponent implements OnInit {
-
   form: FormGroup;
   listaCursos: any[] = [];
   listaDisciplinas: any[] = [];
@@ -28,10 +25,10 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     this.form = this.fb.group({
-      uuid: [null],
+      uuid: [undefined],
       codigo: ['', Validators.required],
       ano: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-      uuidCurso: [null, Validators.required],
+      curso: [null, Validators.required],
       ativo: [true],
       ofertas: this.fb.array([])
     });
@@ -39,47 +36,59 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarDependencias();
-
-    const uuid = this.route.snapshot.paramMap.get('id');
-    if (uuid) {
-      this.isEdicao = true;
-      this.carregarEstrutura(String(uuid));
-    }
   }
 
   carregarDependencias() {
-    this.cursoService.findAll().subscribe((res: any) => {
-      this.listaCursos = res.content || res;
-    });
+    this.cursoService.findAll().subscribe({
+      next: (resCursos: any) => {
+        this.listaCursos = resCursos.content || resCursos;
 
-    this.disciplinaService.findAll().subscribe((res: any) => {
-      this.listaDisciplinas = res.content || res;
+        this.disciplinaService.findAll().subscribe({
+          next: (resD: any) => {
+            this.listaDisciplinas = resD.content || resD;
+
+            const uuid = this.route.snapshot.paramMap.get('id');
+            if (uuid) {
+              this.isEdicao = true;
+              this.carregarEstrutura(uuid);
+            }
+          },
+          error: (err) => console.error('Erro ao carregar disciplinas', err)
+        });
+      },
+      error: (err) => console.error('Erro ao carregar cursos', err)
     });
   }
 
   carregarEstrutura(uuid: string) {
     this.service.findById(uuid).subscribe({
-      next: (res) => {
+      next: (res: any) => {
+        this.ofertas.clear();
+        let cursoEncontrado = this.listaCursos.find(c => c.uuid === res.cursoUuid);
+        if (!cursoEncontrado && res.cursoId) {
+          cursoEncontrado = this.listaCursos.find(c => c.id === res.cursoId);
+        }
+
         this.form.patchValue({
           uuid: res.uuid,
           codigo: res.codigo,
           ano: res.ano,
-          uuidCurso: res.uuidCurso,
+          curso: cursoEncontrado,
           ativo: res.ativo
         });
 
-        if (res.ofertas && res.ofertas.length > 0) {
-          this.ofertas.clear();
-          res.ofertas.forEach(oferta => {
-            this.adicionarOfertaComDados(oferta);
+        if (res.ofertas) {
+          res.ofertas.forEach((o: any) => {
+            let discObj = this.listaDisciplinas.find(d => d.uuid === o.disciplinaUuid);
+            if (!discObj && o.disciplinaId) {
+              discObj = this.listaDisciplinas.find(d => d.id === o.disciplinaId);
+            }
+
+            this.adicionarOfertaComDados({ ...o, disciplinaObj: discObj });
           });
         }
       },
-      error: (err) => {
-        console.error();
-        void Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error');
-        this.cancelar();
-      }
+      error: (err) => Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error')
     });
   }
 
@@ -92,77 +101,95 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
   }
 
   adicionarOfertaComDados(dados: any | null) {
-    const ofertaGroup = this.fb.group({
-      uuidDisciplina: [dados ? (dados.uuidDisciplina || dados.idDisciplina) : null, Validators.required],
-      semestre: [dados ? dados.semestre : null, Validators.required],
-      numProfessoresPratica: [dados ? dados.numProfessoresPratica : 1],
-      numProfessoresTeorica: [dados ? dados.numProfessoresTeorica : 1],
-      tutoria: [dados ? dados.tutoria : false]
+    const group = this.fb.group({
+      disciplina: [dados?.disciplinaObj || null, Validators.required],
+      semestre: [dados?.semestre || null, Validators.required],
+      numProfessoresPratica: [dados?.numProfessoresPratica || 1],
+      numProfessoresTeorica: [dados?.numProfessoresTeorica || 1],
+      tutoria: [dados?.tutoria || false]
     });
-    this.ofertas.push(ofertaGroup);
+    this.ofertas.push(group);
   }
 
   removerOferta(index: number) {
     this.ofertas.removeAt(index);
   }
 
-  trackByCursoUuid(item: any) {
-    return item.uuid;
-  }
-
-  trackByDisciplinaUuid(item: any) {
-    return item.uuid;
+  private extrairUuid(valor: any): string | null {
+    if (!valor) return null;
+    if (typeof valor === 'string') return valor;
+    if (typeof valor === 'object' && valor.uuid) return valor.uuid;
+    return null;
   }
 
   salvar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      void Swal.fire('Atenção', 'Preencha todos os campos obrigatórios.', 'warning');
+      void Swal.fire('Atenção', 'Verifique os campos obrigatórios.', 'warning');
       return;
     }
 
-    const payload = this.form.getRawValue();
-    const dto = {
-      uuid: payload.uuid,
-      codigo: payload.codigo,
-      ano: payload.ano.toString(),
-      uuidCurso: payload.uuidCurso,
-      ativo: payload.ativo,
-      ofertas: payload.ofertas.map((o: any) => ({
-        uuidDisciplina: o.uuidDisciplina,
-        semestre: o.semestre,
-        numProfessoresPratica: o.numProfessoresPratica,
-        numProfessoresTeorica: o.numProfessoresTeorica,
-        tutoria: o.tutoria
-      }))
+    const raw = this.form.getRawValue();
+    const cursoUuid = this.extrairUuid(raw.curso);
+
+    if (!cursoUuid) {
+      void Swal.fire('Atenção', 'Selecione um curso válido.', 'warning');
+      return;
+    }
+
+    // Monta DTO
+    const dto: EstruturaCurricularDto = {
+      uuid: raw.uuid,
+      codigo: raw.codigo,
+      ano: raw.ano.toString(),
+      cursoUuid: cursoUuid,
+      ativo: !!raw.ativo,
+      ofertas: raw.ofertas.map((o: any) => {
+        const discUuid = this.extrairUuid(o.disciplina);
+        if (!discUuid) {
+          console.error("Disciplina sem UUID:", o.disciplina);
+        }
+        return {
+          disciplinaUuid: discUuid || '',
+          semestre: Number(o.semestre),
+          numProfessoresPratica: Number(o.numProfessoresPratica),
+          numProfessoresTeorica: Number(o.numProfessoresTeorica),
+          tutoria: !!o.tutoria,
+          ead: false
+        };
+      })
     };
 
-    if (this.isEdicao && dto.uuid) {
-      this.service.update(dto.uuid, dto).subscribe({
-        next: () => {
-          void Swal.fire('Sucesso', 'Estrutura atualizada!', 'success')
-            .then(() => this.router.navigate(['/estrutura-curricular/visualizar']));
-        },
-        error: (err) => {
-          console.error();
-          void Swal.fire('Erro', 'Erro ao atualizar. Verifique o console.', 'error');
-        }
-      });
-    } else {
-      this.service.save(dto).subscribe({
-        next: () => {
-          void Swal.fire('Sucesso', 'Estrutura cadastrada!', 'success')
-            .then(() => this.router.navigate(['/estrutura-curricular/visualizar']));
-        },
-        error: (err) => {
-          console.error();
-          void Swal.fire('Erro', 'Erro ao salvar. Verifique o console.', 'error');
-        }
-      });
+    if (dto.ofertas.some(o => !o.disciplinaUuid)) {
+      void Swal.fire('Erro', 'Existem disciplinas inválidas selecionadas.', 'error');
+      return;
     }
+
+    const request = (this.isEdicao && dto.uuid)
+      ? this.service.update(dto.uuid, dto)
+      : this.service.save(dto);
+
+    request.subscribe({
+      next: () => {
+        void Swal.fire('Sucesso', 'Estrutura curricular salva!', 'success')
+          .then(() => this.router.navigate(['/estrutura-curricular/visualizar']));
+      },
+      error: (err) => {
+        console.error(err);
+        void Swal.fire('Erro', err.error?.message || 'Erro ao salvar dados.', 'error');
+      }
+    });
   }
 
   cancelar() {
     void this.router.navigate(['/estrutura-curricular/visualizar']);
+  }
+
+  compararCursos(c1: any, c2: any): boolean {
+    return c1 && c2 ? c1.uuid === c2.uuid : c1 === c2;
+  }
+
+  compararDisciplinas(d1: any, d2: any): boolean {
+    return d1 && d2 ? d1.uuid === d2.uuid : d1 === d2;
   }
 }

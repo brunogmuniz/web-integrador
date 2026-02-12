@@ -37,7 +37,7 @@ export class CadastrarDocenteComponent implements OnInit {
       tipoFormacao: [null, Validators.required],
       licenciatura: [false, Validators.required],
       origemVaga: [null, Validators.required],
-      departamento: ['', Validators.required],
+      departamentoId: [null, Validators.required],
     });
   }
 

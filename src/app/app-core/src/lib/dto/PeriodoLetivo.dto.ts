@@ -1,5 +1,5 @@
 export interface PeriodoLetivoDTO {
-  uuid?: string | null;
+  uuid: string;
   codigo: string;
   dataInicio: string;
   dataFim: string;

@@ -49,7 +49,10 @@ export class DocenteService {
       })
     );
   }
-
+  public deleteVinculoSubArea(uuid: string): Observable<void> {
+    const url = `${environment.apiUrl}/docentes-subareas/${uuid}`;
+    return this.http.delete<void>(url);
+  }
   listarTodosDetalhado(): Observable<DocenteDetalheDTO[]> {
     const url = `${this.apiUrl}/detalhes/all`;
     return this.http.get<DocenteDetalheDTO[]>(url).pipe(

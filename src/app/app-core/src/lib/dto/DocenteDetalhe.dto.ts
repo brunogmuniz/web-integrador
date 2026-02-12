@@ -1,7 +1,8 @@
 import {DocenteSubAreaPercentualDTO} from "app-core/lib/dto/DocenteSubAreaPercentual.dto";
 
 export interface DocenteDetalheDTO {
-  uuidDocente: string;
+  idDocente: number;
+  uuid: string;
   nome: string;
   matricula: string;
   tipoVaga: string;
