@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {EstruturaCurricularService} from "../../../../app-core/src/lib/services/estrutura-curricular-service";
-import {EstruturaCurricularDto} from "../../../../app-core/src/lib/dto/EstruturaCurricular.dto";
+import {EstruturaCurricularService} from "app-core";
+import {EstruturaCurricularDTO} from "app-core";
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class VisualizarEstruturaCurricularComponent implements OnInit {
 
-  listaEstruturas: EstruturaCurricularDto[] = [];
+  listaEstruturas: EstruturaCurricularDTO[] = [];
 
   constructor(
     private service: EstruturaCurricularService,
@@ -60,7 +60,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
     });
   }
 
-  trackByEstruturaUuid(_index: number, item: EstruturaCurricularDto) {
+  trackByEstruturaUuid(_index: number, item: EstruturaCurricularDTO) {
     return item.uuid;
   }
 }

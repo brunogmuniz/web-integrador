@@ -18,7 +18,9 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
 
   carregarSubAreas(): void {
     this.subareaService.listarTodos().subscribe({
-      next: (res) => this.subAreas = res,
+      next: (res) => {
+        this.subAreas = res;
+      },
       error: (err) => {
         console.error(err);
         this.notificarErro('Não foi possível carregar a lista de subáreas.');

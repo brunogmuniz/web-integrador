@@ -1,8 +1,6 @@
-export interface OfertaDTO {
+export interface OfertaDisciplinaDTO {
   id?: number;
-  disciplinaUuid: string;
-  disciplinaId?: number;
-  nomeDisciplina?: string;
+  disciplinaId: number;
   semestre: number;
   numProfessoresPratica: number;
   numProfessoresTeorica: number;

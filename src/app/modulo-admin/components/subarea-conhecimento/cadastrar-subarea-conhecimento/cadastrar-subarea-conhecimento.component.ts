@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { SubareaConhecimentoService, AreaConhecimentoService, AreaConhecimentoDTO } from "app-core";
+import { SubareaConhecimentoService, AreaConhecimentoService, AreaConhecimentoDTO, SubareaConhecimentoDTO } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',
@@ -40,7 +40,7 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
       nome: ['', [Validators.required, Validators.minLength(3)]],
       sigla: ['', Validators.required],
       cargaHorariaTotal: [0, [Validators.required, Validators.min(1)]],
-      areaConhecimentoId: [null, Validators.required]
+      areaId: [null, Validators.required]
     });
   }
 
@@ -61,13 +61,10 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
           nome: res.nome,
           sigla: res.sigla,
           cargaHorariaTotal: res.cargaHorariaTotal,
-          areaConhecimentoId: res.area?.uuid
+          areaId: res.area?.id || res.areaId
         });
       },
-      error: () => {
-        this.notificarErro('Não foi possível carregar os dados da subárea.');
-        this.cancelar();
-      }
+      error: () => this.notificarErro('Não foi possível carregar os dados.')
     });
   }
 
@@ -81,23 +78,17 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
       return;
     }
 
-    const { areaConhecimentoId, ...formVal } = this.subAreaForm.value;
-
-    const payload = {
-      ...formVal,
-      area: { uuid: areaConhecimentoId }
-    };
-
+    const payload: SubareaConhecimentoDTO = this.subAreaForm.value;
     const request = this.modoEdicao && this.subAreaUuid
       ? this.subareaService.update(this.subAreaUuid, payload)
       : this.subareaService.create(payload);
 
     request.subscribe({
       next: () => {
-        void Swal.fire('Sucesso', `Subárea ${this.modoEdicao ? 'atualizada' : 'cadastrada'}!`, 'success');
+        void Swal.fire('Sucesso', 'Registro salvo!', 'success');
         this.cancelar();
       },
-      error: (err) => this.notificarErro(err.error?.message || 'Erro ao salvar registro.')
+      error: (err: any) => this.notificarErro(err.error?.message || 'Erro ao salvar.')
     });
   }
 

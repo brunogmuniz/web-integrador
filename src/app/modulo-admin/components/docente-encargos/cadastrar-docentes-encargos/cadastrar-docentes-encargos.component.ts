@@ -90,46 +90,36 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
   }
 
   carregarDadosDocente(uuid: string): void {
-    this.loading = true;
     this.docenteService.buscarPorId(uuid).subscribe({
       next: (response: any) => {
-        if (response) {
+        if (response && response.subAreas) {
           this.docenteNome = response.nome;
-          this.encargosAtuais = (response.subAreas || []).map((sa: any) => ({
-            subAreaId: sa.subareaId || sa.idSubArea || sa.id,
-            nomeArea: sa.nomeArea || 'Área não identificada',
-            nomeSubarea: sa.nomeSubarea || sa.nomeSubArea,
+          this.encargosAtuais = response.subAreas.map((sa: any) => ({
+            subareaId: sa.subareaId,
+            nomeArea: sa.nomeArea || 'N/A',
+            nomeSubarea: sa.nomeSubarea,
             percentual: sa.percentual
           }));
         }
-        this.loading = false;
-      },
-      error: (err: any) => {
-        console.error('Erro ao carregar detalhes do docente', err);
-        alert('Erro ao carregar dados do docente.');
-        this.loading = false;
       }
     });
   }
 
   adicionarEncargo(): void {
     if (this.subForm.invalid) return;
+    const subarea = this.subForm.value.subareaSelecionada;
 
-    const formVal = this.subForm.value;
-    const subarea: SubareaConhecimentoDTO = formVal.subareaSelecionada;
-    const existe = this.encargosAtuais.some(e => e.subAreaId === subarea.id);
-    if (existe) {
-      alert('Esta subárea já está vinculada a este docente.');
+    if (this.encargosAtuais.some(e => e.subareaId === subarea.id)) {
+      alert('Esta subárea já está vinculada.');
       return;
     }
 
     this.encargosAtuais.push({
-      subAreaId: subarea.id,
+      subareaId: subarea.id,
       nomeArea: subarea.area?.nome || 'N/A',
       nomeSubarea: subarea.nome,
-      percentual: formVal.percentual
+      percentual: this.subForm.value.percentual
     });
-
     this.subForm.reset();
   }
 
@@ -151,7 +141,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     }
 
     const payload = this.encargosAtuais.map(e => ({
-      subareaId: e.subAreaId,
+      subareaId: e.subareaId,
       percentualAtuacao: e.percentual
     }));
 
@@ -164,9 +154,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        console.error('Erro ao salvar', err);
-        const msg = err.error ? err.error : 'Ocorreu um erro ao salvar os dados.';
-        alert('Erro: ' + msg);
+        console.error('Erro ao salvar:', err);
       }
     });
   }

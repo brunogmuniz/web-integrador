@@ -62,11 +62,17 @@ export class CadastrarDocenteComponent implements OnInit {
     this.docenteService.buscarPorId(uuid).subscribe({
       next: (doc: any) => {
         this.docenteForm.patchValue(doc);
+
+        if (doc.departamento) {
+          this.docenteForm.get('departamentoId')?.setValue(doc.departamento.id);
+        } else if (doc.departamentoId) {
+          this.docenteForm.get('departamentoId')?.setValue(doc.departamentoId);
+        }
       },
       error: (err) => {
         console.error(err);
         void Swal.fire('Erro', 'Não foi possível carregar o docente.', 'error');
-        void this.router.navigate(['/docente']);
+        this.cancelar();
       }
     });
   }

@@ -60,9 +60,9 @@
         <div class="col-md-6">
           <label class="form-label">Departamento *</label>
           <select formControlName="departamentoId" class="form-select">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let dept of departamentos" [value]="dept.id">
-              {{ dept.nome }} ({{ dept.sigla }})
+            <option [ngValue]="null" disabled>Selecione um departamento</option>
+            <option *ngFor="let item of departamentos" [value]="item.id">
+              {{ item.nome }}
             </option>
           </select>
         </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
-import { EstruturaCurricularDto } from '../dto/EstruturaCurricular.dto';
+import { EstruturaCurricularDTO } from '../dto/EstruturaCurricular.dto';
 import {catchError, map, tap} from "rxjs/operators";
 import {environment} from "../../../../../environments/enviroment";
 
@@ -14,8 +14,8 @@ export class EstruturaCurricularService {
 
   constructor(private http: HttpClient) {}
 
-  save(estrutura: EstruturaCurricularDto): Observable<EstruturaCurricularDto> {
-    return this.http.post<EstruturaCurricularDto>(this.apiUrl, estrutura).pipe(
+  save(estrutura: EstruturaCurricularDTO): Observable<EstruturaCurricularDTO> {
+    return this.http.post<EstruturaCurricularDTO>(this.apiUrl, estrutura).pipe(
       tap(() => console.log('Estrutura Curricular criada com sucesso')),
       catchError(error => {
         console.error(error);
@@ -24,8 +24,8 @@ export class EstruturaCurricularService {
     );
   }
 
-  update(uuid: string, estrutura: EstruturaCurricularDto): Observable<EstruturaCurricularDto> {
-    return this.http.put<EstruturaCurricularDto>(`${this.apiUrl}/${uuid}`, estrutura).pipe(
+  update(uuid: string, estrutura: EstruturaCurricularDTO): Observable<EstruturaCurricularDTO> {
+    return this.http.put<EstruturaCurricularDTO>(`${this.apiUrl}/${uuid}`, estrutura).pipe(
       tap(() => console.log(`Estrutura Curricular ${uuid} atualizada com sucesso`)),
       catchError(error => {
         console.error(error);
@@ -34,16 +34,18 @@ export class EstruturaCurricularService {
     );
   }
 
-  findById(uuid: string): Observable<EstruturaCurricularDto> {
-    return this.http.get<EstruturaCurricularDto>(`${this.apiUrl}/${uuid}`).pipe(
+  findById(uuid: string): Observable<EstruturaCurricularDTO> {
+    return this.http.get<EstruturaCurricularDTO>(`${this.apiUrl}/${uuid}`).pipe(
       catchError(error => {
         console.error(error);
         return throwError(() => error);
       })
     );
   }
-
-  findAll(): Observable<EstruturaCurricularDto[]> {
+  findByCurso(cursoId: number): Observable<EstruturaCurricularDTO[]> {
+    return this.http.get<EstruturaCurricularDTO[]>(`${this.apiUrl}/curso/${cursoId}`);
+  }
+  findAll(): Observable<EstruturaCurricularDTO[]> {
     return this.http.get<any>(`${this.apiUrl}?size=2000`).pipe(
       map(response => response?.content || response || []),
       catchError(error => {

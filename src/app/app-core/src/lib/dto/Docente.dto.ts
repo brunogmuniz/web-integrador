@@ -6,6 +6,6 @@ export interface DocenteDTO {
   tipoFormacao: string;
   licenciatura: boolean;
   origemVaga: string;
-  departamento?: string | null;
-  departamentoId?: number | null;
+  nomeDepartamento: string;
+  departamentoId: number;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { EstruturaCurricularService, CursoService, DisciplinaService, EstruturaCurricularDto } from "app-core";
+import { EstruturaCurricularService, CursoService, DisciplinaService, EstruturaCurricularDTO } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -64,6 +64,7 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
     this.service.findById(uuid).subscribe({
       next: (res: any) => {
         this.ofertas.clear();
+
         let cursoEncontrado = this.listaCursos.find(c => c.uuid === res.cursoUuid);
         if (!cursoEncontrado && res.cursoId) {
           cursoEncontrado = this.listaCursos.find(c => c.id === res.cursoId);
@@ -115,70 +116,58 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
     this.ofertas.removeAt(index);
   }
 
-  private extrairUuid(valor: any): string | null {
-    if (!valor) return null;
-    if (typeof valor === 'string') return valor;
-    if (typeof valor === 'object' && valor.uuid) return valor.uuid;
-    return null;
-  }
-
   salvar() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      void Swal.fire('Atenção', 'Verifique os campos obrigatórios.', 'warning');
+    const formValue = this.form.value;
+    if (!formValue.curso?.id) {
+      void Swal.fire('Erro', 'O Curso selecionado não possui ID válido. Recarregue a página.', 'error');
       return;
     }
 
-    const raw = this.form.getRawValue();
-    const cursoUuid = this.extrairUuid(raw.curso);
-
-    if (!cursoUuid) {
-      void Swal.fire('Atenção', 'Selecione um curso válido.', 'warning');
-      return;
-    }
-
-    // Monta DTO
-    const dto: EstruturaCurricularDto = {
-      uuid: raw.uuid,
-      codigo: raw.codigo,
-      ano: raw.ano.toString(),
-      cursoUuid: cursoUuid,
-      ativo: !!raw.ativo,
-      ofertas: raw.ofertas.map((o: any) => {
-        const discUuid = this.extrairUuid(o.disciplina);
-        if (!discUuid) {
-          console.error("Disciplina sem UUID:", o.disciplina);
+    const dto: EstruturaCurricularDTO = {
+      ano: formValue.ano,
+      codigo: formValue.codigo,
+      ativo: formValue.ativo,
+      cursoId: formValue.curso.id,
+      ofertas: this.ofertas.value.map((o: any) => {
+        if (!o.disciplina?.id) {
+          throw new Error('Disciplina selecionada sem ID');
         }
         return {
-          disciplinaUuid: discUuid || '',
-          semestre: Number(o.semestre),
-          numProfessoresPratica: Number(o.numProfessoresPratica),
-          numProfessoresTeorica: Number(o.numProfessoresTeorica),
-          tutoria: !!o.tutoria,
-          ead: false
+          disciplinaId: o.disciplina.id,
+          semestre: o.semestre,
+          numProfessoresPratica: o.numProfessoresPratica,
+          numProfessoresTeorica: o.numProfessoresTeorica,
+          tutoria: o.tutoria
         };
       })
     };
 
-    if (dto.ofertas.some(o => !o.disciplinaUuid)) {
-      void Swal.fire('Erro', 'Existem disciplinas inválidas selecionadas.', 'error');
-      return;
-    }
-
-    const request = (this.isEdicao && dto.uuid)
-      ? this.service.update(dto.uuid, dto)
-      : this.service.save(dto);
-
-    request.subscribe({
+    const uuid = this.form.get('uuid')?.value;
+    const observer = {
       next: () => {
-        void Swal.fire('Sucesso', 'Estrutura curricular salva!', 'success')
-          .then(() => this.router.navigate(['/estrutura-curricular/visualizar']));
+        Swal.fire({
+          title: 'Sucesso!',
+          text: `Estrutura Curricular ${this.isEdicao ? 'atualizada' : 'cadastrada'} com sucesso!`,
+          icon: 'success',
+          confirmButtonText: 'Ok',
+          confirmButtonColor: '#1BC5BD'
+        }).then((result) => {
+          if (result.isConfirmed || result.isDismissed) {
+            this.cancelar();
+          }
+        });
       },
-      error: (err) => {
-        console.error(err);
-        void Swal.fire('Erro', err.error?.message || 'Erro ao salvar dados.', 'error');
+      error: (err: any) => {
+        console.error('Erro detalhado:', err);
+        void Swal.fire('Erro', 'Ocorreu um erro ao salvar. Verifique o console.', 'error');
       }
-    });
+    };
+
+    if (this.isEdicao && uuid) {
+      this.service.update(uuid, dto).subscribe(observer);
+    } else {
+      this.service.save(dto).subscribe(observer);
+    }
   }
 
   cancelar() {
@@ -186,6 +175,9 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
   }
 
   compararCursos(c1: any, c2: any): boolean {
+    if (c1 && c2 && c1.id && c2.id) {
+      return c1.id === c2.id;
+    }
     return c1 && c2 ? c1.uuid === c2.uuid : c1 === c2;
   }
 
