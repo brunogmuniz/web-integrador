@@ -4,19 +4,18 @@
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-          <th class="min-w-50px">#</th>
-          <th class="min-w-150px">Nome</th>
-          <th class="min-w-100px">Matrícula</th>
+          <th class="min-w-100px">-</th> <th class="min-w-150px">Nome</th>
+          <th class="min-w-150px">Matrícula</th>
           <th class="min-w-100px">Vaga</th>
-          <th class="min-w-120px">Formação</th>
-          <th class="min-w-150px">Departamento</th>
+          <th class="min-w-100px">Formação</th>
+          <th class="min-w-120px">Departamento</th>
           <th class="min-w-120px text-center">Ações</th>
         </tr>
         </thead>
         <tbody class="fs-6">
         <tr *ngFor="let docente of docentes; let i = index; let last = last">
           <td>
-            <span class="text-gray-800 fw-bold">{{ docente.id }}</span>
+            <span class="text-gray-800 fw-bold">{{ i + 1 }}</span>
           </td>
           <td>
             <span class="text-gray-800 fw-bold">{{ docente.nome }}</span>
@@ -31,19 +30,19 @@
             <span class="text-gray-700">{{ docente.tipoFormacao }}</span>
           </td>
           <td>
-            <span class="text-center text-gray-700">{{ docente.departamento }}</span>
+            <span class="text-center text-gray-700">{{ docente.nomeDepartamento }}</span>
           </td>
           <td class="text-center">
             <div class="d-flex justify-content-center gap-2">
               <button
                 class="btn btn-icon btn-light-primary btn-sm me-2"
-                [routerLink]="['/docente/form/editar', docente.id]"
+                [routerLink]="['/docente/form/editar', docente.uuid]"
               >
                 <i class="la la-edit fs-3"></i>
               </button>
               <button type="button"
                       class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
-                      (click)="onDelete(docente.id)"
+                      (click)="onDelete(docente.uuid)"
                       title="Excluir">
                 <i class="la la-trash fs-3"></i>
               </button>

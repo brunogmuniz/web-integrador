@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AreaConhecimentoDTO } from "../../../../app-core/src/lib/dto/AreaConhecimento.dto";
+import { AreaConhecimentoDTO, AreaConhecimentoService} from "app-core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AreaConhecimentoService } from "../../../../app-core/src/lib/services/area-conhecimento-service";
 import { ActivatedRoute, Router } from "@angular/router";
 import Swal from 'sweetalert2';
 
@@ -15,7 +14,7 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
   areaForm!: FormGroup;
   areas: AreaConhecimentoDTO[] = [];
 
-  areaId?: number;
+  areaUuid?: string;
   modoEdicao = false;
 
   constructor(
@@ -27,22 +26,22 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
 
   ngOnInit(): void {
     this.areaForm = this.fb.group({
-      id: [],
+      uuid: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
       cargaHorariaTotal: ['', [Validators.required, Validators.min(1)]],
     });
 
     this.route.paramMap.subscribe(params => {
-      const idParam = params.get('id');
+      const uuidParam = params.get('id');
 
-      if (idParam) {
-        this.areaId = Number(idParam);
+      if (uuidParam) {
+        this.areaUuid = uuidParam;
         this.modoEdicao = true;
-        this.carregarArea(this.areaId);
+        this.carregarArea(this.areaUuid);
       } else {
         this.modoEdicao = false;
-        this.areaId = undefined;
+        this.areaUuid = undefined;
         this.areaForm.reset();
       }
     });
@@ -54,35 +53,20 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
     return this.areaForm.controls as { [key: string]: FormControl };
   }
 
-  trackByAreaId(index: number, item: AreaConhecimentoDTO) {
-    return item.id;
-  }
-
   loadAreas(): void {
     this.areaService.listarTodos().subscribe({
       next: (data) => this.areas = data,
-      error: (err) => console.error('Erro ao carregar áreas:', err)
+      error: (err) => console.error(err)
     });
   }
 
-  carregarArea(id: number): void {
-    this.areaService.buscarPorId(id).subscribe({
+  carregarArea(uuid: string): void {
+    this.areaService.buscarPorId(uuid).subscribe({
       next: (area) => {
         this.areaForm.patchValue(area);
       },
-      error: (err) => console.error('Erro ao carregar área:', err)
+      error: (err) => console.error(err)
     });
-  }
-
-  onDelete(id: number): void {
-    if (confirm('Tem certeza que deseja excluir esta área?')) {
-      this.areaService.delete(id).subscribe({
-        next: () => {
-          this.areas = this.areas.filter(a => a.id !== id);
-        },
-        error: (err) => console.error('Erro ao deletar área:', err)
-      });
-    }
   }
 
   onSubmit(): void {
@@ -91,50 +75,48 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
       return;
     }
 
-    if (this.modoEdicao && this.areaId) {
-      this.areaService.update(this.areaId, this.areaForm.value).subscribe({
+    const areaDto: AreaConhecimentoDTO = this.areaForm.value;
+
+    if (this.modoEdicao && this.areaUuid) {
+      areaDto.uuid = this.areaUuid;
+
+      this.areaService.update(this.areaUuid, areaDto).subscribe({
         next: () => {
-          Swal.fire({
-            title: 'Atualizada!',
-            text: 'Área atualizada com sucesso.',
-            icon: 'success',
-            timer: 1800,
-            showConfirmButton: false
-          });
-          this.router.navigate(['/area/visualizar']);
+          this.exibirSucesso('Atualizada!');
+          void this.router.navigate(['/area/visualizar']);
         },
-        error: () => {
-          Swal.fire({
-            title: 'Erro!',
-            text: 'Não foi possível atualizar a área.',
-            icon: 'error'
-          });
-        }
+        error: () => this.exibirErro('Não foi possível atualizar a área.')
       });
     } else {
-      this.areaService.create(this.areaForm.value).subscribe({
+      this.areaService.create(areaDto).subscribe({
         next: () => {
-          Swal.fire({
-            title: 'Cadastrada!',
-            text: 'Área cadastrada com sucesso.',
-            icon: 'success',
-            timer: 1800,
-            showConfirmButton: false
-          });
+          this.exibirSucesso('Cadastrada!');
           this.areaForm.reset();
           this.loadAreas();
         },
-        error: () => {
-          Swal.fire({
-            title: 'Erro!',
-            text: 'Não foi possível cadastrar a área.',
-            icon: 'error'
-          });
-        }
+        error: () => this.exibirErro('Não foi possível cadastrar a área.')
       });
     }
   }
 
+
+  private exibirSucesso(titulo: string) {
+    void Swal.fire({
+      title: titulo,
+      text: `Área ${titulo.toLowerCase()} com sucesso.`,
+      icon: 'success',
+      timer: 1800,
+      showConfirmButton: false
+    });
+  }
+
+  private exibirErro(mensagem: string) {
+    void Swal.fire({
+      title: 'Erro!',
+      text: mensagem,
+      icon: 'error'
+    });
+  }
 
   cancelar(): void {
     void this.router.navigate(['/area/visualizar']);

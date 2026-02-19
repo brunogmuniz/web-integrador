@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { DisciplinaService } from "../../../../app-core/src/lib/services/disciplina-service";
-import { SubareaConhecimentoService } from "../../../../app-core/src/lib/services/subarea-conhecimento-service";
-import { SubareaConhecimentoDTO } from "../../../../app-core/src/lib/dto/SubareaConhecimento.dto";
-import { DisciplinaDTO } from "../../../../app-core/src/lib/dto/Disciplina.dto";
+import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-disciplina',
@@ -15,7 +12,7 @@ import { DisciplinaDTO } from "../../../../app-core/src/lib/dto/Disciplina.dto";
 export class CadastrarDisciplinaComponent implements OnInit {
   form: FormGroup;
   subareas: SubareaConhecimentoDTO[] = [];
-  idDisciplina: number | null = null;
+  uuidDisciplina?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -27,7 +24,7 @@ export class CadastrarDisciplinaComponent implements OnInit {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoDisciplina: [null, Validators.required],
-      subarea: [null, Validators.required],
+      subareaId: [null, Validators.required],
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],
       cargaHoraria: [{ value: 0, disabled: true }],
@@ -36,59 +33,45 @@ export class CadastrarDisciplinaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carregarSubareas();
     this.configurarCalculoAutomatico();
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.idDisciplina = Number(id);
-      this.carregarDadosDisciplina(this.idDisciplina);
-    }
-  }
-
-  carregarSubareas(): void {
-    this.subareaService.listarTodos().subscribe(res => {
-      this.subareas = res;
-      if (this.idDisciplina && this.form.value.subarea) {
-        const subareaSelecionada = this.subareas.find(s => s.id === this.form.value.subarea.id);
-        if (subareaSelecionada) {
-          this.form.patchValue({ subarea: subareaSelecionada });
-        }
+    this.route.params.subscribe(params => {
+      const uuid = params['id'];
+      if (uuid) {
+        this.uuidDisciplina = uuid;
       }
+      this.carregarDadosIniciais(uuid);
     });
   }
 
-  carregarDadosDisciplina(id: number): void {
-    this.disciplinaService.findById(id).subscribe({
+  private carregarDadosIniciais(uuid: string | null): void {
+    this.subareaService.listarTodos().subscribe({
       next: (res) => {
-        let subareaObj = res.idSubarea ? { id: res.idSubarea, nome: res.nomeSubarea } : null;
-        if (this.subareas.length > 0 && res.idSubarea) {
-          const found = this.subareas.find(s => s.id === res.idSubarea);
-          if (found) subareaObj = found;
+        this.subareas = res;
+        if (uuid) {
+          this.carregarDadosDisciplina(uuid);
         }
+      },
+      error: (err: any) => console.error('Erro ao carregar subáreas:', err)
+    });
+  }
 
-        this.form.patchValue({
-          nome: res.nome,
-          codigoDisciplina: res.codigoDisciplina,
-          subarea: subareaObj,
-          cargaHorariaTeorica: res.cargaHorariaTeorica,
-          cargaHorariaPratica: res.cargaHorariaPratica,
-          ead: res.ead
-        });
-
-        this.form.get('cargaHoraria')?.setValue(res.cargaHoraria);
+  carregarDadosDisciplina(uuid: string): void {
+    this.disciplinaService.findById(uuid).subscribe({
+      next: (res: DisciplinaDTO) => {
+        this.form.patchValue(res);
+        this.form.get('cargaHoraria')?.setValue(res.cargaHoraria, { emitEvent: false });
       },
       error: (err) => {
-        console.error(err);
-        void Swal.fire('Erro', 'Não foi possível carregar os dados da disciplina.', 'error');
-        this.cancelar();
+        void Swal.fire('Erro', 'Erro ao carregar disciplina', 'error');
+        void this.router.navigate(['/disciplina/visualizar']);
       }
     });
   }
 
   configurarCalculoAutomatico(): void {
-    this.form.valueChanges.subscribe(val => {
-      const teorica = val.cargaHorariaTeorica || 0;
-      const pratica = val.cargaHorariaPratica || 0;
+    this.form.valueChanges.subscribe(() => {
+      const teorica = Number(this.form.get('cargaHorariaTeorica')?.value) || 0;
+      const pratica = Number(this.form.get('cargaHorariaPratica')?.value) || 0;
       this.form.get('cargaHoraria')?.setValue(teorica + pratica, { emitEvent: false });
     });
   }
@@ -100,45 +83,28 @@ export class CadastrarDisciplinaComponent implements OnInit {
     }
 
     const formValue = this.form.getRawValue();
-
     const payload: DisciplinaDTO = {
-      id: this.idDisciplina ? this.idDisciplina : 0,
-      nome: formValue.nome,
-      codigoDisciplina: formValue.codigoDisciplina,
-      cargaHoraria: formValue.cargaHoraria,
-      idSubarea: formValue.subarea ? formValue.subarea.id : null,
-      nomeSubarea: formValue.subarea ? formValue.subarea.nome : '',
-      ead: formValue.ead,
-      cargaHorariaTeorica: formValue.cargaHorariaTeorica,
-      cargaHorariaPratica: formValue.cargaHorariaPratica,
-      tipoDisciplina: 'PRESENCIAL'
+      ...formValue,
+      uuid: this.uuidDisciplina,
+      tipoDisciplina: 'PRESENCIAL',
     };
 
-    if (this.idDisciplina) {
-      this.disciplinaService.update(this.idDisciplina, payload).subscribe({
-        next: () => {
-          void Swal.fire('Sucesso', 'Disciplina atualizada com sucesso!', 'success').then(() => {
-            void this.router.navigate(['/disciplina/visualizar']);
-          });
-        },
-        error: (err) => {
-          void Swal.fire('Erro', 'Erro ao atualizar disciplina.', 'error');
-          console.error(err);
-        }
-      });
-    } else {
-      this.disciplinaService.create(payload).subscribe({
-        next: () => {
-          void Swal.fire('Sucesso', 'Disciplina cadastrada com sucesso!', 'success').then(() => {
-            void this.router.navigate(['/disciplina/visualizar']);
-          });
-        },
-        error: (err) => {
-          void Swal.fire('Erro', 'Erro ao cadastrar disciplina.', 'error');
-          console.error(err);
-        }
-      });
-    }
+    console.log('Payload Processado:', payload);
+
+    const request = this.uuidDisciplina
+      ? this.disciplinaService.update(this.uuidDisciplina, payload)
+      : this.disciplinaService.create(payload);
+
+    request.subscribe({
+      next: () => {
+        void Swal.fire('Sucesso', 'Disciplina salva com sucesso!', 'success');
+        void this.router.navigate(['/disciplina/visualizar']);
+      },
+      error: (err: any) => {
+        const msg = err.error?.message || 'Erro ao salvar disciplina.';
+        void Swal.fire('Erro', msg, 'error');
+      }
+    });
   }
 
   cancelar(): void {

@@ -8,7 +8,7 @@ export interface Usuario {
   cpf?: string | null;
   tipoPerfil?: TipoPerfil | null;
   permissoes?: string[];
-  uuid?: string | null;
+  uuid?: string;
   ultimaAtualizacaoCadastro?: string | null;
   pendenciaAtualizacao?: boolean;
 }

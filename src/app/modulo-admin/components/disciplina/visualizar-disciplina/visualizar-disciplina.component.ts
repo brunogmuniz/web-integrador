@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DisciplinaService } from "../../../../app-core/src/lib/services/disciplina-service";
-import { DisciplinaDTO } from "../../../../app-core/src/lib/dto/Disciplina.dto";
+import { DisciplinaService } from "app-core";
+import { DisciplinaDTO } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -20,11 +20,17 @@ export class VisualizarDisciplinaComponent implements OnInit {
   carregarDisciplinas(): void {
     this.disciplinaService.findAll().subscribe({
       next: (res) => this.disciplinas = res,
-      error: (err) => console.error('Erro ao carregar disciplinas', err)
+      error: (err) => console.error(err)
     });
   }
 
-  confirmarExclusao(id: number): void {
+  confirmarExclusao(uuid: string | null | undefined): void {
+
+    if (!uuid) {
+      void Swal.fire('Erro', 'Identificador inválido.', 'error');
+      return;
+    }
+
     Swal.fire({
       title: 'Tem certeza?',
       text: "Esta ação não poderá ser revertida!",
@@ -36,18 +42,21 @@ export class VisualizarDisciplinaComponent implements OnInit {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.excluir(id);
+        this.excluir(uuid);
       }
     });
   }
 
-  private excluir(id: number): void {
-    this.disciplinaService.delete(id).subscribe({
+  private excluir(uuid: string): void {
+    this.disciplinaService.delete(uuid).subscribe({
       next: () => {
         void Swal.fire('Excluído!', 'A disciplina foi removida.', 'success');
         this.carregarDisciplinas();
       },
-      error: () => Swal.fire('Erro', 'Não foi possível excluir o registro.', 'error')
+      error: (err) => {
+        console.error();
+        void Swal.fire('Erro', 'Não foi possível excluir o registro.', 'error');
+      }
     });
   }
 }

@@ -3,7 +3,7 @@ import { SubareaConhecimentoDTO } from './SubareaConhecimento.dto';
 import { DocenteSubAreaPercentualDTO } from './DocenteSubAreaPercentual.dto';
 
 export interface DocenteSubAreaDTO {
-  id?: number;
+  uuid?: string | null;
   idDocente?: number;
   nomeDocente?: string;
   nomeArea?: string;
