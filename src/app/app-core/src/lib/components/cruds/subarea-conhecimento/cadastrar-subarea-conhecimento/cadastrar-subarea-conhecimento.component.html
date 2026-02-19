@@ -28,13 +28,13 @@
       <div class="row mb-3">
         <div class="col-md-6">
           <label class="form-label">Área de Conhecimento</label>
-          <select class="form-select" formControlName="areaConhecimentoId">
+          <select class="form-select" formControlName="areaId">
             <option [ngValue]="null" disabled>Selecione uma área...</option>
-            <option *ngFor="let area of areasDeConhecimento$ | async" [value]="area.id">
+            <option *ngFor="let area of areasDeConhecimento$ | async" [ngValue]="area.id">
               {{ area.nome }} ({{ area.sigla }})
             </option>
           </select>
-          <div *ngIf="c['areaConhecimentoId'].touched && c['areaConhecimentoId'].invalid" class="text-danger small mt-1">
+          <div *ngIf="c['areaId'].touched && c['areaId'].invalid" class="text-danger small mt-1">
             A área é obrigatória.
           </div>
         </div>
@@ -59,7 +59,6 @@
           {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
         </button>
       </div>
-
     </form>
   </div>
 </div>

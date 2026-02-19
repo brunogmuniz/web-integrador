@@ -7,19 +7,13 @@
 
   <div class="card-body">
 
-    <!-- FORM DOCENTE -->
     <form [formGroup]="encargoForm">
       <div class="mb-5">
         <label class="form-label text-gray-700 fw-semibold required">Docente</label>
-        <select
-          formControlName="idDocente"
-          class="form-select form-select-solid"
-          [disabled]="modoEdicao"
-          [class.is-invalid]="encargoForm.get('idDocente')?.invalid && encargoForm.get('idDocente')?.touched">
-
-          <option [ngValue]="null" disabled>Selecione...</option>
-          <option *ngFor="let d of docentesDisponiveis" [value]="d.id">
-            {{ d.nome }} ({{ d.matricula }})
+        <select formControlName="idDocente" class="form-select">
+          <option [value]="null">Selecione um docente</option>
+          <option *ngFor="let d of docentesDisponiveis" [value]="d.uuid">
+            {{ d.nome }} - {{ d.matricula }}
           </option>
         </select>
 
@@ -32,7 +26,6 @@
 
     <div class="separator separator-dashed my-6"></div>
 
-    <!-- ADICIONAR SUBÁREA -->
     <div class="p-5 bg-light-primary border border-primary border-dashed rounded mb-6">
       <h5 class="text-gray-800 fw-bold mb-4">
         <i class="la la-plus-circle text-primary fs-2 me-2"></i>
@@ -49,15 +42,13 @@
               class="form-select form-select-solid"
               [class.is-invalid]="cSub['subareaSelecionada'].invalid && cSub['subareaSelecionada'].touched">
 
-              <option [ngValue]="null" disabled>Selecione...</option>
+              <option [ngValue]="null" disabled>Selecione uma subárea...</option>
 
-              <ng-container *ngFor="let grupo of areasAgrupadas">
-                <optgroup [label]="grupo.nomeArea">
-                  <option *ngFor="let sub of grupo.subareas" [ngValue]="sub">
-                    {{ sub.nome }}
-                  </option>
-                </optgroup>
-              </ng-container>
+              <optgroup *ngFor="let grupo of areasAgrupadas" [label]="grupo.nomeArea">
+                <option *ngFor="let sub of grupo.subareas" [ngValue]="sub">
+                  {{ sub.nome }}
+                </option>
+              </optgroup>
             </select>
 
             <div *ngIf="cSub['subareaSelecionada'].invalid && cSub['subareaSelecionada'].touched"
@@ -100,7 +91,6 @@
       </form>
     </div>
 
-    <!-- LISTA DE ENCARGOS -->
     <div *ngIf="encargosAtuais.length > 0; else emptyEncargos">
       <div class="table-responsive">
         <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
@@ -118,7 +108,7 @@
             <td>{{ enc.nomeArea }}</td>
             <td>{{ enc.nomeSubarea }}</td>
             <td class="text-end">
-              <span class="badge badge-light-primary">{{ enc.percentual }}%</span>
+              <span class="badge badge-light-primary text-black">{{ enc.percentual }}%</span>
             </td>
             <td class="text-center">
               <button

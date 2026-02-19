@@ -1,7 +1,7 @@
 import { TipoPerfil } from '../model/usuario.model';
 
-export interface UsuarioDto {
-  id: number;
+export interface UsuarioDTO {
+  uuid?: string;
   nome: string;
   matricula: string;
   email: string;
@@ -10,7 +10,6 @@ export interface UsuarioDto {
   telefone?: string | null;
   senha?: string | null;
   ativo: boolean;
-  uuid?: string | null;
   ultimaAtualizacaoCadastro?: string | null;
   pendenciaAtualizacao?: boolean;
 }

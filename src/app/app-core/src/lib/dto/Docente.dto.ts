@@ -1,11 +1,11 @@
 export interface DocenteDTO {
-  id: number;
-  uuid?: string;
+  uuid: string;
   nome: string;
   matricula: string;
   tipoVaga: string;
   tipoFormacao: string;
   licenciatura: boolean;
   origemVaga: string;
-  departamento: string;
+  nomeDepartamento: string;
+  departamentoId: number;
 }

@@ -59,10 +59,10 @@
       <div class="row mt-3">
         <div class="col-md-6">
           <label class="form-label">Departamento *</label>
-          <select [formControl]="c['departamento']" class="form-select">
-            <option [ngValue]="''" disabled>Selecione...</option>
-            <option *ngFor="let dept of departamentos" [value]="dept.sigla">
-              {{ dept.nome }} ({{ dept.sigla }})
+          <select formControlName="departamentoId" class="form-select">
+            <option [ngValue]="null" disabled>Selecione um departamento</option>
+            <option *ngFor="let item of departamentos" [value]="item.id">
+              {{ item.nome }}
             </option>
           </select>
         </div>

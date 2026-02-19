@@ -1,20 +1,11 @@
-export interface OfertaDisciplinaDto {
-  idDisciplina: number;
-  nomeDisciplina?: string;
-  semestre: number;
-  tutoria: boolean;
-  numProfessoresTeorica?: number;
-  numProfessoresPratica?: number;
-  ead: boolean;
-}
+import { OfertaDisciplinaDTO } from "./Oferta.dto";
 
-export interface EstruturaCurricularDto {
-  id?: number;
+export interface EstruturaCurricularDTO {
   uuid?: string;
-  ano: string;
+  ano: number;
   codigo: string;
-  idCurso: number;
-  nomeCurso?: string;
   ativo: boolean;
-  ofertas: OfertaDisciplinaDto[];
+  cursoId: number;
+  ofertas: OfertaDisciplinaDTO[];
+  nomeCurso?: string;
 }

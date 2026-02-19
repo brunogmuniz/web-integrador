@@ -1,8 +1,7 @@
-import {DocenteDTO} from './Docente.dto';
-import {AreaConhecimentoDTO} from './AreaConhecimento.dto';
+import {AreaConhecimentoDTO, DocenteDTO} from "app-core";
 
 export interface DocenteAreaAtuacaoDTO {
-  id: number;
+  uuid?: string | null;
   docente: DocenteDTO;
   area: AreaConhecimentoDTO;
   percentualAtuacao: number;

@@ -1,6 +1,11 @@
 import {Component, OnInit} from '@angular/core';
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.ts
 import {EstruturaCurricularService} from "../../../../services/estrutura-curricular-service";
 import {EstruturaCurricularDto} from "../../../../dto/EstruturaCurricular.dto";
+=======
+import {EstruturaCurricularService} from "app-core";
+import {EstruturaCurricularDTO} from "app-core";
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.ts
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,7 +15,7 @@ import Swal from 'sweetalert2';
 })
 export class VisualizarEstruturaCurricularComponent implements OnInit {
 
-  listaEstruturas: EstruturaCurricularDto[] = [];
+  listaEstruturas: EstruturaCurricularDTO[] = [];
 
   constructor(
     private service: EstruturaCurricularService,
@@ -26,12 +31,12 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
         this.listaEstruturas = res;
       },
       error: (err) => {
-        console.error('Erro ao carregar Estruturas Curriculares', err);
+        console.error(err);
       }
     });
   }
 
-  onDelete(id: number, nome: string) {
+  onDelete(uuid: string, nome: string) {
     void Swal.fire({
       title: 'Tem certeza?',
       text: `Deseja realmente excluir a estrutura "${nome}"?`,
@@ -46,13 +51,13 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
       }
     }).then((result: any) => {
       if (result.isConfirmed) {
-        this.service.delete(id).subscribe({
+        this.service.delete(uuid).subscribe({
           next: () => {
             void Swal.fire('Sucesso', 'Estrutura Curricular excluída com sucesso!', 'success');
             this.carregarEstruturas();
           },
           error: (err) => {
-            console.error(err);
+            console.error();
             void Swal.fire('Erro', 'Não foi possível excluir a Estrutura Curricular. Verifique se há vínculos ativos.', 'error');
           }
         });
@@ -60,7 +65,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
     });
   }
 
-  trackByEstruturaId(_index: number, item: EstruturaCurricularDto) {
-    return item.id;
+  trackByEstruturaUuid(_index: number, item: EstruturaCurricularDTO) {
+    return item.uuid;
   }
 }

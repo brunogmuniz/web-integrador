@@ -1,11 +1,11 @@
-import {DocenteDTO} from './Docente.dto';
-import {OfertaDTO} from './Oferta.dto';
+import {DocenteDTO} from 'app-core';
+import {OfertaDTO} from 'app-core';
 
-export interface HorarioAulaDTO{
-  id: number;
+export interface HorarioAulaDTO {
+  uuid: string;
   oferta: OfertaDTO;
   docente: DocenteDTO;
-  diaSemana: String;
-  horaInicio: String;
-  horaFim: String;
+  diaSemana: string;
+  horaInicio: string;
+  horaFim: string;
 }

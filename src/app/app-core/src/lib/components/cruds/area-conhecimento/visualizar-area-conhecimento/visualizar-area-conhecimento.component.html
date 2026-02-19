@@ -7,7 +7,11 @@
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component.html
           <th class="min-w-70px">#</th>
+=======
+          <th class="min-w-70px">-</th>
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component.html
           <th class="min-w-200px">Nome</th>
           <th class="min-w-100px text-black">Sigla</th>
           <th class="min-w-150px">Carga Horária</th>
@@ -15,9 +19,9 @@
         </tr>
         </thead>
         <tbody class="fs-6">
-        <tr *ngFor="let area of areas">
+        <tr *ngFor="let area of areas; let i = index">
           <td>
-            <span class="text-gray-800 fw-bold">{{ area.id }}</span>
+            <span class="text-gray-800 fw-bold">{{ i + 1 }}</span>
           </td>
           <td>
             <span class="text-gray-800 fw-bold">{{ area.nome }}</span>
@@ -31,21 +35,21 @@
           <td class="text-center">
             <button
               class="btn btn-icon btn-light-primary btn-sm me-2" style="color: #303030"
-              [routerLink]="['/area/form/editar', area.id]"
+              [routerLink]="['/area/form/editar', area.uuid]"
               title="Editar Área">
               <i class="la la-edit fs-3"></i>
             </button>
 
             <button
               class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
-              (click)="onDelete(area.id)"
+              (click)="onDelete(area.uuid)"
               title="Excluir Área">
               <i class="la la-trash fs-3"></i>
             </button>
           </td>
         </tr>
 
-        <ng-template #emptyAreas>
+        <ng-template>
           <tr>
             <td colspan="5" class="text-center py-10">
               <div class="d-flex flex-column align-items-center">

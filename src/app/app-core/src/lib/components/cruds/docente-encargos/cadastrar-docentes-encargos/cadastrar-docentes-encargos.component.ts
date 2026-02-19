@@ -1,3 +1,4 @@
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component.ts
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DocenteDTO} from "../../../../dto/Docente.dto";
@@ -12,6 +13,12 @@ interface AreaAgrupadaView {
   nomeArea: string;
   subareas: SubareaConhecimentoDTO[];
 }
+=======
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DocenteService, SubareaConhecimentoService, SubareaConhecimentoDTO } from 'app-core';
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component.ts
 
 @Component({
   selector: 'app-cadastrar-docentes-encargos',
@@ -19,35 +26,48 @@ interface AreaAgrupadaView {
   styleUrls: ['./cadastrar-docentes-encargos.component.scss']
 })
 export class CadastrarDocentesEncargosComponent implements OnInit {
+
+  uuidDocente: string | null = null;
+  docenteNome: string = '';
+  loading: boolean = false;
+  modoEdicao: boolean = false;
   encargoForm!: FormGroup;
   subForm!: FormGroup;
-  docentesDisponiveis: DocenteDTO[] = [];
-  modoEdicao: boolean = false;
-  areasAgrupadas: AreaAgrupadaView[] = [];
-
-  encargosAtuais: DocenteSubAreaPercentualDTO[] = [];
+  docentesDisponiveis: any[] = [];
+  encargosAtuais: any[] = [];
+  areasAgrupadas: { nomeArea: string, subareas: SubareaConhecimentoDTO[] }[] = [];
 
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private docenteService: DocenteService,
-    private subareaService: SubareaConhecimentoService,
-    private router: Router
-  ) {}
+    private subareaService: SubareaConhecimentoService
+  ) {
+    this.initForms();
+  }
 
   ngOnInit(): void {
-    this.initForms();
-    this.carregarDadosIniciais();
+    this.carregarDocentes();
+    this.carregarSubareas();
+    this.uuidDocente = this.route.snapshot.paramMap.get('uuid');
+
+    if (this.uuidDocente) {
+      this.modoEdicao = true;
+      this.encargoForm.get('idDocente')?.setValue(this.uuidDocente);
+      this.encargoForm.get('idDocente')?.disable();
+      this.carregarDadosDocente(this.uuidDocente);
+    }
   }
 
-  getTotalCarga(): number {
-    return this.encargosAtuais.reduce((acc, e) => acc + e.percentual, 0);
-  }
+  private initForms(): void {
+    this.encargoForm = this.fb.group({
+      idDocente: [null, Validators.required]
+    });
 
-  private initForms() {
-    this.encargoForm = this.fb.group({ idDocente: [null, Validators.required] });
     this.subForm = this.fb.group({
       subareaSelecionada: [null, Validators.required],
-      percentual: [null, [Validators.required, Validators.min(0)]]
+      percentual: [null, [Validators.required, Validators.min(0), Validators.max(100)]]
     });
   }
 
@@ -55,88 +75,112 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     return this.subForm.controls;
   }
 
-  carregarDadosIniciais() {
-    this.docenteService.listarTodos().subscribe(res => this.docentesDisponiveis = res);
-    this.subareaService.listarTodos().subscribe(res => this.agruparSubareasPorArea(res));
-  }
-
-  agruparSubareasPorArea(subareas: SubareaConhecimentoDTO[]) {
-    const mapAgrupado = new Map<string, SubareaConhecimentoDTO[]>();
-
-    subareas.forEach(sub => {
-      const nomeArea = sub.area?.nome || 'Geral';
-      if (!mapAgrupado.has(nomeArea)) {
-        mapAgrupado.set(nomeArea, []);
-      }
-      mapAgrupado.get(nomeArea)?.push(sub);
+  carregarDocentes(): void {
+    this.docenteService.listarTodos().subscribe({
+      next: (res: any) => {
+        this.docentesDisponiveis = res.content || res;
+      },
+      error: err => console.error('Erro ao listar docentes', err)
     });
-
-    this.areasAgrupadas = Array.from(mapAgrupado, ([nomeArea, subareas]) => ({
-      nomeArea,
-      subareas
-    })).sort((a, b) => a.nomeArea.localeCompare(b.nomeArea));
   }
 
-  adicionarEncargo() {
+  carregarSubareas(): void {
+    this.subareaService.listarTodos().subscribe({
+      next: (subareas: SubareaConhecimentoDTO[]) => {
+        const grupos = new Map<string, SubareaConhecimentoDTO[]>();
+
+        subareas.forEach(sub => {
+          const nomeArea = sub.area?.nome || 'Outras';
+          if (!grupos.has(nomeArea)) {
+            grupos.set(nomeArea, []);
+          }
+          grupos.get(nomeArea)?.push(sub);
+        });
+
+        this.areasAgrupadas = Array.from(grupos.entries()).map(([nomeArea, subareas]) => ({
+          nomeArea,
+          subareas
+        }));
+      },
+      error: err => console.error('Erro ao carregar subáreas', err)
+    });
+  }
+
+  carregarDadosDocente(uuid: string): void {
+    this.docenteService.buscarPorId(uuid).subscribe({
+      next: (response: any) => {
+        if (response && response.subAreas) {
+          this.docenteNome = response.nome;
+          this.encargosAtuais = response.subAreas.map((sa: any) => ({
+            subareaId: sa.subareaId,
+            nomeArea: sa.nomeArea || 'N/A',
+            nomeSubarea: sa.nomeSubarea,
+            percentual: sa.percentual
+          }));
+        }
+      }
+    });
+  }
+
+  adicionarEncargo(): void {
     if (this.subForm.invalid) return;
+    const subarea = this.subForm.value.subareaSelecionada;
 
-    const sub = this.subForm.get('subareaSelecionada')?.value as SubareaConhecimentoDTO;
-    const perc = this.subForm.get('percentual')?.value;
-
-    if (this.encargosAtuais.some(e => e.idSubarea === sub.id)) {
-      void Swal.fire('Ops', 'Subárea já adicionada.', 'warning');
+    if (this.encargosAtuais.some(e => e.subareaId === subarea.id)) {
+      alert('Esta subárea já está vinculada.');
       return;
     }
 
     this.encargosAtuais.push({
-      id: 0,
-      idSubarea: sub.id,
-      nomeSubarea: sub.nome,
-      idArea: sub.area?.id ?? 0,
-      nomeArea: sub.area?.nome ?? '',
-      percentual: parseFloat(perc)
+      subareaId: subarea.id,
+      nomeArea: subarea.area?.nome || 'N/A',
+      nomeSubarea: subarea.nome,
+      percentual: this.subForm.value.percentual
     });
-
     this.subForm.reset();
   }
 
-  removerEncargo(index: number) {
+  removerEncargo(index: number): void {
     this.encargosAtuais.splice(index, 1);
   }
 
-  get podeSalvar(): boolean {
-    const total = this.getTotalCarga();
-    return this.encargoForm.valid && this.encargosAtuais.length > 0 && total <= 100.001;
-  }
-
-  onSubmit() {
-    if (!this.podeSalvar) {
-      void Swal.fire('Atenção', 'Selecione um docente e a carga total não pode exceder 100%.', 'warning');
+  onSubmit(): void {
+    if (this.encargoForm.invalid && !this.modoEdicao) {
       this.encargoForm.markAllAsTouched();
       return;
     }
 
-    const idDocente = this.encargoForm.get('idDocente')?.value;
+    const uuidTarget = this.modoEdicao ? this.uuidDocente : this.encargoForm.get('idDocente')?.value;
 
-    const novosEncargos = this.encargosAtuais.map(enc => ({
-      subArea: { id: enc.idSubarea },
-      percentualAtuacao: enc.percentual
+    if (!uuidTarget) {
+      alert('Selecione um docente antes de salvar.');
+      return;
+    }
+
+    const payload = this.encargosAtuais.map(e => ({
+      subareaId: e.subareaId,
+      percentualAtuacao: e.percentual
     }));
 
-    this.docenteService.atualizarEncargos(idDocente, novosEncargos).subscribe({
+    this.loading = true;
+    this.docenteService.atualizarEncargos(uuidTarget, payload).subscribe({
       next: () => {
-        Swal.fire('Sucesso', 'Encargos vinculados com sucesso!', 'success').then(() => {
-          void this.router.navigate(['/docente-encargos/visualizar']);
-        });
+        this.loading = false;
+        alert('Encargos salvos com sucesso!');
+        this.voltar();
       },
       error: (err) => {
-        const msg = err.error && typeof err.error === 'string' ? err.error : 'Falha ao salvar encargos.';
-        void Swal.fire('Erro', msg, 'error');
+        this.loading = false;
+        console.error('Erro ao salvar:', err);
       }
     });
   }
 
-  cancelar() {
+  cancelar(): void {
+    this.voltar();
+  }
+
+  voltar(): void {
     void this.router.navigate(['/docente-encargos/visualizar']);
   }
 }

@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/docente/cadastrar-docente/cadastrar-docente.component.ts
 import { DepartamentoDTO } from "../../../../dto/Departamento.dto";
 import { DocenteService } from "../../../../services/docente-service";
 import { DepartamentoService } from "../../../../services/departamento-service";
 import { Router, ActivatedRoute } from "@angular/router";
 import Swal from 'sweetalert2';
 import { DocenteDTO } from '../../../../dto/Docente.dto';
+=======
+import { DepartamentoDTO, DocenteService, DepartamentoService} from "app-core";
+import { Router, ActivatedRoute } from "@angular/router";
+import Swal from 'sweetalert2';
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/docente/cadastrar-docente/cadastrar-docente.component.ts
 
 @Component({
   selector: 'app-cadastrar-docente',
@@ -16,7 +22,7 @@ export class CadastrarDocenteComponent implements OnInit {
   docenteForm!: FormGroup;
   departamentos: DepartamentoDTO[] = [];
   modoEdicao = false;
-  docenteId?: number;
+  docenteUuid?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -40,36 +46,42 @@ export class CadastrarDocenteComponent implements OnInit {
       tipoFormacao: [null, Validators.required],
       licenciatura: [false, Validators.required],
       origemVaga: [null, Validators.required],
-      departamento: ['', Validators.required],
+      departamentoId: [null, Validators.required],
     });
   }
 
   private loadDepartamentos(): void {
-    this.departamentoService.getAll().subscribe(data => {
+    this.departamentoService.getAll().subscribe((data: DepartamentoDTO[]) => {
       this.departamentos = data;
     });
   }
 
   private verificarEdicao(): void {
     this.route.paramMap.subscribe(params => {
-      const idParam = params.get('id');
-      if (idParam) {
-        this.docenteId = Number(idParam);
+      const uuidParam = params.get('id');
+      if (uuidParam) {
+        this.docenteUuid = uuidParam;
         this.modoEdicao = true;
-        this.carregarDocente(this.docenteId);
+        this.carregarDocente(this.docenteUuid);
       }
     });
   }
 
-  private carregarDocente(id: number): void {
-    this.docenteService.buscarPorId(id).subscribe({
-      next: (doc: DocenteDTO) => {
+  private carregarDocente(uuid: string): void {
+    this.docenteService.buscarPorId(uuid).subscribe({
+      next: (doc: any) => {
         this.docenteForm.patchValue(doc);
+
+        if (doc.departamento) {
+          this.docenteForm.get('departamentoId')?.setValue(doc.departamento.id);
+        } else if (doc.departamentoId) {
+          this.docenteForm.get('departamentoId')?.setValue(doc.departamentoId);
+        }
       },
       error: (err) => {
-        console.error('Erro ao carregar docente:', err);
+        console.error(err);
         void Swal.fire('Erro', 'Não foi possível carregar o docente.', 'error');
-        void this.router.navigate(['/docente']);
+        this.cancelar();
       }
     });
   }
@@ -85,14 +97,14 @@ export class CadastrarDocenteComponent implements OnInit {
       return;
     }
 
-    if (this.modoEdicao && this.docenteId) {
-      this.docenteService.update(this.docenteId, this.docenteForm.value).subscribe({
+    if (this.modoEdicao && this.docenteUuid) {
+      this.docenteService.update(this.docenteUuid, this.docenteForm.value).subscribe({
         next: () => {
           void Swal.fire('Sucesso', 'Docente atualizado com sucesso!', 'success');
           void this.router.navigate(['/docente']);
         },
         error: (erro) => {
-          console.error('Erro ao atualizar docente:', erro);
+          console.error(erro);
           void Swal.fire('Erro', 'Não foi possível atualizar o docente.', 'error');
         }
       });
@@ -102,9 +114,8 @@ export class CadastrarDocenteComponent implements OnInit {
           void Swal.fire('Sucesso', 'Docente cadastrado com sucesso!', 'success');
           void this.router.navigate(['/docente']);
         },
-        error: (erro) => {
-          console.error('Erro ao criar docente:', erro);
-          void Swal.fire('Erro', 'Erro ao salvar docente. Verifique os dados.', 'error');
+        error: () => {
+          console.error('error');
         }
       });
     }

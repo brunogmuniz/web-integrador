@@ -4,7 +4,11 @@
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.html
           <th class="min-w-50px">#</th>
+=======
+          <th class="min-w-50px">-</th>
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.html
           <th class="min-w-200px">Nome do Currículo</th>
           <th class="min-w-100px">Curso</th>
           <th class="min-w-100px">Ano</th>
@@ -14,8 +18,8 @@
         </thead>
         <tbody class="fs-6">
         <ng-container *ngIf="(listaEstruturas ?? []).length > 0; else emptyList">
-          <tr *ngFor="let item of listaEstruturas; trackBy: trackByEstruturaId">
-            <td><span class="text-gray-800 fw-bold">{{ item.id }}</span></td>
+          <tr *ngFor="let item of listaEstruturas; trackBy: trackByEstruturaUuid; let i = index">
+            <td><span class="text-gray-800 fw-bold">{{ i + 1 }}</span></td>
             <td><span class="text-gray-800 fw-bold">{{ item.codigo }}</span></td>
             <td><span class="text-gray-700">{{ item.nomeCurso }}</span></td>
             <td><span class="text-gray-700">{{ item.ano }}</span></td>
@@ -26,14 +30,14 @@
             </td>
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
-                <a [routerLink]="['/estrutura-curricular/form/editar', item.id]"
+                <a [routerLink]="['/estrutura-curricular/form/editar', item.uuid]"
                    class="btn btn-icon btn-light-primary btn-sm"
                    title="Editar">
                   <i class="la la-edit fs-3"></i>
                 </a>
                 <button type="button"
                         class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
-                        (click)="onDelete(item.id!, item.codigo)"
+                        (click)="onDelete(item.uuid!, item.codigo)"
                         title="Excluir">
                   <i class="la la-trash fs-3"></i>
                 </button>

@@ -92,7 +92,7 @@ const routes: Routes = [
           { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
           { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
           { path: 'form/novo', component: CadastrarDocentesEncargosComponent },
-          { path: 'form/editar/:id', component: CadastrarDocentesEncargosComponent }
+          { path: 'form/editar/:uuid', component: CadastrarDocentesEncargosComponent }
         ]
       },
 

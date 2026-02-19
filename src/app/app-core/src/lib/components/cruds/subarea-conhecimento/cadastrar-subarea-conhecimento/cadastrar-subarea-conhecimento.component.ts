@@ -4,9 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component.ts
 import { SubareaConhecimentoService } from "../../../../services/subarea-conhecimento-service";
 import { AreaConhecimentoService } from "../../../../services/area-conhecimento-service";
 import { AreaConhecimentoDTO } from "../../../../dto/AreaConhecimento.dto";
+=======
+import { SubareaConhecimentoService, AreaConhecimentoService, AreaConhecimentoDTO, SubareaConhecimentoDTO } from "app-core";
+>>>>>>> origin/Refatoracao:src/app/modulo-admin/components/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component.ts
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',
@@ -17,7 +21,7 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
   subAreaForm!: FormGroup;
   areasDeConhecimento$!: Observable<AreaConhecimentoDTO[]>;
   modoEdicao = false;
-  subAreaId?: number;
+  subAreaUuid?: string;
 
   constructor(
     private fb: FormBuilder,
@@ -38,35 +42,35 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
 
   private initForm(): void {
     this.subAreaForm = this.fb.group({
-      id: [null],
+      uuid: [null],
       nome: ['', [Validators.required, Validators.minLength(3)]],
       sigla: ['', Validators.required],
       cargaHorariaTotal: [0, [Validators.required, Validators.min(1)]],
-      areaConhecimentoId: [null, Validators.required]
+      areaId: [null, Validators.required]
     });
   }
 
   private verificarEdicao(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    const uuid = this.route.snapshot.paramMap.get('id');
+    if (uuid) {
       this.modoEdicao = true;
-      this.subAreaId = Number(id);
-      this.carregarDados(this.subAreaId);
+      this.subAreaUuid = uuid;
+      this.carregarDados(this.subAreaUuid);
     }
   }
 
-  private carregarDados(id: number): void {
-    this.subareaService.buscarPorId(id).subscribe({
+  private carregarDados(uuid: string): void {
+    this.subareaService.buscarPorUuid(uuid).subscribe({
       next: (res) => {
         this.subAreaForm.patchValue({
-          ...res,
-          areaConhecimentoId: res.area?.id
+          uuid: res.uuid,
+          nome: res.nome,
+          sigla: res.sigla,
+          cargaHorariaTotal: res.cargaHorariaTotal,
+          areaId: res.area?.id || res.areaId
         });
       },
-      error: () => {
-        this.notificarErro('Não foi possível carregar os dados da subárea.');
-        this.cancelar();
-      }
+      error: () => this.notificarErro('Não foi possível carregar os dados.')
     });
   }
 
@@ -80,23 +84,17 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
       return;
     }
 
-    const { areaConhecimentoId, ...formVal } = this.subAreaForm.value;
-
-    const payload = {
-      ...formVal,
-      area: { id: areaConhecimentoId }
-    };
-
-    const request = this.modoEdicao && this.subAreaId
-      ? this.subareaService.update(this.subAreaId, payload)
+    const payload: SubareaConhecimentoDTO = this.subAreaForm.value;
+    const request = this.modoEdicao && this.subAreaUuid
+      ? this.subareaService.update(this.subAreaUuid, payload)
       : this.subareaService.create(payload);
 
     request.subscribe({
       next: () => {
-        void Swal.fire('Sucesso', `Subárea ${this.modoEdicao ? 'atualizada' : 'cadastrada'}!`, 'success');
+        void Swal.fire('Sucesso', 'Registro salvo!', 'success');
         this.cancelar();
       },
-      error: (err) => this.notificarErro(err.error?.message || 'Erro ao salvar registro.')
+      error: (err: any) => this.notificarErro(err.error?.message || 'Erro ao salvar.')
     });
   }
 

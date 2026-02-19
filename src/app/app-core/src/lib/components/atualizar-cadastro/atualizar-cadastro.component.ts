@@ -8,7 +8,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { LoginService } from '../../services/login.service';
 import { UsuarioUtil } from '../../utils/usuario-util';
 import { TipoPerfil } from '../../model/usuario.model';
-import { UsuarioDto } from '../../dto/Usuario.dto';
+import { UsuarioDTO } from '../../dto/Usuario.dto';
 
 interface CadastroForm {
   nome: FormControl<string>;
@@ -49,7 +49,7 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
     this.subs.unsubscribe();
   }
 
-  private initForm(u: UsuarioDto): void {
+  private initForm(u: UsuarioDTO): void {
     this.form = this.fb.nonNullable.group({
       nome: [u.nome || '', [Validators.required, Validators.minLength(5), Validators.maxLength(150)]],
       cpf: [u.cpf || '', [Validators.required, Validators.pattern(/^\d{11}$/)]],
@@ -81,15 +81,16 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     const usuarioAtual = this.loginService.getUsuarioLogado();
-    if (this.form.invalid || !usuarioAtual) {
+    if (this.form.invalid || !usuarioAtual?.uuid) {
       this.form.markAllAsTouched();
+      if (!usuarioAtual?.uuid) console.error();
       return;
     }
 
     this.loading = true;
     const payload = this.form.getRawValue();
 
-    this.usuarioService.completarCadastro(usuarioAtual.id, payload)
+    this.usuarioService.completarCadastro(usuarioAtual.uuid, payload)
       .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: () => {

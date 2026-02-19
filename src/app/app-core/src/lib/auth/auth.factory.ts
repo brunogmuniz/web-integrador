@@ -26,7 +26,7 @@ export function initializeAppFactory(
         if (!params.has('code')) oauthService.initLoginFlow();
       }
     } catch (error) {
-      console.error('Erro', error);
+      console.error(error);
     }
   };
 }
