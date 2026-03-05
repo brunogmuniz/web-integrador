@@ -1,12 +1,6 @@
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component.ts
 import {Component, OnInit} from '@angular/core';
-import {AreaConhecimentoDTO} from "../../../../dto/AreaConhecimento.dto";
-import {AreaConhecimentoService} from "../../../../services/area-conhecimento-service";
-=======
-import { Component, OnInit } from '@angular/core';
-import { AreaConhecimentoDTO } from "app-core";
-import { AreaConhecimentoService } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component.ts
+import {AreaConhecimentoDTO} from "app-core";
+import {AreaConhecimentoService} from "app-core";
 import Swal from 'sweetalert2';
 
 @Component({

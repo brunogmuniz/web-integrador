@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component.ts
-import { DisciplinaService } from "../../../../services/disciplina-service";
-import { DisciplinaDTO } from "../../../../dto/Disciplina.dto";
-=======
 import { DisciplinaService } from "app-core";
 import { DisciplinaDTO } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/disciplina/visualizar-disciplina/visualizar-disciplina.component.ts
 import Swal from "sweetalert2";
 
 @Component({

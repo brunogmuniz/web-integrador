@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {AnaliseDasMedias} from "./principal/analise-das-medias/analise-das-medias";
 import {PrincipalComponent} from "./principal/principal.component";
-import {LayoutComponent} from "../../modulo-admin/components/layout/layout.component";
+import {LayoutComponent} from "./layout/layout.component";
 import {authGuard, cadastroCompletoGuard} from "app-core";
 import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
 import {
@@ -114,7 +114,7 @@ const routes: Routes = [
           { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
           { path: 'visualizar', component: VisualizarDocenteEncargosComponent },
           { path: 'form/novo', component: CadastrarDocentesEncargosComponent },
-          { path: 'form/editar/:id', component: CadastrarDocentesEncargosComponent }
+          { path: 'form/editar/:uuid', component: CadastrarDocentesEncargosComponent }
         ]
       },
 

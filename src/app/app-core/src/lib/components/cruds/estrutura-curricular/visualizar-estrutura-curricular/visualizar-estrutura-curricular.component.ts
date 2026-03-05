@@ -1,12 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.ts
-import {EstruturaCurricularService} from "../../../../services/estrutura-curricular-service";
-import {EstruturaCurricularDto} from "../../../../dto/EstruturaCurricular.dto";
-=======
 import {EstruturaCurricularService} from "app-core";
-import {EstruturaCurricularDTO} from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component.ts
 import Swal from 'sweetalert2';
+import { EstruturaCurricularDTO } from 'app-core';
 
 @Component({
   selector: 'app-visualizar-estrutura-curricular',

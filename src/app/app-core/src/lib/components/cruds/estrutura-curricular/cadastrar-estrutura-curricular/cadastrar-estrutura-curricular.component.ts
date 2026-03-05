@@ -1,17 +1,11 @@
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component.ts
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {EstruturaCurricularService} from "../../../../services/estrutura-curricular-service";
-import {CursoService} from "../../../../services/curso-service";
-import {DisciplinaService} from "../../../../services/disciplina-service";
-=======
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
-import { EstruturaCurricularService, CursoService, DisciplinaService, EstruturaCurricularDTO } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component.ts
+import {EstruturaCurricularService} from "app-core";
+import {CursoService} from "app-core";
+import {DisciplinaService} from "app-core";
 import Swal from "sweetalert2";
+import { EstruturaCurricularDTO } from 'app-core';
 
 @Component({
   selector: 'app-cadastrar-estrutura-curricular',

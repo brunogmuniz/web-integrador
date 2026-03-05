@@ -1,20 +1,16 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PrincipalComponent } from './principal/principal.component';
 import { AnaliseDasMedias } from './principal/analise-das-medias/analise-das-medias';
 import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
-import { MenuLateralComponent } from './utils/menu-lateral/menu-lateral.component';
-import { HeaderComponent } from './utils/header/header.component';
 import {APP_AUTH_CONFIG, AppCoreModule, FormInput, initializeAppFactory, LoginService} from "app-core";
-import {HttpClient, HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
 import {NgxMaskDirective, NgxMaskPipe, provideNgxMask} from "ngx-mask";
 import {environment} from "../../../environments/enviroment";
-import {LayoutComponent} from "../../modulo-admin/components/layout/layout.component";
 import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
 import {
   CadastrarDocenteComponent
@@ -62,6 +58,7 @@ import {
   VisualizarDisciplinaComponent
 } from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import {RouterModule} from "@angular/router";
+import {LayoutModule} from "./layout/layout.module";
 
 
 const authConfig: AuthConfig = {
@@ -76,14 +73,12 @@ const authConfig: AuthConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    MenuLateralComponent,
-    LayoutComponent,
     PrincipalComponent,
+    AnaliseDasMedias,
+    AreaTabelaComponent,
     DocenteComponent,
     CadastrarDocenteComponent,
     VisualizarDocenteComponent,
-    AreaTabelaComponent,
     DocenteEncargosComponent,
     CadastrarDocentesEncargosComponent,
     VisualizarDocenteEncargosComponent,
@@ -98,15 +93,12 @@ const authConfig: AuthConfig = {
     VisualizarEstruturaCurricularComponent,
     DisciplinaComponent,
     CadastrarDisciplinaComponent,
-    AnaliseDasMedias,
-    VisualizarDisciplinaComponent,
-    HeaderComponent,
-    MenuLateralComponent,
-    LayoutComponent
+    VisualizarDisciplinaComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
+    LayoutModule,
     FormsModule,
     HttpClientModule,
     RouterModule,

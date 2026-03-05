@@ -2,14 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component.ts
-import { DisciplinaService } from "../../../../services/disciplina-service";
-import { SubareaConhecimentoService } from "../../../../services/subarea-conhecimento-service";
-import { SubareaConhecimentoDTO } from "../../../../dto/SubareaConhecimento.dto";
-import { DisciplinaDTO } from "../../../../dto/Disciplina.dto";
-=======
-import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/disciplina/cadastrar-disciplina/cadastrar-disciplina.component.ts
+import { DisciplinaService } from "app-core";
+import { SubareaConhecimentoService } from "app-core";
+import { SubareaConhecimentoDTO } from "app-core";
+import { DisciplinaDTO } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-disciplina',

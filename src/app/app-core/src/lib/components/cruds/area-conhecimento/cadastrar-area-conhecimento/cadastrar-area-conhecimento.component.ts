@@ -1,12 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component.ts
 import { AreaConhecimentoDTO } from "../../../../dto/AreaConhecimento.dto";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AreaConhecimentoService } from "../../../../services/area-conhecimento-service";
-=======
-import { AreaConhecimentoDTO, AreaConhecimentoService} from "app-core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component.ts
 import { ActivatedRoute, Router } from "@angular/router";
 import Swal from 'sweetalert2';
 

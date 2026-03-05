@@ -1,7 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AreaConhecimentoDTO} from "../../../dto/AreaConhecimento.dto";
-import {AreaConhecimentoService} from "../../../services/area-conhecimento-service";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-area-conhecimento',

@@ -1,24 +1,15 @@
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component.ts
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DocenteDTO} from "../../../../dto/Docente.dto";
-import {DocenteSubAreaPercentualDTO} from "../../../../dto/DocenteSubAreaPercentual.dto";
-import {DocenteService} from "../../../../services/docente-service";
-import {SubareaConhecimentoService} from "../../../../services/subarea-conhecimento-service";
+import {DocenteService} from "app-core";
+import {SubareaConhecimentoService} from "app-core";
 import {Router} from "@angular/router";
-import {SubareaConhecimentoDTO} from "../../../../dto/SubareaConhecimento.dto";
-import Swal from "sweetalert2";
+import {SubareaConhecimentoDTO} from "app-core";
+import { ActivatedRoute } from '@angular/router';
 
 interface AreaAgrupadaView {
   nomeArea: string;
   subareas: SubareaConhecimentoDTO[];
 }
-=======
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DocenteService, SubareaConhecimentoService, SubareaConhecimentoDTO } from 'app-core';
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component.ts
 
 @Component({
   selector: 'app-cadastrar-docentes-encargos',

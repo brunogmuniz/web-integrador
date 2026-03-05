@@ -1,13 +1,7 @@
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component.ts
 import {Component, OnInit} from '@angular/core';
 import {DocenteService} from "../../../../services/docente-service";
 import {DocenteDetalheDTO} from "../../../../dto/DocenteDetalhe.dto";
 import Swal from "sweetalert2";
-=======
-import { Component, OnInit } from '@angular/core';
-import { DocenteService, DocenteDetalheDTO } from 'app-core';
-import Swal from 'sweetalert2';
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component.ts
 
 @Component({
   selector: 'app-visualizar-docente-encargos',

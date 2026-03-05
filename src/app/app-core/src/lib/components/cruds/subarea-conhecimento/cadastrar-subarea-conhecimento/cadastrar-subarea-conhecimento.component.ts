@@ -4,13 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component.ts
-import { SubareaConhecimentoService } from "../../../../services/subarea-conhecimento-service";
-import { AreaConhecimentoService } from "../../../../services/area-conhecimento-service";
-import { AreaConhecimentoDTO } from "../../../../dto/AreaConhecimento.dto";
-=======
-import { SubareaConhecimentoService, AreaConhecimentoService, AreaConhecimentoDTO, SubareaConhecimentoDTO } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component.ts
+import { SubareaConhecimentoService } from "app-core";
+import { AreaConhecimentoService } from "app-core";
+import { AreaConhecimentoDTO } from "app-core";
+import {SubareaConhecimentoDTO} from "app-core";
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',

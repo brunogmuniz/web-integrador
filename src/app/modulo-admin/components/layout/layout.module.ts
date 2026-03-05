@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HeaderComponent } from '../utils/header/header.component';
 import { MenuLateralComponent } from '../utils/menu-lateral/menu-lateral.component';
+import {AppCoreModule} from "app-core";
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { MenuLateralComponent } from '../utils/menu-lateral/menu-lateral.compone
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    AppCoreModule
   ],
   exports: [
     LayoutComponent,

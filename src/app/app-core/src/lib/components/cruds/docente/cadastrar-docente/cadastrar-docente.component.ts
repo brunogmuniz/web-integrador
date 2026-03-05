@@ -1,17 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/docente/cadastrar-docente/cadastrar-docente.component.ts
 import { DepartamentoDTO } from "../../../../dto/Departamento.dto";
 import { DocenteService } from "../../../../services/docente-service";
 import { DepartamentoService } from "../../../../services/departamento-service";
 import { Router, ActivatedRoute } from "@angular/router";
 import Swal from 'sweetalert2';
-import { DocenteDTO } from '../../../../dto/Docente.dto';
-=======
-import { DepartamentoDTO, DocenteService, DepartamentoService} from "app-core";
-import { Router, ActivatedRoute } from "@angular/router";
-import Swal from 'sweetalert2';
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/docente/cadastrar-docente/cadastrar-docente.component.ts
 
 @Component({
   selector: 'app-cadastrar-docente',

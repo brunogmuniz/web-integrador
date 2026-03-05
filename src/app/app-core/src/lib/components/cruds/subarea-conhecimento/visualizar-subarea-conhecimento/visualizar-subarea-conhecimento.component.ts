@@ -1,10 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-<<<<<<< HEAD:src/app/app-core/src/lib/components/cruds/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component.ts
 import { SubareaConhecimentoService } from "../../../../services/subarea-conhecimento-service";
 import { SubareaConhecimentoDTO } from "../../../../dto/SubareaConhecimento.dto";
-=======
-import { SubareaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
->>>>>>> origin/Refatoracao:src/app/modulo-admin/components/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component.ts
 import Swal from "sweetalert2";
 
 @Component({
