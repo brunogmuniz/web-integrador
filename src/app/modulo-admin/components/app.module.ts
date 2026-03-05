@@ -10,6 +10,8 @@ import {environment} from "../../../environments/enviroment";
 import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService} from 'app-core';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import {LayoutModule} from "./layout/layout.module";
+import {PrincipalComponent} from "./principal/principal.component";
+import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -22,9 +24,11 @@ const authConfig: AuthConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PrincipalComponent
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,

@@ -11,52 +11,6 @@ import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angu
 import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
 import {NgxMaskDirective, NgxMaskPipe, provideNgxMask} from "ngx-mask";
 import {environment} from "../../../environments/enviroment";
-import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
-import {
-  CadastrarDocenteComponent
-} from "app-core/lib/components/cruds/docente/cadastrar-docente/cadastrar-docente.component";
-import {
-  VisualizarDocenteComponent
-} from "app-core/lib/components/cruds/docente/visualizar-docente/visualizar-docente.component";
-import {DocenteEncargosComponent} from "app-core/lib/components/cruds/docente-encargos/docente-encargos.component";
-import {
-  CadastrarDocentesEncargosComponent
-} from "app-core/lib/components/cruds/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component";
-import {
-  VisualizarDocenteEncargosComponent
-} from "app-core/lib/components/cruds/docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component";
-import {
-  SubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/subarea-conhecimento.component";
-import {
-  CadastrarSubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component";
-import {
-  VisualizarSubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component";
-import {AreaConhecimentoComponent} from "app-core/lib/components/cruds/area-conhecimento/area-conhecimento.component";
-import {
-  CadastrarAreaConhecimentoComponent
-} from "app-core/lib/components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component";
-import {
-  VisualizarAreaConhecimentoComponent
-} from "app-core/lib/components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component";
-import {
-  EstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/estrutura-curricular.component";
-import {
-  CadastrarEstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component";
-import {
-  VisualizarEstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component";
-import {DisciplinaComponent} from "app-core/lib/components/cruds/disciplina/disciplina.component";
-import {
-  CadastrarDisciplinaComponent
-} from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-import {
-  VisualizarDisciplinaComponent
-} from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import {RouterModule} from "@angular/router";
 import {LayoutModule} from "./layout/layout.module";
 
@@ -76,24 +30,6 @@ const authConfig: AuthConfig = {
     PrincipalComponent,
     AnaliseDasMedias,
     AreaTabelaComponent,
-    DocenteComponent,
-    CadastrarDocenteComponent,
-    VisualizarDocenteComponent,
-    DocenteEncargosComponent,
-    CadastrarDocentesEncargosComponent,
-    VisualizarDocenteEncargosComponent,
-    SubareaConhecimentoComponent,
-    CadastrarSubareaConhecimentoComponent,
-    VisualizarSubareaConhecimentoComponent,
-    AreaConhecimentoComponent,
-    CadastrarAreaConhecimentoComponent,
-    VisualizarAreaConhecimentoComponent,
-    EstruturaCurricularComponent,
-    CadastrarEstruturaCurricularComponent,
-    VisualizarEstruturaCurricularComponent,
-    DisciplinaComponent,
-    CadastrarDisciplinaComponent,
-    VisualizarDisciplinaComponent
   ],
   imports: [
     BrowserModule,

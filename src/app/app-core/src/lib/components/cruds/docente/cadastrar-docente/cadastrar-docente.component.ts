@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { DepartamentoDTO } from "../../../../dto/Departamento.dto";
-import { DocenteService } from "../../../../services/docente-service";
-import { DepartamentoService } from "../../../../services/departamento-service";
+import { DepartamentoDTO, DocenteService, DepartamentoService } from "app-core";
 import { Router, ActivatedRoute } from "@angular/router";
 import Swal from 'sweetalert2';
 

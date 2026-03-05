@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {AbstractControl, FormControl, ReactiveFormsModule} from '@angular/forms';
+import { FormControl, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({

@@ -53,8 +53,8 @@ export class VisualizarDisciplinaComponent implements OnInit {
         void Swal.fire('Excluído!', 'A disciplina foi removida.', 'success');
         this.carregarDisciplinas();
       },
-      error: (err) => {
-        console.error();
+      error: (_err: any) => {
+        console.error(_err);
         void Swal.fire('Erro', 'Não foi possível excluir o registro.', 'error');
       }
     });

@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DocenteService} from "../../../../services/docente-service";
-import {DocenteDetalheDTO} from "../../../../dto/DocenteDetalhe.dto";
+import {DocenteService, DocenteDetalheDTO} from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -19,7 +18,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.carregarDados();
   }
 
-  public trackByDocenteUuid(index: number, item: DocenteDetalheDTO): string {
+  public trackByDocenteUuid(_index: number, item: DocenteDetalheDTO): string {
     return item.uuid;
   }
 
@@ -38,7 +37,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        Swal.fire('Erro', 'Falha ao carregar a lista de docentes.', 'error');
+        void Swal.fire('Erro', 'Falha ao carregar a lista de docentes.', 'error');
       }
     });
   }
@@ -64,7 +63,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.docenteService.deleteVinculoSubArea(uuid).subscribe({
       next: () => {
         this.loading = false;
-        Swal.fire('Sucesso', 'Vínculo removido com sucesso!', 'success');
+        void Swal.fire('Sucesso', 'Vínculo removido com sucesso!', 'success');
         this.carregarDados();
       },
       error: (err) => {
@@ -81,6 +80,6 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     } else if (err.status === 404) {
       mensagem = 'O registro não foi encontrado.';
     }
-    Swal.fire('Erro', mensagem, 'error');
+    void Swal.fire('Erro', mensagem, 'error');
   }
 }

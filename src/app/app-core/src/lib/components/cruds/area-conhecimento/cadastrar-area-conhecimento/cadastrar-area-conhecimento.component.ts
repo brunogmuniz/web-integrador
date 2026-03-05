@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AreaConhecimentoDTO } from "../../../../dto/AreaConhecimento.dto";
+import { AreaConhecimentoDTO } from "app-core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AreaConhecimentoService } from "../../../../services/area-conhecimento-service";
+import { AreaConhecimentoService } from "app-core";
 import { ActivatedRoute, Router } from "@angular/router";
 import Swal from 'sweetalert2';
 

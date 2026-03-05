@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SubareaConhecimentoService } from "../../../../services/subarea-conhecimento-service";
-import { SubareaConhecimentoDTO } from "../../../../dto/SubareaConhecimento.dto";
+import { SubareaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({

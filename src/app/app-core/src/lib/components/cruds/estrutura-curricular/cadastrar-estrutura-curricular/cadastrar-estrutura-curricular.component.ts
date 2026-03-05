@@ -92,7 +92,7 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
           });
         }
       },
-      error: (err) => Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error')
+      error: (_err) => Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error')
     });
   }
 
