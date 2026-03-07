@@ -1,19 +1,17 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService } from 'app-core';
+import { environment } from '../../../environments/enviroment';
 import { AppRoutingModule } from './app-routing.module';
+import { LayoutModule } from './layout/layout.module';
 import { AppComponent } from './app.component';
 import { PrincipalComponent } from './principal/principal.component';
-import { AnaliseDasMedias } from './principal/analise-das-medias/analise-das-medias';
 import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
-import {APP_AUTH_CONFIG, AppCoreModule, FormInput, initializeAppFactory, LoginService} from "app-core";
-import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
-import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
-import {NgxMaskDirective, NgxMaskPipe, provideNgxMask} from "ngx-mask";
-import {environment} from "../../../environments/enviroment";
-import {RouterModule} from "@angular/router";
-import {LayoutModule} from "./layout/layout.module";
-
+import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias';
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -24,23 +22,23 @@ const authConfig: AuthConfig = {
   showDebugInformation: !environment.production,
 };
 
+export function storageFactory(): OAuthStorage {
+  return typeof window !== 'undefined' ? localStorage : ({} as OAuthStorage);
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     PrincipalComponent,
-    AnaliseDasMedias,
-    AreaTabelaComponent,
+    AnaliseDasMediasComponent,
+    AreaTabelaComponent
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
-    LayoutModule,
     FormsModule,
-    HttpClientModule,
-    RouterModule,
     AppRoutingModule,
+    LayoutModule,
     AppCoreModule,
-    FormInput,
     NgxMaskDirective,
     NgxMaskPipe,
     OAuthModule.forRoot({
@@ -52,13 +50,14 @@ const authConfig: AuthConfig = {
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
+    provideNgxMask({ dropSpecialCharacters: true }),
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
     },
     {
       provide: OAuthStorage,
-      useValue: localStorage
+      useFactory: storageFactory
     },
     {
       provide: APP_INITIALIZER,
@@ -66,10 +65,7 @@ const authConfig: AuthConfig = {
         initializeAppFactory(oauthService, config, loginService),
       deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
       multi: true
-    },
-    provideNgxMask({
-      dropSpecialCharacters: true
-    })
+    }
   ],
   bootstrap: [AppComponent]
 })

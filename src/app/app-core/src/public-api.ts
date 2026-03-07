@@ -1,16 +1,11 @@
-//Form Input Padrão
 export * from './lib/components/form-input-padrao/form-input-padrao';
-
-//Atualizar Cadastro
+export * from './lib/components/image-profile/image-profile.component'
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.component';
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
-//import { FormInput } from 'shared-core';  INPUT PADRAO
-export * from './lib/components/image-profile/image-profile.component'
-
-//App Core
 export * from './lib/app-core.module';
 
 //Services
+export * from './lib/services/analise.service';
 export * from './lib/services/curso-service';
 export * from './lib/services/area-conhecimento-service';
 export * from './lib/services/departamento-service';
@@ -20,6 +15,9 @@ export * from './lib/services/docente-service';
 export * from './lib/services/estrutura-curricular-service';
 
 //DTOs e Models
+export * from './lib/dto/analiseParams.dto';
+export * from './lib/dto/anoSemestre.dto';
+export * from './lib/dto/areaMedia.dto';
 export * from './lib/dto/AreaConhecimento.dto';
 export * from './lib/dto/Curso.dto';
 export * from './lib/dto/Disciplina.dto';

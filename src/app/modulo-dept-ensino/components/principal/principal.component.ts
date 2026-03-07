@@ -33,7 +33,7 @@ export class PrincipalComponent {
     this.ferramentas.push({
       title: 'ANALISE DAS MEDIAS',
       sectionView: 'media',
-      pageGo: 'media',
+      pageGo: 'analise/media',
       pages: ['PAGINA DE ANALISE DE MÉDIAS'],
       info: 'Visualização e Análise referente aos dados das médias.',
       svgIcon: ' <i class="la la-area-chart la-3x"></i>'

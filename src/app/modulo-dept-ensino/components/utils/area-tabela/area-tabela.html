@@ -38,7 +38,7 @@
         </thead>
         <tbody>
 
-        <ng-container *ngFor="let area of areasFiltradas; let i = index">
+        <ng-container *ngFor="let area of dadosFiltrados; let i = index">
           <tr
             class="text-center table-cursor"
             data-toggle="collapse"
@@ -53,27 +53,28 @@
             </td>
 
             <td>{{ area.nrDocentes }}</td>
-            <td>{{ area.ano2024s1 }}</td>
-            <td>{{ area.ano2024s2 }}</td>
-            <td>{{ area.ano2025s1 }}</td>
-            <td>{{ area.ano2025s2 }}</td>
-            <td>{{ area.ano2026s1 }}</td>
-            <td>{{ area.ano2026s2 }}</td>
-            <td>{{ area.ano2027s1 }}</td>
-            <td>{{ area.ano2027s2 }}</td>
+
+            <td>{{ area.ano2024s1 || '-' }}</td>
+            <td>{{ area.ano2024s2 || '-' }}</td>
+            <td>{{ area.ano2025s1 || '-' }}</td>
+            <td>{{ area.ano2025s2 || '-' }}</td>
+            <td>{{ area.ano2026s1 || '-' }}</td>
+            <td>{{ area.ano2026s2 || '-' }}</td>
+            <td>{{ area.ano2027s1 || '-' }}</td>
+            <td>{{ area.ano2027s2 || '-' }}</td>
 
             <td>
-              <a [routerLink]="'./' + area.id"
+              <a [routerLink]="'./' + area.uuid"
                  class="btn btn-primary btn-sm btn-icon "
-                 title="Adcionar Docente">
+                 title="Adicionar Docente">
                 <i class="fa fa-cogs"></i>
-                Adcionar Docente
+                Adicionar Docente
               </a>
-              <a [routerLink]="'./' + area.id"
+              <a [routerLink]="'./' + area.uuid"
                  class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
-                 title="Adcionar Ano">
+                 title="Adicionar Ano">
                 <i class="fa fa-cogs"></i>
-                Adcionar Ano
+                Adicionar Ano
               </a>
             </td>
           </tr>
@@ -83,7 +84,6 @@
               <div class="collapse" [id]="'subareas-' + i">
                 <div class="p-4" style="background: #ffffff;">
 
-                  <!-- TABELA DE SUBAREAS -->
                   <table class="table table-sm table-striped">
                     <thead class="thead-light">
                     <tr class="text-center" style="font-size: 12px">
@@ -117,15 +117,14 @@
                     'excelente': sub.media < 8
                     }">{{ sub.media }}
                       </td>
-                      <td class="text-center">{{ sub.nrDocentes }}</td>
-                      <td class="text-center">{{ sub.ano2024s1 }}</td>
-                      <td class="text-center">{{ sub.ano2024s2 }}</td>
-                      <td class="text-center">{{ sub.ano2024s1 }}</td>
-                      <td class="text-center">{{ sub.ano2024s2 }}</td>
-                      <td class="text-center">{{ sub.ano2024s1 }}</td>
-                      <td class="text-center">{{ sub.ano2024s2 }}</td>
-                      <td class="text-center">{{ sub.ano2024s1 }}</td>
-                      <td class="text-center">{{ sub.ano2024s2 }}</td>
+                      <td>{{ sub.ano2024s1 || '-' }}</td>
+                      <td>{{ sub.ano2024s2 || '-' }}</td>
+                      <td>{{ sub.ano2025s1 || '-' }}</td>
+                      <td>{{ sub.ano2025s2 || '-' }}</td>
+                      <td>{{ sub.ano2026s1 || '-' }}</td>
+                      <td>{{ sub.ano2026s2 || '-' }}</td>
+                      <td>{{ sub.ano2027s1 || '-' }}</td>
+                      <td>{{ sub.ano2027s2 || '-' }}</td>
                     </tr>
 
                     </tbody>
