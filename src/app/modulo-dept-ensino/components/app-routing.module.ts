@@ -52,7 +52,11 @@ import {
 } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
 
 const routes: Routes = [
-
+  {
+    path: 'atualizar-cadastro',
+    loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
+    canActivate: [authGuard]
+  },
   {
     path: '',
     component: LayoutComponent,
