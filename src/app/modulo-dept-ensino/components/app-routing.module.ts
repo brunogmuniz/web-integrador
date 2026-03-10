@@ -49,7 +49,11 @@ import {
 import {
   CadastrarDisciplinaComponent
 } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias';
+import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-das-medias.component";
+import {
+  VisualizarAnaliseDasMediasComponent
+} from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
+
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
@@ -72,8 +76,14 @@ const routes: Routes = [
       {
         path: 'analise',
         children: [
-          { path: 'media', component: AnaliseDasMediasComponent },
-          { path: 'media/:uuid', component: AnaliseDasMediasComponent }
+          {
+            path: 'media',
+            component: AnaliseDasMediasComponent,
+            children: [
+              { path: '', component: VisualizarAnaliseDasMediasComponent },
+              { path: ':uuid', component: VisualizarAnaliseDasMediasComponent }
+            ]
+          }
         ]
       },
       {

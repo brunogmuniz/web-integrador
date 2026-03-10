@@ -11,7 +11,9 @@ import { LayoutModule } from './layout/layout.module';
 import { AppComponent } from './app.component';
 import { PrincipalComponent } from './principal/principal.component';
 import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
-import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias';
+import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias.component';
+import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component';
+import { NgOptimizedImage } from '@angular/common';
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -31,10 +33,12 @@ export function storageFactory(): OAuthStorage {
     AppComponent,
     PrincipalComponent,
     AnaliseDasMediasComponent,
+    VisualizarAnaliseDasMediasComponent,
     AreaTabelaComponent
   ],
   imports: [
     BrowserModule,
+    NgOptimizedImage,
     FormsModule,
     AppRoutingModule,
     LayoutModule,

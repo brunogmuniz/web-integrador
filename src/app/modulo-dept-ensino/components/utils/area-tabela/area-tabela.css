@@ -5,7 +5,7 @@
   font-weight: 200 !important;
 }
 
-.search-wrapper {position: relative;width: 500px;}
+.search-wrapper {position: relative;width: 300px;}
 .search-icon img {position: absolute;left: 0;bottom: 8px;width: 18px;opacity: 0.5;pointer-events: none;}
 
 .form-control,
@@ -39,6 +39,7 @@
 
 
 
+
 .kt-portlet__body > .table-responsive > .table > tbody > tr > td {
   font-size: 16px !important;
   background-color: #f4f4f4 !important;
@@ -49,7 +50,6 @@
 .kt-portlet__body > .table-responsive > .table > tbody > tr:nth-of-type(4n) > td {
   background-color: #ffffff !important;
 }
-
 
 
 
@@ -113,4 +113,43 @@
   color: #ff0000 !important;
   font-weight: 700 !important;
   text-align: center;
+}
+
+.legenda-cores {
+  display: flex;
+  gap: 25px;
+  justify-content: flex-start;
+  font-size: 0.85rem;
+  margin-top: 15px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legenda-item::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: block;
+}
+
+.legenda-item.excelente::before { background-color: #0076e8; }
+.legenda-item.bom::before { background-color: #5cb104; }
+.legenda-item.cuidado::before { background-color: #eacb02; }
+.legenda-item.pessimo::before { background-color: #ff0000; }
+
+
+
+.table th,
+.table td {
+  text-align: center !important;
+}
+
+.table-sm th,
+.table-sm td {
+  text-align: center !important;
 }

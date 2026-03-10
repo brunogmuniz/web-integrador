@@ -8,10 +8,10 @@ import { AreaMediaDTO } from 'app-core/lib/dto/areaMedia.dto';
 
 @Component({
   selector: 'app-analise-das-medias',
-  templateUrl: './analise-das-medias.html',
-  styleUrls: ['./analise-das-medias.css'],
+  templateUrl: './visualizar-analise-das-medias.component.html',
+  styleUrls: ['./visualizar-analise-das-medias.component.css'],
 })
-export class AnaliseDasMediasComponent implements OnInit, OnDestroy {
+export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   private readonly analiseService = inject(AnaliseService);
   private readonly route = inject(ActivatedRoute);
 

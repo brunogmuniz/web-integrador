@@ -51,8 +51,9 @@ export class AreaTabelaComponent implements OnChanges {
       dto.listaAnoSemestre.forEach(projecao => {
         if (projecao.ano && projecao.semestre) {
           const key = `ano${projecao.ano}s${projecao.semestre}`;
-          adaptado[key] = (projecao.demandaDocente !== null)
-            ? Number(projecao.demandaDocente).toFixed(2)
+          const valor = projecao.cargaHoraria;
+          adaptado[key] = (valor !== null && valor !== undefined)
+            ? Number(valor).toFixed(2)
             : '-';
         }
       });
