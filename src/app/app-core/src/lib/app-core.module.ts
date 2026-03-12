@@ -22,6 +22,8 @@ import { VisualizarDocenteEncargosComponent } from './components/cruds/docente-e
 import { EstruturaCurricularComponent } from './components/cruds/estrutura-curricular/estrutura-curricular.component';
 import { CadastrarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component';
 import { VisualizarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
+import { ImportarPlanilhaComponent } from './components/importar-planilha/importar-planilha.component';
+import { VisualizarImportarPlanilhaComponent } from './components/importar-planilha/visualizar-importar-planilha/visualizar-importar-planilha.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { VisualizarEstruturaCurricularComponent } from './components/cruds/estru
     VisualizarDocenteEncargosComponent,
     EstruturaCurricularComponent,
     CadastrarEstruturaCurricularComponent,
-    VisualizarEstruturaCurricularComponent
+    VisualizarEstruturaCurricularComponent,
+    ImportarPlanilhaComponent,
+    VisualizarImportarPlanilhaComponent
   ],
   imports: [
     CommonModule,
