@@ -247,28 +247,42 @@
         </li>
 
         <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'importar-planilha'"
+            [class.kt-menu__item--open]="menuAberto === 'importar'"
             [routerLinkActive]="'kt-menu__item--open'">
 
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('importar-planilha')">
-            <i class="kt-menu__link-icon la la-file-excel-o text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Planilhas</span>
+          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('importar')">
+            <i class="kt-menu__link-icon la la-cloud-upload text-white" style="font-size: x-large;"></i>
+            <span class="kt-menu__link-text text-white">Importar Dados</span>
             <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
           </a>
 
           <div class="kt-menu__submenu">
             <span class="kt-menu__arrow"></span>
             <ul class="kt-menu__subnav">
+
               <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/importar-planilha" class="kt-menu__link">
+                <a routerLink="/importar/docentes" class="kt-menu__link">
                   <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Importar Planilha</span>
+                  <span class="kt-menu__link-text text-white">Docentes</span>
+                </a>
+              </li>
+
+              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
+                <a routerLink="/importar/disciplinas" class="kt-menu__link">
+                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                  <span class="kt-menu__link-text text-white">Disciplinas</span>
+                </a>
+              </li>
+
+              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
+                <a routerLink="/importar/cursos" class="kt-menu__link">
+                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                  <span class="kt-menu__link-text text-white">Cursos</span>
                 </a>
               </li>
             </ul>
           </div>
         </li>
-
       </ul>
     </div>
   </div>

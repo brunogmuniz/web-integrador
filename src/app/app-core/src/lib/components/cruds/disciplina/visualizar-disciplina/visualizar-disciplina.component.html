@@ -23,9 +23,9 @@
               {{ item.nomeSubarea }}
             </span>
           </td>
-          <td class="text-center">{{ item.cargaHorariaTeorica }}h</td>
-          <td class="text-center">{{ item.cargaHorariaPratica }}h</td>
-          <td class="text-center fw-bold">{{ item.cargaHoraria }}h</td>
+          <td class="text-center">{{ item.cargaHorariaTeorica || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaPratica || 0 }}</td>
+          <td class="text-center fw-bold">{{ item.cargaHoraria }}</td>
           <td class="text-center">
             <span *ngIf="item.ead">Sim</span>
             <span *ngIf="!item.ead">Não</span>

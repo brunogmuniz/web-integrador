@@ -22,8 +22,7 @@ import { VisualizarDocenteEncargosComponent } from './components/cruds/docente-e
 import { EstruturaCurricularComponent } from './components/cruds/estrutura-curricular/estrutura-curricular.component';
 import { CadastrarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component';
 import { VisualizarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
-import { ImportarPlanilhaComponent } from './components/importar-planilha/importar-planilha.component';
-import { VisualizarImportarPlanilhaComponent } from './components/importar-planilha/visualizar-importar-planilha/visualizar-importar-planilha.component';
+import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +45,7 @@ import { VisualizarImportarPlanilhaComponent } from './components/importar-plani
     EstruturaCurricularComponent,
     CadastrarEstruturaCurricularComponent,
     VisualizarEstruturaCurricularComponent,
-    ImportarPlanilhaComponent,
-    VisualizarImportarPlanilhaComponent
+    UploadPlanilhaComponent
   ],
   imports: [
     CommonModule,
@@ -61,7 +59,8 @@ import { VisualizarImportarPlanilhaComponent } from './components/importar-plani
     ImageProfileComponent,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    UploadPlanilhaComponent
   ]
 })
 export class AppCoreModule { }

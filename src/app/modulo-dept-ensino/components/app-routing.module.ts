@@ -53,10 +53,10 @@ import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-
 import {
   VisualizarAnaliseDasMediasComponent
 } from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
-import {ImportarPlanilhaComponent} from "app-core/lib/components/importar-planilha/importar-planilha.component";
-import {
-  VisualizarImportarPlanilhaComponent
-} from "app-core/lib/components/importar-planilha/visualizar-importar-planilha/visualizar-importar-planilha.component";
+import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.component";
+import {DocentesComponent} from "./importacoes/docentes/docentes.component";
+import {CursosComponent} from "./importacoes/cursos/cursos.component";
+import {ImportacoesComponent} from "./importacoes/importacoes.component";
 
 const routes: Routes = [
   {
@@ -102,11 +102,13 @@ const routes: Routes = [
       },
 
       {
-        path: 'importar-planilha',
-        component: ImportarPlanilhaComponent,
+        path: 'importar',
+        component: ImportacoesComponent,
         children: [
-          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
-          { path: 'visualizar', component: VisualizarImportarPlanilhaComponent },
+          { path: '', redirectTo: 'docentes', pathMatch: 'full' },
+          { path: 'docentes', component: DocentesComponent },
+          { path: 'disciplinas', component: DisciplinasComponent },
+          { path: 'cursos', component: CursosComponent }
         ]
       },
 
