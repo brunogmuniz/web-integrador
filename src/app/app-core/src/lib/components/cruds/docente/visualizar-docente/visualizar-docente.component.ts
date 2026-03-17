@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DocenteDTO } from "../../../../dto/Docente.dto";
-import { DocenteService } from "../../../../services/docente-service";
-import { Router } from '@angular/router';
+import { DocenteDTO, DocenteService } from "app-core";
 
 @Component({
   selector: 'app-visualizar-docente',
@@ -12,10 +10,7 @@ export class VisualizarDocenteComponent implements OnInit {
 
   docentes: DocenteDTO[] = [];
 
-  constructor(
-    private docenteService: DocenteService,
-    private router: Router
-  ) {}
+  constructor(private docenteService: DocenteService) {}
 
   ngOnInit(): void {
     this.carregarDocentes();
@@ -27,7 +22,6 @@ export class VisualizarDocenteComponent implements OnInit {
       error: (err) => console.error(err)
     });
   }
-
 
   onDelete(uuid: string | undefined): void {
     if (!uuid) {
@@ -47,7 +41,7 @@ export class VisualizarDocenteComponent implements OnInit {
         confirmButton: 'btn btn-danger',
         cancelButton: 'btn btn-light-secondary me-3'
       }
-    }).then((result: any) => {
+    }).then((result) => {
       if (result.isConfirmed) {
         this.docenteService.delete(uuid).subscribe({
           next: () => {
@@ -59,6 +53,7 @@ export class VisualizarDocenteComponent implements OnInit {
       }
     });
   }
+
   private handleDeleteError(err: any): void {
     const isConflict = err.status === 500 || err.status === 409;
     void Swal.fire(

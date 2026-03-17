@@ -189,6 +189,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "fast-sha256",
+              "sweetalert2"
+            ],
             "outputPath": "dist/modulo-dept-ensino",
             "index": "src/app/modulo-dept-ensino/index.html",
             "main": "src/app/modulo-dept-ensino/main.ts",

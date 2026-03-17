@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {AnaliseDasMedias} from "./principal/analise-das-medias/analise-das-medias";
 import {PrincipalComponent} from "./principal/principal.component";
 import {LayoutComponent} from "./layout/layout.component";
 import {authGuard, cadastroCompletoGuard} from "app-core";
@@ -50,9 +49,17 @@ import {
 import {
   CadastrarDisciplinaComponent
 } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
+import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-das-medias.component";
+import {
+  VisualizarAnaliseDasMediasComponent
+} from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
 
 const routes: Routes = [
-
+  {
+    path: 'atualizar-cadastro',
+    loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
+    canActivate: [authGuard]
+  },
   {
     path: '',
     component: LayoutComponent,
@@ -60,18 +67,33 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PrincipalComponent
+        component: PrincipalComponent,
+        children: [
+          { path: 'media', component: AnaliseDasMediasComponent },
+          { path: 'media/:uuid', component: AnaliseDasMediasComponent }
+        ]
       },
-      { path: 'media', component: AnaliseDasMedias },
-      { path: 'principal', component: PrincipalComponent },
+      {
+        path: 'analise',
+        children: [
+          {
+            path: 'media',
+            component: AnaliseDasMediasComponent,
+            children: [
+              { path: '', component: VisualizarAnaliseDasMediasComponent },
+              { path: ':uuid', component: VisualizarAnaliseDasMediasComponent }
+            ]
+          }
+        ]
+      },
       {
         path: 'docente',
         component: DocenteComponent,
         children: [
-          {path: '', redirectTo: 'visualizar', pathMatch: 'full'},
-          {path: 'visualizar', component: VisualizarDocenteComponent},
-          {path: 'form/novo', component: CadastrarDocenteComponent},
-          {path: 'form/editar/:id', component: CadastrarDocenteComponent}
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarDocenteComponent },
+          { path: 'form/novo', component: CadastrarDocenteComponent },
+          { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
       {
@@ -84,7 +106,6 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarSubareaConhecimentoComponent }
         ]
       },
-
       {
         path: 'area',
         component: AreaConhecimentoComponent,
@@ -95,7 +116,6 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
         ]
       },
-
       {
         path: 'estrutura-curricular',
         component: EstruturaCurricularComponent,
@@ -106,7 +126,6 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarEstruturaCurricularComponent }
         ]
       },
-
       {
         path: 'docente-encargos',
         component: DocenteEncargosComponent,
@@ -117,7 +136,6 @@ const routes: Routes = [
           { path: 'form/editar/:uuid', component: CadastrarDocentesEncargosComponent }
         ]
       },
-
       {
         path: 'disciplina',
         component: DisciplinaComponent,
@@ -137,6 +155,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-
-}
+export class AppRoutingModule {}

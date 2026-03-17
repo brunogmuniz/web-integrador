@@ -64,7 +64,7 @@ export class CadastrarDisciplinaComponent implements OnInit {
         this.form.patchValue(res);
         this.form.get('cargaHoraria')?.setValue(res.cargaHoraria, { emitEvent: false });
       },
-      error: (err) => {
+      error: (_err) => {
         void Swal.fire('Erro', 'Erro ao carregar disciplina', 'error');
         void this.router.navigate(['/disciplina/visualizar']);
       }

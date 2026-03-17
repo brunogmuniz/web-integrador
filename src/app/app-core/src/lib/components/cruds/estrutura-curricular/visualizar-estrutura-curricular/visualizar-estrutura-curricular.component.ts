@@ -51,7 +51,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
             void Swal.fire('Sucesso', 'Estrutura Curricular excluída com sucesso!', 'success');
             this.carregarEstruturas();
           },
-          error: (err) => {
+          error: (_err) => {
             console.error();
             void Swal.fire('Erro', 'Não foi possível excluir a Estrutura Curricular. Verifique se há vínculos ativos.', 'error');
           }

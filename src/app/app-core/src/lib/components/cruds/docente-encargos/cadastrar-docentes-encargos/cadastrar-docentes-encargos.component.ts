@@ -1,15 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {DocenteService} from "app-core";
-import {SubareaConhecimentoService} from "app-core";
-import {Router} from "@angular/router";
-import {SubareaConhecimentoDTO} from "app-core";
-import { ActivatedRoute } from '@angular/router';
-
-interface AreaAgrupadaView {
-  nomeArea: string;
-  subareas: SubareaConhecimentoDTO[];
-}
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+import { DocenteService, SubareaConhecimentoService, SubareaConhecimentoDTO } from 'app-core';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cadastrar-docentes-encargos',
@@ -26,7 +19,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
   subForm!: FormGroup;
   docentesDisponiveis: any[] = [];
   encargosAtuais: any[] = [];
-  areasAgrupadas: { nomeArea: string, subareas: SubareaConhecimentoDTO[] }[] = [];
+  areasAgrupadas: { nomeArea: string; subareas: SubareaConhecimentoDTO[] }[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -71,7 +64,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
       next: (res: any) => {
         this.docentesDisponiveis = res.content || res;
       },
-      error: err => console.error('Erro ao listar docentes', err)
+      error: (err) => console.error('Erro ao listar docentes', err)
     });
   }
 
@@ -82,25 +75,23 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
 
         subareas.forEach(sub => {
           const nomeArea = sub.area?.nome || 'Outras';
-          if (!grupos.has(nomeArea)) {
-            grupos.set(nomeArea, []);
-          }
+          if (!grupos.has(nomeArea)) grupos.set(nomeArea, []);
           grupos.get(nomeArea)?.push(sub);
         });
 
-        this.areasAgrupadas = Array.from(grupos.entries()).map(([nomeArea, subareas]) => ({
+        this.areasAgrupadas = Array.from(grupos.entries()).map(([nomeArea, subs]) => ({
           nomeArea,
-          subareas
+          subareas: subs
         }));
       },
-      error: err => console.error('Erro ao carregar subáreas', err)
+      error: () => Swal.fire('Erro', 'Não foi possível carregar as subáreas.', 'error')
     });
   }
 
   carregarDadosDocente(uuid: string): void {
     this.docenteService.buscarPorId(uuid).subscribe({
       next: (response: any) => {
-        if (response && response.subAreas) {
+        if (response?.subAreas) {
           this.docenteNome = response.nome;
           this.encargosAtuais = response.subAreas.map((sa: any) => ({
             subareaId: sa.subareaId,
@@ -109,7 +100,8 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
             percentual: sa.percentual
           }));
         }
-      }
+      },
+      error: () => Swal.fire('Erro', 'Não foi possível carregar os dados do docente.', 'error')
     });
   }
 
@@ -118,7 +110,7 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     const subarea = this.subForm.value.subareaSelecionada;
 
     if (this.encargosAtuais.some(e => e.subareaId === subarea.id)) {
-      alert('Esta subárea já está vinculada.');
+      void Swal.fire('Aviso', 'Esta subárea já está vinculada.', 'warning');
       return;
     }
 
@@ -141,10 +133,12 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
       return;
     }
 
-    const uuidTarget = this.modoEdicao ? this.uuidDocente : this.encargoForm.get('idDocente')?.value;
+    const uuidTarget = this.modoEdicao
+      ? this.uuidDocente
+      : this.encargoForm.get('idDocente')?.value;
 
     if (!uuidTarget) {
-      alert('Selecione um docente antes de salvar.');
+      void Swal.fire('Aviso', 'Selecione um docente antes de salvar.', 'warning');
       return;
     }
 
@@ -157,12 +151,14 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     this.docenteService.atualizarEncargos(uuidTarget, payload).subscribe({
       next: () => {
         this.loading = false;
-        alert('Encargos salvos com sucesso!');
-        this.voltar();
+        Swal.fire('Sucesso', 'Encargos salvos com sucesso!', 'success').then(() => {
+          this.voltar();
+        });
       },
       error: (err) => {
         this.loading = false;
         console.error('Erro ao salvar:', err);
+        void Swal.fire('Erro', 'Não foi possível salvar os encargos.', 'error');
       }
     });
   }

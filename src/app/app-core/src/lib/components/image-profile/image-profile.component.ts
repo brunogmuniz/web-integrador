@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {UsuarioService} from "../../services/usuario.service";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'lib-image-profile',
@@ -8,13 +7,12 @@ import {Router} from "@angular/router";
   styleUrls: ['./image-profile.component.scss']
 })
 
-export class ImageProfileComponent {
+export class ImageProfileComponent implements OnInit {
 
   name: string = '';
 
   constructor(
     private usuarioService: UsuarioService,
-    private router: Router
   ) {}
 
   ngOnInit(): void {

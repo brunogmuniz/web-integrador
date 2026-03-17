@@ -1,65 +1,19 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService } from 'app-core';
+import { environment } from '../../../environments/enviroment';
 import { AppRoutingModule } from './app-routing.module';
+import { LayoutModule } from './layout/layout.module';
 import { AppComponent } from './app.component';
 import { PrincipalComponent } from './principal/principal.component';
-import { AnaliseDasMedias } from './principal/analise-das-medias/analise-das-medias';
 import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
-import {APP_AUTH_CONFIG, AppCoreModule, FormInput, initializeAppFactory, LoginService} from "app-core";
-import {HttpClientModule, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
-import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
-import {NgxMaskDirective, NgxMaskPipe, provideNgxMask} from "ngx-mask";
-import {environment} from "../../../environments/enviroment";
-import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
-import {
-  CadastrarDocenteComponent
-} from "app-core/lib/components/cruds/docente/cadastrar-docente/cadastrar-docente.component";
-import {
-  VisualizarDocenteComponent
-} from "app-core/lib/components/cruds/docente/visualizar-docente/visualizar-docente.component";
-import {DocenteEncargosComponent} from "app-core/lib/components/cruds/docente-encargos/docente-encargos.component";
-import {
-  CadastrarDocentesEncargosComponent
-} from "app-core/lib/components/cruds/docente-encargos/cadastrar-docentes-encargos/cadastrar-docentes-encargos.component";
-import {
-  VisualizarDocenteEncargosComponent
-} from "app-core/lib/components/cruds/docente-encargos/visualizar-docente-encargos/visualizar-docente-encargos.component";
-import {
-  SubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/subarea-conhecimento.component";
-import {
-  CadastrarSubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component";
-import {
-  VisualizarSubareaConhecimentoComponent
-} from "app-core/lib/components/cruds/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component";
-import {AreaConhecimentoComponent} from "app-core/lib/components/cruds/area-conhecimento/area-conhecimento.component";
-import {
-  CadastrarAreaConhecimentoComponent
-} from "app-core/lib/components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component";
-import {
-  VisualizarAreaConhecimentoComponent
-} from "app-core/lib/components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component";
-import {
-  EstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/estrutura-curricular.component";
-import {
-  CadastrarEstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component";
-import {
-  VisualizarEstruturaCurricularComponent
-} from "app-core/lib/components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component";
-import {DisciplinaComponent} from "app-core/lib/components/cruds/disciplina/disciplina.component";
-import {
-  CadastrarDisciplinaComponent
-} from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-import {
-  VisualizarDisciplinaComponent
-} from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
-import {RouterModule} from "@angular/router";
-import {LayoutModule} from "./layout/layout.module";
-
+import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias.component';
+import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component';
+import { NgOptimizedImage } from '@angular/common';
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -70,41 +24,25 @@ const authConfig: AuthConfig = {
   showDebugInformation: !environment.production,
 };
 
+export function storageFactory(): OAuthStorage {
+  return typeof window !== 'undefined' ? localStorage : ({} as OAuthStorage);
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     PrincipalComponent,
-    AnaliseDasMedias,
-    AreaTabelaComponent,
-    DocenteComponent,
-    CadastrarDocenteComponent,
-    VisualizarDocenteComponent,
-    DocenteEncargosComponent,
-    CadastrarDocentesEncargosComponent,
-    VisualizarDocenteEncargosComponent,
-    SubareaConhecimentoComponent,
-    CadastrarSubareaConhecimentoComponent,
-    VisualizarSubareaConhecimentoComponent,
-    AreaConhecimentoComponent,
-    CadastrarAreaConhecimentoComponent,
-    VisualizarAreaConhecimentoComponent,
-    EstruturaCurricularComponent,
-    CadastrarEstruturaCurricularComponent,
-    VisualizarEstruturaCurricularComponent,
-    DisciplinaComponent,
-    CadastrarDisciplinaComponent,
-    VisualizarDisciplinaComponent
+    AnaliseDasMediasComponent,
+    VisualizarAnaliseDasMediasComponent,
+    AreaTabelaComponent
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule,
-    LayoutModule,
+    NgOptimizedImage,
     FormsModule,
-    HttpClientModule,
-    RouterModule,
     AppRoutingModule,
+    LayoutModule,
     AppCoreModule,
-    FormInput,
     NgxMaskDirective,
     NgxMaskPipe,
     OAuthModule.forRoot({
@@ -116,13 +54,14 @@ const authConfig: AuthConfig = {
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
+    provideNgxMask({ dropSpecialCharacters: true }),
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
     },
     {
       provide: OAuthStorage,
-      useValue: localStorage
+      useFactory: storageFactory
     },
     {
       provide: APP_INITIALIZER,
@@ -130,10 +69,7 @@ const authConfig: AuthConfig = {
         initializeAppFactory(oauthService, config, loginService),
       deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
       multi: true
-    },
-    provideNgxMask({
-      dropSpecialCharacters: true
-    })
+    }
   ],
   bootstrap: [AppComponent]
 })
