@@ -4,6 +4,7 @@ export * from './lib/components/atualizar-cadastro/atualizar-cadastro.component'
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
 export * from './lib/components/upload-planilha/upload-planilha.component';
 export * from './lib/app-core.module';
+export * from './lib/dto/paginacao/resposta-paginada.dto';
 
 //Services
 export * from './lib/services/analise.service';

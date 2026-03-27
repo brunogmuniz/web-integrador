@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {AreaConhecimentoDTO} from "app-core";
-import {AreaConhecimentoService} from "app-core";
+import { Component, OnInit } from '@angular/core';
+import { AreaConhecimentoDTO, MetadadosPaginacao, RespostaPaginada } from "app-core";
+import { AreaConhecimentoService } from "app-core";
 import Swal from 'sweetalert2';
 
 @Component({
@@ -11,20 +11,36 @@ import Swal from 'sweetalert2';
 export class VisualizarAreaConhecimentoComponent implements OnInit {
   areas: AreaConhecimentoDTO[] = [];
 
+  meta: MetadadosPaginacao = {
+    paginaAtual: 0,
+    tamanho: 15,
+    totalElementos: 0,
+    totalPaginas: 0
+  };
+
   constructor(private areaService: AreaConhecimentoService) {}
 
   ngOnInit(): void {
-    this.loadAreas();
+    this.carregarAreas();
   }
 
-  loadAreas(): void {
-    this.areaService.listarTodos().subscribe({
-      next: (data) => this.areas = data,
-      error: (err) => {
-        console.error(err);
+  carregarAreas(): void {
+    this.areaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+      next: (res: RespostaPaginada<AreaConhecimentoDTO>) => {
+        this.areas = res.conteudo;
+        this.meta = res.meta;
+      },
+      error: (err: Error) => {
+        console.error('Falha ao carregar a página de áreas de conhecimento:', err);
         this.exibirErro('Não foi possível carregar a lista de áreas.');
       }
     });
+  }
+
+  aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
+    this.meta.paginaAtual = evento.pagina;
+    this.meta.tamanho = evento.tamanho;
+    this.carregarAreas();
   }
 
   onDelete(uuid: string | undefined): void {
@@ -43,8 +59,8 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
       if (result.isConfirmed) {
         this.areaService.delete(uuid).subscribe({
           next: () => {
-            this.areas = this.areas.filter(a => a.uuid !== uuid);
             this.exibirSucesso('Área excluída com sucesso!');
+            this.carregarAreas();
           },
           error: (err) => {
             console.error(err);

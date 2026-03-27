@@ -26,20 +26,20 @@
             </td>
             <td>
               <div class="d-flex flex-wrap gap-1">
-                  <span *ngFor="let area of getNomesAreas(item.subAreas || [])" class="text-gray-700 fw-semibold">
+                  <span *ngFor="let area of getNomesAreas(item.subAreas)" class="text-gray-700 fw-semibold">
                     {{ area }}
                   </span>
               </div>
             </td>
             <td class="text-center">
-                <span class="badge fw-bold text-dark"
-                      [ngClass]="{
-                        'badge-light-success': item.totalEncargos === 100,
-                        'badge-light-danger': item.totalEncargos > 100,
-                        'badge-light-warning': item.totalEncargos < 100
-                      }">
-                  {{ item.totalEncargos }}%
-                </span>
+  <span class="badge fw-bold text-dark"
+        [ngClass]="{
+          'badge-light-success': item.totalEncargos === 100,
+          'badge-light-danger': item.totalEncargos > 100,
+          'badge-light-warning': item.totalEncargos < 100
+        }">
+    {{ item.totalEncargos || 0 }}%
+  </span>
             </td>
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
@@ -74,4 +74,10 @@
       </table>
     </div>
   </div>
+</div>
+<div class="mt-4 w-100" *ngIf="listaDocentesDetalhados.length > 0">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
 </div>

@@ -25,9 +25,14 @@ export class DocentesComponent implements OnInit {
   }
 
   private carregarDepartamentos(): void {
-    this.departamentoService.getAll().subscribe({
-      next: (res: DepartamentoDTO[]) => this.departamentos = res,
-      error: () => void Swal.fire('Erro', 'Não foi possível carregar os departamentos.', 'error')
+    this.departamentoService.findAll(0, 500).subscribe({
+      next: (res) => {
+        this.departamentos = res.conteudo;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar departamentos:', err);
+        void Swal.fire('Erro', 'Não foi possível carregar a lista de departamentos.', 'error');
+      }
     });
   }
 

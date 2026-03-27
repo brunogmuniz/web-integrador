@@ -15,7 +15,7 @@
         <tbody class="fs-6">
         <tr *ngFor="let docente of docentes; let i = index; let last = last">
           <td>
-            <span class="text-gray-800 fw-bold">{{ i + 1 }}</span>
+            <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
           </td>
           <td>
             <span class="text-gray-800 fw-bold">{{ docente.nome }}</span>
@@ -66,4 +66,11 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="mt-4 w-100" *ngIf="docentes.length > 0">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
 </div>

@@ -54,5 +54,11 @@
         </tbody>
       </table>
     </div>
+    <div class="mt-4 border-top pt-4">
+      <app-paginador
+        [meta]="meta"
+        (mudancaPagina)="onMudancaPagina($event)">
+      </app-paginador>
+    </div>
   </div>
 </div>

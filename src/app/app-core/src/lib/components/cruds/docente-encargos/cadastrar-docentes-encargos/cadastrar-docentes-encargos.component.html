@@ -38,20 +38,20 @@
           <div class="col-md-6">
             <label class="form-label text-gray-700 fw-semibold required">Subárea</label>
             <select
-              formControlName="subareaSelecionada"
+              formControlName="subareaIdSelecionada"
               class="form-select form-select-solid"
-              [class.is-invalid]="cSub['subareaSelecionada'].invalid && cSub['subareaSelecionada'].touched">
+              [class.is-invalid]="cSub['subareaIdSelecionada'].invalid && cSub['subareaIdSelecionada'].touched">
 
               <option [ngValue]="null" disabled>Selecione uma subárea...</option>
 
               <optgroup *ngFor="let grupo of areasAgrupadas" [label]="grupo.nomeArea">
-                <option *ngFor="let sub of grupo.subareas" [ngValue]="sub">
+                <option *ngFor="let sub of grupo.subareas" [value]="sub.id">
                   {{ sub.nome }}
                 </option>
               </optgroup>
             </select>
 
-            <div *ngIf="cSub['subareaSelecionada'].invalid && cSub['subareaSelecionada'].touched"
+            <div *ngIf="cSub['subareaIdSelecionada'].invalid && cSub['subareaIdSelecionada'].touched"
                  class="invalid-feedback d-block">
               Campo obrigatório
             </div>

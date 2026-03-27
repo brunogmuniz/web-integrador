@@ -30,9 +30,14 @@ export class DisciplinasComponent implements OnInit {
   }
 
   private carregarSubareas(): void {
-    this.subareaService.listarTodos().subscribe({
-      next: (res: SubareaConhecimentoDTO[]) => this.subareas = res,
-      error: () => void Swal.fire('Erro', 'Falha ao carregar a lista de subáreas.', 'error')
+    this.subareaService.findAll(0, 500).subscribe({
+      next: (res) => {
+        this.subareas = res.conteudo;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar departamentos:', err);
+        void Swal.fire('Erro', 'Não foi possível carregar a lista de departamentos.', 'error');
+      }
     });
   }
 
@@ -51,7 +56,7 @@ export class DisciplinasComponent implements OnInit {
         })
       )
       .subscribe({
-        next: () => void Swal.fire('Sucesso', 'Lote de disciplinas importado com sucesso!', 'success'),
+        next: () => void Swal.fire('Sucesso', 'Disciplinas importadas com sucesso!', 'success'),
         error: (err: HttpErrorResponse) => void Swal.fire('Falha na importação', this.extrairErroApi(err), 'error')
       });
   }

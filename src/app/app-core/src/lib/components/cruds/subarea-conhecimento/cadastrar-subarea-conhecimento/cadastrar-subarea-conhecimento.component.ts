@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { SubareaConhecimentoService } from "app-core";
+import {RespostaPaginada, SubareaConhecimentoService} from "app-core";
 import { AreaConhecimentoService } from "app-core";
 import { AreaConhecimentoDTO } from "app-core";
 import {SubareaConhecimentoDTO} from "app-core";
@@ -31,8 +31,12 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.areasDeConhecimento$ = this.areaService.listarTodos().pipe(
-      map((res: any) => Array.isArray(res) ? res : res.content || [])
+    this.areasDeConhecimento$ = this.areaService.findAll(0, 500).pipe(
+      map((res: RespostaPaginada<AreaConhecimentoDTO>) => res.conteudo),
+      catchError(err => {
+        console.error('Erro ao carregar áreas:', err);
+        return throwError(() => err);
+      })
     );
     this.verificarEdicao();
   }

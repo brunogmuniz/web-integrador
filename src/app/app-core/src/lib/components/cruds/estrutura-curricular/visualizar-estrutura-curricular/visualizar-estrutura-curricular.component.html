@@ -15,7 +15,9 @@
         <tbody class="fs-6">
         <ng-container *ngIf="(listaEstruturas ?? []).length > 0; else emptyList">
           <tr *ngFor="let item of listaEstruturas; trackBy: trackByEstruturaUuid; let i = index">
-            <td><span class="text-gray-800 fw-bold">{{ i + 1 }}</span></td>
+            <td>
+              <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
+            </td>
             <td><span class="text-gray-800 fw-bold">{{ item.codigo }}</span></td>
             <td><span class="text-gray-700">{{ item.nomeCurso }}</span></td>
             <td><span class="text-gray-700">{{ item.ano }}</span></td>
@@ -60,4 +62,11 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="mt-4 w-100" *ngIf="listaEstruturas.length > 0">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
 </div>

@@ -25,7 +25,7 @@ export class CadastrarDocenteComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.loadDepartamentos();
+    this.carregarDepartamentos();
     this.verificarEdicao();
   }
 
@@ -41,9 +41,15 @@ export class CadastrarDocenteComponent implements OnInit {
     });
   }
 
-  private loadDepartamentos(): void {
-    this.departamentoService.getAll().subscribe((data: DepartamentoDTO[]) => {
-      this.departamentos = data;
+  private carregarDepartamentos(): void {
+    this.departamentoService.findAll(0, 500).subscribe({
+      next: (res) => {
+        this.departamentos = res.conteudo;
+      },
+      error: (err) => {
+        console.error('Erro ao carregar departamentos:', err);
+        void Swal.fire('Erro', 'Não foi possível carregar a lista de departamentos.', 'error');
+      }
     });
   }
 

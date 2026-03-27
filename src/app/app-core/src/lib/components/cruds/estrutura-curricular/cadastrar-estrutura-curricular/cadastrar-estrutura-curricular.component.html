@@ -132,8 +132,10 @@
       <i class="la la-times"></i> Cancelar
     </button>
 
-    <button type="button" class="btn btn-primary" (click)="salvar()" [disabled]="form.invalid">
-      <i class="la la-check"></i> Salvar Estrutura
+    <button type="button" class="btn btn-primary" (click)="salvar()" [disabled]="loading || form.invalid">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <i *ngIf="!loading" class="la la-check"></i>
+      Salvar Estrutura
     </button>
   </div>
 </div>
