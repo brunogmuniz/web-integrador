@@ -1,3 +1,10 @@
+<div class="mt-4 w-100" *ngIf="areas.length > 14">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
+</div>
+
 <div class="card mt-3">
   <div class="card-header border-0 pt-6">
   </div>

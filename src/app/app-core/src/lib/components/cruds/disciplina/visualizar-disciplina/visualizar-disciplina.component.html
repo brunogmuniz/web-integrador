@@ -1,3 +1,10 @@
+<div class="mt-4 border-top pt-4" *ngIf="disciplinas.length > 14">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="onMudancaPagina($event)">
+  </app-paginador>
+</div>
+
 <div class="card">
   <div class="card-body">
     <div class="table-responsive">
@@ -54,7 +61,7 @@
         </tbody>
       </table>
     </div>
-    <div class="mt-4 border-top pt-4">
+    <div class="mt-4 border-top pt-4" *ngIf="disciplinas.length > 0">
       <app-paginador
         [meta]="meta"
         (mudancaPagina)="onMudancaPagina($event)">
