@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {UsuarioService} from "app-core/lib/services/usuario.service";
-import {Router} from "@angular/router";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { UsuarioService } from "app-core/lib/services/usuario.service";
 
 @Component({
   selector: 'menu-lateral',
@@ -8,34 +7,38 @@ import {Router} from "@angular/router";
   styleUrls: ['./menu-lateral.component.css']
 })
 export class MenuLateralComponent implements OnInit {
-  nome: string = '';
-  cargo: string = '';
+  @Output() onSidebarToggle = new EventEmitter<boolean>();
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      (window as any).KTLayout?.init();
-      (window as any).KTMenu?.init();
-    }, 50);
-  }
-  menuAberto: string = '';
+  public nome: string = '';
+  public cargo: string = '';
+  public menuAberto: string = '';
+  public isSidebarMinimized: boolean = false;
 
-  constructor(private usuarioService: UsuarioService, private router: Router) { }
+  constructor(private readonly usuarioService: UsuarioService) {}
 
-  ngOnInit(): void {
-    this.nome = this.usuarioService.getNomeLogado();
-    this.cargo = this.usuarioService.getCargoLogado();
+  public ngOnInit(): void {
+    this.nome = this.usuarioService.getNomeLogado() || 'Admin';
+    this.cargo = this.usuarioService.getCargoLogado() || 'Admin';
   }
 
-  toggleMenu(nomeMenu: string): void {
-    if (this.menuAberto === nomeMenu) {
+  public toggleSidebarSize(): void {
+    this.isSidebarMinimized = !this.isSidebarMinimized;
+
+    if (this.isSidebarMinimized) {
       this.menuAberto = '';
-    } else {
-      this.menuAberto = nomeMenu;
     }
+
+    this.onSidebarToggle.emit(this.isSidebarMinimized);
   }
 
-  isOpen(nomeMenu: string): boolean {
+  public toggleMenu(nomeMenu: string): void {
+    if (this.isSidebarMinimized) {
+      this.toggleSidebarSize();
+    }
+    this.menuAberto = this.menuAberto === nomeMenu ? '' : nomeMenu;
+  }
+
+  public isOpen(nomeMenu: string): boolean {
     return this.menuAberto === nomeMenu;
   }
-
 }
