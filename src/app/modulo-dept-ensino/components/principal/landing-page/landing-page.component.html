@@ -1,0 +1,48 @@
+<div class="kt-portlet">
+
+  <div class="kt-portlet__body">
+
+    <div class="modulos-header">
+      <h3 class="modulos-title">
+        <i class="la la-server modulos-title-icon"></i>
+        Módulos
+      </h3>
+    </div>
+
+    <div class="row">
+
+      <ng-container *ngIf="isDocente">
+        <div class="cardModulo" (click)="navegarGerenciamentoEnsino()">
+          <div class="mainModulo">
+            <div class="iconeModulo">
+              <span class="kt-widget17__icon">
+                <i class="la la-university la-3x"></i>
+              </span>
+            </div>
+            <div class="textosModulo">
+              <div class="tituloModulo">Módulo de Gerenciamento de Ensino</div>
+              <div class="infoModulo">Acesse as ferramentas de áreas de conhecimento, disciplinas e docentes.</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isDocente">
+        <div class="cardModulo cardModulo--disabled">
+          <div class="mainModulo">
+            <div class="iconeModulo icone-disabled">
+              <span class="kt-widget17__icon">
+                <i class="la la-hourglass-2 la-3x"></i>
+              </span>
+            </div>
+            <div class="textosModulo">
+              <div class="tituloModulo titulo-disabled">Em Breve</div>
+              <div class="infoModulo">O portal exclusivo para o seu perfil está em desenvolvimento e será liberado futuramente.</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>

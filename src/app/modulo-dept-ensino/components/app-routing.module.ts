@@ -53,6 +53,7 @@ import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-
 import {
   VisualizarAnaliseDasMediasComponent
 } from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
+import {LandingPageComponent} from "./principal/landing-page/landing-page.component";
 
 const routes: Routes = [
   {
@@ -67,6 +68,10 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        component: LandingPageComponent
+      },
+      {
+        path: 'gerenciamento-ensino',
         component: PrincipalComponent,
         children: [
           { path: 'media', component: AnaliseDasMediasComponent },

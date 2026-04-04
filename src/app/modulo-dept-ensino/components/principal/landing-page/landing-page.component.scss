@@ -1,0 +1,42 @@
+.modulos-header {
+  margin-bottom: 20px;
+
+  .modulos-title {
+    color: #032947;
+    font-weight: 600;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .modulos-title-icon {
+      color: #366ca3;
+      background: #eef8fb;
+      padding: 8px;
+      border-radius: 8px;
+    }
+  }
+}
+
+.cardModulo--disabled {
+  cursor: default;
+  opacity: 0.8;
+  background-color: #fcfcfc;
+
+  &:hover {
+    transform: none;
+    box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.06);
+  }
+
+  .icone-disabled {
+    background: #f0f0f0;
+
+    i {
+      color: #a1a1a1;
+    }
+  }
+
+  .titulo-disabled {
+    color: #666;
+  }
+}
