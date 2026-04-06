@@ -42,6 +42,13 @@ export * from './lib/utils/usuario-util';
 export * from './lib/services/usuario.service';
 export * from './lib/services/login.service';
 
+//Unidade
+export * from './lib/dto/Unidade.dto';
+export * from './lib/services/unidade.service';
+export * from './lib/components/cruds/unidade/unidade.component';
+export * from './lib/components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
+export * from './lib/components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
+
 //Auth e Guards
 export * from './lib/auth/auth.config';
 export * from './lib/auth/auth.factory';

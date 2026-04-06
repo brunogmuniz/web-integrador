@@ -24,6 +24,9 @@ import { CadastrarEstruturaCurricularComponent } from './components/cruds/estrut
 import { VisualizarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
 import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 import { PaginadorComponent } from './components/paginador/paginador.component';
+import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
+import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
+import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
     CadastrarEstruturaCurricularComponent,
     VisualizarEstruturaCurricularComponent,
     UploadPlanilhaComponent,
-    PaginadorComponent
+    PaginadorComponent,
+    UnidadeComponent,
+    CadastrarUnidadeComponent,
+    VisualizarUnidadeComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +69,11 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
     ReactiveFormsModule,
     RouterModule,
     UploadPlanilhaComponent,
-    PaginadorComponent
+    PaginadorComponent,
+    UnidadeComponent,
+    CadastrarUnidadeComponent,
+    UnidadeComponent,
+    VisualizarUnidadeComponent
   ]
 })
 export class AppCoreModule { }

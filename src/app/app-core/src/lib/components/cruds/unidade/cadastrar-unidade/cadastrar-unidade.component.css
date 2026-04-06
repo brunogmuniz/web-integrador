@@ -1,0 +1,161 @@
+.cadastro-unidade-portlet {
+  border: 1px solid #dde6f0;
+  box-shadow: none;
+}
+
+.cadastro-unidade-portlet .kt-portlet__head {
+  border-bottom: 1px solid #e3eaf3;
+  min-height: 58px;
+}
+
+.cadastro-unidade-portlet .kt-portlet__head-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2f3e55;
+}
+
+.cadastro-unidade-portlet .kt-portlet__body {
+  padding-top: 24px;
+  padding-bottom: 10px;
+}
+
+.cadastro-unidade-portlet .form-group {
+  margin-bottom: 0;
+}
+
+.cadastro-unidade-portlet .row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.cadastro-unidade-portlet [class*='col-'] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.form-row-pdsa {
+  margin-bottom: 18px;
+}
+
+.form-row-pdsa > [class*='col-'] {
+  margin-bottom: 0;
+}
+
+.pdsa-label {
+  display: block !important;
+  margin-bottom: 7px;
+  width: 100% !important;
+  float: none !important;
+  clear: both;
+  text-align: left !important;
+  color: #3d4c63;
+  font-size: 0.93rem;
+  font-weight: 600;
+}
+
+.pdsa-control {
+  height: 40px;
+  border: 1px solid #d6dfeb;
+  border-radius: 0;
+  background: #ffffff;
+  color: #33435b;
+  box-shadow: none;
+}
+
+.pdsa-control:focus {
+  border-color: #b9c7da;
+  box-shadow: none;
+}
+
+.checkbox-panel {
+  padding-top: 6px;
+}
+
+.pdsa-checkbox {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  color: #3c4b61;
+  font-weight: 500;
+}
+
+.pdsa-checkbox input[type='checkbox'] {
+  margin: 0;
+  position: static;
+  flex: 0 0 auto;
+}
+
+.pdsa-checkbox span {
+  display: none;
+}
+
+.cadastro-unidade-portlet.kt-form--label-right .form-group.row > label,
+.cadastro-unidade-portlet .kt-form--label-right .form-group.row > label,
+.cadastro-unidade-portlet.kt-form--label-right label,
+.cadastro-unidade-portlet .kt-form--label-right label,
+.cadastro-unidade-portlet form label {
+  display: block !important;
+  width: 100% !important;
+  float: none !important;
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.cadastro-unidade-portlet .form-control {
+  text-align: left;
+}
+
+.cadastro-unidade-portlet .kt-portlet__foot {
+  border-top: 1px solid #e3eaf3;
+  background: #fcfdff;
+}
+
+.form-actions-pdsa {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 991px) {
+  .cadastro-unidade-portlet .kt-portlet__head {
+    min-height: auto;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .cadastro-unidade-portlet .kt-portlet__body {
+    padding-top: 18px;
+    padding-bottom: 4px;
+  }
+
+  .form-row-pdsa {
+    margin-bottom: 10px;
+  }
+
+  .form-row-pdsa > [class*='col-'] {
+    margin-bottom: 12px;
+  }
+
+  .checkbox-panel {
+    padding-top: 0;
+  }
+
+  .cadastro-unidade-portlet .kt-portlet__foot {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+
+  .form-actions-pdsa {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .form-actions-pdsa .btn {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+}
