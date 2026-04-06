@@ -27,7 +27,7 @@ export class VisualizarUnidadeComponent implements OnInit {
     this.isCarregando = true;
     this.errorMessage = '';
 
-    this.unidadeService.buscarTodasUnidades().subscribe({
+    this.unidadeService.listar().subscribe({
       next: (unidadesPlanas: UnidadeDTO[]) => {
         this.unidadesRaiz = this.montarArvore(unidadesPlanas);
         this.expandedUuids = new Set();
@@ -82,7 +82,7 @@ export class VisualizarUnidadeComponent implements OnInit {
       }
 
       this.isCarregando = true;
-      this.unidadeService.excluirUnidade(uuid).subscribe({
+      this.unidadeService.excluir(uuid).subscribe({
         next: () => {
           void Swal.fire('Sucesso!', 'Unidade removida com sucesso.', 'success');
           this.carregarUnidades();
@@ -120,8 +120,8 @@ export class VisualizarUnidadeComponent implements OnInit {
       this.unidadeEmAtualizacaoUuid = unid.uuid;
       this.errorMessage = '';
 
-      this.unidadeService.buscarUnidadePorUuid(unid.uuid).pipe(
-        switchMap((unidadeAtual: UnidadeDTO) => this.unidadeService.atualizarUnidade(unid.uuid, {
+      this.unidadeService.buscar(unid.uuid).pipe(
+        switchMap((unidadeAtual: UnidadeDTO) => this.unidadeService.atualizar(unid.uuid, {
           nome: unidadeAtual.nome,
           tipo: unidadeAtual.tipo,
           sigla: unidadeAtual.sigla,

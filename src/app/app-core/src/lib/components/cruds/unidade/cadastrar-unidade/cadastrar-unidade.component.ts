@@ -42,7 +42,7 @@ export class CadastrarUnidadeComponent implements OnInit {
   }
 
   private carregarUnidadesPai(): void {
-    this.unidadeService.buscarTodasUnidades(true).subscribe({
+    this.unidadeService.listar(true).subscribe({
       next: (unidades) => {
         this.unidadesPai = unidades.filter(unidade => unidade.ativo);
         this.removerUnidadeAtualDaLista();
@@ -54,7 +54,7 @@ export class CadastrarUnidadeComponent implements OnInit {
   private carregarEdicao(): void {
     this.uuidEdicao = this.route.snapshot.paramMap.get('uuid');
     if (this.uuidEdicao) {
-      this.unidadeService.buscarUnidadePorUuid(this.uuidEdicao).subscribe({
+      this.unidadeService.buscar(this.uuidEdicao).subscribe({
         next: (unidade) => {
           this.formulario.patchValue({
             nome: unidade.nome,
@@ -91,8 +91,8 @@ export class CadastrarUnidadeComponent implements OnInit {
     const payload: UnidadeFormDTO = this.formulario.getRawValue();
 
     const operacaoObservable = this.uuidEdicao
-      ? this.unidadeService.atualizarUnidade(this.uuidEdicao, payload)
-      : this.unidadeService.salvarUnidade(payload);
+      ? this.unidadeService.atualizar(this.uuidEdicao, payload)
+      : this.unidadeService.salvar(payload);
 
     operacaoObservable.subscribe({
       next: () => {
