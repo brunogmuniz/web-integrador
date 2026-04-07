@@ -1,0 +1,122 @@
+<div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4">
+  <i class="la la-exclamation-circle fs-3 me-3"></i>
+  <span>{{ errorMessage }}</span>
+</div>
+
+<div class="visualizar-unidade-layout">
+
+  <div class="busca-unidade">
+    <input
+      type="text"
+      class="busca-unidade__input"
+      placeholder="Buscar vínculo..."
+      [(ngModel)]="filtro"
+      (input)="aplicarFiltro()"
+      autocomplete="off"
+    >
+    <span class="busca-unidade__icon">
+      <i class="la la-search"></i>
+    </span>
+  </div>
+
+  <div class="table-shell">
+
+    <div *ngIf="isCarregando" class="loading-state">
+      <span class="spinner-border spinner-border-sm text-primary me-3"></span>
+      <span>Carregando vínculos...</span>
+    </div>
+
+    <div class="table-responsive" *ngIf="!isCarregando">
+      <table class="table table-hover align-middle mb-0 unidade-layout-table">
+
+        <thead>
+        <tr>
+          <th class="text-center col-status-header">Ativo</th>
+          <th class="col-nome-header">Unidade</th>
+          <th>Usuário</th>
+          <th class="text-center">Papel</th>
+          <th class="text-center">Data</th>
+          <th class="text-center col-acoes-header">Ações</th>
+        </tr>
+        </thead>
+
+        <tbody *ngIf="vinculosFiltrados.length > 0">
+        <tr *ngFor="let vinculo of vinculosFiltrados">
+
+          <td class="text-center col-status-cell">
+            <span
+              class="status-dot"
+              [ngClass]="vinculo.ativo ? 'status-dot--ativo' : 'status-dot--inativo'"
+              [title]="vinculo.ativo ? 'Ativo' : 'Inativo'">
+            </span>
+          </td>
+
+          <td class="col-nome-cell">
+            <span class="nome-text" [ngClass]="{'unidade-inativa': !vinculo.ativo}">
+              {{ vinculo.nomeUnidade | uppercase }}
+            </span>
+          </td>
+
+          <td [ngClass]="{'unidade-inativa': !vinculo.ativo}">
+            {{ vinculo.nomeUsuario }}
+          </td>
+
+          <td class="text-center" [ngClass]="{'unidade-inativa': !vinculo.ativo}">
+            <span class="badge bg-light-primary text-primary px-3 py-2">
+              {{ vinculo.papel }}
+            </span>
+          </td>
+
+          <td class="text-center" [ngClass]="{'unidade-inativa': !vinculo.ativo}">
+            {{ vinculo.dataVinculo | date:'dd/MM/yyyy HH:mm' }}
+          </td>
+
+          <td class="text-center col-acoes-cell">
+            <div class="d-flex justify-content-center gap-2">
+
+              <a
+                [routerLink]="['/unidades-usuarios/form', vinculo.uuid]"
+                class="btn btn-icon btn-light-primary btn-sm me-2"
+                style="color: #303030"
+                title="Editar unidade"
+                (click)="$event.stopPropagation()">
+                <i class="la la-edit fs-3"></i>
+              </a>
+
+
+              <button
+                *ngIf="!vinculo.ativo"
+                class="btn btn-icon btn-light-success btn-sm me-2"
+                title="Ativar vínculo"
+                (click)="confirmarStatus(vinculo, true)">
+                <i class="la la-unlock-alt fs-3"></i>
+              </button>
+
+              <button
+                class="btn btn-icon btn-light-danger btn-sm"
+                style="color: #d63e3e"
+                title="Excluir vínculo"
+                (click)="confirmarExclusao(vinculo)">
+                <i class="la la-trash fs-3"></i>
+              </button>
+
+            </div>
+          </td>
+
+        </tr>
+        </tbody>
+
+        <tbody *ngIf="vinculosFiltrados.length === 0">
+        <tr>
+          <td colspan="6" class="empty-state">
+            <i class="la la-users empty-state-icon"></i>
+            <div class="empty-state-title">Nenhum vínculo encontrado.</div>
+            <div class="empty-state-text">Verifique se existem registros cadastrados.</div>
+          </td>
+        </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>

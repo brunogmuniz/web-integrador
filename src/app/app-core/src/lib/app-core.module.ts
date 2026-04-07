@@ -27,6 +27,9 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
 import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
 import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
 import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
+import { CadastrarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
+import { VisualizarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
+import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component";
 
 @NgModule({
   declarations: [
@@ -53,7 +56,11 @@ import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualiza
     PaginadorComponent,
     UnidadeComponent,
     CadastrarUnidadeComponent,
-    VisualizarUnidadeComponent
+    VisualizarUnidadeComponent,
+    CadastrarUnidadeUsuarioComponent,
+    CadastrarUnidadeUsuarioComponent,
+    VisualizarUnidadeUsuarioComponent,
+    UnidadeUsuarioComponent
   ],
   imports: [
     CommonModule,
@@ -73,7 +80,9 @@ import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualiza
     UnidadeComponent,
     CadastrarUnidadeComponent,
     UnidadeComponent,
-    VisualizarUnidadeComponent
+    VisualizarUnidadeComponent,
+    CadastrarUnidadeUsuarioComponent,
+    VisualizarUnidadeUsuarioComponent
   ]
 })
 export class AppCoreModule { }

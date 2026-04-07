@@ -28,7 +28,11 @@ import {
   VisualizarUnidadeComponent,
   CadastrarUnidadeComponent
 } from 'app-core';
-
+import {
+  UnidadeUsuarioComponent,
+  VisualizarUnidadeUsuarioComponent,
+  CadastrarUnidadeUsuarioComponent
+} from 'app-core';
 
 const routes: Routes = [
   {
@@ -99,6 +103,17 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarUnidadeComponent },
           { path: 'form/novo', component: CadastrarUnidadeComponent },
           { path: 'form/:uuid', component: CadastrarUnidadeComponent }
+        ]
+      },
+
+      {
+        path: 'unidades-usuarios',
+        component: UnidadeUsuarioComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarUnidadeUsuarioComponent },
+          { path: 'form/novo', component: CadastrarUnidadeUsuarioComponent },
+          { path: 'form/:uuid', component: CadastrarUnidadeUsuarioComponent }
         ]
       },
 
