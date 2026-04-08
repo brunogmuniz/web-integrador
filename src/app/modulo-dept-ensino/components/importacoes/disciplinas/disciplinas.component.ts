@@ -51,7 +51,7 @@ export class DisciplinasComponent implements OnInit {
         })
       )
       .subscribe({
-        next: () => void Swal.fire('Sucesso', 'Lote de disciplinas importado com sucesso!', 'success'),
+        next: () => void Swal.fire('Sucesso', 'Disciplinas importadas com sucesso!', 'success'),
         error: (err: HttpErrorResponse) => void Swal.fire('Falha na importação', this.extrairErroApi(err), 'error')
       });
   }
