@@ -51,6 +51,10 @@ export class UnidadeUsuarioService {
   }
 
   public atualizar(uuid: string, payload: any): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/${uuid}`, payload);
+    return this.http.put<any>(`${this.apiUrl}/${uuid}`, payload);
+  }
+
+  buscarPorUuid(uuid: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${uuid}`);
   }
 }

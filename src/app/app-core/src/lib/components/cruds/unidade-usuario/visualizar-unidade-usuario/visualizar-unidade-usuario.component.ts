@@ -6,7 +6,6 @@ import { UnidadeUsuarioService } from '../../../../services/unidade-usuario.serv
   selector: 'app-visualizar-unidade-usuario',
   templateUrl: './visualizar-unidade-usuario.component.html',
   styleUrls: ['./visualizar-unidade-usuario.component.css'],
-  encapsulation: ViewEncapsulation.None
 })
 export class VisualizarUnidadeUsuarioComponent implements OnInit {
 
@@ -50,7 +49,9 @@ export class VisualizarUnidadeUsuarioComponent implements OnInit {
       v.papel?.toLowerCase().includes(termo)
     );
   }
-
+  formatarPapel(papel: string): string {
+    return papel.replaceAll('_', ' ');
+  }
   public confirmarStatus(vinculo: any, ativar: boolean): void {
     const acao = ativar ? 'ativar' : 'inativar';
 

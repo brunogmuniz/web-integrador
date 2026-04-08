@@ -63,7 +63,7 @@
 
           <td class="text-center" [ngClass]="{'unidade-inativa': !vinculo.ativo}">
             <span class="badge bg-light-primary text-primary px-3 py-2">
-              {{ vinculo.papel }}
+              {{ formatarPapel(vinculo.papel) }}
             </span>
           </td>
 

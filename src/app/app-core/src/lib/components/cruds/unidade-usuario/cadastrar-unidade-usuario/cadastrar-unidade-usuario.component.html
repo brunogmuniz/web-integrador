@@ -53,7 +53,7 @@
           <select class="form-control pdsa-control" formControlName="papel">
             <option [ngValue]="null" disabled>Selecione o papel...</option>
             <option *ngFor="let papel of papeis" [value]="papel">
-              {{ papel }}
+              {{ formatarPapel(papel) }}
             </option>
           </select>
           <span class="form-text text-danger"
@@ -63,14 +63,6 @@
         </div>
 
         <!-- ATIVO -->
-        <div class="col-lg-6 d-flex align-items-center" style="padding-top: 1.8rem;">
-          <div class="form-check">
-            <input formControlName="ativo" class="form-check-input" type="checkbox" id="ativoCheck">
-            <label class="form-check-label pdsa-label mb-0" for="ativoCheck">
-              Vínculo Ativo
-            </label>
-          </div>
-        </div>
       </div>
 
     </div>
