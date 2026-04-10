@@ -1,0 +1,52 @@
+<div class="card mt-3">
+  <div class="card-header bg-navy-custom text-white">
+    <h5 class="mb-0 kt-label-font-color-4">
+      {{ modoEdicao ? 'Editar Área de Conhecimento' : 'Cadastrar Área de Conhecimento' }}
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="areaForm" (ngSubmit)="onSubmit()" *ngIf="areaForm">
+
+      <div class="form-row mb-3">
+        <div class="col-md-8">
+          <lib-form-input-padrao
+            [label]="'Nome'"
+            [control]="c['nome']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Sigla'"
+            [control]="c['sigla']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-3">
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Carga Horária'"
+            [control]="c['cargaHorariaTotal']"
+            [type]="'number'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-actions text-right">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+          <i class="la la-times"></i>
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="areaForm.invalid">
+          <i class="la la-check"></i>
+          {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
