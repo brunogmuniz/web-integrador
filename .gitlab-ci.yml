@@ -49,7 +49,7 @@ build_dept_ensino:
   extends: .default_build
   variables:
     MODULE: modulo-dept-ensino
-    BASE_HREF: /dept_ensino/    
+    BASE_HREF: /dept-ensino/    
 
 
 assemble_image:
