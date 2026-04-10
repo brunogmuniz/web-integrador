@@ -14,11 +14,6 @@ import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
 import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias.component';
 import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component';
 import { NgOptimizedImage } from '@angular/common';
-import { DocentesComponent } from './importacoes/docentes/docentes.component';
-import { DisciplinasComponent } from './importacoes/disciplinas/disciplinas.component';
-import { CursosComponent } from './importacoes/cursos/cursos.component';
-import { ImportacoesComponent } from './importacoes/importacoes.component';
-
 
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
@@ -38,6 +33,7 @@ export function storageFactory(): OAuthStorage {
     AppComponent,
     PrincipalComponent,
     AnaliseDasMediasComponent,
+    LandingPageComponent,
     VisualizarAnaliseDasMediasComponent,
     AreaTabelaComponent,
     DocentesComponent,

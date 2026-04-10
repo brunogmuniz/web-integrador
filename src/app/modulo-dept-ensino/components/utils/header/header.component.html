@@ -1,22 +1,40 @@
+<div id="kt_header" class="kt-header kt-grid__item header-custom">
+  <div class="header-custom__left">
+    <span class="font-weight-bold kt-font-success font-space title-ensino">
+      PORTAL DEPARTAMENTO ENSINO
+    </span>
+  </div>
 
-<div id="kt_header" class="kt-header kt-grid__item ">
+  <div class="header-custom__center">
+    <span class="font-weight-bold kt-font-danger title-dev">
+      Versão de Desenvolvimento
+    </span>
+  </div>
 
+  <div class="header-custom__right kt-header__topbar">
+    <div class="kt-header__topbar-item kt-header__topbar-item--user user-menu-container">
 
-  <div  class="kt-header__topbar">
-    <div class="kt-header__topbar-wrapper  kt-header__topbar-item">
-      <span class="font-weight-bold kt-visible-desktop kt-font-success font-space">PORTAL DEPARTAMENTO ENSINO</span>
+      <div
+        class="kt-header__topbar-wrapper user-menu-trigger"
+        (click)="toggleMenu($event)"
+        style="display: flex; align-items: center;"
+      >
+        <span class="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold user-badge">
+          {{ iniciais }}
+        </span>
+
+        <span class="kt-header__topbar-username kt-hidden-mobile user-name">
+          {{ nomeUsuario }}
+        </span>
+      </div>
+
+      <div *ngIf="menuAberto" class="dropdown-menu-custom" (click)="$event.stopPropagation()">
+        <div class="dropdown-menu-custom__body" style="text-align: center;">
+          <button (click)="sair()" class="btn btn-label btn-label-danger btn-sm btn-bold btn-logout">
+            Sair da sessão
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="kt-header__topbar">
-    <div class="kt-header__topbar-wrapper  kt-header__topbar-item">
-      <span class="font-weight-bold kt-visible-desktop  kt-font-danger">Versão de Desenvolvimento</span>
-    </div>
-  </div>
-
-  <div class="kt-header__topbar">
-
-
-  </div>
-
 </div>
