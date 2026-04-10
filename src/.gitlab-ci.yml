@@ -44,8 +44,6 @@ stages:
     paths:
       - dist/
     expire_in: 1h
-  except:
-     - production
   tags:
     - bolicheiro
 
