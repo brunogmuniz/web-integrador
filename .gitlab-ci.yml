@@ -11,6 +11,7 @@ variables:
 
 stages:
    - build
+   - merge
 
 .default_build:
   image:
