@@ -4,37 +4,47 @@ workflow:
       when: never
     - when: always
 
-variables:
-  GIT_TEMPLATE_DIR: ""
-  GIT_STRATEGY: clone
-  GIT_CLEAN_FLAGS: -ffdx
 
 stages:
-   - build
+  - build
+  - deploy
 
-default_build:
-  image:
-    name: dhi.io/node:20-debian12-dev
-    entrypoint: [""]
+build docker image:
+  image: docker:20.10.5
+  services:
+    - docker:20.10.5-dind
   stage: build
   variables:
-    NODE_OPTIONS: "--openssl-legacy-provider"
-  before_script:
-    - apt-get update && apt-get install -y curl unzip python3
-    - curl -fsSL https://bun.sh/install | bash
-    - export BUN_INSTALL="$HOME/.bun"
-    - export PATH="$BUN_INSTALL/bin:$PATH"
+    IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
   script:
-    - bun why stylus
-    - rm -f bun.lockb package-lock.json yarn.lock
-    - ls -a
-    - bun pm cache rm
-    - bun install --force
-    - node --openssl-legacy-provider ./node_modules/.bin/ng build $MODULE --aot --base-href="$BASE_HREF" --configuration=production
-  artifacts:
-    name: "$CI_JOB_NAME"
-    paths:
-      - dist/
-    expire_in: 1h
+    - docker login --username="$CI_REGISTRY_USER" --password="$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "$PASSWORD_DOCKER_DHI" | docker login --username "$USER_DOCKER_DHI" --password-stdin dhi.io
+    - docker pull "$IMAGE" || true
+    - >-
+      docker build
+      --tag "$IMAGE"
+      .
+    - docker push "$IMAGE"
   tags:
     - bolicheiro
+  only:
+    - main
+    - production
+    
+deploy review:
+  stage: deploy
+  variables:
+    SERVICE_REQUESTED: API
+    COMMAND: deploy
+    BRANCH_NAME: $CI_COMMIT_REF_NAME
+    DOCKER_LOGIN: $DOCKER_LOGIN       
+    DOCKER_PASSWORD: $DOCKER_PASSWORD
+  trigger:
+    project: br.ufsm.lumac1/bolicheiro/utils/env-deployer-main
+    strategy: depend
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production"
+      when: on_success
+    - when: never
+
+
