@@ -43,3 +43,9 @@ build_admin:
   variables:
     MODULE: modulo-admin
     BASE_HREF: /admin/
+
+build_depto_ensino:
+  extends: .default_build
+  variables:
+    MODULE: modulo-dept-ensino
+    BASE_HREF: /depto_ensino/    
