@@ -49,3 +49,32 @@ build_depto_ensino:
   variables:
     MODULE: modulo-dept-ensino
     BASE_HREF: /depto_ensino/    
+
+
+assemble_image:
+  stage: merge
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+    ENV: "production"
+  before_script:
+    - docker login --username="$CI_REGISTRY_USER" --password="$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "$PASSWORD_DOCKER_DHI" | docker login --username "$USER_DOCKER_DHI" --password-stdin dhi.io
+    - docker pull "$IMAGE" || true
+  needs:
+    - build_admin
+    - build_depto_ensino
+  script:
+    - mkdir -p modulo-admin modulo-depto-ensino
+    - cp -r dist/admin/* modulo-admin/
+    - cp -r dist/dept_ensino/* modulo-dept-ensino/
+    #- docker build -t "$IMAGE" .
+    #- docker push "$IMAGE"
+  tags:
+    - bolicheiro
+  except:
+    - production
+
