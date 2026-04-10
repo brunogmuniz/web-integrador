@@ -1,12 +1,16 @@
-FROM node:22-alpine
-WORKDIR /app
+# servidor web
+FROM dhi.io/nginx:1.28-alpine3.22-dev as RUNNER
 
-COPY package*.json ./
-RUN npm install
+RUN rm -rf /etc/nginx/conf.d/* /usr/share/nginx/html/*
 
-COPY . .
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 4200
-EXPOSE 4203
+# Origem: pasta gerada pelo CI | Destino: pasta baseada no BASE_HREF do Angular
+COPY ./modulo-admin /usr/share/nginx/html/admin/
+COPY ./modulo-dept-ensino /usr/share/nginx/html/depto_ensino/
 
-CMD ["npm", "run", "start"]
+
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:8080/ || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]

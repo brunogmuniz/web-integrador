@@ -72,8 +72,8 @@ assemble_image:
     - mkdir -p modulo-admin modulo-dept-ensino
     - cp -r dist/modulo-admin/* modulo-admin/
     - cp -r dist/modulo-dept-ensino/* modulo-dept-ensino/
-    #- docker build -t "$IMAGE" .
-    #- docker push "$IMAGE"
+    - docker build -t "$IMAGE" .
+    - docker push "$IMAGE"
   tags:
     - bolicheiro
   except:
