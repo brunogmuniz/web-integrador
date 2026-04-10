@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'menu-lateral',
   templateUrl: './menu-lateral.component.html',
-  styleUrls: ['./menu-lateral.component.css']
+  styleUrls: ['./menu-lateral.component.scss']
 })
 export class MenuLateralComponent implements OnInit {
   nome: string = '';
