@@ -27,6 +27,9 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
 import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
 import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
 import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
+import { UsuarioComponent } from './components/cruds/usuario/usuario.component';
+import { CadastrarUsuarioComponent } from './components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
+import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualizar-usuario/visualizar-usuario.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +56,10 @@ import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualiza
     PaginadorComponent,
     UnidadeComponent,
     CadastrarUnidadeComponent,
-    VisualizarUnidadeComponent
+    VisualizarUnidadeComponent,
+    UsuarioComponent,
+    CadastrarUsuarioComponent,
+    VisualizarUsuarioComponent
   ],
   imports: [
     CommonModule,
@@ -72,7 +78,6 @@ import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualiza
     PaginadorComponent,
     UnidadeComponent,
     CadastrarUnidadeComponent,
-    UnidadeComponent,
     VisualizarUnidadeComponent
   ]
 })

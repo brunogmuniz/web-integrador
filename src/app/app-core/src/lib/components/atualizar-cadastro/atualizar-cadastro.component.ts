@@ -10,6 +10,8 @@ import { UsuarioUtil } from '../../utils/usuario-util';
 import { TipoPerfil } from '../../model/usuario.model';
 import { UsuarioDTO } from '../../dto/Usuario.dto';
 
+const NOME_COMPLETO_REGEX = /^\S+(?:\s+\S+)+$/;
+
 interface CadastroForm {
   nome: FormControl<string>;
   email: FormControl<string>;
@@ -21,7 +23,8 @@ interface CadastroForm {
 
 @Component({
   selector: 'app-atualizar-cadastro',
-  templateUrl: './atualizar-cadastro.component.html'
+  templateUrl: './atualizar-cadastro.component.html',
+  styleUrls: ['./atualizar-cadastro.component.scss']
 })
 export class AtualizarCadastroComponent implements OnInit, OnDestroy {
   form!: FormGroup<CadastroForm>;
@@ -51,7 +54,7 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
 
   private initForm(u: UsuarioDTO): void {
     this.form = this.fb.nonNullable.group({
-      nome: [u.nome || '', [Validators.required, Validators.minLength(5), Validators.maxLength(150)]],
+      nome: [u.nome || '', [Validators.required, Validators.minLength(5), Validators.maxLength(150), Validators.pattern(NOME_COMPLETO_REGEX)]],
       cpf: [u.cpf || '', [Validators.required, Validators.pattern(/^\d{11}$/)]],
       email: [u.email || '', [Validators.required, Validators.email]],
       matricula: [u.matricula || '', [Validators.required]],
@@ -83,6 +86,9 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
     const usuarioAtual = this.loginService.getUsuarioLogado();
     if (this.form.invalid || !usuarioAtual?.uuid) {
       this.form.markAllAsTouched();
+      if (this.form.controls.nome.errors?.['pattern']) {
+        void Swal.fire('Dados incompletos', 'Informe nome e sobrenome antes de salvar.', 'warning');
+      }
       if (!usuarioAtual?.uuid) console.error();
       return;
     }
@@ -105,7 +111,12 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
           });
         },
         error: (err) => {
-          const msg = err.status === 409 ? 'CPF ou Matrícula já em uso.' : 'Ocorreu um erro ao salvar os dados.';
+          const mensagemBackend = typeof err.error === 'string'
+            ? err.error
+            : err.error?.message || err.message;
+          const msg = err.status === 409
+            ? (mensagemBackend || 'Já existe um conflito com os dados informados.')
+            : 'Ocorreu um erro ao salvar os dados.';
           void Swal.fire('Erro', msg, 'error');
         }
       });
