@@ -14,11 +14,15 @@ import {PrincipalComponent} from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  issuer: 'http://localhost:8081/realms/ufsm',
-  clientId: 'webClient',
-  redirectUri: 'http://localhost:4200/',
-  responseType: 'code',
-  scope: 'openid profile email offline_access',
+  // Puxa as configurações oficiais
+  issuer: environment.issuer,
+  clientId: environment.clientId,
+
+  // Descobre a URL do navegador atual e adiciona a pasta do admin
+  redirectUri: window.location.origin + '/admin/',
+
+  responseType: environment.responseType,
+  scope: environment.scope,
   showDebugInformation: !environment.production,
 };
 
