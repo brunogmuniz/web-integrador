@@ -1,0 +1,57 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: always
+
+variables:
+  GIT_TEMPLATE_DIR: ""
+  GIT_STRATEGY: clone
+  GIT_CLEAN_FLAGS: -ffdx
+
+
+stages:
+   - build
+
+
+.default_build: &default_build
+  image:
+    # O node usado de fato pelo front eh o 16... mas essa imagem consegue fazer o build
+    name: dhi.io/node:20-debian12-dev
+    entrypoint: [""]
+  stage: build
+  variables:
+    NODE_OPTIONS: "--openssl-legacy-provider"
+  before_script:
+    #- apk add --no-cache curl jq unzip
+    #- apk add python3
+    - apt-get update && apt-get install -y curl unzip python3  # Instala dependências
+    - curl -fsSL https://bun.sh/install | bash  # Instala o Bun
+    - export BUN_INSTALL="$HOME/.bun"
+    - export PATH="$BUN_INSTALL/bin:$PATH"
+  script:
+    - bun why stylus
+    - rm -f package-lock.json yarn.lock
+    - ls -a
+    - bun pm cache rm
+    # Remove o arquivo de lock para forçar uma nova resolução
+    - rm -f bun.lockb package-lock.json yarn.lock
+    - bun install --force
+    - node --openssl-legacy-provider ./node_modules/.bin/ng build $MODULE --aot --base-href="$BASE_HREF" --configuration=production
+
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - dist/
+    expire_in: 1h
+  except:
+     - production
+  tags:
+    - bolicheiro
+
+build_admin:
+  <<: *default_build
+  variables:
+    MODULE: modulo-admin
+    BASE_HREF: /admin/
+
