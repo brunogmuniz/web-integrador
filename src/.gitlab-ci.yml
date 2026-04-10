@@ -12,7 +12,7 @@ variables:
 stages:
    - build
 
-.default_build:
+default_build:
   image:
     name: dhi.io/node:20-debian12-dev
     entrypoint: [""]
@@ -38,9 +38,3 @@ stages:
     expire_in: 1h
   tags:
     - bolicheiro
-
-build_admin:
-  extends: .default_build
-  variables:
-    MODULE: modulo-admin
-    BASE_HREF: /admin/
