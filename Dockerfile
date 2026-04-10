@@ -9,8 +9,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY ./modulo-admin /usr/share/nginx/html/admin/
 COPY ./modulo-dept-ensino /usr/share/nginx/html/depto_ensino/
 
-
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:8080/ || exit 1
+  CMD wget -qO- http://127.0.0.1:8080/admin/ || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
