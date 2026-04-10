@@ -25,7 +25,6 @@ stages:
     - export BUN_INSTALL="$HOME/.bun"
     - export PATH="$BUN_INSTALL/bin:$PATH"
   script:
-    - bun why stylus
     - rm -f bun.lockb package-lock.json yarn.lock
     - ls -a
     - bun pm cache rm
