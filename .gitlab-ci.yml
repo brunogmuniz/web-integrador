@@ -69,9 +69,9 @@ assemble_image:
     - build_admin
     - build_depto_ensino
   script:
-    - mkdir -p modulo-admin modulo-depto-ensino
-    - cp -r dist/admin/* modulo-admin/
-    - cp -r dist/dept_ensino/* modulo-dept-ensino/
+    - mkdir -p modulo-admin modulo-dept-ensino
+    - cp -r dist/modulo-admin/* modulo-admin/
+    - cp -r dist/modulo-dept-ensino/* modulo-dept-ensino/
     #- docker build -t "$IMAGE" .
     #- docker push "$IMAGE"
   tags:
