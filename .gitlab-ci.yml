@@ -67,7 +67,7 @@ assemble_image:
     - docker pull "$IMAGE" || true
   needs:
     - build_admin
-    - build_depto_ensino
+    - build_dept_ensino
   script:
     - mkdir -p modulo-admin modulo-dept-ensino
     - cp -r dist/modulo-admin/* modulo-admin/
