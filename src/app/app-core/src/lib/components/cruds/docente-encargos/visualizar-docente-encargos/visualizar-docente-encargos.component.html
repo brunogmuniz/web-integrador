@@ -1,0 +1,77 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+        <thead>
+        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+          <th class="min-w-200px">Docente</th>
+          <th class="min-w-150px">Departamento</th>
+          <th class="min-w-200px">Áreas de Atuação</th>
+          <th class="min-w-100px text-center">Carga (%)</th>
+          <th class="min-w-120px text-center">Ações</th>
+        </tr>
+        </thead>
+
+        <tbody class="fs-6">
+        <ng-container *ngIf="listaDocentesDetalhados && listaDocentesDetalhados.length > 0; else emptyList">
+
+          <tr *ngFor="let item of listaDocentesDetalhados; trackBy: trackByDocenteUuid">
+            <td>
+              <div class="d-flex flex-column">
+                <span class="text-gray-800 fw-bold">{{ item.nome }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="text-gray-800">{{ item.nomeDepartamento || item.departamento }}</span>
+            </td>
+            <td>
+              <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let area of getNomesAreas(item.subAreas || [])" class="text-gray-700 fw-semibold">
+                    {{ area }}
+                  </span>
+              </div>
+            </td>
+            <td class="text-center">
+                <span class="badge fw-bold text-dark"
+                      [ngClass]="{
+                        'badge-light-success': item.totalEncargos === 100,
+                        'badge-light-danger': item.totalEncargos > 100,
+                        'badge-light-warning': item.totalEncargos < 100
+                      }">
+                  {{ item.totalEncargos }}%
+                </span>
+            </td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-icon btn-light-primary btn-sm me-2"
+                        [routerLink]="['/docente-encargos/form/editar', item.uuid]">
+                  <i class="la la-edit fs-3"></i>
+                </button>
+                <button type="button"
+                        class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
+                        (click)="onDelete(item.uuid)"
+                        title="Excluir">
+                  <i class="la la-trash fs-3"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
+        <ng-template #emptyList>
+          <tr>
+            <td colspan="5" class="text-center py-10">
+              <div class="d-flex flex-column align-items-center">
+                <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
+                <span class="text-gray-600 fw-semibold fs-5">
+                    Nenhum registro encontrado.
+                  </span>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

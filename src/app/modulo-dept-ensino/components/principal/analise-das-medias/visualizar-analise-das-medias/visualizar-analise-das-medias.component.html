@@ -1,0 +1,18 @@
+<div class="analise-container">
+  <ng-container *ngIf="loading$ | async; else conteudoPronto">
+    <div class="spinner-overlay">
+      <span>Processando análise...</span>
+    </div>
+  </ng-container>
+
+  <ng-template #conteudoPronto>
+    <div class="alert alert-danger" *ngIf="error$ | async as errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <app-area-tabela
+      *ngIf="data$ | async as dadosTabela"
+      [dados]="dadosTabela">
+    </app-area-tabela>
+  </ng-template>
+</div>

@@ -1,0 +1,71 @@
+$cor-borda: #ccc;
+$cor-fundo: #ffffff;
+$cor-texto: #0e0e0e;
+$cor-suporte: #888;
+$radius: 8px;
+$padding-vertical: 12px;
+$padding-horizontal: 16px;
+
+.input-container {
+  display: block;
+  margin-bottom: 1rem;
+  width: 100%;
+  position: relative;
+
+  .form-input {
+    width: 100%;
+    padding: $padding-vertical $padding-horizontal;
+    background-color: $cor-fundo;
+    border: 1px solid $cor-borda;
+    border-radius: $radius;
+    color: $cor-texto;
+    font-size: 16px;
+    line-height: 1.5;
+    transition: border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+
+    &:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+      outline: none;
+    }
+
+    &::placeholder {
+      opacity: 0; 
+    }
+  }
+
+  .input-label {
+    position: absolute;
+    left: $padding-horizontal;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: $cor-suporte;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    background: $cor-fundo;
+    padding: 0 4px;
+  }
+
+  .form-input:focus + .input-label,
+
+  .form-input:not(:placeholder-shown) + .input-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    font-size: 12px;
+    color: #007bff;
+  }
+
+  .support-text {
+    font-size: 13px;
+    color: $cor-suporte;
+    margin-top: 4px;
+    padding-left: 2px;
+  }
+}
+
+.form-input.ng-invalid.ng-touched {
+  border-color: #ff878f;
+  box-shadow: 0 0 0 0.15rem rgba(234, 117, 129, 0.25);
+}

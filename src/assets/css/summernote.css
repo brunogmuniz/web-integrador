@@ -1,0 +1,11 @@
+.note-btn {
+   padding: 3px 8px !important;
+}
+
+.note-btn i {
+   font-size: 13px !important;
+}
+
+.note-editor .note-editable p {
+   margin-bottom: 0 !important;
+}

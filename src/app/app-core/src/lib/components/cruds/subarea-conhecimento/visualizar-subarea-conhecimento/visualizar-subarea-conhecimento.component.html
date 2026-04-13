@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+        <thead>
+        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+          <th class="min-w-200px">-</th>
+          <th class="min-w-150px">Sigla</th>
+          <th class="min-w-200px">Nome</th>
+          <th class="min-w-100px text-center">CHT</th>
+          <th class="min-w-200px">Area</th>
+          <th class="min-w-120px text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody class="fs-6">
+        <ng-container *ngIf="subAreas.length > 0; else emptyList">
+          <tr *ngFor="let sub of subAreas; trackBy: trackBySubUuid; let i = index">
+            <td><span class="text-gray-800 fw-bold">{{ i + 1 }}</span></td>
+            <td><span class="text-gray-700">{{ sub.sigla }}</span></td>
+            <td><span class="text-gray-700">{{ sub.nome }}</span></td>
+            <td class="text-center">{{ sub.cargaHorariaTotal }}h</td>
+            <td>{{ sub.area?.nome || 'Não informada' }}</td>
+            <td class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <button class="btn btn-icon btn-light-primary btn-sm" [routerLink]="['/sub-area/form/editar', sub.uuid]">
+                  <i class="la la-edit fs-3"></i>
+                </button>
+                <button class="btn btn-icon btn-light-danger btn-sm" (click)='onDelete(sub.uuid!)'>
+                  <i class="la la-trash fs-3"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+
+        <ng-template #emptyList>
+          <tr>
+            <td colspan="6" class="text-center py-10">
+              <span class="text-gray-600">Nenhum registro encontrado.</span>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
