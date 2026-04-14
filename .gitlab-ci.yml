@@ -20,15 +20,15 @@ config_treinamento:
   stage: config
   image: nginx:1.25
   variables:
-    PRODUCTION: "true",
+    PRODUCTION: true
 
-    APIURL: "https://main.api.bolicheiro.ufsm.br",
+    APIURL: "https://main.api.bolicheiro.ufsm.br"
 
-    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm',
+    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm'
 
-    CLIENTID: 'webClient',
-    RESPONSETYPE: 'code',
-    SCOPE: 'openid profile email offline_access',
+    CLIENTID: 'webClient'
+    RESPONSETYPE: 'code'
+    SCOPE: 'openid profile email offline_access'
 
 
   script:
