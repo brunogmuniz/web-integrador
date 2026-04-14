@@ -2,7 +2,9 @@ workflow:
   rules:
     - if: $CI_COMMIT_TAG
       when: never
-    - when: always
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "production"'
+      when: always
+    - when: never
 
 variables:
   GIT_TEMPLATE_DIR: ""
@@ -10,8 +12,37 @@ variables:
   GIT_CLEAN_FLAGS: -ffdx
 
 stages:
+   - config
    - build
    - merge
+
+config_treinamento:
+  stage: config
+  image: nginx:1.25
+  variables:
+    PRODUCTION: true,
+
+    APIURL: "https://main.api.bolicheiro.ufsm.br",
+
+    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm',
+
+    CLIENTID: 'webClient',
+    RESPONSETYPE: 'code',
+    SCOPE: 'openid profile email offline_access',
+
+
+  script:
+    - envsubst < src/assets/static-js/env.template.js > src/environments/environment.ts
+    - echo "Configuração aplicada com sucesso."
+    - cat src/environments/environment.ts
+  tags:
+    - bolicheiro
+  artifacts:
+    paths:
+      - src/
+    expire_in: 1 hour
+  only:
+    - main
 
 .default_build:
   image:
@@ -51,7 +82,6 @@ build_dept_ensino:
     MODULE: modulo-dept-ensino
     BASE_HREF: /dept-ensino/    
 
-
 assemble_image:
   stage: merge
   image: docker:latest
@@ -76,6 +106,3 @@ assemble_image:
     - docker push "$IMAGE"
   tags:
     - bolicheiro
-  except:
-    - production
-
