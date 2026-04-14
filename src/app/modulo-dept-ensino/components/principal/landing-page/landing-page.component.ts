@@ -5,7 +5,7 @@ import { LoginService, Usuario } from 'app-core';
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['../principal.component.css']
+  styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit {
   usuarioLogado: Usuario | null = null;

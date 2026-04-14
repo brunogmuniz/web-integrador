@@ -30,6 +30,7 @@ import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualiza
 import { CadastrarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
 import { VisualizarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
 import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component";
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usu
     CadastrarUnidadeUsuarioComponent,
     CadastrarUnidadeUsuarioComponent,
     VisualizarUnidadeUsuarioComponent,
-    UnidadeUsuarioComponent
+    UnidadeUsuarioComponent,
+    UserMenuComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +84,8 @@ import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usu
     UnidadeComponent,
     VisualizarUnidadeComponent,
     CadastrarUnidadeUsuarioComponent,
-    VisualizarUnidadeUsuarioComponent
+    VisualizarUnidadeUsuarioComponent,
+    UserMenuComponent
   ]
 })
 export class AppCoreModule { }

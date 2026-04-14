@@ -51,6 +51,7 @@ export class UnidadeUsuarioService {
   }
 
   public atualizar(uuid: string, payload: any): Observable<any> {
+    console.log(payload);
     return this.http.put<any>(`${this.apiUrl}/${uuid}`, payload);
   }
 

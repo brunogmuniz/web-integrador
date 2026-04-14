@@ -5,6 +5,7 @@ export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
 export * from './lib/components/upload-planilha/upload-planilha.component';
 export * from './lib/app-core.module';
 export * from './lib/dto/paginacao/resposta-paginada.dto';
+export * from './lib/components/user-menu/user-menu.component';
 
 //unidades usuario
 export * from './lib/components/cruds/unidade-usuario/unidade-usuario.component';
