@@ -41,8 +41,6 @@ config_treinamento:
     paths:
       - src/
     expire_in: 1 hour
-  only:
-    - main
 
 .default_build:
   image:
