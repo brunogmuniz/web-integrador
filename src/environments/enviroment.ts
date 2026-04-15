@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: "https://pdsa-5033-a.bolicheiro.ufsm.br/api",
+  apiUrl: "main.bolicheiro.ufsm.br",
   issuer: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm',
   clientId: 'webClient',
   responseType: 'code',
