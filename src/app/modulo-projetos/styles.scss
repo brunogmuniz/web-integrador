@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+.kt-wrapper {
+  margin-left: 265px;
+  transition: margin-left 0.3s ease;
+}
+
+body.sidebar-minimized-global .kt-wrapper {
+  margin-left: 75px;
+}
+

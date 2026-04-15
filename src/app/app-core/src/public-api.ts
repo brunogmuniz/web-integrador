@@ -6,7 +6,7 @@ export * from './lib/components/upload-planilha/upload-planilha.component';
 export * from './lib/app-core.module';
 export * from './lib/dto/paginacao/resposta-paginada.dto';
 export * from './lib/components/user-menu/user-menu.component';
-
+export * from './lib/components/projetos/visualizar-projetos/visualizar-projetos.component';
 //unidades usuario
 export * from './lib/components/cruds/unidade-usuario/unidade-usuario.component';
 export * from './lib/components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';

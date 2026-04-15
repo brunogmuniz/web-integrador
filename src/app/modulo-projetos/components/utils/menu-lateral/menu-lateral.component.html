@@ -1,0 +1,84 @@
+<div class="sidebar-container bg-navy-custom" [class.sidebar-minimized]="isSidebarMinimized">
+
+  <div class="sidebar-header bg-navy-custom">
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <img src="assets/img/brasao-ufsm-politecnico.png" alt="Brasão UFSM">
+      </a>
+    </div>
+    <div class="sidebar-toggler-wrapper">
+      <button class="toggler-button" aria-label="Alternar tamanho do menu lateral" (click)="toggleSidebarSize()">
+        <i class="la la-bars text-white"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="sidebar-menu-wrapper bg-navy-custom">
+
+    <!--<div class="sidebar-user-profile text-center mt-4 mb-4">
+      <div class="user-avatar mb-2 align-items-center">
+        <lib-image-profile></lib-image-profile>
+      </div>
+      <div class="user-info">
+        <h5 class="text-white font-weight-bold mb-0">
+          {{ nome }}
+          <i class="fa fa-pencil-alt text-white-50 icon-edit" aria-hidden="true"></i>
+        </h5>
+        <span class="d-block text-warning small font-weight-bold mt-1">
+          {{ cargo }}
+        </span>
+      </div>
+    </div>
+    -->
+
+    <ul class="menu-nav">
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">Principal</h4>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="">
+          <i class="menu-link-icon la la-home"></i>
+          <span class="menu-link-text">Página Inicial</span>
+        </a>
+      </li>
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">Gerenciamento</h4>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="gerenciar-interesses">
+          <i class="menu-link-icon la la-pencil"></i>
+          <span class="menu-link-text">Gerenciar Interesses</span>
+        </a>
+      </li>
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">Projetos</h4>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="visualizar-projetos">
+          <i class="menu-link-icon la la-eye"></i>
+          <span class="menu-link-text">Ver Todos</span>
+        </a>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="gerenciar-interesses">
+          <i class="menu-link-icon la la-paperclip"></i>
+          <span class="menu-link-text">Meus Projetos</span>
+        </a>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="gerenciar-interesses">
+          <i class="menu-link-icon la la-heart"></i>
+          <span class="menu-link-text">Projetos Favoritos</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
