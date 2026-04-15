@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import {DepartamentoDTO} from '../dto/Departamento.dto';
-import {environment} from "../../../../../environments/enviroment";
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'

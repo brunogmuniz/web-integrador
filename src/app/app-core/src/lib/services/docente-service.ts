@@ -4,7 +4,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import {DocenteDTO} from '../dto/Docente.dto'
 import { DocenteDetalheDTO } from '../dto/DocenteDetalhe.dto';
-import {environment} from "../../../../../environments/enviroment";
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'

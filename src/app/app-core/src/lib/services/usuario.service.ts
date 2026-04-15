@@ -7,7 +7,7 @@ import { Usuario } from '../model/usuario.model';
 import { Mensagem } from '../model/mensagem.model';
 import { TokenStatus } from '../dto/token-status';
 import { OAuthService } from 'angular-oauth2-oidc';
-import {environment} from "../../../../../environments/enviroment";
+import {environment} from "../../../../../environments/environment";
 
 export const API_URL = new InjectionToken<string>('API_URL');
 

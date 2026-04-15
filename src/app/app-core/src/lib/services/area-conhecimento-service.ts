@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError, map, tap} from 'rxjs/operators';
 import {AreaConhecimentoDTO} from '../dto/AreaConhecimento.dto';
 import { throwError } from 'rxjs';
-import {environment} from "../../../../../environments/enviroment";
+import {environment} from "../../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
