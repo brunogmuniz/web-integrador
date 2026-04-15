@@ -12,6 +12,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import {LayoutModule} from "./layout/layout.module";
 import {PrincipalComponent} from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
+import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, API_URL } from 'app-core';
 
 const authConfig: AuthConfig = {
   // Puxa as configurações oficiais
@@ -53,6 +54,10 @@ const authConfig: AuthConfig = {
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
