@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from "angular-oauth2-oidc";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { environment } from "../../../environments/enviroment"; 
+import { environment } from "../../../environments/environment";
 
 import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, API_URL } from 'app-core'; 
 
