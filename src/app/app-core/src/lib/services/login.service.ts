@@ -6,6 +6,8 @@ import { tap } from 'rxjs/operators';
 import { Usuario } from '../model/usuario.model';
 import { API_URL } from './usuario.service';
 import { StorageService } from './storage.service';
+import { environment } from '../../../../environments/environment';
+
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
