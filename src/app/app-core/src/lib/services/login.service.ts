@@ -1,13 +1,11 @@
-import { Injectable, Inject, Optional } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Usuario } from '../model/usuario.model';
-import { API_URL } from './usuario.service';
 import { StorageService } from './storage.service';
-import { environment } from '../../../../environments/environment';
-
+import { API_URL } from './usuario.service'; 
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -19,9 +17,9 @@ export class LoginService {
     private readonly oauthService: OAuthService,
     private readonly http: HttpClient,
     private readonly storage: StorageService,
-    private readonly apiUrl: string = environment.apiUrl
+    @Inject(API_URL) private readonly apiUrl: string 
   ) {
-    this.baseUrl = environment.apiUrl + '/usuarios';
+    this.baseUrl = this.apiUrl + '/usuarios';
   }
 
   public getUsuarioLogado(): Usuario | null {
