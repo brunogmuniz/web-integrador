@@ -16,24 +16,44 @@ stages:
    - build
    - merge
 
-config_treinamento:
+config_main:
   stage: config
   image: nginx:1.25
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
   variables:
     PRODUCTION: true
-
     APIURL: "https://main.api.bolicheiro.ufsm.br"
-
     ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm'
-
     CLIENTID: 'webClient'
     RESPONSETYPE: 'code'
     SCOPE: 'openid profile email offline_access'
-
-
   script:
     - envsubst < src/assets/static-js/env.template.js > src/environments/environment.ts
-    - echo "Configuração aplicada com sucesso."
+    - echo "Configuração de MAIN aplicada com sucesso."
+    - cat src/environments/environment.ts
+  tags:
+    - bolicheiro
+  artifacts:
+    paths:
+      - src/
+    expire_in: 1 hour
+
+config_production:
+  stage: config
+  image: nginx:1.25
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+  variables:
+    PRODUCTION: true
+    APIURL: "https://production.api.bolicheiro.ufsm.br"
+    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm'
+    CLIENTID: 'webClient'
+    RESPONSETYPE: 'code'
+    SCOPE: 'openid profile email offline_access'
+  script:
+    - envsubst < src/assets/static-js/env.template.js > src/environments/environment.ts
+    - echo "Configuração de PRODUCTION aplicada com sucesso."
     - cat src/environments/environment.ts
   tags:
     - bolicheiro
