@@ -20,7 +20,7 @@ const authConfig: AuthConfig = {
   issuer: environment.issuer,
   clientId: environment.clientId,
 
-  redirectUri: window.location.origin + '/dept-ensino/',
+  redirectUri: window.location.origin + '/geral/',
 
   responseType: environment.responseType,
   scope: environment.scope,
