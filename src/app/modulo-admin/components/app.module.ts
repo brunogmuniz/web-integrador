@@ -3,16 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
+import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from "angular-oauth2-oidc";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {environment} from "../../../environments/environment";
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService} from 'app-core';
+import { environment } from "../../../environments/enviroment"; 
+
+import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, API_URL } from 'app-core'; 
+
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import {LayoutModule} from "./layout/layout.module";
-import {PrincipalComponent} from "./principal/principal.component";
+import { LayoutModule } from "./layout/layout.module";
+import { PrincipalComponent } from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, API_URL } from 'app-core';
 
 const authConfig: AuthConfig = {
   // Puxa as configurações oficiais
