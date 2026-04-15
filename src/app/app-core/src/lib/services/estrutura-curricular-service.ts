@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, of } from 'rxjs';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { EstruturaCurricularDTO } from '../dto/EstruturaCurricular.dto';
 import {catchError, map, tap} from "rxjs/operators";
 import {environment} from "../../../../../environments/enviroment";
+import { RespostaPaginada } from '../dto/paginacao/resposta-paginada.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,15 +43,31 @@ export class EstruturaCurricularService {
       })
     );
   }
-  findByCurso(cursoId: number): Observable<EstruturaCurricularDTO[]> {
-    return this.http.get<EstruturaCurricularDTO[]>(`${this.apiUrl}/curso/${cursoId}`);
-  }
-  findAll(): Observable<EstruturaCurricularDTO[]> {
-    return this.http.get<any>(`${this.apiUrl}?size=2000`).pipe(
-      map(response => response?.content || response || []),
+
+  findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<EstruturaCurricularDTO>> {
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('itensPorPagina', tamanho.toString());
+
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(response => {
+        let lista = response?.conteudo || response?.content || response?.data || [];
+        const metaData = response?.meta || response?.data?.meta || response || {};
+
+        return {
+          conteudo: lista,
+          meta: {
+            totalElementos: metaData.totalElementos ?? metaData.totalElements ?? metaData.total ?? 0,
+            tamanho: metaData.tamanho ?? metaData.size ?? metaData.perPage ?? tamanho,
+            paginaAtual: metaData.paginaAtual ?? metaData.number ?? metaData.page ?? pagina,
+            totalPaginas: metaData.totalPaginas ?? metaData.totalPages ?? metaData.pages ?? 0
+          }
+        } as RespostaPaginada<EstruturaCurricularDTO>;
+      }),
+      tap(() => console.log('Estruturas Curriculares lidas com sucesso')),
       catchError(error => {
-        console.error(error);
-        return of([]);
+        console.error('Erro ao listar estruturas curriculares:', error);
+        return throwError(() => error);
       })
     );
   }

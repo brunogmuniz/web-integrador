@@ -53,6 +53,10 @@ import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-
 import {
   VisualizarAnaliseDasMediasComponent
 } from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
+import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.component";
+import {DocentesComponent} from "./importacoes/docentes/docentes.component";
+import {CursosComponent} from "./importacoes/cursos/cursos.component";
+import {ImportacoesComponent} from "./importacoes/importacoes.component";
 
 const routes: Routes = [
   {
@@ -96,6 +100,18 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
+
+      {
+        path: 'importar',
+        component: ImportacoesComponent,
+        children: [
+          { path: '', redirectTo: 'docentes', pathMatch: 'full' },
+          { path: 'docentes', component: DocentesComponent },
+          { path: 'disciplinas', component: DisciplinasComponent },
+          { path: 'cursos', component: CursosComponent }
+        ]
+      },
+
       {
         path: 'sub-area',
         component: SubareaConhecimentoComponent,

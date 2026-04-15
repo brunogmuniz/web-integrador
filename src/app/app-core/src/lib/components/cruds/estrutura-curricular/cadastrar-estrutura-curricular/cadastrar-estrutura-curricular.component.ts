@@ -1,23 +1,32 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {EstruturaCurricularService} from "app-core";
-import {CursoService} from "app-core";
-import {DisciplinaService} from "app-core";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { forkJoin, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import Swal from "sweetalert2";
-import { EstruturaCurricularDTO } from 'app-core';
+
+import { EstruturaCurricularService } from "app-core/lib/services/estrutura-curricular-service";
+import { CursoService } from "app-core/lib/services/curso-service";
+import { DisciplinaService } from "app-core/lib/services/disciplina-service";
+
+import { EstruturaCurricularDTO } from "app-core/lib/dto/EstruturaCurricular.dto";
+import { CursoDTO } from "app-core/lib/dto/Curso.dto";
+import { DisciplinaDTO } from "app-core/lib/dto/Disciplina.dto";
 
 @Component({
   selector: 'app-cadastrar-estrutura-curricular',
   templateUrl: './cadastrar-estrutura-curricular.component.html',
   styleUrls: ['../estrutura-curricular.component.scss']
 })
-export class CadastrarEstruturaCurricularComponent implements OnInit {
-  form: FormGroup;
-  listaCursos: any[] = [];
-  listaDisciplinas: any[] = [];
-  listaOpcoesSemestre = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  isEdicao = false;
+export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy {
+  public form: FormGroup;
+  public listaCursos: CursoDTO[] = [];
+  public listaDisciplinas: DisciplinaDTO[] = [];
+  public listaOpcoesSemestre: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  public isEdicao: boolean = false;
+  public loading: boolean = false;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -38,153 +47,176 @@ export class CadastrarEstruturaCurricularComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carregarDependencias();
+    const uuid = this.route.snapshot.paramMap.get('id') || this.route.snapshot.paramMap.get('uuid');
+    if (uuid) {
+      this.isEdicao = true;
+    }
+    this.carregarDependencias(uuid);
   }
 
-  carregarDependencias() {
-    this.cursoService.findAll().subscribe({
-      next: (resCursos: any) => {
-        this.listaCursos = resCursos.content || resCursos;
-
-        this.disciplinaService.findAll().subscribe({
-          next: (resD: any) => {
-            this.listaDisciplinas = resD.content || resD;
-
-            const uuid = this.route.snapshot.paramMap.get('id');
-            if (uuid) {
-              this.isEdicao = true;
-              this.carregarEstrutura(uuid);
-            }
-          },
-          error: (err) => console.error('Erro ao carregar disciplinas', err)
-        });
-      },
-      error: (err) => console.error('Erro ao carregar cursos', err)
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  carregarEstrutura(uuid: string) {
-    this.service.findById(uuid).subscribe({
-      next: (res: any) => {
-        this.ofertas.clear();
+  private carregarDependencias(uuidEstrutura: string | null): void {
+    this.loading = true;
 
-        let cursoEncontrado = this.listaCursos.find(c => c.uuid === res.cursoUuid);
-        if (!cursoEncontrado && res.cursoId) {
-          cursoEncontrado = this.listaCursos.find(c => c.id === res.cursoId);
+    const reqCursos$ = this.cursoService.findAll(0, 500);
+    const reqDisciplinas$ = this.disciplinaService.findAll(0, 500);
+    const reqEstrutura$ = uuidEstrutura ? this.service.findById(uuidEstrutura) : of(null);
+
+    forkJoin({
+      cursos: reqCursos$,
+      disciplinas: reqDisciplinas$,
+      estrutura: reqEstrutura$
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.listaCursos = (res.cursos as any)?.conteudo || res.cursos || [];
+          this.listaDisciplinas = (res.disciplinas as any)?.conteudo || res.disciplinas || [];
+
+          if (res.estrutura) {
+            this.preencherFormulario(res.estrutura);
+          }
+          this.loading = false;
+        },
+        error: (err: any) => {
+          this.loading = false;
+          console.error('Erro no carregamento paralelo:', err);
+          void Swal.fire('Erro', 'Falha de comunicação com o servidor ao carregar dados auxiliares.', 'error');
+          this.cancelar();
         }
+      });
+  }
 
-        this.form.patchValue({
-          uuid: res.uuid,
-          codigo: res.codigo,
-          ano: res.ano,
-          curso: cursoEncontrado,
-          ativo: res.ativo
-        });
+  private preencherFormulario(res: any): void {
+    this.ofertas.clear();
 
-        if (res.ofertas) {
-          res.ofertas.forEach((o: any) => {
-            let discObj = this.listaDisciplinas.find(d => d.uuid === o.disciplinaUuid);
-            if (!discObj && o.disciplinaId) {
-              discObj = this.listaDisciplinas.find(d => d.id === o.disciplinaId);
-            }
+    let cursoEncontrado = this.listaCursos.find(c => c.uuid === res.cursoUuid);
+    if (!cursoEncontrado && res.cursoId) {
+      cursoEncontrado = this.listaCursos.find(c => c.id === res.cursoId);
+    }
 
-            this.adicionarOfertaComDados({ ...o, disciplinaObj: discObj });
-          });
-        }
-      },
-      error: (_err) => Swal.fire('Erro', 'Não foi possível carregar a estrutura.', 'error')
+    this.form.patchValue({
+      uuid: res.uuid,
+      codigo: res.codigo,
+      ano: res.ano,
+      curso: cursoEncontrado,
+      ativo: res.ativo
     });
+
+    if (res.ofertas && Array.isArray(res.ofertas)) {
+      res.ofertas.forEach((o: any) => {
+        let discObj = this.listaDisciplinas.find(d => d.uuid === o.disciplinaUuid);
+        if (!discObj && o.disciplinaId) {
+          discObj = this.listaDisciplinas.find(d => d.id === o.disciplinaId);
+        }
+        this.adicionarOfertaComDados({ ...o, disciplinaObj: discObj });
+      });
+    }
   }
 
   get ofertas(): FormArray {
     return this.form.get('ofertas') as FormArray;
   }
 
-  adicionarOferta() {
+  public adicionarOferta(): void {
     this.adicionarOfertaComDados(null);
   }
 
-  adicionarOfertaComDados(dados: any | null) {
+  public adicionarOfertaComDados(dados: any | null): void {
     const group = this.fb.group({
       disciplina: [dados?.disciplinaObj || null, Validators.required],
       semestre: [dados?.semestre || null, Validators.required],
-      numProfessoresPratica: [dados?.numProfessoresPratica || 1],
-      numProfessoresTeorica: [dados?.numProfessoresTeorica || 1],
+      numProfessoresPratica: [dados?.numProfessoresPratica || 1, [Validators.required, Validators.min(0)]],
+      numProfessoresTeorica: [dados?.numProfessoresTeorica || 1, [Validators.required, Validators.min(0)]],
       tutoria: [dados?.tutoria || false]
     });
     this.ofertas.push(group);
   }
 
-  removerOferta(index: number) {
+  public removerOferta(index: number): void {
     this.ofertas.removeAt(index);
   }
 
-  salvar() {
+  public salvar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      void Swal.fire('Aviso', 'Preencha todos os campos obrigatórios corretamente.', 'warning');
+      return;
+    }
+
     const formValue = this.form.value;
+
     if (!formValue.curso?.id) {
       void Swal.fire('Erro', 'O Curso selecionado não possui ID válido. Recarregue a página.', 'error');
       return;
     }
 
-    const dto: EstruturaCurricularDTO = {
-      ano: formValue.ano,
-      codigo: formValue.codigo,
-      ativo: formValue.ativo,
-      cursoId: formValue.curso.id,
-      ofertas: this.ofertas.value.map((o: any) => {
-        if (!o.disciplina?.id) {
-          throw new Error('Disciplina selecionada sem ID');
-        }
-        return {
-          disciplinaId: o.disciplina.id,
-          semestre: o.semestre,
-          numProfessoresPratica: o.numProfessoresPratica,
-          numProfessoresTeorica: o.numProfessoresTeorica,
-          tutoria: o.tutoria
-        };
-      })
-    };
-
-    const uuid = this.form.get('uuid')?.value;
-    const observer = {
-      next: () => {
-        Swal.fire({
-          title: 'Sucesso!',
-          text: `Estrutura Curricular ${this.isEdicao ? 'atualizada' : 'cadastrada'} com sucesso!`,
-          icon: 'success',
-          confirmButtonText: 'Ok',
-          confirmButtonColor: '#1BC5BD'
-        }).then((result) => {
-          if (result.isConfirmed || result.isDismissed) {
-            this.cancelar();
+    try {
+      const dto: EstruturaCurricularDTO = {
+        ano: formValue.ano,
+        codigo: formValue.codigo,
+        ativo: formValue.ativo,
+        cursoId: formValue.curso.id,
+        ofertas: this.ofertas.value.map((o: any) => {
+          if (!o.disciplina?.id) {
+            throw new Error('A disciplina selecionada não possui ID válido. Remova e adicione novamente.');
           }
-        });
-      },
-      error: (err: any) => {
-        console.error('Erro detalhado:', err);
-        void Swal.fire('Erro', 'Ocorreu um erro ao salvar. Verifique o console.', 'error');
-      }
-    };
+          return {
+            disciplinaId: o.disciplina.id,
+            semestre: o.semestre,
+            numProfessoresPratica: o.numProfessoresPratica,
+            numProfessoresTeorica: o.numProfessoresTeorica,
+            tutoria: o.tutoria
+          };
+        })
+      };
 
-    if (this.isEdicao && uuid) {
-      this.service.update(uuid, dto).subscribe(observer);
-    } else {
-      this.service.save(dto).subscribe(observer);
+      const uuid = this.form.get('uuid')?.value;
+      this.loading = true;
+
+      const requisicao$ = (this.isEdicao && uuid)
+        ? this.service.update(uuid, dto)
+        : this.service.save(dto);
+
+      requisicao$.pipe(takeUntil(this.destroy$)).subscribe({
+        next: () => {
+          this.loading = false;
+          void Swal.fire({
+            title: 'Sucesso!',
+            text: `Estrutura Curricular ${this.isEdicao ? 'atualizada' : 'cadastrada'} com sucesso!`,
+            icon: 'success',
+            confirmButtonText: 'Ok',
+            confirmButtonColor: '#1BC5BD'
+          }).then(() => this.cancelar());
+        },
+        error: (err: any) => {
+          this.loading = false;
+          console.error('Erro na submissão:', err);
+          void Swal.fire('Erro', 'Ocorreu um erro ao salvar a estrutura no servidor.', 'error');
+        }
+      });
+
+    } catch (e: any) {
+      this.loading = false;
+      void Swal.fire('Erro de Validação', e.message, 'error');
     }
   }
 
-  cancelar() {
+  public cancelar(): void {
     void this.router.navigate(['/estrutura-curricular/visualizar']);
   }
 
-  compararCursos(c1: any, c2: any): boolean {
-    if (c1 && c2 && c1.id && c2.id) {
-      return c1.id === c2.id;
-    }
+  public compararCursos(c1: any, c2: any): boolean {
+    if (c1 && c2 && c1.id && c2.id) return c1.id === c2.id;
     return c1 && c2 ? c1.uuid === c2.uuid : c1 === c2;
   }
 
-  compararDisciplinas(d1: any, d2: any): boolean {
+  public compararDisciplinas(d1: any, d2: any): boolean {
+    if (d1 && d2 && d1.id && d2.id) return d1.id === d2.id;
     return d1 && d2 ? d1.uuid === d2.uuid : d1 === d2;
   }
 }

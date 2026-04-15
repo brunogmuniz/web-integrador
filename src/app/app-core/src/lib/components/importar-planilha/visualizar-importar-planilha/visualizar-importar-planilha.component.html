@@ -1,0 +1,9 @@
+<div class="kt-portlet m-0">
+  <div class="kt-portlet__body align-content-center">
+    <form>
+      <input title="Selecione os arquivos" draggable="true" type='file' (change)="addObjeto($event)"/>
+      <button (click)="importarCSV()" class="btn btn-success pull-right" [disabled]="importando"
+      >Enviar arquivo</button>
+    </form>
+  </div>
+</div>

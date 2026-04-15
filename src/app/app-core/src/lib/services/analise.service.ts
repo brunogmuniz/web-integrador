@@ -18,10 +18,10 @@ export class AnaliseService {
   }
 
   analisarTodas(params: AnaliseParamsDTO): Observable<AreaMediaDTO[]> {
-    return this.http.post<AreaMediaDTO[]>(`${environment.apiUrl}/api/analise-depto/todas`, params);
+    return this.http.post<AreaMediaDTO[]>(`${environment.apiUrl}/analise-depto/todas`, params);
   }
 
   analisarArea(uuid: string, params: AnaliseParamsDTO): Observable<AreaMediaDTO> {
-    return this.http.post<AreaMediaDTO>(`${environment.apiUrl}/api/analise-depto/area/${uuid}`, params);
+    return this.http.post<AreaMediaDTO>(`${environment.apiUrl}/analise-depto/area/${uuid}`, params);
   }
 }

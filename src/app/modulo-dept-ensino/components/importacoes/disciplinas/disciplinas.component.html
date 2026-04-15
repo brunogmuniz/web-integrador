@@ -1,0 +1,57 @@
+<div class="card">
+  <div class="kt-portlet m-0 shadow-none">
+    <div class="kt-portlet__head">
+      <div class="kt-portlet__head-label">
+        <span class="kt-portlet__head-icon">
+          <i class="la la-upload kt-font-brand"></i>
+        </span>
+        <h3 class="kt-portlet__head-title">Importar Disciplinas</h3>
+      </div>
+      <div class="kt-portlet__head-toolbar d-flex align-items-center">
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-light"
+          title="Instruções do arquivo"
+          (click)="mostrarInstrucoesDisciplinas()"
+        >
+          <i class="la la-question-circle"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="kt-portlet__body pt-3">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-md-0">
+            <label class="kt-font-bold">
+              Subárea de Conhecimento <span class="text-danger">*</span>
+            </label>
+            <select
+              class="form-control form-control-sm"
+              [(ngModel)]="subareaId"
+              [disabled]="isUploading"
+            >
+              <option [ngValue]="null" disabled selected>Selecione uma subárea...</option>
+              <option *ngFor="let subarea of subareas" [ngValue]="subarea.id">
+                {{ subarea.nome }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group mb-0">
+            <app-upload-planilha
+              [isLoading]="isUploading"
+              [disableSubmit]="!subareaId"
+              subtitulo="Selecione a planilha no formato .CSV"
+              textoBotao="Importar"
+              (fileSubmit)="processarImportacao($event)"
+            >
+            </app-upload-planilha>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

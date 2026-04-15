@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import {DepartamentoDTO} from '../dto/Departamento.dto';
-import {environment} from "../../../../../environments/enviroment";
+import { DepartamentoDTO } from '../dto/Departamento.dto';
+import { environment } from "../../../../../environments/enviroment";
+import { RespostaPaginada } from '../dto/paginacao/resposta-paginada.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -21,13 +22,41 @@ export class DepartamentoService {
       })
     );
   }
-  getAll(): Observable<DepartamentoDTO[]> {
-    return this.http.get<any>(`${this.apiUrl}?size=2000`).pipe(
-      map(response => response.content),
+
+  findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<DepartamentoDTO>> {
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('itensPorPagina', tamanho.toString());
+
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(response => {
+        let lista = [];
+        if (response && Array.isArray(response.data)) {
+          lista = response.data;
+        } else if (response?.data && Array.isArray(response.data.data)) {
+          lista = response.data.data;
+        } else if (response && Array.isArray(response.content)) {
+          lista = response.content;
+        } else if (Array.isArray(response)) {
+          lista = response;
+        }
+
+        const metaData = response?.meta || response?.data?.meta || {};
+
+        return {
+          conteudo: lista,
+          meta: {
+            totalElementos: metaData.total ?? metaData.totalElements ?? 0,
+            tamanho: metaData.perPage ?? metaData.size ?? tamanho,
+            paginaAtual: metaData.page ?? metaData.number ?? pagina,
+            totalPaginas: metaData.pages ?? metaData.totalPages ?? 0
+          }
+        } as RespostaPaginada<DepartamentoDTO>;
+      }),
       tap(() => console.log('Departamentos lidos com sucesso')),
       catchError(error => {
-        console.error(error);
-        return of([]);
+        console.error('Erro ao listar departamentos:', error);
+        return throwError(() => error);
       })
     );
   }

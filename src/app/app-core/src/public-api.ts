@@ -2,7 +2,9 @@ export * from './lib/components/form-input-padrao/form-input-padrao';
 export * from './lib/components/image-profile/image-profile.component'
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.component';
 export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
+export * from './lib/components/upload-planilha/upload-planilha.component';
 export * from './lib/app-core.module';
+export * from './lib/dto/paginacao/resposta-paginada.dto';
 
 //Services
 export * from './lib/services/analise.service';
@@ -13,6 +15,9 @@ export * from './lib/services/subarea-conhecimento-service';
 export * from './lib/services/disciplina-service';
 export * from './lib/services/docente-service';
 export * from './lib/services/estrutura-curricular-service';
+export * from './lib/services/importacoes/docente-importacao.service';
+export * from './lib/services/importacoes/disciplina-importacao.service';
+export * from './lib/services/importacoes/curso-importacao.service';
 
 //DTOs e Models
 export * from './lib/dto/analiseParams.dto';
