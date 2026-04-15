@@ -17,9 +17,9 @@ export class LoginService {
     private readonly oauthService: OAuthService,
     private readonly http: HttpClient,
     private readonly storage: StorageService,
-    @Optional() @Inject(API_URL) apiUrl?: string
+    private readonly apiUrl: string = environment.apiUrl
   ) {
-    this.baseUrl = apiUrl ? `${apiUrl}/usuarios` : 'http://localhost:8080/usuarios';
+    this.baseUrl = environment.apiUrl + '/usuarios';
   }
 
   public getUsuarioLogado(): Usuario | null {
