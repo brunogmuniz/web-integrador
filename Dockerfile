@@ -7,7 +7,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Origem: pasta gerada pelo CI | Destino: pasta baseada no BASE_HREF do Angular
 COPY ./modulo-admin /usr/share/nginx/html/admin/
-COPY ./modulo-dept-ensino /usr/share/nginx/html/dept-ensino/
+COPY ./modulo-dept-ensino /usr/share/nginx/html/geral/
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
   CMD wget -qO- http://127.0.0.1:8080/admin/ || exit 1
