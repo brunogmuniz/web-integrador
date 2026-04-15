@@ -461,6 +461,127 @@
           }
         }
       }
+    },
+    "modulo-projetos": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "src/app/modulo-projetos",
+      "sourceRoot": "src/app/modulo-projetos",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/modulo-projetos",
+            "index": "src/app/modulo-projetos/index.html",
+            "main": "src/app/modulo-projetos/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "src/app/modulo-projetos/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "src/app/modulo-projetos/styles.scss",
+              "src/assets/css/demo-12/style.bundle.min.css",
+              "src/assets/css/demo-12/wizard-2.min.css",
+              "src/assets/icons/line-awesome/css/line-awesome.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+            ],
+            "scripts": [
+              "src/assets/js/jquery-1.12.4.min.js",
+              "src/assets/js/vendors/jquery/dist/jquery.js",
+              "src/assets/js/vendors/popper.js/dist/umd/popper.js",
+              "src/assets/js/vendors/bootstrap/dist/js/bootstrap.min.js",
+              "src/assets/js/vendors/js-cookie/src/js.cookie.js",
+              "src/assets/js/vendors/moment/min/moment.min.js",
+              "src/assets/js/vendors/perfect-scrollbar/dist/perfect-scrollbar.js",
+              "src/assets/js/vendors/sticky-js/dist/sticky.min.js",
+              "src/assets/js/vendors/tooltip.js/dist/umd/tooltip.min.js",
+              "src/assets/js/vendors/wnumb/wNumb.js",
+              "src/assets/js/vendors/chart.js/dist/Chart.bundle.min.js",
+              "src/assets/js/demo-9/login-1.min.js",
+              "src/assets/js/vendors/sweetalert/sweetalert2.min.js"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "modulo-projetos:build:production"
+            },
+            "development": {
+              "browserTarget": "modulo-projetos:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "modulo-projetos:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "src/app/modulo-projetos/tsconfig.spec.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
+              }
+            ],
+            "styles": [
+              "src/app/modulo-projetos/styles.scss"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   },
   "cli": {

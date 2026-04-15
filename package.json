@@ -9,7 +9,8 @@
     "test": "ng test",
     "start root": "ng serve modulo-root --port 4201",
     "start admin": "ng serve modulo-admin --port 4200",
-    "start dept": "ng serve modulo-dept-ensino --port 4203"
+    "start dept": "ng serve modulo-dept-ensino --port 4203",
+    "start projetos": "ng serve modulo-projetos --port 4204"
   },
   "private": true,
   "dependencies": {
