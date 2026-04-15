@@ -16,12 +16,11 @@ import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-med
 import { NgOptimizedImage } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  // Puxa as configurações oficiais
+  
   issuer: environment.issuer,
   clientId: environment.clientId,
-
-  // Descobre a URL do navegador atual e adiciona a pasta do admin
-  redirectUri: window.location.origin + '/admin/',
+  
+  redirectUri: window.location.origin + '/dept-ensino/',
 
   responseType: environment.responseType,
   scope: environment.scope,
@@ -54,7 +53,10 @@ const authConfig: AuthConfig = {
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
-    provideNgxMask({ dropSpecialCharacters: true }),
+    {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig

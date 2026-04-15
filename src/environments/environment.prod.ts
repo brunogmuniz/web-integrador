@@ -1,11 +1,7 @@
 export const environment = {
-  production: true,
-  // A URL real de onde sua API está respondendo neste ambiente
-  apiUrl: "main.bolicheiro.ufsm.br",
-
-  // A URL pública e real do seu servidor Keycloak
-  issuer: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm', // Substitua pelo domínio real do seu Keycloak
-
+  production: false,
+  apiUrl: "http://localhost:8080",
+  issuer: 'http://localhost:8081/realms/ufsm',
   clientId: 'webClient',
   responseType: 'code',
   scope: 'openid profile email offline_access',

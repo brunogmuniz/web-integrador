@@ -16,11 +16,10 @@ import { PrincipalComponent } from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  // Puxa as configurações oficiais
+  
   issuer: environment.issuer,
   clientId: environment.clientId,
 
-  // Descobre a URL do navegador atual e adiciona a pasta do admin
   redirectUri: window.location.origin + '/admin/',
 
   responseType: environment.responseType,

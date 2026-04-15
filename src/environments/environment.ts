@@ -1,9 +1,8 @@
 export const environment = {
-  production: true,
-  apiUrl: "main.bolicheiro.ufsm.br",
-  issuer: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm',
+  production: false,
+  apiUrl: "http://localhost:8080",
+  issuer: 'http://localhost:8081/realms/ufsm',
   clientId: 'webClient',
   responseType: 'code',
   scope: 'openid profile email offline_access',
 };
-
