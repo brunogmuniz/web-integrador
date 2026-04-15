@@ -1,0 +1,24 @@
+<div class="d-flex align-items-center justify-content-center min-vh-100 px-3 py-5 bg-light">
+  <div class="card shadow-sm border-0" style="max-width: 560px; width: 100%;">
+    <div class="card-body p-5 text-center">
+      <div class="mb-4">
+        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-warning text-white"
+              style="width: 72px; height: 72px; font-size: 2rem;">
+          !
+        </span>
+      </div>
+
+      <h2 class="h4 font-weight-bold text-dark mb-3">Acesso não autorizado</h2>
+      <p class="text-muted mb-4">
+        Seu usuário foi autenticado, mas não possui permissão para acessar os portais disponíveis no sistema.
+      </p>
+      <p class="text-muted mb-4">
+        Entre em contato com a administração para solicitar a liberação do perfil adequado.
+      </p>
+
+      <button type="button" class="btn btn-outline-danger px-4" (click)="logout()">
+        Sair
+      </button>
+    </div>
+  </div>
+</div>

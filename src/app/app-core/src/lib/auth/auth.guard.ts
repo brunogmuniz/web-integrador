@@ -4,5 +4,11 @@ import { LoginService } from '../services/login.service';
 
 export const authGuard: CanActivateFn = (): boolean => {
   const loginService = inject(LoginService);
-  return loginService.estaAutenticado();
+
+  if (loginService.estaAutenticado()) {
+    return true;
+  }
+
+  loginService.iniciarLogin();
+  return false;
 };

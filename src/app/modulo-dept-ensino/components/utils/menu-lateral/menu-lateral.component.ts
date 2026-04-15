@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AcessoUnidadeService } from 'app-core';
 import { UsuarioService } from "app-core/lib/services/usuario.service";
 
 @Component({
@@ -13,12 +14,17 @@ export class MenuLateralComponent implements OnInit {
   public cargo: string = '';
   public menuAberto: string = '';
   public isSidebarMinimized: boolean = false;
+  public podeImportarDados: boolean = false;
 
-  constructor(private readonly usuarioService: UsuarioService) {}
+  constructor(
+    private readonly usuarioService: UsuarioService,
+    private readonly acessoUnidadeService: AcessoUnidadeService
+  ) {}
 
   public ngOnInit(): void {
     this.nome = this.usuarioService.getNomeLogado() || 'Admin';
     this.cargo = this.usuarioService.getCargoLogado() || 'Admin';
+    this.atualizarPermissoesMenu();
   }
 
   public toggleSidebarSize(): void {
@@ -40,5 +46,17 @@ export class MenuLateralComponent implements OnInit {
 
   public isOpen(nomeMenu: string): boolean {
     return this.menuAberto === nomeMenu;
+  }
+
+  private atualizarPermissoesMenu(): void {
+    this.acessoUnidadeService.carregarMeusAcessos().subscribe(() => {
+      const possuiPermissaoDirecao = this.acessoUnidadeService.possuiPermissaoNaUnidadeAtiva(['DIRECAO']);
+      const possuiContextoDirecao = this.acessoUnidadeService.possuiContextoNaUnidadeAtiva(
+        ['DIRECAO'],
+        ['RESPONSAVEL', 'RESPONSAVEL_ADJUNTO']
+      );
+
+      this.podeImportarDados = possuiPermissaoDirecao || possuiContextoDirecao;
+    });
   }
 }

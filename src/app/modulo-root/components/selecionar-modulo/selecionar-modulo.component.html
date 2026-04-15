@@ -1,0 +1,21 @@
+<div class="selecao-modulo">
+  <div class="selecao-card" *ngIf="!carregando">
+    <div class="campo">
+      <label for="modulo">Módulo</label>
+      <select
+        id="modulo"
+        class="form-select"
+        [(ngModel)]="moduloSelecionado">
+        <option *ngFor="let modulo of modulos" [ngValue]="modulo">
+          {{ formatarModulo(modulo) }}
+        </option>
+      </select>
+    </div>
+
+    <div class="acoes">
+      <button class="btn btn-primary" type="button" (click)="continuar()">
+        Continuar
+      </button>
+    </div>
+  </div>
+</div>

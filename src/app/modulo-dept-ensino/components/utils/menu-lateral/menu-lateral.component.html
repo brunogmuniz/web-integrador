@@ -202,7 +202,7 @@
         </div>
       </li>
 
-      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('importar')">
+      <li *ngIf="podeImportarDados" class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('importar')">
         <a class="menu-link" (click)="toggleMenu('importar')" tabindex="0" aria-label="Menu Importar Dados">
           <i class="menu-link-icon la la-cloud-upload"></i>
           <span class="menu-link-text">Importar Dados</span>
