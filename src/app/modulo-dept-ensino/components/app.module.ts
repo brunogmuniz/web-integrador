@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import { APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService } from 'app-core';
+import {API_URL, APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService} from 'app-core';
 import { environment } from '../../../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { LayoutModule } from './layout/layout.module';
@@ -16,10 +16,10 @@ import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-med
 import { NgOptimizedImage } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  
+
   issuer: environment.issuer,
   clientId: environment.clientId,
-  
+
   redirectUri: window.location.origin + '/dept-ensino/',
 
   responseType: environment.responseType,
