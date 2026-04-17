@@ -1,7 +1,7 @@
 import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 import { LoginService } from '../services/login.service';
 import { AcessoUnidadeService } from '../services/acesso-unidade.service';
-import {firstValueFrom, of, throwError} from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 
 export function initializeAppFactory(
@@ -12,39 +12,45 @@ export function initializeAppFactory(
 ): () => Promise<void> {
   return async () => {
     oauthService.configure(config);
-    oauthService.setupAutomaticSilentRefresh();
 
     try {
-      const isLoggedIn = await oauthService.loadDiscoveryDocumentAndLogin();
-      if (isLoggedIn || oauthService.hasValidAccessToken()) {
-        await firstValueFrom(
+      const parametrosUrl = new URLSearchParams(window.location.search);
+      const isCallbackAutenticacao = parametrosUrl.has('code') || parametrosUrl.has('state');
+
+      const hasToken = await oauthService.loadDiscoveryDocumentAndTryLogin();
+
+      if (hasToken) {
+        const usuarioSincronizado = await firstValueFrom(
           loginService.sincronizarUsuarioComBanco().pipe(
             timeout(5000),
-            catchError((error) => {
-              console.error('[AuthFactory] Erro crítico ao sincronizar usuário com a base:', error);
-              loginService.iniciarLogin();
-              return throwError(() => error);
+            catchError((error: unknown) => {
+              const erroFormatado = error instanceof Error ? error.message : String(error);
+              console.error('[AuthFactory] Sincronização bloqueada por falha na API ou conexão:', erroFormatado);
+              return of(null);
             })
           )
         );
 
-        try {
-          await firstValueFrom(
-            acessoUnidadeService.carregarMeusAcessos(false, { fallbackOnError: false }).pipe(
-              timeout(5000)
-            )
-          );
-        } catch (error) {
-          console.warn('Nao foi possivel carregar os acessos da unidade apos o login.', error);
-        }
+        if (usuarioSincronizado) {
+          try {
+            await firstValueFrom(
+              acessoUnidadeService.carregarMeusAcessos(false, { fallbackOnError: false }).pipe(
+                timeout(5000)
+              )
+            );
+          } catch (error: unknown) {
+            const erroAcessoFormatado = error instanceof Error ? error.message : String(error);
+            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades:', erroAcessoFormatado);
+          }
 
-        loginService.tratarPosLogin();
-      } else {
-        const params = new URLSearchParams(window.location.search);
-        if (!params.has('code')) loginService.iniciarLogin();
+          if (isCallbackAutenticacao) {
+            loginService.tratarPosLogin();
+          }
+        }
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      const erroFatal = error instanceof Error ? error.message : String(error);
+      console.error('[AuthFactory] Colapso vital na orquestração com o Identity Provider:', erroFatal);
     }
   };
 }
