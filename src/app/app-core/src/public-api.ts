@@ -5,6 +5,12 @@ export * from './lib/components/atualizar-cadastro/atualizar-cadastro.module';
 export * from './lib/components/upload-planilha/upload-planilha.component';
 export * from './lib/app-core.module';
 export * from './lib/dto/paginacao/resposta-paginada.dto';
+export * from './lib/components/user-menu/user-menu.component';
+
+//unidades usuario
+export * from './lib/components/cruds/unidade-usuario/unidade-usuario.component';
+export * from './lib/components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
+export * from './lib/components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
 
 //Services
 export * from './lib/services/analise.service';
@@ -41,6 +47,13 @@ export * from './lib/model/usuario.model';
 export * from './lib/utils/usuario-util';
 export * from './lib/services/usuario.service';
 export * from './lib/services/login.service';
+
+//Unidade
+export * from './lib/dto/Unidade.dto';
+export * from './lib/services/unidade.service';
+export * from './lib/components/cruds/unidade/unidade.component';
+export * from './lib/components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
+export * from './lib/components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
 
 //Auth e Guards
 export * from './lib/auth/auth.config';

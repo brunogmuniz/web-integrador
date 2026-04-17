@@ -20,8 +20,19 @@ import { CadastrarDocentesEncargosComponent } from "app-core/lib/components/crud
 import { DisciplinaComponent } from 'app-core/lib/components/cruds/disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import { CadastrarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
-import { cadastroCompletoGuard, authGuard } from 'app-core';
 
+import {
+  cadastroCompletoGuard,
+  authGuard,
+  UnidadeComponent,
+  VisualizarUnidadeComponent,
+  CadastrarUnidadeComponent
+} from 'app-core';
+import {
+  UnidadeUsuarioComponent,
+  VisualizarUnidadeUsuarioComponent,
+  CadastrarUnidadeUsuarioComponent
+} from 'app-core';
 
 const routes: Routes = [
   {
@@ -50,7 +61,6 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
-
 
       {
         path: 'sub-area',
@@ -82,6 +92,28 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarEstruturaCurricularComponent },
           { path: 'form/novo', component: CadastrarEstruturaCurricularComponent },
           { path: 'form/editar/:id', component: CadastrarEstruturaCurricularComponent }
+        ]
+      },
+
+      {
+        path: 'unidades',
+        component: UnidadeComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarUnidadeComponent },
+          { path: 'form/novo', component: CadastrarUnidadeComponent },
+          { path: 'form/:uuid', component: CadastrarUnidadeComponent }
+        ]
+      },
+
+      {
+        path: 'unidades-usuarios',
+        component: UnidadeUsuarioComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarUnidadeUsuarioComponent },
+          { path: 'form/novo', component: CadastrarUnidadeUsuarioComponent },
+          { path: 'form/:uuid', component: CadastrarUnidadeUsuarioComponent }
         ]
       },
 

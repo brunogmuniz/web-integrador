@@ -24,6 +24,13 @@ import { CadastrarEstruturaCurricularComponent } from './components/cruds/estrut
 import { VisualizarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
 import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 import { PaginadorComponent } from './components/paginador/paginador.component';
+import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
+import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
+import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
+import { CadastrarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
+import { VisualizarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
+import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component";
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +54,15 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
     CadastrarEstruturaCurricularComponent,
     VisualizarEstruturaCurricularComponent,
     UploadPlanilhaComponent,
-    PaginadorComponent
+    PaginadorComponent,
+    UnidadeComponent,
+    CadastrarUnidadeComponent,
+    VisualizarUnidadeComponent,
+    CadastrarUnidadeUsuarioComponent,
+    CadastrarUnidadeUsuarioComponent,
+    VisualizarUnidadeUsuarioComponent,
+    UnidadeUsuarioComponent,
+    UserMenuComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +78,14 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
     ReactiveFormsModule,
     RouterModule,
     UploadPlanilhaComponent,
-    PaginadorComponent
+    PaginadorComponent,
+    UnidadeComponent,
+    CadastrarUnidadeComponent,
+    UnidadeComponent,
+    VisualizarUnidadeComponent,
+    CadastrarUnidadeUsuarioComponent,
+    VisualizarUnidadeUsuarioComponent,
+    UserMenuComponent
   ]
 })
 export class AppCoreModule { }
