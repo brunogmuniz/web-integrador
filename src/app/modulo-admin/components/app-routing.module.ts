@@ -22,6 +22,7 @@ import { VisualizarDisciplinaComponent } from "app-core/lib/components/cruds/dis
 import { CadastrarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
 
 import {
+  adminGuard,
   cadastroCompletoGuard,
   authGuard,
   UnidadeComponent,
@@ -38,13 +39,13 @@ const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, adminGuard]
   },
 
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, adminGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',

@@ -1,22 +1,27 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router, UrlTree } from '@angular/router';
+import { CanActivateFn } from '@angular/router';
 import { LoginService } from '../services/login.service';
+import { PortalNavigationService } from '../services/portal-navigation.service';
 import { UsuarioUtil } from '../utils/usuario-util';
 
-export const cadastroCompletoGuard: CanActivateFn = (): boolean | UrlTree => {
+export const cadastroCompletoGuard: CanActivateFn = (): boolean => {
   const loginService = inject(LoginService);
-  const router = inject(Router);
+  const portalNavService = inject(PortalNavigationService);
 
   if (!loginService.estaAutenticado()) {
-    return router.createUrlTree(['/login']);
+    loginService.iniciarLogin();
+    return false;
   }
 
   const usuario = loginService.getUsuarioLogado();
-  const precisaAtualizar = !usuario ||
-    usuario.pendenciaAtualizacao === true ||
-    UsuarioUtil.isCadastroExpirado(usuario.ultimaAtualizacaoCadastro);
+  const precisaAtualizar = !usuario
+    || usuario.pendenciaAtualizacao === true
+    || UsuarioUtil.isCadastroExpirado(usuario.ultimaAtualizacaoCadastro);
 
-  return precisaAtualizar
-    ? router.createUrlTree(['/atualizar-cadastro'])
-    : true;
+  if (precisaAtualizar) {
+    portalNavService.redirecionarParaAtualizacaoDeCadastro(document.location.origin);
+    return false;
+  }
+
+  return true;
 };

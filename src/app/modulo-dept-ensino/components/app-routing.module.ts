@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {PrincipalComponent} from "./principal/principal.component";
 import {LayoutComponent} from "./layout/layout.component";
-import {authGuard, cadastroCompletoGuard} from "app-core";
+import {authGuard, cadastroCompletoGuard, comPermissaoUnidade, ensinoGuard, permissaoUnidadeGuard} from "app-core";
 import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
 import {
   VisualizarDocenteComponent
@@ -63,12 +63,12 @@ const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ensinoGuard]
   },
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, ensinoGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
@@ -109,6 +109,12 @@ const routes: Routes = [
       {
         path: 'importar',
         component: ImportacoesComponent,
+        canActivate: [permissaoUnidadeGuard],
+        data: comPermissaoUnidade({
+          permissoes: ['DIRECAO'],
+          tiposUnidade: ['DIRECAO'],
+          papeis: ['RESPONSAVEL', 'RESPONSAVEL_ADJUNTO']
+        }),
         children: [
           { path: '', redirectTo: 'docentes', pathMatch: 'full' },
           { path: 'docentes', component: DocentesComponent },

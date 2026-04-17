@@ -13,6 +13,7 @@ export * from './lib/components/cruds/unidade-usuario/visualizar-unidade-usuario
 export * from './lib/components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
 
 //Services
+export * from './lib/services/acesso-unidade.service';
 export * from './lib/services/analise.service';
 export * from './lib/services/curso-service';
 export * from './lib/services/area-conhecimento-service';
@@ -28,6 +29,7 @@ export * from './lib/services/importacoes/curso-importacao.service';
 //DTOs e Models
 export * from './lib/dto/analiseParams.dto';
 export * from './lib/dto/anoSemestre.dto';
+export * from './lib/dto/AcessoUnidade.dto';
 export * from './lib/dto/areaMedia.dto';
 export * from './lib/dto/AreaConhecimento.dto';
 export * from './lib/dto/Curso.dto';
@@ -59,4 +61,9 @@ export * from './lib/components/cruds/unidade/visualizar-unidade/visualizar-unid
 export * from './lib/auth/auth.config';
 export * from './lib/auth/auth.factory';
 export * from './lib/auth/auth.guard';
+export * from './lib/auth/portal.config';
+export * from './lib/auth/shared-cookie-oauth.storage';
+export * from './lib/guards/admin.guard';
 export * from './lib/guards/cadastro-completo.guard';
+export * from './lib/guards/ensino.guard';
+export * from './lib/guards/permissao-unidade.guard';

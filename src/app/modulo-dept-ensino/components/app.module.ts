@@ -4,7 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import { APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService } from 'app-core';
+import {
+  AcessoUnidadeService,
+  API_URL, APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService, montarUrlPortal, SharedCookieOAuthStorage
+} from 'app-core';
 import { environment } from '../../../environments/enviroment';
 import { AppRoutingModule } from './app-routing.module';
 import { LayoutModule } from './layout/layout.module';
@@ -23,16 +26,11 @@ import {ImportacoesComponent} from "./importacoes/importacoes.component";
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
   clientId: 'webClient',
-  redirectUri: 'http://localhost:4203/',
+  redirectUri: montarUrlPortal('ensino'),
   responseType: 'code',
   scope: 'openid profile email offline_access',
   showDebugInformation: !environment.production,
 };
-
-export function storageFactory(): OAuthStorage {
-  return typeof window !== 'undefined' ? localStorage : ({} as OAuthStorage);
-}
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -70,14 +68,18 @@ export function storageFactory(): OAuthStorage {
       useValue: authConfig
     },
     {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
+    {
       provide: OAuthStorage,
-      useFactory: storageFactory
+      useClass: SharedCookieOAuthStorage
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService) =>
-        initializeAppFactory(oauthService, config, loginService),
-      deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
+      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService, acessoUnidadeService: AcessoUnidadeService) =>
+        initializeAppFactory(oauthService, config, loginService, acessoUnidadeService),
+      deps: [OAuthService, APP_AUTH_CONFIG, LoginService, AcessoUnidadeService],
       multi: true
     }
   ],

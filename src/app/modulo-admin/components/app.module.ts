@@ -7,7 +7,7 @@ import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {environment} from "../../../environments/enviroment";
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService} from 'app-core';
+import { AcessoUnidadeService, AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, montarUrlPortal, SharedCookieOAuthStorage } from 'app-core';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import {LayoutModule} from "./layout/layout.module";
 import {PrincipalComponent} from "./principal/principal.component";
@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 const authConfig: AuthConfig = {
   issuer: 'http://localhost:8081/realms/ufsm',
   clientId: 'webClient',
-  redirectUri: 'http://localhost:4200/',
+  redirectUri: montarUrlPortal('admin'),
   responseType: 'code',
   scope: 'openid profile email offline_access',
   showDebugInformation: !environment.production,
@@ -55,13 +55,13 @@ const authConfig: AuthConfig = {
     },
     {
       provide: OAuthStorage,
-      useValue: localStorage
+      useClass: SharedCookieOAuthStorage
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService) =>
-        initializeAppFactory(oauthService, config, loginService),
-      deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
+      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService, acessoUnidadeService: AcessoUnidadeService) =>
+        initializeAppFactory(oauthService, config, loginService, acessoUnidadeService),
+      deps: [OAuthService, APP_AUTH_CONFIG, LoginService, AcessoUnidadeService],
       multi: true
     },
     provideNgxMask({

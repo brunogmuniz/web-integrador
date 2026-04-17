@@ -6,6 +6,7 @@ import { finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { UsuarioService } from '../../services/usuario.service';
 import { LoginService } from '../../services/login.service';
+import { PortalNavigationService } from '../../services/portal-navigation.service';
 import { UsuarioUtil } from '../../utils/usuario-util';
 import { TipoPerfil } from '../../model/usuario.model';
 import { UsuarioDTO } from '../../dto/Usuario.dto';
@@ -32,6 +33,7 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
     private loginService: LoginService,
+    private portalNavService: PortalNavigationService,
     private router: Router
   ) {}
 
@@ -101,6 +103,7 @@ export class AtualizarCadastroComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Ir para Login',
             allowOutsideClick: false
           }).then(() => {
+            this.portalNavService.salvarDestinoPortal(usuarioAtual);
             this.loginService.logout();
           });
         },
