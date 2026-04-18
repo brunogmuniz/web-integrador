@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
-import { DocenteDTO, DocenteService } from "app-core";
+import {DocenteDTO, DocenteService, MetadadosPaginacao, RespostaPaginada} from "app-core";
 
 @Component({
   selector: 'app-visualizar-docente',
   templateUrl: './visualizar-docente.component.html',
 })
 export class VisualizarDocenteComponent implements OnInit {
-
   docentes: DocenteDTO[] = [];
+
+  meta: MetadadosPaginacao = {
+    paginaAtual: 0,
+    tamanho: 15,
+    totalElementos: 0,
+    totalPaginas: 0
+  };
 
   constructor(private docenteService: DocenteService) {}
 
@@ -17,10 +23,22 @@ export class VisualizarDocenteComponent implements OnInit {
   }
 
   carregarDocentes(): void {
-    this.docenteService.listarTodos().subscribe({
-      next: (data) => this.docentes = data,
-      error: (err) => console.error(err)
+    this.docenteService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+      next: (res: RespostaPaginada<DocenteDTO>) => {
+        this.docentes = res.conteudo;
+        this.meta = res.meta;
+      },
+      error: (err: Error) => {
+        console.error('Falha ao carregar a página de Docentes:', err);
+        this.exibirErro('Não foi possível carregar a lista de Docentes.');
+      }
     });
+  }
+
+  aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
+    this.meta.paginaAtual = evento.pagina;
+    this.meta.tamanho = evento.tamanho;
+    this.carregarDocentes();
   }
 
   onDelete(uuid: string | undefined): void {
@@ -61,5 +79,9 @@ export class VisualizarDocenteComponent implements OnInit {
       isConflict ? 'Não é possível excluir este docente pois ele possui encargos ou vínculos ativos.' : 'Erro ao excluir o docente.',
       isConflict ? 'warning' : 'error'
     );
+  }
+
+  private exibirErro(msg: string): void {
+    void Swal.fire('Erro!', msg, 'error');
   }
 }

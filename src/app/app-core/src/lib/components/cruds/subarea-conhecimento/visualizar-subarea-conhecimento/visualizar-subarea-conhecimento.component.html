@@ -1,3 +1,10 @@
+<div class="mt-4 w-100" *ngIf="subAreas.length > 14">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
+</div>
+
 <div class="card">
   <div class="card-body">
     <div class="table-responsive">
@@ -15,7 +22,9 @@
         <tbody class="fs-6">
         <ng-container *ngIf="subAreas.length > 0; else emptyList">
           <tr *ngFor="let sub of subAreas; trackBy: trackBySubUuid; let i = index">
-            <td><span class="text-gray-800 fw-bold">{{ i + 1 }}</span></td>
+            <td>
+              <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
+            </td>
             <td><span class="text-gray-700">{{ sub.sigla }}</span></td>
             <td><span class="text-gray-700">{{ sub.nome }}</span></td>
             <td class="text-center">{{ sub.cargaHorariaTotal }}h</td>
@@ -25,7 +34,7 @@
                 <button class="btn btn-icon btn-light-primary btn-sm" [routerLink]="['/sub-area/form/editar', sub.uuid]">
                   <i class="la la-edit fs-3"></i>
                 </button>
-                <button class="btn btn-icon btn-light-danger btn-sm" (click)='onDelete(sub.uuid!)'>
+                <button class="btn btn-icon btn-light-danger btn-sm" (click)='onDelete(sub.uuid!)' style="color: #d63e3e">
                   <i class="la la-trash fs-3"></i>
                 </button>
               </div>
@@ -44,4 +53,11 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="mt-4 w-100" *ngIf="subAreas.length > 0">
+  <app-paginador
+    [meta]="meta"
+    (mudancaPagina)="aoMudarPaginacao($event)">
+  </app-paginador>
 </div>

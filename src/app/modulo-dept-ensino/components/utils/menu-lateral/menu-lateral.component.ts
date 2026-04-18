@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {UsuarioService} from "app-core/lib/services/usuario.service";
-import {Router} from "@angular/router";
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { AcessoUnidadeService } from 'app-core';
+import { UsuarioService } from "app-core/lib/services/usuario.service";
 
 @Component({
   selector: 'menu-lateral',
@@ -8,34 +8,55 @@ import {Router} from "@angular/router";
   styleUrls: ['./menu-lateral.component.scss']
 })
 export class MenuLateralComponent implements OnInit {
-  nome: string = '';
-  cargo: string = '';
+  @Output() onSidebarToggle = new EventEmitter<boolean>();
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      (window as any).KTLayout?.init();
-      (window as any).KTMenu?.init();
-    }, 50);
+  public nome: string = '';
+  public cargo: string = '';
+  public menuAberto: string = '';
+  public isSidebarMinimized: boolean = false;
+  public podeImportarDados: boolean = false;
+
+  constructor(
+    private readonly usuarioService: UsuarioService,
+    private readonly acessoUnidadeService: AcessoUnidadeService
+  ) {}
+
+  public ngOnInit(): void {
+    this.nome = this.usuarioService.getNomeLogado() || 'Admin';
+    this.cargo = this.usuarioService.getCargoLogado() || 'Admin';
+    this.atualizarPermissoesMenu();
   }
-  menuAberto: string = '';
 
-  constructor(private usuarioService: UsuarioService, private router: Router) { }
+  public toggleSidebarSize(): void {
+    this.isSidebarMinimized = !this.isSidebarMinimized;
 
-  ngOnInit(): void {
-    this.nome = this.usuarioService.getNomeLogado();
-    this.cargo = this.usuarioService.getCargoLogado();
-  }
-
-  toggleMenu(nomeMenu: string): void {
-    if (this.menuAberto === nomeMenu) {
+    if (this.isSidebarMinimized) {
       this.menuAberto = '';
-    } else {
-      this.menuAberto = nomeMenu;
     }
+
+    this.onSidebarToggle.emit(this.isSidebarMinimized);
   }
 
-  isOpen(nomeMenu: string): boolean {
+  public toggleMenu(nomeMenu: string): void {
+    if (this.isSidebarMinimized) {
+      this.toggleSidebarSize();
+    }
+    this.menuAberto = this.menuAberto === nomeMenu ? '' : nomeMenu;
+  }
+
+  public isOpen(nomeMenu: string): boolean {
     return this.menuAberto === nomeMenu;
   }
 
+  private atualizarPermissoesMenu(): void {
+    this.acessoUnidadeService.carregarMeusAcessos().subscribe(() => {
+      const possuiPermissaoDirecao = this.acessoUnidadeService.possuiPermissaoNaUnidadeAtiva(['DIRECAO']);
+      const possuiContextoDirecao = this.acessoUnidadeService.possuiContextoNaUnidadeAtiva(
+        ['DIRECAO'],
+        ['RESPONSAVEL', 'RESPONSAVEL_ADJUNTO']
+      );
+
+      this.podeImportarDados = possuiPermissaoDirecao || possuiContextoDirecao;
+    });
+  }
 }

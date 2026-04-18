@@ -1,0 +1,22 @@
+<div class="user-menu-container">
+  <div
+    class="user-menu-trigger"
+    (click)="toggleMenu($event)"
+  >
+    <span class="user-badge">
+      {{ iniciais }}
+    </span>
+
+    <span class="user-name">
+      {{ nomeUsuario }}
+    </span>
+  </div>
+
+  <div *ngIf="menuAberto" class="dropdown-menu-custom" (click)="$event.stopPropagation()">
+    <div class="dropdown-menu-custom__body">
+      <button (click)="sair()" class="btn-logout">
+        Sair da sessão
+      </button>
+    </div>
+  </div>
+</div>

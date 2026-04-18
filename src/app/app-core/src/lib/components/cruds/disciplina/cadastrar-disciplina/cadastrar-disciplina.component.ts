@@ -1,21 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin, of, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { DisciplinaService } from "app-core";
-import { SubareaConhecimentoService } from "app-core";
-import { SubareaConhecimentoDTO } from "app-core";
-import { DisciplinaDTO } from "app-core";
+import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-disciplina',
   templateUrl: './cadastrar-disciplina.component.html',
   styleUrls: ['./cadastrar-disciplina.component.scss']
 })
-export class CadastrarDisciplinaComponent implements OnInit {
-  form: FormGroup;
-  subareas: SubareaConhecimentoDTO[] = [];
-  uuidDisciplina?: string;
+export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
+  public form: FormGroup;
+  public subareas: SubareaConhecimentoDTO[] = [];
+  public uuidDisciplina?: string;
+  public loading: boolean = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -37,51 +39,75 @@ export class CadastrarDisciplinaComponent implements OnInit {
 
   ngOnInit(): void {
     this.configurarCalculoAutomatico();
-    this.route.params.subscribe(params => {
-      const uuid = params['id'];
+
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const uuid = params['id'] || params['uuid'];
       if (uuid) {
         this.uuidDisciplina = uuid;
       }
-      this.carregarDadosIniciais(uuid);
+      this.carregarDadosIniciais(this.uuidDisciplina);
     });
   }
 
-  private carregarDadosIniciais(uuid: string | null): void {
-    this.subareaService.listarTodos().subscribe({
-      next: (res) => {
-        this.subareas = res;
-        if (uuid) {
-          this.carregarDadosDisciplina(uuid);
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private carregarDadosIniciais(uuid?: string): void {
+    this.loading = true;
+
+    const subareasReq$ = this.subareaService.findAll(0, 500);
+    const disciplinaReq$ = uuid ? this.disciplinaService.findById(uuid) : of(null);
+
+    forkJoin({
+      subareas: subareasReq$,
+      disciplina: disciplinaReq$
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.subareas = res.subareas.conteudo || [];
+
+          if (res.disciplina) {
+            this.preencherFormulario(res.disciplina);
+          }
+          this.loading = false;
+        },
+        error: (err: any) => {
+          this.loading = false;
+          console.error('Erro ao carregar dados da tela:', err);
+          void Swal.fire('Erro', 'Não foi possível carregar as informações do servidor.', 'error');
+          void this.router.navigate(['/disciplina/visualizar']);
         }
-      },
-      error: (err: any) => console.error('Erro ao carregar subáreas:', err)
-    });
+      });
   }
 
-  carregarDadosDisciplina(uuid: string): void {
-    this.disciplinaService.findById(uuid).subscribe({
-      next: (res: DisciplinaDTO) => {
-        this.form.patchValue(res);
-        this.form.get('cargaHoraria')?.setValue(res.cargaHoraria, { emitEvent: false });
-      },
-      error: (_err) => {
-        void Swal.fire('Erro', 'Erro ao carregar disciplina', 'error');
-        void this.router.navigate(['/disciplina/visualizar']);
-      }
-    });
+  private preencherFormulario(disciplina: DisciplinaDTO): void {
+    this.form.patchValue(disciplina);
+    this.form.get('cargaHoraria')?.setValue(disciplina.cargaHoraria || 0, { emitEvent: false });
   }
 
-  configurarCalculoAutomatico(): void {
-    this.form.valueChanges.subscribe(() => {
-      const teorica = Number(this.form.get('cargaHorariaTeorica')?.value) || 0;
-      const pratica = Number(this.form.get('cargaHorariaPratica')?.value) || 0;
-      this.form.get('cargaHoraria')?.setValue(teorica + pratica, { emitEvent: false });
-    });
+  private configurarCalculoAutomatico(): void {
+    const ctrlTeorica = this.form.get('cargaHorariaTeorica');
+    const ctrlPratica = this.form.get('cargaHorariaPratica');
+
+    if (!ctrlTeorica || !ctrlPratica) return;
+
+    ctrlTeorica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
+    ctrlPratica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
   }
 
-  salvar(): void {
+  private atualizarCargaTotal(): void {
+    const teorica = Number(this.form.get('cargaHorariaTeorica')?.value) || 0;
+    const pratica = Number(this.form.get('cargaHorariaPratica')?.value) || 0;
+    this.form.get('cargaHoraria')?.setValue(teorica + pratica, { emitEvent: false });
+  }
+
+  public salvar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      void Swal.fire('Aviso', 'Preencha todos os campos obrigatórios em vermelho.', 'warning');
       return;
     }
 
@@ -89,28 +115,30 @@ export class CadastrarDisciplinaComponent implements OnInit {
     const payload: DisciplinaDTO = {
       ...formValue,
       uuid: this.uuidDisciplina,
-      tipoDisciplina: 'PRESENCIAL',
+      tipoDisciplina: formValue.ead ? 'EAD' : 'PRESENCIAL',
     };
 
-    console.log('Payload Processado:', payload);
-
-    const request = this.uuidDisciplina
+    this.loading = true;
+    const requisicao$ = this.uuidDisciplina
       ? this.disciplinaService.update(this.uuidDisciplina, payload)
       : this.disciplinaService.create(payload);
 
-    request.subscribe({
+    requisicao$.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
+        this.loading = false;
         void Swal.fire('Sucesso', 'Disciplina salva com sucesso!', 'success');
         void this.router.navigate(['/disciplina/visualizar']);
       },
       error: (err: any) => {
-        const msg = err.error?.message || 'Erro ao salvar disciplina.';
+        this.loading = false;
+        const msg = err.error?.message || 'Erro crítico ao salvar disciplina.';
+        console.error('Erro na submissão:', err);
         void Swal.fire('Erro', msg, 'error');
       }
     });
   }
 
-  cancelar(): void {
+  public cancelar(): void {
     void this.router.navigate(['/disciplina/visualizar']);
   }
 }

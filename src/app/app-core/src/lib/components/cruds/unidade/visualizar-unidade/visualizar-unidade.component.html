@@ -1,0 +1,134 @@
+<div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4">
+  <i class="la la-exclamation-circle fs-3 me-3"></i>
+  <span>{{ errorMessage }}</span>
+</div>
+
+<div class="visualizar-unidade-layout">
+  <div class="busca-unidade">
+    <input
+      type="text"
+      class="busca-unidade__input"
+      placeholder="Buscar unidade..."
+      autocomplete="off"
+    >
+    <span class="busca-unidade__icon">
+      <i class="la la-search"></i>
+    </span>
+  </div>
+
+  <div class="table-shell">
+  <div *ngIf="isCarregando" class="loading-state">
+    <span class="spinner-border spinner-border-sm text-primary me-3"></span>
+    <span>Carregando unidades...</span>
+  </div>
+
+  <ng-template #linhasUnidades let-lista="lista" let-nivel="nivel">
+    <ng-container *ngFor="let unid of lista">
+      <tr>
+        <td class="text-center col-status-cell">
+          <span
+            class="status-dot"
+            [ngClass]="unid.ativo ? 'status-dot--ativo' : 'status-dot--inativo'"
+            [title]="unid.ativo ? 'Ativo' : 'Inativo'">
+          </span>
+        </td>
+
+        <td
+          class="col-nome-cell"
+          [ngClass]="{'is-clickable': unid.subunidades?.length, 'unidade-inativa': !unid.ativo}"
+          (click)="alternarExpansao(unid)">
+          <div class="nome-cell" [style.padding-left.px]="nivel * 26">
+            <span class="tree-guide" *ngIf="nivel > 0"></span>
+            <i
+              *ngIf="unid.subunidades?.length"
+              class="la tree-chevron"
+              [ngClass]="expandedUuids.has(unid.uuid) ? 'la-angle-down' : 'la-angle-right'">
+            </i>
+            <span class="nome-text">{{ unid.nome | uppercase }}</span>
+          </div>
+        </td>
+
+        <td class="text-center" [ngClass]="{'unidade-inativa': !unid.ativo}">
+          {{ formatarTipo(unid.tipo) }}
+        </td>
+
+        <td class="text-center" [ngClass]="{'unidade-inativa': !unid.ativo}">
+          {{ (unid.unidadeGerenciadoraNome || '---') | uppercase }}
+        </td>
+
+        <td class="text-center col-acoes-cell">
+          <div class="d-flex justify-content-center gap-2">
+            <a
+              [routerLink]="['/unidades/form', unid.uuid]"
+              class="btn btn-icon btn-light-primary btn-sm me-2"
+              style="color: #303030"
+              title="Editar unidade"
+              (click)="$event.stopPropagation()">
+              <i class="la la-edit fs-3"></i>
+            </a>
+
+            <button
+              *ngIf="unid.ativo"
+              type="button"
+              class="btn btn-icon btn-light-warning btn-sm me-2"
+              title="Inativar unidade"
+              (click)="$event.stopPropagation(); confirmarStatus(unid, false)">
+              <i class="la la-unlock fs-3"></i>
+            </button>
+
+            <button
+              *ngIf="!unid.ativo"
+              type="button"
+              class="btn btn-icon btn-light-success btn-sm me-2"
+              title="Ativar unidade"
+              (click)="$event.stopPropagation(); confirmarStatus(unid, true)">
+              <i class="la la-unlock-alt fs-3"></i>
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-icon btn-light-danger btn-sm"
+              style="color: #d63e3e"
+              title="Excluir unidade"
+              (click)="$event.stopPropagation(); confirmarExclusao(unid.uuid, unid.nome)">
+              <i class="la la-trash fs-3"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+
+      <ng-container *ngIf="unid.subunidades?.length && expandedUuids.has(unid.uuid)">
+        <ng-container *ngTemplateOutlet="linhasUnidades; context: { lista: unid.subunidades, nivel: nivel + 1 }"></ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+
+  <div class="table-responsive" *ngIf="!isCarregando">
+    <table class="table table-hover align-middle mb-0 unidade-layout-table">
+      <thead>
+      <tr>
+        <th class="text-center col-status-header">Ativo</th>
+        <th class="col-nome-header">Nome</th>
+        <th class="text-center col-tipo-header">Tipo</th>
+        <th class="text-center">Gerenciadora</th>
+        <th class="text-center col-acoes-header">Ações</th>
+      </tr>
+      </thead>
+
+      <tbody *ngIf="unidadesRaiz.length > 0">
+      <ng-container *ngTemplateOutlet="linhasUnidades; context: { lista: unidadesRaiz, nivel: 0 }"></ng-container>
+      </tbody>
+
+      <tbody *ngIf="unidadesRaiz.length === 0">
+      <tr>
+        <td colspan="5" class="empty-state">
+          <i class="la la-building empty-state-icon"></i>
+          <div class="empty-state-title">Nenhuma unidade encontrada.</div>
+          <div class="empty-state-text">Verifique se existem registros cadastrados.</div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>

@@ -1,7 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {EstruturaCurricularService} from "app-core";
+import {EstruturaCurricularService, RespostaPaginada} from "app-core";
 import Swal from 'sweetalert2';
 import { EstruturaCurricularDTO } from 'app-core';
+
+interface MetadadosPaginacao {
+  paginaAtual: number;
+  tamanho: number;
+  totalElementos: number;
+  totalPaginas: number;
+}
 
 @Component({
   selector: 'app-visualizar-estrutura-curricular',
@@ -11,6 +18,13 @@ import { EstruturaCurricularDTO } from 'app-core';
 export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   listaEstruturas: EstruturaCurricularDTO[] = [];
+  public loading: boolean = false;
+  public meta: MetadadosPaginacao = {
+    paginaAtual: 0,
+    tamanho: 15,
+    totalElementos: 0,
+    totalPaginas: 0
+  };
 
   constructor(
     private service: EstruturaCurricularService,
@@ -20,18 +34,28 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
     this.carregarEstruturas();
   }
 
-  carregarEstruturas() {
-    this.service.findAll().subscribe({
-      next: (res) => {
-        this.listaEstruturas = res;
+  public carregarEstruturas(): void {
+    this.loading = true;
+    this.service.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+      next: (res: RespostaPaginada<EstruturaCurricularDTO>) => {
+        this.listaEstruturas = res.conteudo || [];
+        this.meta = res.meta;
+        this.loading = false;
       },
       error: (err) => {
+        this.loading = false;
         console.error(err);
+        void Swal.fire('Erro', 'Não foi possível carregar as Estruturas Curriculares.', 'error');
       }
     });
   }
+  public aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
+    this.meta.paginaAtual = evento.pagina;
+    this.meta.tamanho = evento.tamanho;
+    this.carregarEstruturas();
+  }
 
-  onDelete(uuid: string, nome: string) {
+  public onDelete(uuid: string, nome: string): void {
     void Swal.fire({
       title: 'Tem certeza?',
       text: `Deseja realmente excluir a estrutura "${nome}"?`,
@@ -46,13 +70,15 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
       }
     }).then((result: any) => {
       if (result.isConfirmed) {
+        this.loading = true;
         this.service.delete(uuid).subscribe({
           next: () => {
+            this.loading = false;
             void Swal.fire('Sucesso', 'Estrutura Curricular excluída com sucesso!', 'success');
             this.carregarEstruturas();
           },
           error: (_err) => {
-            console.error();
+            this.loading = false;
             void Swal.fire('Erro', 'Não foi possível excluir a Estrutura Curricular. Verifique se há vínculos ativos.', 'error');
           }
         });

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SubareaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
+import { SubareaConhecimentoService, MetadadosPaginacao, SubareaConhecimentoDTO } from "app-core";
 import Swal from "sweetalert2";
 
 @Component({
@@ -10,6 +10,13 @@ import Swal from "sweetalert2";
 export class VisualizarSubareaConhecimentoComponent implements OnInit {
   subAreas: SubareaConhecimentoDTO[] = [];
 
+  meta: MetadadosPaginacao = {
+    paginaAtual: 0,
+    tamanho: 15,
+    totalElementos: 0,
+    totalPaginas: 0
+  };
+
   constructor(private subareaService: SubareaConhecimentoService) {}
 
   ngOnInit(): void {
@@ -17,15 +24,21 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
   }
 
   carregarSubAreas(): void {
-    this.subareaService.listarTodos().subscribe({
+    this.subareaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
       next: (res) => {
-        this.subAreas = res;
+        this.subAreas = res.conteudo;
+        this.meta = res.meta;
       },
       error: (err) => {
         console.error(err);
         this.notificarErro('Não foi possível carregar a lista de subáreas.');
       }
     });
+  }
+  aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
+    this.meta.paginaAtual = evento.pagina;
+    this.meta.tamanho = evento.tamanho;
+    this.carregarSubAreas();
   }
 
   onDelete(uuid: string): void {

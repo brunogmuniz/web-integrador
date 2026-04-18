@@ -26,6 +26,7 @@ export class UsuarioService {
     }
   }
 
+
   login(email: string, senha: string): Observable<ResponseDto> {
     return this.http.post<ResponseDto>(`${this.apiUrl}/auth/login`, { email, senha });
   }

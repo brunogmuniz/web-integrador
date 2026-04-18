@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AreaConhecimentoDTO } from "app-core";
+import { AreaConhecimentoDTO, RespostaPaginada } from "app-core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AreaConhecimentoService } from "app-core";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -55,18 +55,24 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
   }
 
   loadAreas(): void {
-    this.areaService.listarTodos().subscribe({
-      next: (data) => this.areas = data,
-      error: (err) => console.error(err)
+    this.areaService.findAll(0, 100).subscribe({
+      next: (res: RespostaPaginada<AreaConhecimentoDTO>) => {
+        this.areas = Array.isArray(res?.conteudo) ? res.conteudo : [];
+      },
+      error: (err: any) => {
+        console.error('Falha ao carregar as áreas de conhecimento no formulário:', err);
+      }
     });
   }
 
   carregarArea(uuid: string): void {
     this.areaService.buscarPorId(uuid).subscribe({
-      next: (area) => {
+      next: (area: AreaConhecimentoDTO) => {
         this.areaForm.patchValue(area);
       },
-      error: (err) => console.error(err)
+      error: (err: Error) => {
+        console.error(`Falha ao carregar dados da área ${uuid} para edição:`, err);
+      }
     });
   }
 
@@ -86,7 +92,10 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
           this.exibirSucesso('Atualizada!');
           void this.router.navigate(['/area/visualizar']);
         },
-        error: () => this.exibirErro('Não foi possível atualizar a área.')
+        error: (err: Error) => {
+          console.error('Falha ao atualizar área de conhecimento:', err);
+          this.exibirErro('Não foi possível atualizar a área.');
+        }
       });
     } else {
       this.areaService.create(areaDto).subscribe({
@@ -95,11 +104,13 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
           this.areaForm.reset();
           this.loadAreas();
         },
-        error: () => this.exibirErro('Não foi possível cadastrar a área.')
+        error: (err: Error) => {
+          console.error('Falha ao cadastrar nova área de conhecimento:', err);
+          this.exibirErro('Não foi possível cadastrar a área.');
+        }
       });
     }
   }
-
 
   private exibirSucesso(titulo: string) {
     void Swal.fire({

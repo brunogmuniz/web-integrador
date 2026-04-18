@@ -1,27 +1,107 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+.header-custom {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+  padding: 0 25px;
+  background-color: #f8f8f8;
+  height: 60px;
+  width: 100%;
+  position: relative;
 
-*{
-  font-family: "Barlow", sans-serif;
+  &__left {
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  &__center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .title-ensino {
+    color: #00bfa5 !important;
+  }
+
+  .title-dev {
+    color: #ff4081 !important;
+  }
 }
 
-.font-space{
-  padding-left: 15px !important;
-}
-.kt-header {
-  background: #f8f8f8;
+.user-menu-container {
+  position: relative;
 }
 
-.kt-header__topbar .kt-header__topbar-item.show .kt-header__topbar-icon, .kt-header__topbar .kt-header__topbar-item:hover .kt-header__topbar-icon {
-  background-color: #fff;
+.user-menu-trigger {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 10px;
+  background: #eef2f5;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #e4e9ef;
+  }
+
+  .user-badge {
+    background: #c9f7f5;
+    color: #1bc5bd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+
+  .user-name {
+    color: #3f4254;
+    font-weight: 500;
+  }
 }
 
-.kt-header__topbar .kt-header__topbar-item .kt-header__topbar-icon i {
-  color: #9a999f;
-}
+.dropdown-menu-custom {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background: white;
+  box-shadow: 0px 0px 15px 1px rgba(113, 106, 202, 0.2);
+  border-radius: 4px;
+  min-width: 160px;
+  z-index: 99;
 
-.kt-header__topbar-wrapper {
-  -webkit-box-align: center !important;
-  align-items: center !important;
-  -webkit-box-pack: center;
-  justify-content: center;
+  &__body {
+    padding: 10px;
+  }
+
+  .btn-logout {
+    width: 100%;
+    text-align: center;
+    background: #ffe2e5;
+    color: #f64e60;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: darken(#ffe2e5, 5%);
+    }
+  }
 }

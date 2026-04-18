@@ -1,14 +1,14 @@
 <div class="input-container">
+  <label class="input-label">
+    {{ label }}
+  </label>
+
   <input
     class="form-input"
     [type]="type"
     [formControl]="control"
     placeholder=" "
   />
-
-  <label class="input-label">
-    {{ label }}
-  </label>
 
   <div class="support-text" *ngIf="supportText">
     {{ supportText }}

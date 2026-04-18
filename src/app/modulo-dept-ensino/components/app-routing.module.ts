@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {PrincipalComponent} from "./principal/principal.component";
 import {LayoutComponent} from "./layout/layout.component";
-import {authGuard, cadastroCompletoGuard} from "app-core";
+import {authGuard, cadastroCompletoGuard, comPermissaoUnidade, ensinoGuard, permissaoUnidadeGuard} from "app-core";
 import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
 import {
   VisualizarDocenteComponent
@@ -53,20 +53,29 @@ import {AnaliseDasMediasComponent} from "./principal/analise-das-medias/analise-
 import {
   VisualizarAnaliseDasMediasComponent
 } from "./principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component";
+import {LandingPageComponent} from "./principal/landing-page/landing-page.component";
+import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.component";
+import {DocentesComponent} from "./importacoes/docentes/docentes.component";
+import {CursosComponent} from "./importacoes/cursos/cursos.component";
+import {ImportacoesComponent} from "./importacoes/importacoes.component";
 
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ensinoGuard]
   },
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, ensinoGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
+        component: LandingPageComponent
+      },
+      {
+        path: 'gerenciamento-ensino',
         component: PrincipalComponent,
         children: [
           { path: 'media', component: AnaliseDasMediasComponent },
@@ -96,6 +105,24 @@ const routes: Routes = [
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
         ]
       },
+
+      {
+        path: 'importar',
+        component: ImportacoesComponent,
+        canActivate: [permissaoUnidadeGuard],
+        data: comPermissaoUnidade({
+          permissoes: ['DIRECAO'],
+          tiposUnidade: ['DIRECAO'],
+          papeis: ['RESPONSAVEL', 'RESPONSAVEL_ADJUNTO']
+        }),
+        children: [
+          { path: '', redirectTo: 'docentes', pathMatch: 'full' },
+          { path: 'docentes', component: DocentesComponent },
+          { path: 'disciplinas', component: DisciplinasComponent },
+          { path: 'cursos', component: CursosComponent }
+        ]
+      },
+
       {
         path: 'sub-area',
         component: SubareaConhecimentoComponent,

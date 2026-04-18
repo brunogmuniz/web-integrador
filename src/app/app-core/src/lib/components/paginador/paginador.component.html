@@ -1,0 +1,34 @@
+<div class="d-flex justify-content-between align-items-center w-100">
+
+  <div>
+    <div *ngIf="seletorQuantidade" class="pagination-flex kt-padding-b-5">
+      <span class="pagination-label font-weight-bold">Itens por página</span>
+      <select [ngModel]="meta.tamanho"
+              (change)="mudaMax($event)"
+              class="form-control kt-font-brand"
+              style="width: 80px;">
+        <option *ngFor="let op of opcoesTamanho" [value]="op">{{ op }}</option>
+      </select>
+      <span class="pagination-label">
+         Mostrando {{ meta.tamanho }} de {{ meta.totalElementos }} registos
+      </span>
+    </div>
+  </div>
+
+  <div class="pagination-container d-flex align-items-center">
+
+    <button (click)="goToFirst()" [disabled]="meta.paginaAtual <= 0"><<</button>
+    <button (click)="goToPrevious()" [disabled]="meta.paginaAtual <= 0"><</button>
+
+    <button *ngFor="let page of visiblePages"
+            (click)="changePage(page)"
+            [class.active]="page === meta.paginaAtual">
+      {{ page + 1 }}
+    </button>
+
+    <button (click)="goToNext()" [disabled]="meta.paginaAtual >= meta.totalPaginas - 1">></button>
+    <button (click)="goToLast()" [disabled]="meta.paginaAtual >= meta.totalPaginas - 1">>></button>
+
+  </div>
+
+</div>

@@ -6,9 +6,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from "angular-oauth2-oidc";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AcessoUnidadeService, AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, montarUrlPortal, SharedCookieOAuthStorage, API_URL } from 'app-core';
 import { environment } from "../../../environments/environment";
-
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, API_URL } from 'app-core'; 
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { LayoutModule } from "./layout/layout.module";
@@ -16,7 +15,7 @@ import { PrincipalComponent } from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  
+
   issuer: environment.issuer,
   clientId: environment.clientId,
 
@@ -64,13 +63,13 @@ const authConfig: AuthConfig = {
     },
     {
       provide: OAuthStorage,
-      useValue: localStorage
+      useClass: SharedCookieOAuthStorage
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService) =>
-        initializeAppFactory(oauthService, config, loginService),
-      deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
+      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService, acessoUnidadeService: AcessoUnidadeService) =>
+        initializeAppFactory(oauthService, config, loginService, acessoUnidadeService),
+      deps: [OAuthService, APP_AUTH_CONFIG, LoginService, AcessoUnidadeService],
       multi: true
     },
     provideNgxMask({

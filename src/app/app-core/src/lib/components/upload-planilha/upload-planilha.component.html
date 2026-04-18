@@ -1,0 +1,30 @@
+<div class="upload-container">
+  <div class="form-group">
+    <label>Arquivo CSV <span class="text-danger">*</span></label>
+    <div class="custom-file">
+      <input
+        #fileInput
+        type="file"
+        class="custom-file-input"
+        id="csvUpload"
+        accept=".csv"
+        (change)="onFileSelected($event)"
+        [disabled]="isLoading">
+      <label class="custom-file-label" for="csvUpload">
+        {{ selectedFile ? selectedFile.name : 'Escolher arquivo...' }}
+      </label>
+    </div>
+    <span class="form-text text-muted">{{ subtitulo }}</span>
+  </div>
+
+  <div class="kt-form__actions text-right mt-4">
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="onSubmit()"
+      [disabled]="!selectedFile || isLoading || disableSubmit">
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
+      {{ isLoading ? 'Processando...' : textoBotao }}
+    </button>
+  </div>
+</div>

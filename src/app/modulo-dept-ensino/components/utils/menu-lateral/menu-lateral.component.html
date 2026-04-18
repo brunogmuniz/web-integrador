@@ -1,254 +1,237 @@
-<button class="kt-aside-close" id="kt_aside_close_btn" style="background-color: #377838;">
-  <i class="la la-close text-white"></i>
-</button>
+<div class="sidebar-container bg-navy-custom" [class.sidebar-minimized]="isSidebarMinimized">
 
-<div class="kt-aside kt-aside--fixed kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop bg-navy-custom" id="kt_aside">
-
-  <div class="kt-aside__brand kt-grid__item bg-navy-custom" id="kt_aside_brand">
-    <div class="kt-aside__brand-logo">
-      <a routerLink="/" style="color: white; font-weight: bold;">
-        <img src="assets/img/brasao-ufsm-politecnico.png" style="width: 100%; max-width: 150px;">
+  <div class="sidebar-header bg-navy-custom">
+    <div class="sidebar-logo">
+      <a routerLink="/">
+        <img src="assets/img/brasao-ufsm-politecnico.png" alt="Brasão UFSM">
       </a>
     </div>
-    <div class="kt-aside__brand-tools">
-      <button class="kt-aside__brand-aside-toggler" id="kt_aside_toggler">
-        <span></span>
+    <div class="sidebar-toggler-wrapper">
+      <button class="toggler-button" aria-label="Alternar tamanho do menu lateral" (click)="toggleSidebarSize()">
+        <i class="la la-bars text-white"></i>
       </button>
     </div>
   </div>
 
-  <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid bg-navy-custom" id="kt_aside_menu_wrapper">
+  <div class="sidebar-menu-wrapper bg-navy-custom">
 
-    <div id="kt_aside_menu" class="kt-aside-menu bg-navy-custom" data-ktmenu-vertical="1" data-ktmenu-scroll="1">
-
-      <div class="sidebar-user-profile text-center mt-4 mb-4">
-        <div class="user-avatar mb-2 align-items-center">
-          <lib-image-profile></lib-image-profile>
-        </div>
-        <div class="user-info">
-          <h5 class="text-white font-weight-bold mb-0">
-            {{ nome ? nome : 'Admin' }}
-            <i class="fa fa-pencil-alt text-white-50" style="font-size: 0.8rem; cursor: pointer;"></i>
-          </h5>
-          <span class="d-block text-warning small font-weight-bold mt-1">
-                        {{ cargo ? cargo : 'Admin' }}
-                    </span>
-        </div>
+    <div class="sidebar-user-profile text-center mt-4 mb-4">
+      <div class="user-avatar mb-2 align-items-center">
+        <lib-image-profile></lib-image-profile>
       </div>
-
-      <ul class="kt-menu__nav">
-
-        <li class="kt-menu__section kt-menu__section--first">
-          <h4 class="kt-menu__section-text text-white-50" style="opacity: 1; font-size: 1rem; text-transform: uppercase;">
-            Principal
-          </h4>
-        </li>
-
-        <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'"
-            [routerLinkActiveOptions]="{ exact: true }">
-          <a class="kt-menu__link" routerLink="">
-            <i class="kt-menu__link-icon la la-home text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Página Inicial</span>
-          </a>
-        </li>
-
-        <li class="kt-menu__section">
-          <h4 class="kt-menu__section-text text-white-50" style="opacity: 1; font-size: 1rem; text-transform: uppercase;">
-            FERRAMENTAS
-          </h4>
-        </li>
-
-        <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'"
-            [routerLinkActiveOptions]="{ exact: true }">
-          <a class="kt-menu__link" routerLink="/media">
-            <i class="kt-menu__link-icon la la-area-chart text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Analise de Médias</span>
-          </a>
-        </li>
-
-
-        <li class="kt-menu__section">
-          <h4 class="kt-menu__section-text text-white-50" style="opacity: 1; font-size: 1rem; text-transform: uppercase;">
-            Gerenciamento
-          </h4>
-        </li>
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'area'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('area')">
-            <i class="kt-menu__link-icon la la-book text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Área de Conhecimento</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/area/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Ver Áreas</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/area/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Área</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'subarea'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('subarea')">
-            <i class="kt-menu__link-icon la la-bookmark text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Subárea Conhecimento</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/sub-area/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Ver Subáreas</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/sub-area/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Subárea</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'docente'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('docente')">
-            <i class="kt-menu__link-icon la la-user text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Docente</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/docente/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Listar Docentes</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/docente/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Docente</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'encargo'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('encargo')">
-            <i class="kt-menu__link-icon la la-tasks text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Encargos Docente</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/docente-encargos/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Listar Encargos</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/docente-encargos/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Encargo</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'disciplina'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('disciplina')">
-            <i class="kt-menu__link-icon la la-paperclip text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Disciplinas</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/disciplina/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Listar Disciplinas</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/disciplina/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Disciplinas</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="kt-menu__item kt-menu__item--submenu"
-            [class.kt-menu__item--open]="menuAberto === 'estrutura-curricular'"
-            [routerLinkActive]="'kt-menu__item--open'">
-
-          <a href="javascript:;" class="kt-menu__link kt-menu__toggle" (click)="toggleMenu('estrutura-curricular')">
-            <i class="kt-menu__link-icon la la-sitemap text-white" style="font-size: x-large;"></i>
-            <span class="kt-menu__link-text text-white">Estrutura Curricular</span>
-            <i class="kt-menu__ver-arrow la la-angle-right text-white"></i>
-          </a>
-
-          <div class="kt-menu__submenu">
-            <span class="kt-menu__arrow"></span>
-            <ul class="kt-menu__subnav">
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/estrutura-curricular/visualizar" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Listar Estruturas</span>
-                </a>
-              </li>
-              <li class="kt-menu__item" [routerLinkActive]="'kt-menu__item--active'">
-                <a routerLink="/estrutura-curricular/form/novo" class="kt-menu__link">
-                  <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
-                  <span class="kt-menu__link-text text-white">Cadastrar Estrutura</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-
-
-
-      </ul>
+      <div class="user-info">
+        <h5 class="text-white font-weight-bold mb-0">
+          {{ nome }}
+          <i class="fa fa-pencil-alt text-white-50 icon-edit" aria-hidden="true"></i>
+        </h5>
+        <span class="d-block text-warning small font-weight-bold mt-1">
+          {{ cargo }}
+        </span>
+      </div>
     </div>
+
+    <ul class="menu-nav">
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">Principal</h4>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="">
+          <i class="menu-link-icon la la-home"></i>
+          <span class="menu-link-text">Página Inicial</span>
+        </a>
+      </li>
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">FERRAMENTAS</h4>
+      </li>
+
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="/analise/media/">
+          <i class="menu-link-icon la la-area-chart"></i>
+          <span class="menu-link-text">Análise de Médias</span>
+        </a>
+      </li>
+
+      <li class="menu-section">
+        <h4 class="menu-section-text">Gerenciamento</h4>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('area')">
+        <a class="menu-link" (click)="toggleMenu('area')" tabindex="0" aria-label="Menu Área de Conhecimento">
+          <i class="menu-link-icon la la-book"></i>
+          <span class="menu-link-text">Área de Conhecimento</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/area/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Ver Áreas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/area/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Área</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('subarea')">
+        <a class="menu-link" (click)="toggleMenu('subarea')" tabindex="0" aria-label="Menu Subárea Conhecimento">
+          <i class="menu-link-icon la la-bookmark"></i>
+          <span class="menu-link-text">Subárea Conhecimento</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/sub-area/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Ver Subáreas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/sub-area/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Subárea</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('docente')">
+        <a class="menu-link" (click)="toggleMenu('docente')" tabindex="0" aria-label="Menu Docente">
+          <i class="menu-link-icon la la-user"></i>
+          <span class="menu-link-text">Docente</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/docente/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Docentes</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/docente/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Docente</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('encargo')">
+        <a class="menu-link" (click)="toggleMenu('encargo')" tabindex="0" aria-label="Menu Encargos Docente">
+          <i class="menu-link-icon la la-tasks"></i>
+          <span class="menu-link-text">Encargos Docente</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/docente-encargos/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Encargos</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/docente-encargos/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Encargo</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('disciplina')">
+        <a class="menu-link" (click)="toggleMenu('disciplina')" tabindex="0" aria-label="Menu Disciplinas">
+          <i class="menu-link-icon la la-paperclip"></i>
+          <span class="menu-link-text">Disciplinas</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/disciplina/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Disciplinas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/disciplina/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Disciplinas</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('estrutura-curricular')">
+        <a class="menu-link" (click)="toggleMenu('estrutura-curricular')" tabindex="0" aria-label="Menu Estrutura Curricular">
+          <i class="menu-link-icon la la-sitemap"></i>
+          <span class="menu-link-text">Estrutura Curricular</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/estrutura-curricular/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Estruturas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/estrutura-curricular/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Estrutura</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li *ngIf="podeImportarDados" class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('importar')">
+        <a class="menu-link" (click)="toggleMenu('importar')" tabindex="0" aria-label="Menu Importar Dados">
+          <i class="menu-link-icon la la-cloud-upload"></i>
+          <span class="menu-link-text">Importar Dados</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/importar/docentes" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Docentes</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/importar/disciplinas" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Disciplinas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/importar/cursos" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cursos</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+    </ul>
   </div>
 </div>
