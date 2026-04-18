@@ -15,6 +15,7 @@ stages:
    - config
    - build
    - merge
+   - deploy
 
 config_main:
   stage: config
@@ -104,7 +105,7 @@ build_root:
   extends: .default_build
   variables:
     MODULE: modulo-root
-    BASE_HREF: /      
+    BASE_HREF: /        
 
 assemble_image:
   stage: merge
@@ -132,3 +133,19 @@ assemble_image:
     - docker push "$IMAGE"
   tags:
     - bolicheiro
+    
+deploy_review:
+  stage: deploy
+  variables:
+    SERVICE_REQUESTED: CLIENT 
+    COMMAND: deploy
+    BRANCH_NAME: $CI_COMMIT_REF_NAME
+    DOCKER_LOGIN: $DOCKER_LOGIN        
+    DOCKER_PASSWORD: $DOCKER_PASSWORD
+  trigger:
+    project: br.ufsm.lumac1/bolicheiro/utils/env-deployer-main
+    strategy: depend
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production"'
+      when: on_success
+    - when: never
