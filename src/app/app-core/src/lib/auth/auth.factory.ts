@@ -3,6 +3,7 @@ import { LoginService } from '../services/login.service';
 import { AcessoUnidadeService } from '../services/acesso-unidade.service';
 import { firstValueFrom, of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export function initializeAppFactory(
   oauthService: OAuthService,
@@ -16,16 +17,24 @@ export function initializeAppFactory(
     try {
       const parametrosUrl = new URLSearchParams(window.location.search);
       const isCallbackAutenticacao = parametrosUrl.has('code') || parametrosUrl.has('state');
+      await oauthService.loadDiscoveryDocumentAndTryLogin();
 
-      const hasToken = await oauthService.loadDiscoveryDocumentAndTryLogin();
+      if (isCallbackAutenticacao) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
 
-      if (hasToken) {
+      const possuiAcessoValido = oauthService.hasValidAccessToken();
+
+      if (possuiAcessoValido) {
         const usuarioSincronizado = await firstValueFrom(
           loginService.sincronizarUsuarioComBanco().pipe(
             timeout(5000),
             catchError((error: unknown) => {
-              const erroFormatado = error instanceof Error ? error.message : String(error);
-              console.error('[AuthFactory] Sincronização bloqueada por falha na API ou conexão:', erroFormatado);
+              if (error instanceof HttpErrorResponse && error.status === 401) {
+                console.warn('[AuthFactory] Sincronização cancelada: Token rejeitado pela API (401 Unauthorized). O usuário será redirecionado em breve.');
+                return of(null);
+              }
+              console.error('[AuthFactory] Sincronização bloqueada por falha interna ou de rede:', error);
               return of(null);
             })
           )
@@ -39,8 +48,7 @@ export function initializeAppFactory(
               )
             );
           } catch (error: unknown) {
-            const erroAcessoFormatado = error instanceof Error ? error.message : String(error);
-            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades:', erroAcessoFormatado);
+            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades:', error);
           }
 
           if (isCallbackAutenticacao) {
@@ -49,8 +57,7 @@ export function initializeAppFactory(
         }
       }
     } catch (error: unknown) {
-      const erroFatal = error instanceof Error ? error.message : String(error);
-      console.error('[AuthFactory] Colapso vital na orquestração com o Identity Provider:', erroFatal);
+      console.error('[AuthFactory] Colapso vital na orquestração com o Identity Provider:', error);
     }
   };
 }

@@ -15,7 +15,14 @@ export class SelecionarModuloComponent implements OnInit {
   constructor(private readonly loginService: LoginService) {}
 
   public ngOnInit(): void {
-    this.moduloSelecionado = this.modulos[0];
+    const acessosReais = this.loginService.obterPortaisAcessiveis();
+
+    if (acessosReais.length > 0) {
+      this.moduloSelecionado = acessosReais.includes('admin') ? 'admin' : acessosReais[0];
+    } else {
+      this.moduloSelecionado = null;
+    }
+
     this.carregando = false;
   }
 
@@ -27,14 +34,13 @@ export class SelecionarModuloComponent implements OnInit {
     }
 
     const acessosReais = this.loginService.obterPortaisAcessiveis();
-
     const possuiAcesso = acessosReais.includes(this.moduloSelecionado);
 
     if (possuiAcesso) {
       this.loginService.irParaPortal(this.moduloSelecionado);
     } else {
       this.erroPermissao = true;
-      console.warn(`Usuário tentou acessar ${this.moduloSelecionado} sem permissão no banco.`);
+      console.warn(`[Segurança] Tentativa de acesso bloqueada para o módulo: ${this.moduloSelecionado}`);
     }
   }
 

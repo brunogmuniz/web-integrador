@@ -104,33 +104,22 @@ export class PortalNavigationService {
     urlAtual: string
   ): void {
     const portaisAcessiveis = this.obterPortaisAcessiveis(usuario);
-    const destinoSalvoEhSeguro = destinoSalvo && this.isDestinoSeguro(destinoSalvo);
 
-    if (destinoSalvoEhSeguro && this.normalizarUrl(destinoSalvo!) === this.normalizarUrl(urlAtual)) {
-      this.limparDestinoSalvo();
+    if (portaisAcessiveis.length === 0) {
+      this.irParaSemPermissao();
       return;
     }
 
-    if (!portaisAcessiveis.length || portaisAcessiveis.length > 1) {
-      const destinoSelecao = `${this.obterUrlPortal('root')}selecionar-modulo`;
-      if (this.normalizarUrl(destinoSelecao) !== this.normalizarUrl(urlAtual)) {
-        this.redirecionarSeguro(destinoSelecao);
-      }
+    if (portaisAcessiveis.length === 1) {
+      this.irParaPortal(portaisAcessiveis[0]);
       return;
     }
 
-    const portalPreferido = this.obterPortalPorUrl(destinoSalvo);
-    const destino = destinoSalvoEhSeguro ? destinoSalvo! : this.salvarDestinoPortal(
-      usuario,
-      portalPreferido === 'desconhecido' ? portaisAcessiveis[0] : portalPreferido
-    );
+    const destinoSelecao = `${this.obterUrlPortal('root')}selecionar-modulo`;
 
-    if (this.normalizarUrl(destino) === this.normalizarUrl(urlAtual)) {
-      this.limparDestinoSalvo();
-      return;
+    if (this.normalizarUrl(destinoSelecao) !== this.normalizarUrl(urlAtual)) {
+      this.redirecionarSeguro(destinoSelecao);
     }
-
-    this.redirecionarSeguro(destino);
   }
 
   public obterPortalAtual(): PortalKeyOuDesconhecido {
