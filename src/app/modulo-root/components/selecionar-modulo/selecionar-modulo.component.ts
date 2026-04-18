@@ -7,35 +7,35 @@ import { LoginService, PortalKey } from 'app-core';
   styleUrls: ['./selecionar-modulo.component.scss']
 })
 export class SelecionarModuloComponent implements OnInit {
-  public modulos: PortalKey[] = [];
+  public modulos: PortalKey[] = ['admin', 'ensino'];
   public moduloSelecionado: PortalKey | null = null;
   public carregando = true;
+  public erroPermissao = false;
 
   constructor(private readonly loginService: LoginService) {}
 
   public ngOnInit(): void {
-    this.modulos = this.loginService.obterPortaisAcessiveis();
-
-    if (!this.modulos.length) {
-      this.loginService.irParaSemPermissao();
-      return;
-    }
-
-    if (this.modulos.length === 1) {
-      this.loginService.irParaPortal(this.modulos[0]);
-      return;
-    }
-
     this.moduloSelecionado = this.modulos[0];
     this.carregando = false;
   }
 
   public continuar(): void {
+    this.erroPermissao = false;
+
     if (!this.moduloSelecionado) {
       return;
     }
 
-    this.loginService.irParaPortal(this.moduloSelecionado);
+    const acessosReais = this.loginService.obterPortaisAcessiveis();
+
+    const possuiAcesso = acessosReais.includes(this.moduloSelecionado);
+
+    if (possuiAcesso) {
+      this.loginService.irParaPortal(this.moduloSelecionado);
+    } else {
+      this.erroPermissao = true;
+      console.warn(`Usuário tentou acessar ${this.moduloSelecionado} sem permissão no banco.`);
+    }
   }
 
   public formatarModulo(portal: PortalKey): string {
