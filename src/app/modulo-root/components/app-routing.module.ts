@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SelecionarModuloComponent } from './selecionar-modulo/selecionar-modulo.component';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
-import { authGuard, cadastroCompletoGuard } from "app-core";
+import { authGuard, cadastroCompletoGuard, selecionarModuloGuard } from "app-core";
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
   {
     path: 'selecionar-modulo',
     component: SelecionarModuloComponent,
-    canActivate: [authGuard, cadastroCompletoGuard]
+    canActivate: [authGuard, cadastroCompletoGuard, selecionarModuloGuard]
   },
   {
     path: '',

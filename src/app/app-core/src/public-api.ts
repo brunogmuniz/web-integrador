@@ -67,3 +67,4 @@ export * from './lib/guards/admin.guard';
 export * from './lib/guards/cadastro-completo.guard';
 export * from './lib/guards/ensino.guard';
 export * from './lib/guards/permissao-unidade.guard';
+export * from './lib/guards/selecionar-modulo.guard';
