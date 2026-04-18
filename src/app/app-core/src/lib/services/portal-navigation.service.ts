@@ -111,12 +111,7 @@ export class PortalNavigationService {
       return;
     }
 
-    if (!portaisAcessiveis.length) {
-      this.irParaSemPermissao();
-      return;
-    }
-
-    if (portaisAcessiveis.length > 1) {
+    if (!portaisAcessiveis.length || portaisAcessiveis.length > 1) {
       const destinoSelecao = `${this.obterUrlPortal('root')}selecionar-modulo`;
       if (this.normalizarUrl(destinoSelecao) !== this.normalizarUrl(urlAtual)) {
         this.redirecionarSeguro(destinoSelecao);
