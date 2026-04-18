@@ -22,8 +22,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    canActivate: [authGuard, cadastroCompletoGuard],
-    children: [],
+    pathMatch: 'full',
+    redirectTo: 'selecionar-modulo'
   }
 ];
 
