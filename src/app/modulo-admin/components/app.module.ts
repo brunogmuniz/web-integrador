@@ -15,12 +15,9 @@ import { PrincipalComponent } from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
-
   issuer: environment.issuer,
   clientId: environment.clientId,
-
-  redirectUri: window.location.origin + '/admin/',
-
+  redirectUri: montarUrlPortal('admin'),
   responseType: environment.responseType,
   scope: environment.scope,
   showDebugInformation: !environment.production,

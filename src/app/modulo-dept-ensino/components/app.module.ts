@@ -24,16 +24,15 @@ import {CursosComponent} from "./importacoes/cursos/cursos.component";
 import {ImportacoesComponent} from "./importacoes/importacoes.component";
 
 const authConfig: AuthConfig = {
-
   issuer: environment.issuer,
   clientId: environment.clientId,
-
-  redirectUri: window.location.origin + '/geral/',
-
+  redirectUri: montarUrlPortal('ensino'),
   responseType: environment.responseType,
   scope: environment.scope,
   showDebugInformation: !environment.production,
 };
+
+
 
 @NgModule({
   declarations: [
@@ -73,10 +72,6 @@ const authConfig: AuthConfig = {
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
-    },
-    {
-      provide: API_URL,
-      useValue: environment.apiUrl
     },
     {
       provide: OAuthStorage,

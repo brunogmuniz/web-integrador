@@ -23,12 +23,12 @@ import { SelecionarModuloComponent } from './selecionar-modulo/selecionar-modulo
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 
 const authConfig: AuthConfig = {
-  issuer: 'http://localhost:8081/realms/ufsm',
-  clientId: 'webClient',
+  issuer: environment.issuer,
+  clientId: environment.clientId,
   redirectUri: montarUrlPortal('root'),
-  responseType: 'code',
-  scope: 'openid profile email offline_access',
-  showDebugInformation: true,
+  responseType: environment.responseType,
+  scope: environment.scope,
+  showDebugInformation: !environment.production,
 };
 
 @NgModule({
