@@ -98,7 +98,13 @@ build_dept_ensino:
   extends: .default_build
   variables:
     MODULE: modulo-dept-ensino
-    BASE_HREF: /dept-ensino/    
+    BASE_HREF: /dept-ensino/
+
+build_root:
+  extends: .default_build
+  variables:
+    MODULE: modulo-root
+    BASE_HREF: /modulo-root/        
 
 assemble_image:
   stage: merge
@@ -116,10 +122,12 @@ assemble_image:
   needs:
     - build_admin
     - build_dept_ensino
+    - build_root
   script:
-    - mkdir -p modulo-admin modulo-dept-ensino
+    - mkdir -p modulo-admin modulo-dept-ensino modulo-root
     - cp -r dist/modulo-admin/* modulo-admin/
     - cp -r dist/modulo-dept-ensino/* modulo-dept-ensino/
+    - cp -r dist/modulo-root/* modulo-root/
     - docker build -t "$IMAGE" .
     - docker push "$IMAGE"
   tags:
