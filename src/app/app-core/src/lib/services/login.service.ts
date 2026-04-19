@@ -79,7 +79,10 @@ export class LoginService {
   }
 
   public logout(): void {
-    this.storage.removeItem(this.STORAGE_KEY);
+    this.storage.clear();
+    if (this.document.defaultView) {
+      this.document.defaultView.sessionStorage.clear();
+    }
     this.authzService.invalidarCacheDeRoles();
     this.userSubject.next(null);
     this.oauthService.logOut();
