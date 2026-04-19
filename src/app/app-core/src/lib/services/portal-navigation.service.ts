@@ -123,7 +123,13 @@ export class PortalNavigationService {
   }
 
   public obterPortalAtual(): PortalKeyOuDesconhecido {
-    return this.obterPortalPorPorta(this.document.location.port);
+    const location = this.document.location;
+
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+      return this.obterPortalPorPorta(location.port);
+    }
+
+    return this.obterPortalPorPath(location.pathname);
   }
 
   private resolverDestinoPortal(
@@ -173,7 +179,13 @@ export class PortalNavigationService {
   private obterPortalPorUrl(url: string | null): PortalKeyOuDesconhecido {
     if (!url) return 'desconhecido';
     try {
-      return this.obterPortalPorPorta(new URL(url).port);
+      const parsedUrl = new URL(url, this.document.location.origin);
+
+      if (parsedUrl.hostname === 'localhost' || parsedUrl.hostname === '127.0.0.1') {
+        return this.obterPortalPorPorta(parsedUrl.port);
+      }
+
+      return this.obterPortalPorPath(parsedUrl.pathname);
     } catch {
       return 'desconhecido';
     }
@@ -182,6 +194,18 @@ export class PortalNavigationService {
   private obterPortalPorPorta(porta: string): PortalKeyOuDesconhecido {
     const portal = Object.values(PORTAIS).find(item => item.port === porta);
     return portal?.key ?? 'desconhecido';
+  }
+
+  private obterPortalPorPath(pathname: string): PortalKeyOuDesconhecido {
+    const portaisValidos = Object.values(PORTAIS).filter(p => p.key !== 'root');
+
+    for (const portal of portaisValidos) {
+      if (pathname.startsWith(portal.path)) {
+        return portal.key;
+      }
+    }
+
+    return 'root';
   }
 
   private obterDestinoDoPortalSelecionado(

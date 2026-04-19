@@ -31,10 +31,10 @@ export function initializeAppFactory(
             timeout(5000),
             catchError((error: unknown) => {
               if (error instanceof HttpErrorResponse && error.status === 401) {
-                console.warn('[AuthFactory] Sincronização cancelada: Token rejeitado pela API (401 Unauthorized). O usuário será redirecionado em breve.');
-                return of(null);
+                console.warn('[AuthFactory] Sincronização cancelada: Token rejeitado pela API (401 Unauthorized). A sessão local será abatida.');
+              } else {
+                console.error('[AuthFactory] Sincronização bloqueada por falha interna ou de rede:', error);
               }
-              console.error('[AuthFactory] Sincronização bloqueada por falha interna ou de rede:', error);
               return of(null);
             })
           )
@@ -48,12 +48,14 @@ export function initializeAppFactory(
               )
             );
           } catch (error: unknown) {
-            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades:', error);
+            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades de acesso:', error);
           }
 
           if (isCallbackAutenticacao) {
             loginService.tratarPosLogin();
           }
+        } else {
+          loginService.logout();
         }
       }
     } catch (error: unknown) {

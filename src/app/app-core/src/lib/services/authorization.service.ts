@@ -61,6 +61,7 @@ export class AuthorizationService {
 
     const claims = this.oauthService.getIdentityClaims() as Record<string, unknown> | null;
     const realmAccess = claims?.['realm_access'] as { roles?: string[] } | undefined;
+
     for (const role of realmAccess?.roles ?? []) {
       this.adicionarRolePadronizada(roles, role);
     }
@@ -86,15 +87,32 @@ export class AuthorizationService {
     try {
       const payload = token.split('.')[1];
       if (!payload) {
-        return [];
+        throw new Error('Formato estrutural do Token JWT encontra-se desconfigurado, sem matriz válida de dados.');
       }
 
-      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-      const json = atob(base64);
-      const claims = JSON.parse(json) as { realm_access?: { roles?: string[] } };
+      let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const diferencaMatematicaPadding = base64.length % 4;
+
+      if (diferencaMatematicaPadding > 0) {
+        if (diferencaMatematicaPadding === 1) {
+          throw new Error('A cadeia de bytes de Base64Url está em tamanho corrompido, impossibilitando compensação algorítmica e conversão no navegador.');
+        }
+        base64 += '='.repeat(4 - diferencaMatematicaPadding);
+      }
+
+      const hashBrutoTransformado = atob(base64);
+      const jsonUtf8Legivel = decodeURIComponent(
+        hashBrutoTransformado.split('').map(caractere =>
+          '%' + ('00' + caractere.charCodeAt(0).toString(16)).slice(-2)
+        ).join('')
+      );
+
+      const claims = JSON.parse(jsonUtf8Legivel) as { realm_access?: { roles?: string[] } };
       return claims.realm_access?.roles ?? [];
+
     } catch (error) {
-      console.error('[AuthorizationService] Erro crítico ao decodificar roles do JWT. Token possivelmente corrompido.', error);
+      const mensagemErroReal = error instanceof Error ? error.message : 'Exceção não catalogada.';
+      console.error(`[AuthorizationService] Quebra da barreira de autenticação por falha vital ao desmontar estrutura Base64Url do token em produção. Evidência técnica real do processo interceptado: ${mensagemErroReal}`, error);
       return [];
     }
   }

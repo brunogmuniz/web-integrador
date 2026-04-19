@@ -12,15 +12,17 @@ export class SharedCookieOAuthStorage implements OAuthStorage {
   }
 
   removeItem(key: string): void {
-    this.document.cookie = `${encodeURIComponent(key)}=; Max-Age=0; path=/; SameSite=Lax`;
+    const delimitadorSeguranca = this.document.location.protocol === 'https:' ? '; Secure' : '';
+    this.document.cookie = `${encodeURIComponent(key)}=; Max-Age=0; path=/; SameSite=Lax${delimitadorSeguranca}`;
   }
 
   setItem(key: string, data: string): void {
+    const delimitadorSeguranca = this.document.location.protocol === 'https:' ? '; Secure' : '';
     this.document.cookie = [
       `${encodeURIComponent(key)}=${encodeURIComponent(data)}`,
       'path=/',
       'SameSite=Lax'
-    ].join('; ');
+    ].join('; ') + delimitadorSeguranca;
   }
 
   private readCookie(key: string): string | null {
