@@ -18,6 +18,7 @@ export class LoginService {
   private readonly STORAGE_KEY = 'usuario_logado';
   private readonly baseUrl: string;
   private userSubject = new BehaviorSubject<Usuario | null>(this.storage.getItem<Usuario>(this.STORAGE_KEY));
+  public user$ = this.userSubject.asObservable();
 
   constructor(
     private readonly oauthService: OAuthService,
