@@ -101,9 +101,9 @@ export class LoginService {
 
     this.authzService.invalidarCacheDeRoles();
     this.userSubject.next(null);
+    this.oauthService.postLogoutRedirectUri = this.document.location.origin;
     this.oauthService.logOut();
   }
-
 
   public irParaPortal(portal: PortalKey): void {
     this.portalNavService.irParaPortal(portal);
