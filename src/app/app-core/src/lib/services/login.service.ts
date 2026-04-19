@@ -80,9 +80,25 @@ export class LoginService {
 
   public logout(): void {
     this.storage.clear();
-    if (this.document.defaultView) {
-      this.document.defaultView.sessionStorage.clear();
+
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
+    } catch (e) {
+      console.warn('[LoginService] Falha ao limpar storage nativo', e);
     }
+
+    const cookies = this.document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const nomeCookie = cookies[i].split('=')[0].trim();
+      
+      const cookiesProtegidos = ['id_token', 'access_token', 'nonce', 'session_state'];
+      
+      if (!cookiesProtegidos.includes(nomeCookie)) {
+        this.document.cookie = `${nomeCookie}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; SameSite=Lax`;
+      }
+    }
+
     this.authzService.invalidarCacheDeRoles();
     this.userSubject.next(null);
     this.oauthService.logOut();
