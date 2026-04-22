@@ -31,7 +31,7 @@
           <label class="pdsa-label">Tipo <span class="text-danger">*</span></label>
           <select class="form-control pdsa-control kt-selectpicker" formControlName="tipo">
             <option [ngValue]="null" disabled>Selecione um tipo...</option>
-            <option *ngFor="let tipo of tiposDeUnidade" [value]="tipo">{{ tipo }}</option>
+            <option *ngFor="let tipo of tiposDeUnidade" [value]="tipo">{{ getTipoLabel(tipo) }}</option>
           </select>
           <span class="form-text text-danger" *ngIf="formulario.get('tipo')?.touched && formulario.get('tipo')?.errors?.['required']">O tipo é obrigatório.</span>
         </div>

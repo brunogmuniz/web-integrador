@@ -12,6 +12,8 @@ import { UnidadeService } from '../../../../services/unidade.service';
 })
 export class VisualizarUnidadeComponent implements OnInit {
   public unidadesRaiz: UnidadeTreeNode[] = [];
+  private unidadesArvoreOriginal: UnidadeTreeNode[] = [];
+
   public errorMessage = '';
   public isCarregando = true;
   public expandedUuids: Set<string> = new Set();
@@ -29,7 +31,9 @@ export class VisualizarUnidadeComponent implements OnInit {
 
     this.unidadeService.listar().subscribe({
       next: (unidadesPlanas: UnidadeDTO[]) => {
-        this.unidadesRaiz = this.montarArvore(unidadesPlanas);
+        const arvoreMontada = this.montarArvore(unidadesPlanas);
+        this.unidadesArvoreOriginal = arvoreMontada;
+        this.unidadesRaiz = arvoreMontada;
         this.expandedUuids = new Set();
         this.isCarregando = false;
       },
@@ -38,6 +42,47 @@ export class VisualizarUnidadeComponent implements OnInit {
         this.isCarregando = false;
       }
     });
+  }
+
+  public onBuscarUnidade(event: Event): void {
+    const termoBusca = (event.target as HTMLInputElement).value;
+    this.filtrarArvoreVisual(termoBusca);
+  }
+
+  private filtrarArvoreVisual(termo: string): void {
+    const termoLimpo = termo.trim().toLowerCase();
+
+    if (!termoLimpo) {
+      this.unidadesRaiz = [...this.unidadesArvoreOriginal];
+      return;
+    }
+
+    this.expandedUuids = new Set();
+    this.unidadesRaiz = this.filtrarNodos(this.unidadesArvoreOriginal, termoLimpo);
+  }
+
+  private filtrarNodos(nodos: UnidadeTreeNode[], termo: string): UnidadeTreeNode[] {
+    return nodos.map(nodo => {
+      const nomeCorresponde = nodo.nome.toLowerCase().includes(termo);
+      const siglaCorresponde = nodo.sigla ? nodo.sigla.toLowerCase().includes(termo) : false;
+      const nodoCorresponde = nomeCorresponde || siglaCorresponde;
+
+      const subunidadesFiltradas = this.filtrarNodos(nodo.subunidades || [], termo);
+      const possuiFilhosCorrespondentes = subunidadesFiltradas.length > 0;
+
+      if (nodoCorresponde || possuiFilhosCorrespondentes) {
+        if (possuiFilhosCorrespondentes) {
+          this.expandedUuids.add(nodo.uuid);
+        }
+
+        return {
+          ...nodo,
+          subunidades: nodoCorresponde ? nodo.subunidades : subunidadesFiltradas
+        };
+      }
+
+      return null;
+    }).filter((nodo): nodo is UnidadeTreeNode => nodo !== null);
   }
 
   public alternarExpansao(unidade: UnidadeTreeNode): void {
