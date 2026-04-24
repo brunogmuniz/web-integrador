@@ -11,7 +11,17 @@ import { TiposUnidade, UnidadeDTO, UnidadeFormDTO } from '../../../../dto/Unidad
 })
 export class CadastrarUnidadeComponent implements OnInit {
   public formulario: FormGroup;
-  public tiposDeUnidade = Object.values(TiposUnidade);
+  public tiposDeUnidade = Object.values(TiposUnidade) as TiposUnidade[];
+
+  private readonly tiposUnidadeLabel: Record<TiposUnidade, string> = {
+    [TiposUnidade.DIRECAO]: 'Direção',
+    [TiposUnidade.COMISSAO]: 'Comissão',
+    [TiposUnidade.DEPARTAMENTO]: 'Departamento',
+    [TiposUnidade.SETOR]: 'Setor',
+    [TiposUnidade.LABORATORIO]: 'Laboratório',
+    [TiposUnidade.CURSO]: 'Curso'
+  };
+
   public unidadesPai: UnidadeDTO[] = [];
   public uuidEdicao: string | null = null;
   public isSubmetendo: boolean = false;
@@ -39,6 +49,10 @@ export class CadastrarUnidadeComponent implements OnInit {
 
   public get unidadesPaiAtivas(): UnidadeDTO[] {
     return this.unidadesPai.filter(unidade => unidade.ativo);
+  }
+
+  public getTipoLabel(tipo: TiposUnidade): string {
+    return this.tiposUnidadeLabel[tipo] || String(tipo);
   }
 
   private carregarUnidadesPai(): void {
