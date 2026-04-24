@@ -25,7 +25,8 @@
           <div class="form-group mb-0">
             <app-upload-planilha
               [isLoading]="isUploading"
-              subtitulo="Selecione a planilha no formato .CSV"
+              subtitulo="Selecione a planilha no formato .XLS"
+              extensaoArquivo="xls"
               textoBotao="Importar"
               (fileSubmit)="processarImportacao($event)"
             >

@@ -44,7 +44,8 @@
             <app-upload-planilha
               [isLoading]="isUploading"
               [disableSubmit]="!subareaId"
-              subtitulo="Selecione a planilha no formato .CSV"
+              subtitulo="Selecione a planilha no formato .XLS"
+              extensaoArquivo="xls"
               textoBotao="Importar"
               (fileSubmit)="processarImportacao($event)"
             >
