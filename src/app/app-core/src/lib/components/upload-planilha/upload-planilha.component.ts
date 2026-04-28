@@ -8,7 +8,8 @@ import Swal from 'sweetalert2';
 })
 export class UploadPlanilhaComponent {
   @Input() titulo: string = 'Importar Arquivo';
-  @Input() subtitulo: string = 'Selecione a planilha no formato .CSV';
+  @Input() subtitulo: string = 'Selecione a planilha no formato .XLS';
+  @Input() extensaoArquivo: string = 'xls';
   @Input() textoBotao: string = 'Importar';
   @Input() isLoading: boolean = false;
   @Input() disableSubmit: boolean = false;
@@ -24,12 +25,15 @@ export class UploadPlanilhaComponent {
 
     if (files && files.length > 0) {
       const file = files[0];
+      const extensaoEsperada = this.extensaoArquivo.toLowerCase().replace('.', '');
+      const nomeExtensao = `.${extensaoEsperada}`;
+      const tipoExcelLegado = 'application/vnd.ms-excel';
+      const tipoExcelXml = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const isExcelType = file.type === tipoExcelLegado || file.type === tipoExcelXml;
+      const isExpectedExtension = file.name.toLowerCase().endsWith(nomeExtensao);
 
-      const isCsvType = file.type === 'text/csv' || file.type === 'application/vnd.ms-excel';
-      const isCsvExtension = file.name.toLowerCase().endsWith('.csv');
-
-      if (!isCsvType && !isCsvExtension) {
-        void Swal.fire('Formato inválido', 'Por favor, anexe um arquivo .csv válido.', 'warning');
+      if (!isExcelType && !isExpectedExtension) {
+        void Swal.fire('Formato inválido', `Por favor, anexe um arquivo ${nomeExtensao} válido.`, 'warning');
         this.limpar();
         return;
       }

@@ -3,22 +3,23 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import {AuthConfig, OAuthModule, OAuthService, OAuthStorage} from "angular-oauth2-oidc";
+import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from "angular-oauth2-oidc";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {environment} from "../../../environments/enviroment";
-import { AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService} from 'app-core';
+import { AcessoUnidadeService, AppCoreModule, FormInput, APP_AUTH_CONFIG, initializeAppFactory, LoginService, montarUrlPortal, SharedCookieOAuthStorage, API_URL } from 'app-core';
+import { environment } from "../../../environments/environment";
+
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import {LayoutModule} from "./layout/layout.module";
-import {PrincipalComponent} from "./principal/principal.component";
+import { LayoutModule } from "./layout/layout.module";
+import { PrincipalComponent } from "./principal/principal.component";
 import { CommonModule } from '@angular/common';
 
 const authConfig: AuthConfig = {
-  issuer: 'http://localhost:8081/realms/ufsm',
-  clientId: 'webClient',
-  redirectUri: 'http://localhost:4200/',
-  responseType: 'code',
-  scope: 'openid profile email offline_access',
+  issuer: environment.issuer,
+  clientId: environment.clientId,
+  redirectUri: montarUrlPortal('admin'),
+  responseType: environment.responseType,
+  scope: environment.scope,
   showDebugInformation: !environment.production,
 };
 
@@ -50,18 +51,22 @@ const authConfig: AuthConfig = {
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
     {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
+    {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
     },
     {
       provide: OAuthStorage,
-      useValue: localStorage
+      useClass: SharedCookieOAuthStorage
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService) =>
-        initializeAppFactory(oauthService, config, loginService),
-      deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
+      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService, acessoUnidadeService: AcessoUnidadeService) =>
+        initializeAppFactory(oauthService, config, loginService, acessoUnidadeService),
+      deps: [OAuthService, APP_AUTH_CONFIG, LoginService, AcessoUnidadeService],
       multi: true
     },
     provideNgxMask({

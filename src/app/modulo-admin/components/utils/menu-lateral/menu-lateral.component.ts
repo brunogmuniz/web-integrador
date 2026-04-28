@@ -5,7 +5,7 @@ import { UsuarioService } from 'app-core';
 @Component({
   selector: 'menu-lateral',
   templateUrl: './menu-lateral.component.html',
-  styleUrls: ['./menu-lateral.component.css']
+  styleUrls: ['./menu-lateral.component.scss']
 })
 export class MenuLateralComponent implements OnInit, OnDestroy {
   @Output() onSidebarToggle = new EventEmitter<boolean>();

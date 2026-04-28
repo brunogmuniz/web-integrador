@@ -24,25 +24,30 @@ import { UsuarioComponent } from 'app-core/lib/components/cruds/usuario/usuario.
 import { CadastrarUsuarioComponent } from 'app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
 
 import {
+  adminGuard,
   cadastroCompletoGuard,
   authGuard,
   UnidadeComponent,
   VisualizarUnidadeComponent,
   CadastrarUnidadeComponent
 } from 'app-core';
-
+import {
+  UnidadeUsuarioComponent,
+  VisualizarUnidadeUsuarioComponent,
+  CadastrarUnidadeUsuarioComponent
+} from 'app-core';
 
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, adminGuard]
   },
 
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, adminGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
@@ -109,6 +114,17 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarUnidadeComponent },
           { path: 'form/novo', component: CadastrarUnidadeComponent },
           { path: 'form/:uuid', component: CadastrarUnidadeComponent }
+        ]
+      },
+
+      {
+        path: 'unidades-usuarios',
+        component: UnidadeUsuarioComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarUnidadeUsuarioComponent },
+          { path: 'form/novo', component: CadastrarUnidadeUsuarioComponent },
+          { path: 'form/:uuid', component: CadastrarUnidadeUsuarioComponent }
         ]
       },
 

@@ -1,0 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@200;300;400;500;600;700&display=swap');
+
+body {
+  font-family: "Barlow", sans-serif;
+  font-weight: 200;
+}
+
+i[class*="la-"] {
+  font-family: "Line Awesome Free" !important;
+}
+
+
+.modulos-header {
+  margin-bottom: 20px;
+}
+
+.modulos-title {
+  color: #032947;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modulos-title-icon {
+  color: #366ca3;
+  background: #eef8fb;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+
+.cardModulo {
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.06);
+  transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+  cursor: pointer;
+
+  padding: 24px;
+  background: white;
+  border-radius: 4px;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  margin: 5px;
+  flex: 0 0 31.33333%;
+  max-width: 31.33333%;
+}
+
+.cardModulo:hover {
+  transform: scale(1.01);
+}
+
+@media (max-width: 1487px) {
+  .cardModulo {
+    flex: 0 0 48%;
+    max-width: 48%;
+  }
+}
+
+@media (max-width: 590px) {
+  .cardModulo {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+
+.cardModulo--disabled {
+  cursor: default;
+  opacity: 0.8;
+  background-color: #fcfcfc;
+}
+
+.cardModulo--disabled:hover {
+  transform: none;
+  box-shadow: 0px 4px 7px rgba(0, 0, 0, 0.06);
+}
+
+.icone-disabled {
+  background: #f0f0f0;
+}
+
+.icone-disabled i {
+  color: #a1a1a1;
+}
+
+.titulo-disabled {
+  color: #666;
+}
+
+
+.mainModulo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconeModulo {
+  padding: 16px;
+  background: #EEF8FB;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.textosModulo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tituloModulo {
+  color: #032947;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.infoModulo {
+  color: #8A8A8A;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 14px;
+}
+
+
+.margin-top {
+  margin-top: 15px;
+}
+
+.margin-right {
+  margin-right: 10px;
+}
+
+.padding {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.marginH3 {
+  margin-top: 25px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  box-shadow: 0 5px 10px rgba(153, 153, 153, 0.25);
+}
+
+
+.active {
+  background-color: #ececec;
+  font-weight: bold;
+  text-decoration: underline;
+  border-right: solid 20px #ececec !important;
+}
+
+.disabled {
+  background-color: #8b8b8b;
+}
+
+.linha-vertical {
+  height: 500px;
+  border-left: 1px solid rgb(213, 213, 213);
+}

@@ -4,8 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthConfig, OAuthModule, OAuthService, OAuthStorage } from 'angular-oauth2-oidc';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-import { APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService } from 'app-core';
-import { environment } from '../../../environments/enviroment';
+import {
+  AcessoUnidadeService,
+  API_URL, APP_AUTH_CONFIG, AppCoreModule, initializeAppFactory, LoginService, montarUrlPortal, SharedCookieOAuthStorage
+} from 'app-core';
+import { environment } from '../../../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { LayoutModule } from './layout/layout.module';
 import { AppComponent } from './app.component';
@@ -14,30 +17,29 @@ import { AreaTabelaComponent } from './utils/area-tabela/area-tabela';
 import { AnaliseDasMediasComponent } from './principal/analise-das-medias/analise-das-medias.component';
 import { VisualizarAnaliseDasMediasComponent } from './principal/analise-das-medias/visualizar-analise-das-medias/visualizar-analise-das-medias.component';
 import { NgOptimizedImage } from '@angular/common';
-import { DocentesComponent } from './importacoes/docentes/docentes.component';
-import { DisciplinasComponent } from './importacoes/disciplinas/disciplinas.component';
-import { CursosComponent } from './importacoes/cursos/cursos.component';
-import { ImportacoesComponent } from './importacoes/importacoes.component';
-
+import {DocentesComponent} from "./importacoes/docentes/docentes.component";
+import {LandingPageComponent} from "./principal/landing-page/landing-page.component";
+import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.component";
+import {CursosComponent} from "./importacoes/cursos/cursos.component";
+import {ImportacoesComponent} from "./importacoes/importacoes.component";
 
 const authConfig: AuthConfig = {
-  issuer: 'http://localhost:8081/realms/ufsm',
-  clientId: 'webClient',
-  redirectUri: 'http://localhost:4203/',
-  responseType: 'code',
-  scope: 'openid profile email offline_access',
+  issuer: environment.issuer,
+  clientId: environment.clientId,
+  redirectUri: montarUrlPortal('ensino'),
+  responseType: environment.responseType,
+  scope: environment.scope,
   showDebugInformation: !environment.production,
 };
 
-export function storageFactory(): OAuthStorage {
-  return typeof window !== 'undefined' ? localStorage : ({} as OAuthStorage);
-}
+
 
 @NgModule({
   declarations: [
     AppComponent,
     PrincipalComponent,
     AnaliseDasMediasComponent,
+    LandingPageComponent,
     VisualizarAnaliseDasMediasComponent,
     AreaTabelaComponent,
     DocentesComponent,
@@ -63,20 +65,23 @@ export function storageFactory(): OAuthStorage {
   ],
   providers: [
     provideHttpClient(withInterceptorsFromDi()),
-    provideNgxMask({ dropSpecialCharacters: true }),
+    {
+      provide: API_URL,
+      useValue: environment.apiUrl
+    },
     {
       provide: APP_AUTH_CONFIG,
       useValue: authConfig
     },
     {
       provide: OAuthStorage,
-      useFactory: storageFactory
+      useClass: SharedCookieOAuthStorage
     },
     {
       provide: APP_INITIALIZER,
-      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService) =>
-        initializeAppFactory(oauthService, config, loginService),
-      deps: [OAuthService, APP_AUTH_CONFIG, LoginService],
+      useFactory: (oauthService: OAuthService, config: AuthConfig, loginService: LoginService, acessoUnidadeService: AcessoUnidadeService) =>
+        initializeAppFactory(oauthService, config, loginService, acessoUnidadeService),
+      deps: [OAuthService, APP_AUTH_CONFIG, LoginService, AcessoUnidadeService],
       multi: true
     }
   ],

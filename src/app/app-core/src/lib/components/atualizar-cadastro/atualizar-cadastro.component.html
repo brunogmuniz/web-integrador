@@ -24,7 +24,8 @@
             </div>
           </div>
 
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
             <div class="form-group row">
               <div class="col-lg-12">
                 <label>Nome Completo <span class="text-danger">*</span></label>

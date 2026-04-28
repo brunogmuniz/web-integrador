@@ -1,0 +1,151 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "production"'
+      when: always
+    - when: never
+
+variables:
+  GIT_TEMPLATE_DIR: ""
+  GIT_STRATEGY: clone
+  GIT_CLEAN_FLAGS: -ffdx
+
+stages:
+   - config
+   - build
+   - merge
+   - deploy
+
+config_main:
+  stage: config
+  image: nginx:1.25
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  variables:
+    PRODUCTION: true
+    APIURL: "https://main.api.bolicheiro.ufsm.br"
+    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm'
+    CLIENTID: 'webClient'
+    RESPONSETYPE: 'code'
+    SCOPE: 'openid profile email offline_access'
+  script:
+    - envsubst < src/assets/static-js/env.template.js > src/environments/environment.ts
+    - echo "Configuração de MAIN aplicada com sucesso."
+    - cat src/environments/environment.ts
+  tags:
+    - bolicheiro
+  artifacts:
+    paths:
+      - src/
+    expire_in: 1 hour
+
+config_production:
+  stage: config
+  image: nginx:1.25
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production"'
+  variables:
+    PRODUCTION: true
+    APIURL: "https://production.api.bolicheiro.ufsm.br"
+    ISSUER: 'https://oauth.bolicheiro.ufsm.br/realms/ufsm'
+    CLIENTID: 'webClient'
+    RESPONSETYPE: 'code'
+    SCOPE: 'openid profile email offline_access'
+  script:
+    - envsubst < src/assets/static-js/env.template.js > src/environments/environment.ts
+    - echo "Configuração de PRODUCTION aplicada com sucesso."
+    - cat src/environments/environment.ts
+  tags:
+    - bolicheiro
+  artifacts:
+    paths:
+      - src/
+    expire_in: 1 hour
+
+.default_build:
+  image:
+    name: dhi.io/node:20-debian12-dev
+    entrypoint: [""]
+  stage: build
+  variables:
+    NODE_OPTIONS: "--openssl-legacy-provider"
+  before_script:
+    - apt-get update && apt-get install -y curl unzip python3
+    - curl -fsSL https://bun.sh/install | bash
+    - export BUN_INSTALL="$HOME/.bun"
+    - export PATH="$BUN_INSTALL/bin:$PATH"
+  script:
+    - rm -f bun.lockb package-lock.json yarn.lock
+    - ls -a
+    - bun pm cache rm
+    - bun install --force
+    - node --openssl-legacy-provider ./node_modules/.bin/ng build $MODULE --aot --base-href="$BASE_HREF" --configuration=production
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - dist/
+    expire_in: 1h
+  tags:
+    - bolicheiro
+
+build_admin:
+  extends: .default_build
+  variables:
+    MODULE: modulo-admin
+    BASE_HREF: /admin/
+
+build_dept_ensino:
+  extends: .default_build
+  variables:
+    MODULE: modulo-dept-ensino
+    BASE_HREF: /dept-ensino/
+
+build_root:
+  extends: .default_build
+  variables:
+    MODULE: modulo-root
+    BASE_HREF: /        
+
+assemble_image:
+  stage: merge
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+    IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME"
+    ENV: "production"
+  before_script:
+    - docker login --username="$CI_REGISTRY_USER" --password="$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - echo "$PASSWORD_DOCKER_DHI" | docker login --username "$USER_DOCKER_DHI" --password-stdin dhi.io
+    - docker pull "$IMAGE" || true
+  needs:
+    - build_admin
+    - build_dept_ensino
+    - build_root
+  script:
+    - mkdir -p modulo-admin modulo-dept-ensino modulo-root
+    - cp -r dist/modulo-admin/* modulo-admin/
+    - cp -r dist/modulo-dept-ensino/* modulo-dept-ensino/
+    - cp -r dist/modulo-root/* modulo-root/
+    - docker build -t "$IMAGE" .
+    - docker push "$IMAGE"
+  tags:
+    - bolicheiro
+    
+deploy_review:
+  stage: deploy
+  variables:
+    SERVICE_REQUESTED: CLIENT 
+    COMMAND: deploy
+    BRANCH_NAME: $CI_COMMIT_REF_NAME
+    DOCKER_LOGIN: $DOCKER_LOGIN        
+    DOCKER_PASSWORD: $DOCKER_PASSWORD
+  trigger:
+    project: br.ufsm.lumac1/bolicheiro/utils/env-deployer-main
+    strategy: depend
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "production"'
+      when: on_success
+    - when: never

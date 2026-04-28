@@ -1,71 +1,64 @@
-$cor-borda: #ccc;
+$cor-borda: #d6dfeb;
+$cor-borda-focus: #b9c7da;
 $cor-fundo: #ffffff;
-$cor-texto: #0e0e0e;
+$cor-texto: #33435b;
+$cor-label: #3d4c63;
 $cor-suporte: #888;
-$radius: 8px;
-$padding-vertical: 12px;
-$padding-horizontal: 16px;
+$cor-erro: #ff878f;
+$altura-input: 40px;
 
 .input-container {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   width: 100%;
   position: relative;
 
+  .input-label {
+    display: block;
+    margin-bottom: 7px;
+    width: 100%;
+    color: $cor-label;
+    font-size: 0.93rem;
+    font-weight: 600;
+    text-align: left;
+    pointer-events: none;
+  }
+
   .form-input {
     width: 100%;
-    padding: $padding-vertical $padding-horizontal;
+    height: $altura-input;
+    padding: 0 12px;
     background-color: $cor-fundo;
     border: 1px solid $cor-borda;
-    border-radius: $radius;
+    border-radius: 0;
     color: $cor-texto;
-    font-size: 16px;
-    line-height: 1.5;
-    transition: border-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out;
+    font-size: 0.95rem;
+    line-height: $altura-input;
+    box-shadow: none;
+    transition: border-color 0.2s ease-in-out;
 
     &:focus {
-      border-color: #007bff;
-      box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.25);
+      border-color: $cor-borda-focus;
+      box-shadow: none;
       outline: none;
     }
 
     &::placeholder {
-      opacity: 0; 
+      color: #a0aebf;
+      opacity: 1;
+      font-weight: 400;
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: $cor-erro;
+      box-shadow: none;
     }
   }
 
-  .input-label {
-    position: absolute;
-    left: $padding-horizontal;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: $cor-suporte;
-    pointer-events: none;
-    transition: all 0.2s ease;
-    background: $cor-fundo;
-    padding: 0 4px;
-  }
-
-  .form-input:focus + .input-label,
-
-  .form-input:not(:placeholder-shown) + .input-label {
-    top: 0;
-    transform: translateY(-50%) scale(0.85);
-    font-size: 12px;
-    color: #007bff;
-  }
-
   .support-text {
-    font-size: 13px;
+    font-size: 0.82rem;
     color: $cor-suporte;
-    margin-top: 4px;
+    margin-top: 5px;
     padding-left: 2px;
   }
-}
-
-.form-input.ng-invalid.ng-touched {
-  border-color: #ff878f;
-  box-shadow: 0 0 0 0.15rem rgba(234, 117, 129, 0.25);
 }
