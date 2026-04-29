@@ -28,37 +28,46 @@ import { VisualizarSubareaConhecimentoComponent } from './components/cruds/subar
 import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
 import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
 import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
+import { UnidadeUsuarioComponent } from 'app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component';
 import { CadastrarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
 import { VisualizarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
-import { UnidadeUsuarioComponent } from 'app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component';
 import { UsuarioComponent } from './components/cruds/usuario/usuario.component';
 import { CadastrarUsuarioComponent } from './components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
 import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualizar-usuario/visualizar-usuario.component';
+import { CursoComponent } from './components/cruds/curso/curso.component';
+import { CadastrarCursoComponent } from './components/cruds/curso/cadastrar-curso/cadastrar-curso.component';
+import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-curso/visualizar-curso.component';
 
 @NgModule({
   declarations: [
     AreaConhecimentoComponent,
     CadastrarAreaConhecimentoComponent,
-    CadastrarDisciplinaComponent,
-    CadastrarDocenteComponent,
-    CadastrarDocentesEncargosComponent,
-    CadastrarEstruturaCurricularComponent,
-    CadastrarSubareaConhecimentoComponent,
-    CadastrarUnidadeComponent,
-    CadastrarUnidadeUsuarioComponent,
-    CadastrarUsuarioComponent,
+
     DisciplinaComponent,
+    CadastrarDisciplinaComponent,
+
     DocenteComponent,
+    CadastrarDocenteComponent,
+
     DocenteEncargosComponent,
+    CadastrarDocentesEncargosComponent,
+
     EstruturaCurricularComponent,
+    CadastrarEstruturaCurricularComponent,
+
+    SubareaConhecimentoComponent,
+    CadastrarSubareaConhecimentoComponent,
+
+    UnidadeComponent,
+    CadastrarUnidadeComponent,
+    UnidadeUsuarioComponent,
+    CadastrarUnidadeUsuarioComponent,
+    UsuarioComponent,
+    CadastrarUsuarioComponent,
     ImageProfileComponent,
     PaginadorComponent,
-    SubareaConhecimentoComponent,
-    UnidadeComponent,
-    UnidadeUsuarioComponent,
     UploadPlanilhaComponent,
     UserMenuComponent,
-    UsuarioComponent,
     VisualizarAreaConhecimentoComponent,
     VisualizarDisciplinaComponent,
     VisualizarDocenteComponent,
@@ -67,7 +76,10 @@ import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualiza
     VisualizarSubareaConhecimentoComponent,
     VisualizarUnidadeComponent,
     VisualizarUnidadeUsuarioComponent,
-    VisualizarUsuarioComponent
+    VisualizarUsuarioComponent,
+    CursoComponent,
+    CadastrarCursoComponent,
+    VisualizarCursoComponent
   ],
   imports: [
     CommonModule,

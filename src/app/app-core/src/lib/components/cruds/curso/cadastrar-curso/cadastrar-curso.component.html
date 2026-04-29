@@ -1,0 +1,75 @@
+<div class="card mt-3">
+  <div class="card-header bg-navy-custom text-white">
+    <h5 class="mb-0 kt-label-font-color-4">
+      {{ modoEdicao ? 'Editar Curso' : 'Cadastrar Curso' }}
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()" *ngIf="cursoForm">
+
+      <div class="form-row mb-3">
+        <div class="col-md-8">
+          <lib-form-input-padrao
+            [label]="'Nome'"
+            [control]="c['nome']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Sigla'"
+            [control]="c['sigla']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-3">
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Ano Currículo'"
+            [control]="c['anoCurriculo']"
+            [type]="'number'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <lib-form-input-padrao
+            [label]="'Carga Horária Total'"
+            [control]="c['cargaHorariaTotal']"
+            [type]="'number'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Nível</label>
+          <select
+            class="form-control"
+            formControlName="nivel"
+            [class.is-invalid]="c['nivel'].invalid && c['nivel'].touched">
+            <option value="" disabled selected>Selecione...</option>
+            <option *ngFor="let n of niveis" [value]="n.valor">{{ n.label }}</option>
+          </select>
+          <div class="invalid-feedback" *ngIf="c['nivel'].invalid && c['nivel'].touched">
+            Nível é obrigatório.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions text-right">
+        <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">
+          <i class="la la-times"></i>
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="cursoForm.invalid">
+          <i class="la la-check"></i>
+          {{ modoEdicao ? 'Atualizar' : 'Salvar' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
