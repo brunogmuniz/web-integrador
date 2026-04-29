@@ -1,0 +1,97 @@
+<div class="perfil-overlay">
+  <div class="perfil-card">
+
+    <div class="perfil-header">
+      <div class="perfil-header-title">
+        <h2 class="perfil-titulo">Perfil</h2>
+        <span class="perfil-subtitulo">Altere suas informações de perfil</span>
+      </div>
+      <div class="perfil-divider"></div>
+    </div>
+
+    <div class="perfil-body">
+      <form [formGroup]="formUsuario" (ngSubmit)="submeterFormulario()">
+
+        <div class="perfil-campo">
+          <label class="perfil-label" for="nomeInput">Nome Completo</label>
+          <input
+            id="nomeInput"
+            type="text"
+            class="perfil-input"
+            formControlName="nome"
+            [class.perfil-input--invalido]="formUsuario.get('nome')?.invalid && formUsuario.get('nome')?.touched">
+          <small class="text-danger" *ngIf="formUsuario.get('nome')?.touched && formUsuario.get('nome')?.errors?.['pattern']">
+            Informe nome e sobrenome.
+          </small>
+        </div>
+
+        <div class="perfil-campo">
+          <label class="perfil-label" for="emailInput">Email</label>
+          <input
+            id="emailInput"
+            type="email"
+            class="perfil-input"
+            formControlName="email"
+            [class.perfil-input--invalido]="formUsuario.get('email')?.invalid && formUsuario.get('email')?.touched">
+        </div>
+
+        <div class="perfil-campo">
+          <label class="perfil-label" for="cpfInput">
+            CPF
+            <span class="perfil-info-icon" tabindex="0" aria-label="Informação sobre o campo CPF">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span class="perfil-tooltip">Campo apenas para visualização. Não é possível alterar este dado.</span>
+            </span>
+          </label>
+          <input
+            id="cpfInput"
+            type="text"
+            class="perfil-input"
+            formControlName="cpf">
+        </div>
+
+        <div class="perfil-campo">
+          <label class="perfil-label" for="matriculaInput">
+            Matrícula
+            <span class="perfil-info-icon" tabindex="0" aria-label="Informação sobre o campo Matrícula">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span class="perfil-tooltip">Campo apenas para visualização. Não é possível alterar este dado.</span>
+            </span>
+          </label>
+          <input
+            id="matriculaInput"
+            type="text"
+            class="perfil-input"
+            formControlName="matricula">
+        </div>
+
+        <div class="perfil-acoes">
+          <button type="button" class="perfil-btn perfil-btn--cancelar" routerLink="/">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+            Cancelar
+          </button>
+          <button type="submit" class="perfil-btn perfil-btn--salvar" [disabled]="estaSubmetendoFormulario">
+            <span *ngIf="estaSubmetendoFormulario" class="perfil-spinner"></span>
+            <svg *ngIf="!estaSubmetendoFormulario" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Salvar
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

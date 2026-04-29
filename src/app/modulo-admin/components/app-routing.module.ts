@@ -20,6 +20,8 @@ import { CadastrarDocentesEncargosComponent } from "app-core/lib/components/crud
 import { DisciplinaComponent } from 'app-core/lib/components/cruds/disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import { CadastrarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
+import { UsuarioComponent } from 'app-core/lib/components/cruds/usuario/usuario.component';
+import { CadastrarUsuarioComponent } from 'app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
 
 import {
   adminGuard,
@@ -82,6 +84,14 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
           { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
           { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
+        ]
+      },
+
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        children: [
+          { path: 'form/novo', component: CadastrarUsuarioComponent }
         ]
       },
 

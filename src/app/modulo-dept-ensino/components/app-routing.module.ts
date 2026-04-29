@@ -58,6 +58,10 @@ import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.compon
 import {DocentesComponent} from "./importacoes/docentes/docentes.component";
 import {CursosComponent} from "./importacoes/cursos/cursos.component";
 import {ImportacoesComponent} from "./importacoes/importacoes.component";
+import { UsuarioComponent } from "app-core/lib/components/cruds/usuario/usuario.component";
+import {
+  CadastrarUsuarioComponent
+} from "app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component";
 
 const routes: Routes = [
   {
@@ -141,6 +145,13 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
           { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
           { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
+        ]
+      },
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        children: [
+          { path: 'form/novo', component: CadastrarUsuarioComponent },
         ]
       },
       {

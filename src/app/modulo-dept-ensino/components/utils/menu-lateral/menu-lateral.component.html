@@ -22,7 +22,9 @@
       <div class="user-info">
         <h5 class="text-white font-weight-bold mb-0">
           {{ nome }}
-          <i class="fa fa-pencil-alt text-white-50 icon-edit" aria-hidden="true"></i>
+          <a [routerLink]="['/usuario/form/novo']" [queryParams]="{ uuid: uuidUsuario }" aria-label="Editar dados do perfil" class="text-decoration-none">
+            <i class="la la-pencil text-white-50 icon-edit" aria-hidden="true"></i>
+          </a>
         </h5>
         <span class="d-block text-warning small font-weight-bold mt-1">
           {{ cargo }}

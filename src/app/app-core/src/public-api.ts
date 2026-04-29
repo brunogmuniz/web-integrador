@@ -49,6 +49,9 @@ export * from './lib/model/usuario.model';
 export * from './lib/utils/usuario-util';
 export * from './lib/services/usuario.service';
 export * from './lib/services/login.service';
+export * from './lib/components/cruds/usuario/usuario.component';
+export * from './lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
+export * from './lib/components/cruds/usuario/visualizar-usuario/visualizar-usuario.component';
 
 //Unidade
 export * from './lib/dto/Unidade.dto';

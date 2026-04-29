@@ -4,12 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FormInput } from './components/form-input-padrao/form-input-padrao';
 import { ImageProfileComponent } from './components/image-profile/image-profile.component';
+import { PaginadorComponent } from './components/paginador/paginador.component';
+import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
+import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { AreaConhecimentoComponent } from './components/cruds/area-conhecimento/area-conhecimento.component';
 import { CadastrarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
 import { VisualizarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component';
-import { SubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/subarea-conhecimento.component';
-import { CadastrarSubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component';
-import { VisualizarSubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component';
 import { DisciplinaComponent } from './components/cruds/disciplina/disciplina.component';
 import { CadastrarDisciplinaComponent } from './components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component';
 import { VisualizarDisciplinaComponent } from './components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component';
@@ -22,70 +22,74 @@ import { VisualizarDocenteEncargosComponent } from './components/cruds/docente-e
 import { EstruturaCurricularComponent } from './components/cruds/estrutura-curricular/estrutura-curricular.component';
 import { CadastrarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/cadastrar-estrutura-curricular/cadastrar-estrutura-curricular.component';
 import { VisualizarEstruturaCurricularComponent } from './components/cruds/estrutura-curricular/visualizar-estrutura-curricular/visualizar-estrutura-curricular.component';
-import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
-import { PaginadorComponent } from './components/paginador/paginador.component';
+import { SubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/subarea-conhecimento.component';
+import { CadastrarSubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/cadastrar-subarea-conhecimento/cadastrar-subarea-conhecimento.component';
+import { VisualizarSubareaConhecimentoComponent } from './components/cruds/subarea-conhecimento/visualizar-subarea-conhecimento/visualizar-subarea-conhecimento.component';
 import { UnidadeComponent } from './components/cruds/unidade/unidade.component';
 import { CadastrarUnidadeComponent } from './components/cruds/unidade/cadastrar-unidade/cadastrar-unidade.component';
 import { VisualizarUnidadeComponent } from './components/cruds/unidade/visualizar-unidade/visualizar-unidade.component';
 import { CadastrarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/cadastrar-unidade-usuario/cadastrar-unidade-usuario.component';
 import { VisualizarUnidadeUsuarioComponent } from './components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
-import {UnidadeUsuarioComponent} from "app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component";
-import { UserMenuComponent } from './components/user-menu/user-menu.component';
+import { UnidadeUsuarioComponent } from 'app-core/lib/components/cruds/unidade-usuario/unidade-usuario.component';
+import { UsuarioComponent } from './components/cruds/usuario/usuario.component';
+import { CadastrarUsuarioComponent } from './components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
+import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualizar-usuario/visualizar-usuario.component';
 
 @NgModule({
   declarations: [
-    ImageProfileComponent,
     AreaConhecimentoComponent,
     CadastrarAreaConhecimentoComponent,
-    VisualizarAreaConhecimentoComponent,
-    SubareaConhecimentoComponent,
-    CadastrarSubareaConhecimentoComponent,
-    VisualizarSubareaConhecimentoComponent,
-    DisciplinaComponent,
     CadastrarDisciplinaComponent,
-    VisualizarDisciplinaComponent,
-    DocenteComponent,
     CadastrarDocenteComponent,
-    VisualizarDocenteComponent,
-    DocenteEncargosComponent,
     CadastrarDocentesEncargosComponent,
-    VisualizarDocenteEncargosComponent,
-    EstruturaCurricularComponent,
     CadastrarEstruturaCurricularComponent,
-    VisualizarEstruturaCurricularComponent,
-    UploadPlanilhaComponent,
-    PaginadorComponent,
-    UnidadeComponent,
+    CadastrarSubareaConhecimentoComponent,
     CadastrarUnidadeComponent,
-    VisualizarUnidadeComponent,
     CadastrarUnidadeUsuarioComponent,
-    CadastrarUnidadeUsuarioComponent,
-    VisualizarUnidadeUsuarioComponent,
+    CadastrarUsuarioComponent,
+    DisciplinaComponent,
+    DocenteComponent,
+    DocenteEncargosComponent,
+    EstruturaCurricularComponent,
+    ImageProfileComponent,
+    PaginadorComponent,
+    SubareaConhecimentoComponent,
+    UnidadeComponent,
     UnidadeUsuarioComponent,
-    UserMenuComponent
+    UploadPlanilhaComponent,
+    UserMenuComponent,
+    UsuarioComponent,
+    VisualizarAreaConhecimentoComponent,
+    VisualizarDisciplinaComponent,
+    VisualizarDocenteComponent,
+    VisualizarDocenteEncargosComponent,
+    VisualizarEstruturaCurricularComponent,
+    VisualizarSubareaConhecimentoComponent,
+    VisualizarUnidadeComponent,
+    VisualizarUnidadeUsuarioComponent,
+    VisualizarUsuarioComponent
   ],
   imports: [
     CommonModule,
+    FormInput,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,
-    FormInput
+    RouterModule
   ],
   exports: [
+    CadastrarUnidadeComponent,
+    CadastrarUnidadeUsuarioComponent,
     FormInput,
-    ImageProfileComponent,
     FormsModule,
+    ImageProfileComponent,
+    PaginadorComponent,
     ReactiveFormsModule,
     RouterModule,
+    UnidadeComponent,
     UploadPlanilhaComponent,
-    PaginadorComponent,
-    UnidadeComponent,
-    CadastrarUnidadeComponent,
-    UnidadeComponent,
+    UserMenuComponent,
     VisualizarUnidadeComponent,
-    CadastrarUnidadeUsuarioComponent,
-    VisualizarUnidadeUsuarioComponent,
-    UserMenuComponent
+    VisualizarUnidadeUsuarioComponent
   ]
 })
 export class AppCoreModule { }
