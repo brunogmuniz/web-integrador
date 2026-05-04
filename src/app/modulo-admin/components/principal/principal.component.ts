@@ -77,6 +77,15 @@ export class PrincipalComponent {
       svgIcon: '<i class="la la-paperclip la-3x"></i> '
     });
 
+    this.modulos.push({
+      title: 'GERENCIAR CURSOS',
+      sectionView: 'curso/visualizar',
+      pageGo: 'curso/visualizar/',
+      pages: ['Curso'],
+      info: 'Operações referentes a gerenciamento dos Cursos',
+      svgIcon: '<i class="la la-calendar la-3x"></i> '
+    });
+
   }
   navegar(rota: string) {
     if (rota) {

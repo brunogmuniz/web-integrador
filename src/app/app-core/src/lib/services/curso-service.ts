@@ -70,4 +70,9 @@ export class CursoService {
       })
     );
   }
+
+
+  buscarPorId(uuid: string): Observable<CursoDTO> {
+    return this.http.get<CursoDTO>(`${this.apiUrl}/${uuid}`);
+  }
 }

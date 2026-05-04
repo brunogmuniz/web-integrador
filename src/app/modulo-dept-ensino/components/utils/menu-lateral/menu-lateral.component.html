@@ -156,6 +156,30 @@
         </div>
       </li>
 
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('curso')">
+        <a class="menu-link" (click)="toggleMenu('curso')" tabindex="0" aria-label="Menu Estrutura Curricular">
+          <i class="menu-link-icon la la-calendar"></i>
+          <span class="menu-link-text">Cursos</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/curso/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Cursos</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/curso/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Curso</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
       <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('disciplina')">
         <a class="menu-link" (click)="toggleMenu('disciplina')" tabindex="0" aria-label="Menu Disciplinas">
           <i class="menu-link-icon la la-paperclip"></i>
