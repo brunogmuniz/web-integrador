@@ -67,18 +67,21 @@
             <td>{{ area.ano2027s1 || '-' }}</td>
             <td>{{ area.ano2027s2 || '-' }}</td>
             <td>
-              <a [routerLink]="'./' + area.uuid"
-                 class="btn btn-primary btn-sm btn-icon "
-                 title="Adicionar Docente">
-                <i class="fa fa-cogs"></i>
+              <button [routerLink]="'./' + area.uuid"
+                      class="btn btn-primary btn-sm btn-icon"
+                      title="Adicionar Docente"
+                      [disabled]="true">
+                <i class="fa fa-user-plus"></i>
                 Adicionar Docente
-              </a>
-              <a [routerLink]="'./' + area.uuid"
-                 class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
-                 title="Adicionar Ano">
-                <i class="fa fa-cogs"></i>
+              </button>
+
+              <button [routerLink]="'./' + area.uuid"
+                      class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
+                      title="Adicionar Ano"
+                      [disabled]="true">
+                <i class="fa fa-calendar-plus"></i>
                 Adicionar Ano
-              </a>
+              </button>
             </td>
           </tr>
           <tr class="collapse-row">

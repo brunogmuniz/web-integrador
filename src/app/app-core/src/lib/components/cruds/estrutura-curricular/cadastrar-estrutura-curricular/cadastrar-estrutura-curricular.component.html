@@ -40,7 +40,7 @@
             <select [compareWith]="compararCursos" formControlName="curso" class="form-select form-select-solid">
               <option [ngValue]="null">Selecione...</option>
               <option *ngFor="let curso of listaCursos" [ngValue]="curso">
-                {{ curso.nome }}
+                {{ curso.nome }} ({{ curso.sigla }})
               </option>
             </select>
             <div *ngIf="form.get('curso')?.invalid && form.get('curso')?.touched" class="invalid-feedback d-block">
