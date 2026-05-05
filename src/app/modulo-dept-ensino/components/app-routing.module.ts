@@ -62,6 +62,11 @@ import { UsuarioComponent } from "app-core/lib/components/cruds/usuario/usuario.
 import {
   CadastrarUsuarioComponent
 } from "app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component";
+import {CursoComponent} from "app-core/lib/components/cruds/curso/curso.component";
+import {
+  VisualizarCursoComponent
+} from "app-core/lib/components/cruds/curso/visualizar-curso/visualizar-curso.component";
+import {CadastrarCursoComponent} from "app-core/lib/components/cruds/curso/cadastrar-curso/cadastrar-curso.component";
 
 const routes: Routes = [
   {
@@ -183,7 +188,19 @@ const routes: Routes = [
           { path: 'form/novo', component: CadastrarDisciplinaComponent },
           { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
         ]
-      }
+      },
+
+      {
+        path: 'curso',
+        component: CursoComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarCursoComponent },
+          { path: 'form/novo', component: CadastrarCursoComponent },
+          { path: 'form/editar/:id', component: CadastrarCursoComponent }
+        ]
+      },
+
     ]
   },
   { path: '**', redirectTo: '' }
