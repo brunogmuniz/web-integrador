@@ -27,7 +27,7 @@
             </td>
             <td><span class="text-gray-700">{{ sub.sigla }}</span></td>
             <td><span class="text-gray-700">{{ sub.nome }}</span></td>
-            <td class="text-center">{{ sub.cargaHorariaTotal }}h</td>
+            <td class="text-center">{{ sub.cargaHorariaTotal || 0}}h</td>
             <td>{{ sub.area?.nome || 'Não informada' }}</td>
             <td class="text-center">
               <div class="d-flex justify-content-center gap-2">
