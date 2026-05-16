@@ -46,7 +46,6 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
       uuid: [null],
       nome: ['', [Validators.required, Validators.minLength(3)]],
       sigla: ['', Validators.required],
-      cargaHorariaTotal: [0, [Validators.required, Validators.min(1)]],
       areaId: [null, Validators.required]
     });
   }

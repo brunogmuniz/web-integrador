@@ -1,16 +1,16 @@
 <div class="upload-container">
   <div class="form-group">
-    <label>Arquivo CSV <span class="text-danger">*</span></label>
+    <label>Arquivo {{ extensaoArquivo | uppercase }} <span class="text-danger">*</span></label>
     <div class="custom-file">
       <input
         #fileInput
         type="file"
         class="custom-file-input"
-        id="csvUpload"
-        accept=".csv"
+        id="planilhaUpload"
+        [accept]="'.' + extensaoArquivo.replace('.', '')"
         (change)="onFileSelected($event)"
         [disabled]="isLoading">
-      <label class="custom-file-label" for="csvUpload">
+      <label class="custom-file-label" for="planilhaUpload">
         {{ selectedFile ? selectedFile.name : 'Escolher arquivo...' }}
       </label>
     </div>

@@ -1,32 +1,65 @@
 import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 import { LoginService } from '../services/login.service';
+import { AcessoUnidadeService } from '../services/acesso-unidade.service';
 import { firstValueFrom, of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export function initializeAppFactory(
   oauthService: OAuthService,
   config: AuthConfig,
-  loginService: LoginService
+  loginService: LoginService,
+  acessoUnidadeService: AcessoUnidadeService
 ): () => Promise<void> {
   return async () => {
     oauthService.configure(config);
-    oauthService.setupAutomaticSilentRefresh();
 
     try {
-      const isLoggedIn = await oauthService.loadDiscoveryDocumentAndLogin();
-      if (isLoggedIn || oauthService.hasValidAccessToken()) {
-        await firstValueFrom(
+      const parametrosUrl = new URLSearchParams(window.location.search);
+      const isCallbackAutenticacao = parametrosUrl.has('code') || parametrosUrl.has('state');
+      await oauthService.loadDiscoveryDocumentAndTryLogin();
+
+      if (isCallbackAutenticacao) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      const possuiAcessoValido = oauthService.hasValidAccessToken();
+
+      if (possuiAcessoValido) {
+        const usuarioSincronizado = await firstValueFrom(
           loginService.sincronizarUsuarioComBanco().pipe(
             timeout(5000),
-            catchError(() => of(null))
+            catchError((error: unknown) => {
+              if (error instanceof HttpErrorResponse && error.status === 401) {
+                console.warn('[AuthFactory] Sincronização cancelada: Token rejeitado pela API (401 Unauthorized). A sessão local será abatida.');
+              } else {
+                console.error('[AuthFactory] Sincronização bloqueada por falha interna ou de rede:', error);
+              }
+              return of(null);
+            })
           )
         );
-      } else {
-        const params = new URLSearchParams(window.location.search);
-        if (!params.has('code')) oauthService.initLoginFlow();
+
+        if (usuarioSincronizado) {
+          try {
+            await firstValueFrom(
+              acessoUnidadeService.carregarMeusAcessos(false, { fallbackOnError: false }).pipe(
+                timeout(5000)
+              )
+            );
+          } catch (error: unknown) {
+            console.warn('[AuthFactory] Limitação transitória na recuperação de unidades de acesso:', error);
+          }
+
+          if (isCallbackAutenticacao) {
+            loginService.tratarPosLogin();
+          }
+        } else {
+          loginService.logout();
+        }
       }
-    } catch (error) {
-      console.error(error);
+    } catch (error: unknown) {
+      console.error('[AuthFactory] Colapso vital na orquestração com o Identity Provider:', error);
     }
   };
 }

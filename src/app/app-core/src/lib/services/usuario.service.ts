@@ -1,92 +1,78 @@
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UsuarioDTO } from '../dto/Usuario.dto';
-import { ResponseDto } from '../dto/response.dto';
-import { Usuario } from '../model/usuario.model';
-import { Mensagem } from '../model/mensagem.model';
-import { TokenStatus } from '../dto/token-status';
+import { Observable, Subject } from 'rxjs';
 import { OAuthService } from 'angular-oauth2-oidc';
-import {environment} from "../../../../../environments/enviroment";
+import { environment } from '../../../../../environments/environment';
+import { UsuarioDTO } from '../dto/Usuario.dto';
+import { Usuario } from '../model/usuario.model';
 
 export const API_URL = new InjectionToken<string>('API_URL');
 
+const CHAVE_STORAGE_USUARIO = 'usuario_logado';
+const CHAVE_STORAGE_TOKEN = 'token';
+
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
-
-  private readonly apiUrl = `${environment.apiUrl}/usuarios`;
+  private readonly urlBaseApi: string;
+  public readonly eventoUsuarioAtualizado = new Subject<Usuario>();
 
   constructor(
-    private http: HttpClient,
-    private oauthService: OAuthService,
-    @Optional() @Inject(API_URL) apiUrl?: string
+    private readonly http: HttpClient,
+    private readonly oauthService: OAuthService,
+    @Optional() @Inject(API_URL) urlApiInjetada?: string
   ) {
-    if (apiUrl) {
-      this.apiUrl = `${apiUrl}/usuarios`;
-    }
+    const urlBase = urlApiInjetada ? urlApiInjetada : environment.apiUrl;
+    this.urlBaseApi = `${urlBase}/usuarios`;
   }
 
-
-  login(email: string, senha: string): Observable<ResponseDto> {
-    return this.http.post<ResponseDto>(`${this.apiUrl}/auth/login`, { email, senha });
-  }
-
-  logout(): void {
+  public logout(): void {
+    localStorage.removeItem(CHAVE_STORAGE_USUARIO);
+    localStorage.removeItem(CHAVE_STORAGE_TOKEN);
     localStorage.removeItem('usuario');
-    localStorage.removeItem('token');
   }
 
-  setUsuarioLogado(usuario: Usuario, token: string): void {
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    localStorage.setItem('token', token);
+  public setUsuarioLogado(usuario: Usuario, token: string): void {
+    localStorage.setItem(CHAVE_STORAGE_USUARIO, JSON.stringify(usuario));
+    localStorage.setItem(CHAVE_STORAGE_TOKEN, token);
+    this.eventoUsuarioAtualizado.next(usuario);
   }
 
-  getUsuarioLogado(): Usuario | null {
-    const user = localStorage.getItem('usuario_logado');
-    return user ? JSON.parse(user) : null;
-  }
+  public getUsuarioLogado(): Usuario | null {
+    const usuarioArmazenado = localStorage.getItem(CHAVE_STORAGE_USUARIO);
 
-  isLogged(): boolean {
-    return !!localStorage.getItem('token');
-  }
-
-  getNomeLogado(): string {
-    const claims = this.oauthService.getIdentityClaims() as any;
-    if (claims && claims.name) {
-      return claims.name;
+    if (!usuarioArmazenado) {
+      return null;
     }
-    const user = this.getUsuarioLogado();
-    return user ? user.nome : '';
-  }
 
-  getCargoLogado(): string {
-    const claims = this.oauthService.getIdentityClaims() as any;
-    if (claims && claims.tipoPerfil) {
-      return claims.tipoPerfil;
+    try {
+      return JSON.parse(usuarioArmazenado) as Usuario;
+    } catch (erro) {
+      console.error('Falha estrutural ao converter os dados do usuário armazenados no localStorage', erro);
+      return null;
     }
-    const user = this.getUsuarioLogado();
-    return user?.tipoPerfil ?? '';
   }
 
-  hasPermission(permission: string[]): boolean {
-    const usuario = this.getUsuarioLogado();
-    if (!usuario || !usuario.permissoes) return false;
-    return usuario.permissoes.some(perm => permission.includes(perm));
+  public getNomeLogado(): string {
+    const usuarioArmazenado = this.getUsuarioLogado();
+    if (usuarioArmazenado && usuarioArmazenado.nome) {
+      return usuarioArmazenado.nome;
+    }
+
+    const reivindicacoesIdentidade = this.oauthService.getIdentityClaims() as Record<string, any>;
+    return reivindicacoesIdentidade?.['name'] || '';
   }
 
-  statusToken(token: string): Observable<TokenStatus> {
-    return this.http.get<TokenStatus>(`${this.apiUrl}/redefinir-senha/${token}`);
+  public getCargoLogado(): string {
+    const reivindicacoesIdentidade = this.oauthService.getIdentityClaims() as Record<string, any>;
+    if (reivindicacoesIdentidade && reivindicacoesIdentidade['tipoPerfil']) {
+      return reivindicacoesIdentidade['tipoPerfil'];
+    }
+
+    const usuarioArmazenado = this.getUsuarioLogado();
+    return usuarioArmazenado?.tipoPerfil ?? '';
   }
 
-  editarNome(usuario: Usuario): Observable<Mensagem> {
-    return this.http.post<Mensagem>(`${this.apiUrl}/editarNome`, usuario);
-  }
-
-  alterarSenha(usuario: Usuario): Observable<Mensagem> {
-    return this.http.post<Mensagem>(`${this.apiUrl}/alterarSenha`, usuario);
-  }
-
-  completarCadastro(uuid: string, dados: Partial<UsuarioDTO>): Observable<UsuarioDTO> {
-    return this.http.put<UsuarioDTO>(`${this.apiUrl}/${uuid}/completar-cadastro`, dados);
+  public completarCadastro(uuidUsuario: string, dadosAtualizados: Partial<UsuarioDTO>): Observable<UsuarioDTO> {
+    return this.http.put<UsuarioDTO>(`${this.urlBaseApi}/${uuidUsuario}/completar-cadastro`, dadosAtualizados);
   }
 }

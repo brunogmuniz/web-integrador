@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from 'src/environments/enviroment';
+import { environment } from 'src/environments/environment';
 import {ResponseDto} from "app-core/lib/dto/response.dto";
 
 export interface UnidadeUsuarioRequestDTO {

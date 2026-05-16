@@ -30,7 +30,6 @@ export class CadastrarAreaConhecimentoComponent implements OnInit {
       uuid: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
-      cargaHorariaTotal: ['', [Validators.required, Validators.min(1)]],
     });
 
     this.route.paramMap.subscribe(params => {

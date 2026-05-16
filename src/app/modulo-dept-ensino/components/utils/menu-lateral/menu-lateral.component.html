@@ -22,7 +22,9 @@
       <div class="user-info">
         <h5 class="text-white font-weight-bold mb-0">
           {{ nome }}
-          <i class="fa fa-pencil-alt text-white-50 icon-edit" aria-hidden="true"></i>
+          <a [routerLink]="['/usuario/form/novo']" [queryParams]="{ uuid: uuidUsuario }" aria-label="Editar dados do perfil" class="text-decoration-none">
+            <i class="la la-pencil text-white-50 icon-edit" aria-hidden="true"></i>
+          </a>
         </h5>
         <span class="d-block text-warning small font-weight-bold mt-1">
           {{ cargo }}
@@ -154,6 +156,30 @@
         </div>
       </li>
 
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('curso')">
+        <a class="menu-link" (click)="toggleMenu('curso')" tabindex="0" aria-label="Menu Estrutura Curricular">
+          <i class="menu-link-icon la la-calendar"></i>
+          <span class="menu-link-text">Cursos</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/curso/visualizar" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Listar Cursos</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/curso/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Curso</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
       <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('disciplina')">
         <a class="menu-link" (click)="toggleMenu('disciplina')" tabindex="0" aria-label="Menu Disciplinas">
           <i class="menu-link-icon la la-paperclip"></i>
@@ -202,7 +228,7 @@
         </div>
       </li>
 
-      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('importar')">
+      <li *ngIf="podeImportarDados" class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('importar')">
         <a class="menu-link" (click)="toggleMenu('importar')" tabindex="0" aria-label="Menu Importar Dados">
           <i class="menu-link-icon la la-cloud-upload"></i>
           <span class="menu-link-text">Importar Dados</span>

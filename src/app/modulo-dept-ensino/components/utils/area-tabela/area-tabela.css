@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
-*{
-  font-family: "Barlow", sans-serif !important;
-  font-weight: 200 !important;
+.kt-portlet {
+  font-family: "Barlow", sans-serif;
+  font-weight: 200;
 }
 
 .search-wrapper {position: relative;width: 300px;}
@@ -26,8 +26,6 @@
   border-bottom: 2px solid #005290 !important;
 }
 
-
-
 .table thead.thead-light th,
 .kt-portlet__head .kt-portlet__head-label {
   background-color: #ffffff !important;
@@ -37,35 +35,35 @@
   font-weight: 700 !important;
 }
 
-
-
-
 .kt-portlet__body > .table-responsive > .table > tbody > tr > td {
   font-size: 16px !important;
   background-color: #f4f4f4 !important;
 }
-
 
 .kt-portlet__body > .table-responsive > .table > tbody > tr:nth-of-type(4n+3) > td,
 .kt-portlet__body > .table-responsive > .table > tbody > tr:nth-of-type(4n) > td {
   background-color: #ffffff !important;
 }
 
-
-
 .btn-action-primary,
 .btn.btn-primary.btn-sm.btn-icon {
   background-color: #005290;
-  border-color: #ffffff;
+  border: none;
   color: #fff !important;
-  font-size: 0.6rem !important;
+  font-size: 0.75rem !important;
   border-radius: 32px !important;
-  text-transform: uppercase !important;
-  width: 100px;
+  text-transform: none !important;
+  width: 110px;
   font-weight: 600 !important;
-  white-space: wrap !important;
+  white-space: normal !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1.1 !important;
+  padding: 0.85rem !important;
+  gap: 2px !important;
+  letter-spacing: 0.3px;
 }
-
 
 .btn-action-primary:hover,
 .btn.btn-primary.btn-sm.btn-icon:hover {
@@ -75,15 +73,23 @@
 
 .btn-action-secondary,
 .btn.btn-secondary.btn-sm.btn-icon {
-  background-color: #ffffff !important;
-  border-color: #032947;
-  color: #032947 !important;
-  font-size: 0.7rem !important;
+  background-color: transparent !important;
+  border: 1px solid #005290;
+  color: #005290 !important;
+  font-size: 0.75rem !important;
   border-radius: 32px !important;
-  text-transform: uppercase !important;
-  width: 100px;
-  white-space: nowrap !important;
+  text-transform: none !important;
+  width: 110px;
+  white-space: normal !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  line-height: 1.1 !important;
+  padding: 0.45rem !important;
+  font-weight: 500;
 }
+
 .btn-action-secondary:hover,
 .btn.btn-secondary.btn-sm.btn-icon:hover {
   background-color: #e1e1e1 !important;
@@ -142,8 +148,6 @@
 .legenda-item.cuidado::before { background-color: #eacb02; }
 .legenda-item.pessimo::before { background-color: #ff0000; }
 
-
-
 .table th,
 .table td {
   text-align: center !important;
@@ -153,3 +157,8 @@
 .table-sm td {
   text-align: center !important;
 }
+
+.btn.btn-secondary.btn-sm.btn-icon i {
+  color: #005290 !important;
+}
+

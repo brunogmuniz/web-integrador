@@ -20,8 +20,11 @@ import { CadastrarDocentesEncargosComponent } from "app-core/lib/components/crud
 import { DisciplinaComponent } from 'app-core/lib/components/cruds/disciplina/disciplina.component';
 import { VisualizarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/visualizar-disciplina/visualizar-disciplina.component";
 import { CadastrarDisciplinaComponent } from "app-core/lib/components/cruds/disciplina/cadastrar-disciplina/cadastrar-disciplina.component";
+import { UsuarioComponent } from 'app-core/lib/components/cruds/usuario/usuario.component';
+import { CadastrarUsuarioComponent } from 'app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component';
 
 import {
+  adminGuard,
   cadastroCompletoGuard,
   authGuard,
   UnidadeComponent,
@@ -33,18 +36,23 @@ import {
   VisualizarUnidadeUsuarioComponent,
   CadastrarUnidadeUsuarioComponent
 } from 'app-core';
+import {CursoComponent} from "app-core/lib/components/cruds/curso/curso.component";
+import {
+  VisualizarCursoComponent
+} from "app-core/lib/components/cruds/curso/visualizar-curso/visualizar-curso.component";
+import {CadastrarCursoComponent} from "app-core/lib/components/cruds/curso/cadastrar-curso/cadastrar-curso.component";
 
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, adminGuard]
   },
 
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, adminGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
@@ -59,6 +67,17 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarDocenteComponent },
           { path: 'form/novo', component: CadastrarDocenteComponent },
           { path: 'form/editar/:id', component: CadastrarDocenteComponent }
+        ]
+      },
+
+      {
+        path: 'curso',
+        component: CursoComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarCursoComponent },
+          { path: 'form/novo', component: CadastrarCursoComponent },
+          { path: 'form/editar/:id', component: CadastrarCursoComponent }
         ]
       },
 
@@ -81,6 +100,14 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
           { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
           { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
+        ]
+      },
+
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        children: [
+          { path: 'form/novo', component: CadastrarUsuarioComponent }
         ]
       },
 

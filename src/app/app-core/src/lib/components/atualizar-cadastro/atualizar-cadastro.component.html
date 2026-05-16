@@ -24,7 +24,8 @@
             </div>
           </div>
 
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+
             <div class="form-group row">
               <div class="col-lg-12">
                 <label>Nome Completo <span class="text-danger">*</span></label>
@@ -34,7 +35,8 @@
                        placeholder="Seu nome completo"
                        [class.is-invalid]="form.get('nome')?.touched && form.get('nome')?.invalid">
                 <div *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="invalid-feedback">
-                  Nome é obrigatório (min. 5 caracteres).
+                  <span *ngIf="form.get('nome')?.errors?.['pattern']; else nomeBasicoInvalido">Informe nome e sobrenome.</span>
+                  <ng-template #nomeBasicoInvalido>Nome é obrigatório (min. 5 caracteres).</ng-template>
                 </div>
               </div>
             </div>
@@ -113,9 +115,12 @@
                 <div class="row">
                   <div class="col-lg-12 text-right">
                     <button type="submit"
-                            class="btn btn-success btn-elevate btn-pill btn-wide"
+                            class="perfil-btn perfil-btn--salvar"
                             [disabled]="form.invalid || loading">
-                      <i class="fa" [ngClass]="{'fa-spinner fa-spin': loading, 'fa-save': !loading}"></i>
+                      <span *ngIf="loading" class="perfil-spinner"></span>
+                      <svg *ngIf="!loading" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
                       Salvar e Continuar
                     </button>
                   </div>

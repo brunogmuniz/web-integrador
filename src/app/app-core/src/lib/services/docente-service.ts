@@ -5,7 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { DocenteDTO } from '../dto/Docente.dto';
 import { DocenteDetalheDTO } from '../dto/DocenteDetalhe.dto';
 import { DocenteSubAreaDTO } from '../dto/DocenteSubArea.dto';
-import { environment } from "../../../../../environments/enviroment";
+import { environment } from "../../../../../environments/environment";
 import { RespostaPaginada } from "app-core/lib/dto/paginacao/resposta-paginada.dto";
 
 @Injectable({

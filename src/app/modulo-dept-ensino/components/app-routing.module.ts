@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {PrincipalComponent} from "./principal/principal.component";
 import {LayoutComponent} from "./layout/layout.component";
-import {authGuard, cadastroCompletoGuard} from "app-core";
+import {authGuard, cadastroCompletoGuard, comPermissaoUnidade, ensinoGuard, permissaoUnidadeGuard} from "app-core";
 import {DocenteComponent} from "app-core/lib/components/cruds/docente/docente.component";
 import {
   VisualizarDocenteComponent
@@ -58,17 +58,26 @@ import {DisciplinasComponent} from "./importacoes/disciplinas/disciplinas.compon
 import {DocentesComponent} from "./importacoes/docentes/docentes.component";
 import {CursosComponent} from "./importacoes/cursos/cursos.component";
 import {ImportacoesComponent} from "./importacoes/importacoes.component";
+import { UsuarioComponent } from "app-core/lib/components/cruds/usuario/usuario.component";
+import {
+  CadastrarUsuarioComponent
+} from "app-core/lib/components/cruds/usuario/cadastrar-usuario/cadastrar-usuario.component";
+import {CursoComponent} from "app-core/lib/components/cruds/curso/curso.component";
+import {
+  VisualizarCursoComponent
+} from "app-core/lib/components/cruds/curso/visualizar-curso/visualizar-curso.component";
+import {CadastrarCursoComponent} from "app-core/lib/components/cruds/curso/cadastrar-curso/cadastrar-curso.component";
 
 const routes: Routes = [
   {
     path: 'atualizar-cadastro',
     loadChildren: () => import('app-core').then(m => m.AtualizarCadastroModule),
-    canActivate: [authGuard]
+    canActivate: [authGuard, ensinoGuard]
   },
   {
     path: '',
     component: LayoutComponent,
-    canActivate: [authGuard, cadastroCompletoGuard],
+    canActivate: [authGuard, ensinoGuard, cadastroCompletoGuard],
     children: [
       {
         path: '',
@@ -109,6 +118,12 @@ const routes: Routes = [
       {
         path: 'importar',
         component: ImportacoesComponent,
+        canActivate: [permissaoUnidadeGuard],
+        data: comPermissaoUnidade({
+          permissoes: ['DIRECAO'],
+          tiposUnidade: ['DIRECAO'],
+          papeis: ['RESPONSAVEL', 'RESPONSAVEL_ADJUNTO']
+        }),
         children: [
           { path: '', redirectTo: 'docentes', pathMatch: 'full' },
           { path: 'docentes', component: DocentesComponent },
@@ -135,6 +150,13 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarAreaConhecimentoComponent },
           { path: 'form/novo', component: CadastrarAreaConhecimentoComponent },
           { path: 'form/editar/:id', component: CadastrarAreaConhecimentoComponent }
+        ]
+      },
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        children: [
+          { path: 'form/novo', component: CadastrarUsuarioComponent },
         ]
       },
       {
@@ -166,7 +188,19 @@ const routes: Routes = [
           { path: 'form/novo', component: CadastrarDisciplinaComponent },
           { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
         ]
-      }
+      },
+
+      {
+        path: 'curso',
+        component: CursoComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarCursoComponent },
+          { path: 'form/novo', component: CadastrarCursoComponent },
+          { path: 'form/editar/:id', component: CadastrarCursoComponent }
+        ]
+      },
+
     ]
   },
   { path: '**', redirectTo: '' }

@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { SubareaConhecimentoDTO } from '../dto/SubareaConhecimento.dto';
-import { environment } from "../../../../../environments/enviroment";
+import {environment} from "../../../../../environments/environment";
 import { RespostaPaginada } from '../dto/paginacao/resposta-paginada.dto';
 
 @Injectable({
