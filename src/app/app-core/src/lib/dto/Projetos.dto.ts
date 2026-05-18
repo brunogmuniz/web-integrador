@@ -1,8 +1,19 @@
 export interface ProjetosDTO {
-  numero: number;
+  id: number;
+
+  numero: string;
   titulo: string;
-  unidade: string;
-  responsavel: string;
-  inicio: string;
-  termino: string;
+
+  responsavel?: string;
+
+  dataInicio: string;
+  dataFim?: string;
+
+  resumo: string;
+
+  tipoOrientacao?: string;
+  classificacaoCNPQ?: string;
+  situacao?: string;
+
+  topicos?: string[];
 }

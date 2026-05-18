@@ -50,6 +50,8 @@ import { CadastrarCursoComponent } from './components/cruds/curso/cadastrar-curs
 import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-curso/visualizar-curso.component';
 
 import { VisualizarProjetosComponent } from './components/projetos/visualizar-projetos/visualizar-projetos.component';
+import { DetalhesProjetoComponent } from './components/projetos/detalhes-projeto/detalhes-projeto.component';
+import { ViewInputComponent } from './components/view-input/view-input.component';
 
 @NgModule({
   declarations: [
@@ -99,7 +101,9 @@ import { VisualizarProjetosComponent } from './components/projetos/visualizar-pr
     VisualizarUsuarioComponent,
     VisualizarCursoComponent,
 
-    VisualizarProjetosComponent
+    VisualizarProjetosComponent,
+      DetalhesProjetoComponent,
+      ViewInputComponent
   ],
   imports: [
     CommonModule,

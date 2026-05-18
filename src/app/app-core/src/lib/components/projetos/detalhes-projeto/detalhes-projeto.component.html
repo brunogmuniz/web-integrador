@@ -1,0 +1,78 @@
+<div class="project-page" *ngIf="projeto">
+
+  <div class="card card-custom gutter-b">
+
+    <div class="card-body border-bottom">
+
+      <span class="numero-projeto">
+        Projeto #{{ projeto.numero }}
+      </span>
+      <h2 class="project-title">
+        {{ projeto.titulo }}
+      </h2>
+
+      <div class="project-meta">
+
+        <div class="meta-item">
+          <i class="la la-user"></i>
+          {{ projeto.responsavel || 'Responsável não informado' }}
+        </div>
+
+        <div class="meta-item">
+          <i class="la la-calendar"></i>
+          {{ projeto.dataInicio }} até {{ projeto.dataFim || 'Em andamento' }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="row">
+
+        <div class="col-md-6 mb-5">
+          <div class="info-block">
+            <div class="info-label">Classificação CNPQ</div>
+            <div class="info-value">
+              {{ projeto.classificacaoCNPQ || 'Não informado' }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-5">
+          <div class="info-block">
+            <div class="info-label">Situação</div>
+            <div class="info-value">
+              {{ projeto.situacao || 'Não informado' }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="separator separator-dashed my-5"></div>
+      <div class="mb-8">
+        <h4 class="section-title">
+          Resumo do Projeto
+        </h4>
+        <div class="project-content">
+          {{ projeto.resumo || 'Nenhum resumo informado.' }}
+        </div>
+      </div>
+      <div *ngIf="projeto.topicos?.length">
+      <br>
+        <h4 class="section-title">
+          Palavras-chave
+        </h4>
+        <div class="topics-container">
+    <span
+      *ngFor="let topico of projeto.topicos"
+      class="topic-tag">
+      {{ topico }}
+    </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
