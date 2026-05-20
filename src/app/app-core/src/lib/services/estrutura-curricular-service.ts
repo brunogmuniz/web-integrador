@@ -44,6 +44,15 @@ export class EstruturaCurricularService {
     );
   }
 
+  findByCurso(cursoId: number): Observable<EstruturaCurricularDTO[]> {
+    return this.http.get<EstruturaCurricularDTO[]>(`${this.apiUrl}/curso/${cursoId}`).pipe(
+      catchError(error => {
+        console.error(error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<EstruturaCurricularDTO>> {
     const params = new HttpParams()
       .set('pagina', pagina.toString())

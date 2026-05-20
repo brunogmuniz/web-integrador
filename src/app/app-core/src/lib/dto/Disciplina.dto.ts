@@ -7,7 +7,7 @@ export interface DisciplinaDTO {
   subareaId: number;
   nomeSubarea: string;
   tipoDisciplina?: string;
-  ead: boolean;
+  ead?: boolean;
   cargaHorariaTeorica: number;
   cargaHorariaPratica: number;
 }

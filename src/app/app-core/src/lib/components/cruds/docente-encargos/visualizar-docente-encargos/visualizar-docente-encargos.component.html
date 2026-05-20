@@ -5,7 +5,21 @@
   </app-paginador>
 </div>
 
-<div class="card">
+<div class="card mt-3">
+  <div class="card-header border-0 pt-6">
+    <div class="row w-100">
+      <div class="col-lg-4 col-md-6">
+        <label class="form-label required fw-bold text-gray-700 fs-7">Oferta</label>
+        <select class="form-select form-select-solid" [(ngModel)]="ofertaSelecionadaUuid" (ngModelChange)="carregarDados()">
+          <option [ngValue]="undefined" disabled>{{ ofertas.length ? 'Selecione...' : 'Nenhuma oferta ativa encontrada' }}</option>
+          <option *ngFor="let oferta of ofertas" [ngValue]="oferta.uuid">
+            {{ oferta.ano }}/{{ oferta.semestre }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
@@ -13,9 +27,8 @@
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
           <th class="min-w-200px">Docente</th>
           <th class="min-w-150px">Departamento</th>
-          <th class="min-w-200px">Áreas de Atuação</th>
+          <th class="min-w-200px text-center">Áreas de Atuação</th>
           <th class="min-w-100px text-center">Carga (%)</th>
-          <th class="min-w-120px text-center">Ações</th>
         </tr>
         </thead>
 
@@ -31,12 +44,12 @@
             <td>
               <span class="text-gray-800">{{ item.nomeDepartamento || item.departamento }}</span>
             </td>
-            <td>
-              <div class="d-flex flex-wrap gap-1">
-                  <span *ngFor="let area of getNomesAreas(item.subAreas)" class="text-gray-700 fw-semibold">
-                    {{ area }}
-                  </span>
-              </div>
+            <td class="text-center">
+              <button class="btn btn-icon btn-sm bg-transparent"
+                      (click)="abrirModal(item)"
+                      title="Visualizar Áreas de Atuação">
+                <i class="la la-eye fs-3 text-dark"></i>
+              </button>
             </td>
             <td class="text-center">
   <span class="badge fw-bold text-dark"
@@ -48,26 +61,12 @@
     {{ item.totalEncargos || 0 }}%
   </span>
             </td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center gap-2">
-                <button class="btn btn-icon btn-light-primary btn-sm me-2"
-                        [routerLink]="['/docente-encargos/form/editar', item.uuid]">
-                  <i class="la la-edit fs-3"></i>
-                </button>
-                <button type="button"
-                        class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
-                        (click)="onDelete(item.uuid)"
-                        title="Excluir">
-                  <i class="la la-trash fs-3"></i>
-                </button>
-              </div>
-            </td>
           </tr>
         </ng-container>
 
         <ng-template #emptyList>
           <tr>
-            <td colspan="5" class="text-center py-10">
+            <td colspan="4" class="text-center py-10">
               <div class="d-flex flex-column align-items-center">
                 <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
                 <span class="text-gray-600 fw-semibold fs-5">
@@ -88,3 +87,92 @@
     (mudancaPagina)="aoMudarPaginacao($event)">
   </app-paginador>
 </div>
+
+<div class="modal fade"
+     [class.show]="exibirModal"
+     [style.display]="exibirModal ? 'block' : 'none'"
+     tabindex="-1"
+     role="dialog"
+     aria-modal="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow-lg border-0" style="border-radius: 8px;">
+      <div class="modal-header bg-light py-4 px-6 border-bottom">
+        <h5 class="modal-title fw-bold text-gray-800 fs-4">
+          Áreas de Atuação - {{ docenteSelecionado?.nome }}
+        </h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="fecharModal()"></button>
+      </div>
+      <div class="modal-body p-6">
+        <h6 class="text-gray-800 fw-bold fs-6 mb-3 text-center">Carga na Oferta</h6>
+        <div class="table-responsive mb-5">
+          <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-3 mb-0">
+            <thead>
+              <tr class="border-bottom-2 border-gray-200 text-gray-800 fw-bold fs-6">
+                <th class="text-center min-w-160px">Carga total</th>
+                <th class="text-center min-w-160px">Carga horária teórica</th>
+                <th class="text-center min-w-160px">Carga horária prática</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><span class="text-gray-800 fw-bold">{{ docenteSelecionado?.cargaTotal || 0 }}</span></td>
+                <td class="text-center"><span class="text-gray-800 fw-bold">{{ docenteSelecionado?.cargaTeorica || 0 }}</span></td>
+                <td class="text-center"><span class="text-gray-800 fw-bold">{{ docenteSelecionado?.cargaPratica || 0 }}</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-responsive" *ngIf="docenteSelecionado?.subAreas && docenteSelecionado!.subAreas!.length > 0; else semAreas">
+          <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
+            <thead>
+              <tr class="border-bottom-2 border-gray-200 text-gray-800 fw-bold fs-6">
+                <th class="min-w-150px">Área</th>
+                <th class="min-w-150px">Subárea</th>
+                <th class="min-w-80px text-center">CH Total</th>
+                <th class="min-w-80px text-center">CH Teórica</th>
+                <th class="min-w-80px text-center">CH Prática</th>
+                <th class="min-w-80px text-center">Carga (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sub of docenteSelecionado?.subAreas">
+                <td>
+                  <span class="text-gray-800 fw-semibold">{{ sub.nomeArea || 'N/A' }}</span>
+                </td>
+                <td>
+                  <span class="text-gray-800">{{ sub.nomeSubarea || 'N/A' }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-gray-800 fw-semibold">{{ sub.cargaHoraria || 0 }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-gray-800 fw-semibold">{{ sub.cargaHorariaTeorica || 0 }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-gray-800 fw-semibold">{{ sub.cargaHorariaPratica || 0 }}</span>
+                </td>
+                <td class="text-center">
+                  <span class="text-gray-800 fw-semibold">{{ (sub.percentual || 0) | number:'1.0-0' }}%</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #semAreas>
+          <div class="text-center py-10">
+            <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
+            <p class="text-gray-600 fw-semibold fs-5 mb-0">Nenhuma área de atuação vinculada para esta oferta.</p>
+          </div>
+        </ng-template>
+      </div>
+      <div class="modal-footer bg-light py-4 px-6 border-top justify-content-end">
+        <button type="button" class="btn btn-secondary fw-semibold px-6" style="border-radius: 4px;" (click)="fecharModal()">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="exibirModal" (click)="fecharModal()"></div>

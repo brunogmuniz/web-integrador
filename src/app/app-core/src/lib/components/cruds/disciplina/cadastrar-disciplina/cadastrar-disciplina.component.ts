@@ -33,6 +33,7 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],
       cargaHoraria: [{ value: 0, disabled: true }],
+      tipoDisciplina: ['Regular', Validators.required],
       ead: [false]
     });
   }
@@ -115,7 +116,6 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     const payload: DisciplinaDTO = {
       ...formValue,
       uuid: this.uuidDisciplina,
-      tipoDisciplina: formValue.ead ? 'EAD' : 'PRESENCIAL',
     };
 
     this.loading = true;

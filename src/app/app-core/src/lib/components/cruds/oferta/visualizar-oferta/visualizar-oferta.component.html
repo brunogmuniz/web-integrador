@@ -1,0 +1,67 @@
+<div class="card mt-3">
+  <div class="card-body pt-4">
+    <div class="table-responsive">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+        <thead>
+        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+          <th>Ano/Semestre</th>
+          <th>Status</th>
+          <th class="text-center">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let oferta of ofertas">
+          <td>
+            <span class="fw-bold" [ngClass]="{'oferta-inativa': !oferta.ativo}">
+              {{ oferta.ano }}/{{ oferta.semestre }}
+            </span>
+          </td>
+          <td>
+            <span class="badge" [ngClass]="oferta.ativo ? 'badge-light-success text-success' : 'badge-light-danger text-danger'">
+              {{ oferta.ativo ? 'Disponível' : 'Indisponível' }}
+            </span>
+          </td>
+          <td class="text-center">
+
+            <button
+              *ngIf="oferta.ativo"
+              class="btn btn-icon btn-light-danger text-danger btn-sm me-2"
+              title="Tornar indisponível"
+              (click)="alterarDisponibilidade(oferta)">
+              <i class="la la-lock fs-3"></i>
+            </button>
+
+            <button
+              *ngIf="!oferta.ativo"
+              class="btn btn-icon btn-light-success text-success btn-sm me-2"
+              title="Disponibilizar"
+              (click)="alterarDisponibilidade(oferta)">
+              <i class="la la-unlock fs-3"></i>
+            </button>
+
+            <button
+              class="btn btn-icon btn-light-primary btn-sm me-2"
+              [routerLink]="['/disciplina-oferta/form/editar', oferta.uuid]"
+              title="Editar disciplinas ofertadas">
+              <i class="la la-edit fs-3"></i>
+            </button>
+
+            <button
+              class="btn btn-icon btn-light-danger btn-sm"
+              (click)="excluir(oferta.uuid)"
+              title="Excluir oferta">
+              <i class="la la-trash fs-3"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="ofertas.length === 0">
+          <td colspan="3" class="text-center py-10">Nenhuma oferta cadastrada.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="mt-4 w-100" *ngIf="ofertas.length > 0">
+  <app-paginador [meta]="meta" (mudancaPagina)="aoMudarPaginacao($event)"></app-paginador>
+</div>

@@ -17,7 +17,7 @@
               [class.is-invalid]="form.get('codigo')?.invalid && form.get('codigo')?.touched"
             />
             <div *ngIf="form.get('codigo')?.invalid && form.get('codigo')?.touched" class="invalid-feedback d-block">
-              O nome é obrigatório
+              O nome e obrigatorio
             </div>
           </div>
 
@@ -55,27 +55,29 @@
       <div class="d-flex flex-stack mb-5">
         <h3 class="text-gray-800 fw-bold m-0">
           <i class="la la-book text-primary fs-2 me-2"></i>
-          Oferta de Disciplinas
+          Disciplinas do Currículo
         </h3>
-        <button type="button" class="btn btn-sm btn-light-primary" (click)="$event.preventDefault(); adicionarOferta()">
+        <button type="button" class="btn btn-sm btn-light-primary" (click)="$event.preventDefault(); adicionarDisciplinaCurriculo()">
           <i class="la la-plus"></i> Adicionar Disciplina
         </button>
       </div>
 
-      <div class="table-responsive" formArrayName="ofertas">
-        <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4" *ngIf="ofertas.controls.length > 0; else nenhumaOferta">
+      <div class="table-responsive" formArrayName="disciplinasCurriculo">
+        <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4" *ngIf="disciplinasCurriculo.controls.length > 0; else nenhumaOferta">
           <thead>
           <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
             <th class="min-w-300px required">Disciplina</th>
             <th class="min-w-100px required">Semestre</th>
-            <th class="min-w-100px text-center">Nº Prof. Teórica</th>
-            <th class="min-w-100px text-center">Nº Prof. Prática</th>
+            <th class="min-w-100px text-center">CH Teorica</th>
+            <th class="min-w-100px text-center">CH Pratica</th>
+            <th class="min-w-100px text-center">Max. Prof. Teorica</th>
+            <th class="min-w-100px text-center">Max. Prof. Pratica</th>
             <th class="min-w-80px text-center">Tutoria?</th>
             <th class="min-w-50px text-center">Ações</th>
           </tr>
           </thead>
           <tbody class="fs-6">
-          <tr *ngFor="let oferta of ofertas.controls; let i = index" [formGroupName]="i">
+          <tr *ngFor="let oferta of disciplinasCurriculo.controls; let i = index" [formGroupName]="i">
             <td>
               <select [compareWith]="compararDisciplinas" formControlName="disciplina" class="form-select form-select-solid">
                 <option [ngValue]="null">Selecione...</option>
@@ -88,16 +90,24 @@
             <td>
               <select class="form-select form-select-solid" formControlName="semestre">
                 <option [ngValue]="null">...</option>
-                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ sem }}º Semestre</option>
+                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ sem }} Semestre</option>
               </select>
             </td>
 
             <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="numProfessoresTeorica" min="1" />
+              <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaTeorica" min="0" />
             </td>
 
             <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="numProfessoresPratica" min="1" />
+              <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaPratica" min="0" />
+            </td>
+
+            <td>
+              <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresTeorica" min="0" />
+            </td>
+
+            <td>
+              <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresPratica" min="0" />
             </td>
 
             <td class="text-center">
@@ -107,7 +117,7 @@
             </td>
 
             <td class="text-center">
-              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerOferta(i)">
+              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerDisciplinaCurriculo(i)">
                 <i class="la la-trash fs-3"></i>
               </button>
             </td>

@@ -31,7 +31,7 @@ export class VisualizarDisciplinaComponent implements OnInit {
       },
       error: (err: Error) => {
         console.error('Falha ao carregar a página de disciplinas:', err);
-        void Swal.fire('Erro', 'Não foi possível carregar os registos. Tente novamente mais tarde.', 'error');
+        void Swal.fire('Erro', 'Não foi possível carregar os registros. Tente novamente mais tarde.', 'error');
       }
     });
   }
@@ -70,10 +70,18 @@ export class VisualizarDisciplinaComponent implements OnInit {
         void Swal.fire('Excluído!', 'A disciplina foi removida.', 'success');
         this.carregarDisciplinas();
       },
-      error: (_err: any) => {
-        console.error('Erro ao excluir disciplina:', _err);
-        void Swal.fire('Erro', 'Não foi possível excluir o registro.', 'error');
+      error: (err: any) => {
+        console.error('Erro ao excluir disciplina:', err);
+        void Swal.fire('Erro', this.obterMensagemErroExclusao(err), 'error');
       }
     });
+  }
+
+  private obterMensagemErroExclusao(err: any): string {
+    if (err?.status === 409) {
+      return err?.error?.message || err?.error?.detail || err?.error || 'Não é possível excluir esta disciplina porque ela possui vínculos.';
+    }
+
+    return 'Não foi possível excluir o registro.';
   }
 }
