@@ -1,0 +1,98 @@
+<div class="kt-portlet kt-portlet--tabs m-0">
+  <div class="kt-portlet__head">
+    <div class="kt-portlet__head-label">
+      <span class="kt-portlet__head-icon">
+        <i class="flaticon2-gear text-primary"></i>
+      </span>
+      <h3 class="kt-portlet__head-title">Gerenciar Projetos</h3>
+    </div>
+  </div>
+
+  <div class="kt-portlet__body">
+
+    <div class="busca-projetos">
+      <i class="la la-search busca-projetos__icon"></i>
+      <input
+        type="text"
+        class="busca-projetos__input"
+        placeholder="Buscar projetos..."
+        [(ngModel)]="termoBusca"
+        (keyup.enter)="buscar()"
+      />
+    </div>
+
+    <div class="mt-4 p-3 border-top" *ngIf="meta.totalPaginas > 0">
+      <app-paginador
+        [meta]="meta"
+        (mudancaPagina)="aoMudarPaginacao($event)">
+      </app-paginador>
+    </div>
+
+    <div class="table-shell">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0 projetos-layout-table">
+          <thead>
+          <tr>
+            <th class="text-center col-numero-header">Número</th>
+            <th class="col-titulo-header">Título</th>
+            <th class="text-center col-responsavel-header">Responsável</th>
+            <th class="text-center col-data-header">Início</th>
+            <th class="text-center col-data-header">Término</th>
+            <th class="text-center col-acoes-header">Ações</th>
+          </tr>
+          </thead>
+
+          <tbody *ngIf="projetos.length > 0">
+          <tr *ngFor="let projeto of projetos">
+            <td class="text-center col-numero-cell">{{ projeto.numero }}</td>
+            <td>{{ projeto.titulo }}</td>
+            <td class="text-center">
+              {{ projeto.responsavel ? projeto.responsavel : 'Não Consta' }}
+            </td>
+
+            <td class="text-center">{{ projeto.dataInicio }}</td>
+            <td class="text-center">{{ projeto.dataFim }}</td>
+
+            <td class="text-center col-acoes-cell">
+              <div class="d-flex justify-content-center gap-2">
+
+                <button
+                  class="btn btn-icon btn-light-primary btn-sm"
+                  title="Editar"
+                  [routerLink]="['/admin/editar-projeto', projeto.id]">
+                  <i class="la la-edit fs-3"></i>
+                </button>
+
+                <button
+                  class="btn btn-icon btn-light-danger btn-sm"
+                  title="Excluir"
+                  (click)="onDelete(projeto.id)">
+                  <i class="la la-trash fs-3"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+
+          <tbody *ngIf="projetos.length === 0">
+          <tr>
+            <td colspan="6" class="empty-state">
+              <i class="la la-folder-open empty-state-icon"></i>
+              <div class="empty-state-title">Nenhum projeto encontrado.</div>
+              <div class="empty-state-text">Verifique se existem registros cadastrados ou altere sua busca.</div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 p-3 border-top" *ngIf="meta.totalPaginas > 0">
+        <app-paginador
+          [meta]="meta"
+          (mudancaPagina)="aoMudarPaginacao($event)">
+        </app-paginador>
+      </div>
+
+    </div>
+  </div>
+</div>

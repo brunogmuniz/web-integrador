@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { UsuarioService } from "app-core/lib/services/usuario.service";
 
 @Component({
-  selector: 'menu-lateral',
+  selector: 'menu-lateral-admin',
   templateUrl: './menu-lateral.component.html',
   styleUrls: ['./menu-lateral.component.css']
 })

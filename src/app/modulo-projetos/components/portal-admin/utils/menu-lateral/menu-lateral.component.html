@@ -15,22 +15,6 @@
 
   <div class="sidebar-menu-wrapper bg-navy-custom">
 
-    <!--<div class="sidebar-user-profile text-center mt-4 mb-4">
-      <div class="user-avatar mb-2 align-items-center">
-        <lib-image-profile></lib-image-profile>
-      </div>
-      <div class="user-info">
-        <h5 class="text-white font-weight-bold mb-0">
-          {{ nome }}
-          <i class="fa fa-pencil-alt text-white-50 icon-edit" aria-hidden="true"></i>
-        </h5>
-        <span class="d-block text-warning small font-weight-bold mt-1">
-          {{ cargo }}
-        </span>
-      </div>
-    </div>
-    -->
-
     <ul class="menu-nav">
 
       <li class="menu-section">
@@ -38,7 +22,7 @@
       </li>
 
       <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="menu-link" routerLink="">
+        <a class="menu-link" routerLink="/admin">
           <i class="menu-link-icon la la-home"></i>
           <span class="menu-link-text">Página Inicial</span>
         </a>
@@ -48,17 +32,16 @@
         <h4 class="menu-section-text">Projetos</h4>
       </li>
 
-
       <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="menu-link" routerLink="ver-projetos">
-          <i class="menu-link-icon la la-eye"></i>
-          <span class="menu-link-text">Ver Todos</span>
+        <a class="menu-link" routerLink="/admin/ver-projetos">
+          <i class="menu-link-icon la la-list"></i>
+          <span class="menu-link-text">Gerenciar Projetos</span>
         </a>
       </li>
 
       <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="menu-link" routerLink="gerenciar-interesses">
-          <i class="menu-link-icon la la-paperclip"></i>
+        <a class="menu-link" routerLink="/admin/cadastrar-projeto">
+          <i class="menu-link-icon la la-plus-circle"></i>
           <span class="menu-link-text">Cadastrar Projetos</span>
         </a>
       </li>

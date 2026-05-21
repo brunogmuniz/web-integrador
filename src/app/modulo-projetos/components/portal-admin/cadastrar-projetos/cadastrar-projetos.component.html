@@ -1,0 +1,117 @@
+<div class="card mt-3">
+  <div class="card-header bg-navy-custom text-white" style="background-color: #1e1e2d;">
+    <h5 class="mb-0 kt-label-font-color-4 text-white">
+      {{ modoEdicao ? 'Editar Projeto' : 'Cadastrar Projeto' }}
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="projetoForm" (ngSubmit)="onSubmit()" *ngIf="projetoForm">
+
+      <div class="form-row mb-3 d-flex flex-wrap">
+        <div class="col-md-3 pe-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Número do Projeto'"
+            [control]="c['numero']"
+            [supportText]="'Ex: PRJ-2026-001'">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-9 ps-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Título'"
+            [control]="c['titulo']"
+            [supportText]="'Mínimo de 3 caracteres'">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-3 d-flex flex-wrap align-items-end">
+        <div class="col-md-3 pe-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Data de Início'"
+            [type]="'date'"
+            [control]="c['dataInicio']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-3 px-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Data de Fim'"
+            [type]="'date'"
+            [control]="c['dataFim']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-3 px-2 mb-3">
+          <label class="form-label font-weight-bold">Situação</label>
+          <select
+            class="form-control"
+            formControlName="situacao"
+            [class.is-invalid]="c['situacao'].invalid && c['situacao'].touched">
+            <option value="" disabled selected>Selecione a situação...</option>
+            <option *ngFor="let s of situacoes" [value]="s.valor">{{ s.label }}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3 ps-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Classificação CNPQ'"
+            [control]="c['classificacaoCNPQ']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-3 d-flex flex-wrap">
+        <div class="col-md-4 pe-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Responsável'"
+            [control]="c['responsavel']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4 px-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Tipo de Orientação'"
+            [control]="c['tipoOrientacao']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-4 ps-2 mb-3">
+          <lib-form-input-padrao
+            [label]="'Linha de Pesquisa'"
+            [control]="c['linhaPesquisa']"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+      </div>
+
+      <div class="form-row mb-4">
+        <div class="col-md-12">
+          <label class="form-label font-weight-bold">Resumo do Projeto</label>
+          <textarea
+            class="form-control"
+            rows="5"
+            formControlName="resumo"
+            placeholder="Descreva o resumo do projeto aqui..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions text-right d-flex justify-content-end mt-4 pt-3 border-top">
+        <button type="button" class="btn btn-secondary me-3" (click)="cancelar()">
+          <i class="la la-times"></i>
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="projetoForm.invalid">
+          <i class="la la-check"></i>
+          {{ modoEdicao ? 'Atualizar Projeto' : 'Salvar Projeto' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

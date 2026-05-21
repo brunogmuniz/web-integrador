@@ -52,13 +52,7 @@ import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-cu
 import { VisualizarProjetosComponent } from './components/projetos/visualizar-projetos/visualizar-projetos.component';
 import { DetalhesProjetoComponent } from './components/projetos/detalhes-projeto/detalhes-projeto.component';
 import { ViewInputComponent } from './components/view-input/view-input.component';
-import { CadastrarProjetosComponent } from 'app-core/lib/components/projetos/portal-admin/cadastrar-projetos/cadastrar-projetos.component';
-import { PortalAdminComponent } from './components/projetos/portal-admin/portal-admin.component';
 import {LayoutModule} from "../../../modulo-projetos/components/layout/layout.module";
-import {HeaderComponent} from "app-core/lib/components/projetos/portal-admin/utils/header/header.component";
-import {
-  MenuLateralComponent
-} from "app-core/lib/components/projetos/portal-admin/utils/menu-lateral/menu-lateral.component";
 
 @NgModule({
   declarations: [
@@ -110,11 +104,7 @@ import {
 
     VisualizarProjetosComponent,
     DetalhesProjetoComponent,
-    ViewInputComponent,
-    CadastrarProjetosComponent,
-    PortalAdminComponent,
-    HeaderComponent,
-    MenuLateralComponent
+    ViewInputComponent
   ],
   imports: [
     CommonModule,

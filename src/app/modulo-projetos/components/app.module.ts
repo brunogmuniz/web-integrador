@@ -9,11 +9,19 @@ import {PrincipalComponent} from "../../modulo-admin/components/principal/princi
 import { LayoutModule } from './layout/layout.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {HttpClientModule} from "@angular/common/http";
+import {PortalAdminComponent} from "./portal-admin/portal-admin.component";
+import {GerenciarProjetosComponent} from "./portal-admin/gerenciar-projetos/gerenciar-projetos.component";
+import {CadastrarProjetosComponent} from "./portal-admin/cadastrar-projetos/cadastrar-projetos.component";
+import {AppCoreModule} from "app-core";
+import {AdminModule} from "./portal-admin/admin.module";
 
 @NgModule({
   declarations: [
     AppComponent,
-    PrincipalComponent
+    PrincipalComponent,
+    PortalAdminComponent,
+    GerenciarProjetosComponent,
+    CadastrarProjetosComponent
   ],
   imports: [
     BrowserModule,
@@ -21,7 +29,9 @@ import {HttpClientModule} from "@angular/common/http";
     RouterModule,
     LayoutModule,
     HttpClientModule,
-    OAuthModule.forRoot()
+    OAuthModule.forRoot(),
+    AppCoreModule,
+    AdminModule
   ],
   bootstrap: [AppComponent]
 })

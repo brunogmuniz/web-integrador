@@ -4,10 +4,9 @@ import {AppComponent} from "./app.component";
 import {LayoutComponent} from "./layout/layout.component";
 import {VisualizarProjetosComponent} from "app-core";
 import {DetalhesProjetoComponent} from "app-core/lib/components/projetos/detalhes-projeto/detalhes-projeto.component";
-import {
-  CadastrarProjetosComponent
-} from "app-core/lib/components/projetos/portal-admin/cadastrar-projetos/cadastrar-projetos.component";
-import {PortalAdminComponent} from "app-core/lib/components/projetos/portal-admin/portal-admin.component";
+import {CadastrarProjetosComponent} from "./portal-admin/cadastrar-projetos/cadastrar-projetos.component";
+import {PortalAdminComponent} from "./portal-admin/portal-admin.component";
+import {GerenciarProjetosComponent} from "./portal-admin/gerenciar-projetos/gerenciar-projetos.component";
 
 const routes: Routes = [
   {
@@ -38,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'ver-projetos',
-        component: VisualizarProjetosComponent
+        component: GerenciarProjetosComponent
       },
     ]
   }
