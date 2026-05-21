@@ -1,0 +1,23 @@
+/* 1. Zera qualquer espaçamento nativo da página que o Metronic tenta injetar */
+.kt-page {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+#kt_wrapper {
+  margin-left: 265px !important;
+  padding-left: 0 !important;
+  width: auto !important;
+  transition: margin-left 0.3s ease;
+}
+
+
+#kt_wrapper.wrapper-minimized {
+  margin-left: 75px !important;
+}
+
+@media (max-width: 992px) {
+  #kt_wrapper,
+  #kt_wrapper.wrapper-minimized {
+    margin-left: 0 !important;
+  }
+}
