@@ -4,11 +4,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { forkJoin, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from "sweetalert2";
-
 import { EstruturaCurricularService } from "app-core/lib/services/estrutura-curricular-service";
 import { CursoService } from "app-core/lib/services/curso-service";
 import { DisciplinaService } from "app-core/lib/services/disciplina-service";
-
 import { EstruturaCurricularDTO } from "app-core/lib/dto/EstruturaCurricular.dto";
 import { CursoDTO } from "app-core/lib/dto/Curso.dto";
 import { DisciplinaDTO } from "app-core/lib/dto/Disciplina.dto";
@@ -23,7 +21,6 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
   public listaCursos: CursoDTO[] = [];
   public listaDisciplinas: DisciplinaDTO[] = [];
   public listaOpcoesSemestre: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
   public isEdicao: boolean = false;
   public loading: boolean = false;
   private destroy$ = new Subject<void>();
@@ -42,7 +39,7 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
       ano: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
       curso: [null, Validators.required],
       ativo: [true],
-      ofertas: this.fb.array([])
+      disciplinasCurriculo: this.fb.array([])
     });
   }
 
@@ -92,7 +89,7 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
   }
 
   private preencherFormulario(res: any): void {
-    this.ofertas.clear();
+    this.disciplinasCurriculo.clear();
 
     let cursoEncontrado = this.listaCursos.find(c => c.uuid === res.cursoUuid);
     if (!cursoEncontrado && res.cursoId) {
@@ -107,38 +104,43 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
       ativo: res.ativo
     });
 
-    if (res.ofertas && Array.isArray(res.ofertas)) {
-      res.ofertas.forEach((o: any) => {
+    const disciplinasCurriculo = res.disciplinasCurriculo || res.ofertas || [];
+    if (Array.isArray(disciplinasCurriculo)) {
+      disciplinasCurriculo.forEach((o: any) => {
         let discObj = this.listaDisciplinas.find(d => d.uuid === o.disciplinaUuid);
         if (!discObj && o.disciplinaId) {
           discObj = this.listaDisciplinas.find(d => d.id === o.disciplinaId);
         }
-        this.adicionarOfertaComDados({ ...o, disciplinaObj: discObj });
+        this.adicionarDisciplinaCurriculoComDados({ ...o, disciplinaObj: discObj });
       });
     }
   }
 
-  get ofertas(): FormArray {
-    return this.form.get('ofertas') as FormArray;
+  get disciplinasCurriculo(): FormArray {
+    return this.form.get('disciplinasCurriculo') as FormArray;
   }
 
-  public adicionarOferta(): void {
-    this.adicionarOfertaComDados(null);
+  public adicionarDisciplinaCurriculo(): void {
+    this.adicionarDisciplinaCurriculoComDados(null);
   }
 
-  public adicionarOfertaComDados(dados: any | null): void {
+  public adicionarDisciplinaCurriculoComDados(dados: any | null): void {
     const group = this.fb.group({
+      id: [dados?.id || null],
+      uuid: [dados?.uuid || null],
       disciplina: [dados?.disciplinaObj || null, Validators.required],
       semestre: [dados?.semestre || null, Validators.required],
-      numProfessoresPratica: [dados?.numProfessoresPratica || 1, [Validators.required, Validators.min(0)]],
-      numProfessoresTeorica: [dados?.numProfessoresTeorica || 1, [Validators.required, Validators.min(0)]],
+      maxProfessoresPratica: [dados?.maxProfessoresPratica ?? dados?.numProfessoresPratica ?? 1, [Validators.required, Validators.min(0)]],
+      maxProfessoresTeorica: [dados?.maxProfessoresTeorica ?? dados?.numProfessoresTeorica ?? 1, [Validators.required, Validators.min(0)]],
+      cargaHorariaTeorica: [dados?.cargaHorariaTeorica ?? 0, [Validators.required, Validators.min(0)]],
+      cargaHorariaPratica: [dados?.cargaHorariaPratica ?? 0, [Validators.required, Validators.min(0)]],
       tutoria: [dados?.tutoria || false]
     });
-    this.ofertas.push(group);
+    this.disciplinasCurriculo.push(group);
   }
 
-  public removerOferta(index: number): void {
-    this.ofertas.removeAt(index);
+  public removerDisciplinaCurriculo(index: number): void {
+    this.disciplinasCurriculo.removeAt(index);
   }
 
   public salvar(): void {
@@ -161,15 +163,20 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
         codigo: formValue.codigo,
         ativo: formValue.ativo,
         cursoId: formValue.curso.id,
-        ofertas: this.ofertas.value.map((o: any) => {
+        disciplinasCurriculo: this.disciplinasCurriculo.value.map((o: any) => {
           if (!o.disciplina?.id) {
             throw new Error('A disciplina selecionada não possui ID válido. Remova e adicione novamente.');
           }
           return {
+            id: o.id,
+            uuid: o.uuid,
             disciplinaId: o.disciplina.id,
+            disciplinaUuid: o.disciplina.uuid,
             semestre: o.semestre,
-            numProfessoresPratica: o.numProfessoresPratica,
-            numProfessoresTeorica: o.numProfessoresTeorica,
+            maxProfessoresPratica: o.maxProfessoresPratica,
+            maxProfessoresTeorica: o.maxProfessoresTeorica,
+            cargaHorariaTeorica: o.cargaHorariaTeorica,
+            cargaHorariaPratica: o.cargaHorariaPratica,
             tutoria: o.tutoria
           };
         })

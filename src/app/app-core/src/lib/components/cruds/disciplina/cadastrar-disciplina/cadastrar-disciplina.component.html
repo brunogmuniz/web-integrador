@@ -40,10 +40,18 @@
           <input type="number" class="form-control form-control-solid" formControlName="cargaHorariaPratica" min="0"/>
         </div>
 
-        <div class="col-md-2 d-flex align-items-center mt-8">
+        <div class="col-md-2">
+          <label class="form-label required">Tipo</label>
+          <select class="form-select form-select-solid" formControlName="tipoDisciplina">
+            <option value="Regular">Regular</option>
+            <option value="DCG">DCG</option>
+          </select>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-center mt-auto pb-2">
           <div class="form-check form-check-custom form-check-solid">
-            <input class="form-check-input" type="checkbox" formControlName="ead" id="chkEad"/>
-            <label class="form-check-label fw-bold cursor-pointer" for="chkEad">
+            <input class="form-check-input" type="checkbox" id="ead" formControlName="ead" />
+            <label class="form-check-label ms-2" for="ead">
               EAD
             </label>
           </div>

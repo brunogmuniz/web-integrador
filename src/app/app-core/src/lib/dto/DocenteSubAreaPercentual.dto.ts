@@ -5,4 +5,7 @@ export interface DocenteSubAreaPercentualDTO {
   idArea?: number;
   nomeArea: string;
   percentual: number;
+  cargaHoraria?: number;
+  cargaHorariaTeorica?: number;
+  cargaHorariaPratica?: number;
 }

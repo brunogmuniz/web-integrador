@@ -41,6 +41,11 @@ import {
   VisualizarCursoComponent
 } from "app-core/lib/components/cruds/curso/visualizar-curso/visualizar-curso.component";
 import {CadastrarCursoComponent} from "app-core/lib/components/cruds/curso/cadastrar-curso/cadastrar-curso.component";
+import { OfertaComponent } from "app-core/lib/components/cruds/oferta/oferta.component";
+import { VisualizarOfertaComponent } from "app-core/lib/components/cruds/oferta/visualizar-oferta/visualizar-oferta.component";
+import { CadastrarOfertaComponent } from "app-core/lib/components/cruds/oferta/cadastrar-oferta/cadastrar-oferta.component";
+import { DisciplinaOfertaComponent } from "app-core/lib/components/cruds/disciplina-oferta/disciplina-oferta.component";
+import { CadastrarDisciplinaOfertaComponent } from "app-core/lib/components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component";
 
 const routes: Routes = [
   {
@@ -163,6 +168,25 @@ const routes: Routes = [
           { path: 'visualizar', component: VisualizarDisciplinaComponent },
           { path: 'form/novo', component: CadastrarDisciplinaComponent },
           { path: 'form/editar/:id', component: CadastrarDisciplinaComponent }
+        ]
+      },
+      {
+        path: 'oferta',
+        component: OfertaComponent,
+        children: [
+          { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
+          { path: 'visualizar', component: VisualizarOfertaComponent },
+          { path: 'form/novo', component: CadastrarOfertaComponent },
+          { path: 'form/editar/:id', component: CadastrarOfertaComponent }
+        ]
+      },
+      {
+        path: 'disciplina-oferta',
+        component: DisciplinaOfertaComponent,
+        children: [
+          { path: '', redirectTo: 'form/novo', pathMatch: 'full' },
+          { path: 'form/novo', component: CadastrarDisciplinaOfertaComponent },
+          { path: 'form/editar/:uuid', component: CadastrarDisciplinaOfertaComponent }
         ]
       }
     ]

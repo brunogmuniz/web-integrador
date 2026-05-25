@@ -1,4 +1,4 @@
-import { OfertaDisciplinaDTO } from "./Oferta.dto";
+import { DisciplinaCurriculoDTO } from "./DisciplinaCurriculo.dto";
 
 export interface EstruturaCurricularDTO {
   uuid?: string;
@@ -6,6 +6,6 @@ export interface EstruturaCurricularDTO {
   codigo: string;
   ativo: boolean;
   cursoId: number;
-  ofertas: OfertaDisciplinaDTO[];
+  disciplinasCurriculo: DisciplinaCurriculoDTO[];
   nomeCurso?: string;
 }

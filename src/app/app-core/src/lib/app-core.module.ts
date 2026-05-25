@@ -37,27 +37,26 @@ import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualiza
 import { CursoComponent } from './components/cruds/curso/curso.component';
 import { CadastrarCursoComponent } from './components/cruds/curso/cadastrar-curso/cadastrar-curso.component';
 import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-curso/visualizar-curso.component';
+import { OfertaComponent } from './components/cruds/oferta/oferta.component';
+import { CadastrarOfertaComponent } from './components/cruds/oferta/cadastrar-oferta/cadastrar-oferta.component';
+import { VisualizarOfertaComponent } from './components/cruds/oferta/visualizar-oferta/visualizar-oferta.component';
+import { DisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/disciplina-oferta.component';
+import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component';
 
 @NgModule({
   declarations: [
     AreaConhecimentoComponent,
     CadastrarAreaConhecimentoComponent,
-
     DisciplinaComponent,
     CadastrarDisciplinaComponent,
-
     DocenteComponent,
     CadastrarDocenteComponent,
-
     DocenteEncargosComponent,
     CadastrarDocentesEncargosComponent,
-
     EstruturaCurricularComponent,
     CadastrarEstruturaCurricularComponent,
-
     SubareaConhecimentoComponent,
     CadastrarSubareaConhecimentoComponent,
-
     UnidadeComponent,
     CadastrarUnidadeComponent,
     UnidadeUsuarioComponent,
@@ -79,7 +78,12 @@ import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-cu
     VisualizarUsuarioComponent,
     CursoComponent,
     CadastrarCursoComponent,
-    VisualizarCursoComponent
+    VisualizarCursoComponent,
+    OfertaComponent,
+    CadastrarOfertaComponent,
+    VisualizarOfertaComponent,
+    DisciplinaOfertaComponent,
+    CadastrarDisciplinaOfertaComponent
   ],
   imports: [
     CommonModule,

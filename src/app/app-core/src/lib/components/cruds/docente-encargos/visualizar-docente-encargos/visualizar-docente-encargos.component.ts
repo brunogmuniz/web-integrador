@@ -3,7 +3,7 @@ import { DocenteService } from "app-core/lib/services/docente-service";
 import { DocenteDetalheDTO } from "app-core/lib/dto/DocenteDetalhe.dto";
 import { RespostaPaginada } from "app-core/lib/dto/paginacao/resposta-paginada.dto";
 import Swal from "sweetalert2";
-import {DocenteSubAreaPercentualDTO} from "app-core";
+import {DocenteSubAreaPercentualDTO, OfertaDTO, OfertaService} from "app-core";
 
 interface MetadadosPaginacao {
   paginaAtual: number;
@@ -20,7 +20,11 @@ interface MetadadosPaginacao {
 export class VisualizarDocenteEncargosComponent implements OnInit {
 
   public listaDocentesDetalhados: DocenteDetalheDTO[] = [];
+  public ofertas: OfertaDTO[] = [];
+  public ofertaSelecionadaUuid?: string;
   public loading: boolean = false;
+  public exibirModal: boolean = false;
+  public docenteSelecionado?: DocenteDetalheDTO;
 
   public meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -29,10 +33,13 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     totalPaginas: 0
   };
 
-  constructor(private docenteService: DocenteService) {}
+  constructor(
+    private docenteService: DocenteService,
+    private ofertaService: OfertaService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarDados();
+    this.carregarOfertas();
   }
 
   public aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
@@ -49,16 +56,29 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     if (!subAreas || !Array.isArray(subAreas) || subAreas.length === 0) {
       return [];
     }
-   console.log('Inspecionando subArea:', subAreas[0]);
-
     return Array.from(new Set(subAreas.map((sub: any) =>
-      sub.nomeSubArea || sub.nomeArea || sub.nome || sub.subarea?.nome || 'Área sem nome'
+      sub.nomeSubarea || sub.nomeSubArea || sub.nomeArea || sub.nome || 'Área sem nome'
     )));
   }
 
+  public abrirModal(docente: DocenteDetalheDTO): void {
+    this.docenteSelecionado = docente;
+    this.exibirModal = true;
+  }
+
+  public fecharModal(): void {
+    this.exibirModal = false;
+    this.docenteSelecionado = undefined;
+  }
+
   public carregarDados(): void {
+    if (!this.ofertaSelecionadaUuid) {
+      this.listaDocentesDetalhados = [];
+      return;
+    }
+
     this.loading = true;
-    this.docenteService.listarTodosDetalhado(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.docenteService.listarTodosDetalhadoPorOferta(this.ofertaSelecionadaUuid, this.meta.paginaAtual, this.meta.tamanho).subscribe({
       next: (res: RespostaPaginada<DocenteDetalheDTO>) => {
         this.listaDocentesDetalhados = res.conteudo || [];
         this.meta = res.meta;
@@ -71,44 +91,15 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     });
   }
 
-  public onDelete(uuidDocente: string): void {
-    Swal.fire({
-      title: 'Limpar Encargos?',
-      text: 'Esta ação removerá TODOS os vínculos deste docente com suas respectivas subáreas.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, limpar tudo!',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#d33'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.executarExclusaoDeEncargos(uuidDocente);
-      }
-    });
-  }
-
-  private executarExclusaoDeEncargos(uuidDocente: string): void {
-    this.loading = true;
-    this.docenteService.atualizarEncargos(uuidDocente, []).subscribe({
-      next: () => {
-        this.loading = false;
-        void Swal.fire('Sucesso', 'Todos os encargos do docente foram removidos!', 'success');
+  public carregarOfertas(): void {
+    this.ofertaService.findAll(0, 500).subscribe({
+      next: (res) => {
+        this.ofertas = (res.conteudo || []).filter(oferta => oferta.ativo);
+        const ultimaOferta = [...this.ofertas].sort((a, b) => `${b.ano}${b.semestre}`.localeCompare(`${a.ano}${a.semestre}`))[0];
+        this.ofertaSelecionadaUuid = ultimaOferta?.uuid;
         this.carregarDados();
       },
-      error: (err) => {
-        this.loading = false;
-        this.handleDeleteError(err);
-      }
+      error: () => void Swal.fire('Erro', 'Falha ao carregar as ofertas.', 'error')
     });
-  }
-
-  private handleDeleteError(err: any): void {
-    let mensagem = 'Não foi possível remover os encargos.';
-    if (err.status === 409) {
-      mensagem = 'Conflito: Este vínculo possui dependências ativas no sistema.';
-    } else if (err.status === 404) {
-      mensagem = 'O docente especificado não foi encontrado.';
-    }
-    void Swal.fire('Erro', mensagem, 'error');
   }
 }

@@ -6,4 +6,5 @@ export interface CursoDTO {
   anoCurriculo: number;
   cargaHorariaTotal: number;
   nivel: string;
+  ativo?: boolean;
 }

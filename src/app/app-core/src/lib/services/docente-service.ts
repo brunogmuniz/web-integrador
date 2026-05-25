@@ -123,6 +123,39 @@ export class DocenteService {
     );
   }
 
+  listarTodosDetalhadoPorOferta(ofertaUuid: string, pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<DocenteDetalheDTO>> {
+    const url = `${this.apiUrl}/detalhes/oferta/${ofertaUuid}`;
+    const params = new HttpParams()
+      .set('pagina', pagina.toString())
+      .set('itensPorPagina', tamanho.toString());
+
+    return this.http.get<any>(url, { params }).pipe(
+      map(response => {
+        let lista = [];
+        if (response && Array.isArray(response.data)) {
+          lista = response.data;
+        } else if (response && Array.isArray(response.content)) {
+          lista = response.content;
+        } else if (Array.isArray(response)) {
+          lista = response;
+        }
+
+        const metaData = response?.meta || response?.data?.meta || {};
+
+        return {
+          conteudo: lista,
+          meta: {
+            totalElementos: metaData.total ?? metaData.totalElements ?? 0,
+            tamanho: metaData.perPage ?? metaData.size ?? tamanho,
+            paginaAtual: metaData.page ?? metaData.number ?? pagina,
+            totalPaginas: metaData.pages ?? metaData.totalPages ?? 0
+          }
+        } as RespostaPaginada<DocenteDetalheDTO>;
+      }),
+      catchError(error => throwError(() => error))
+    );
+  }
+
   update(uuid: string, dto: DocenteDTO): Observable<DocenteDTO> {
     const url = `${this.apiUrl}/${uuid}`;
     return this.http.put<DocenteDTO>(url, dto).pipe(
