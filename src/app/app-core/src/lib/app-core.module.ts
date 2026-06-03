@@ -7,6 +7,7 @@ import { ImageProfileComponent } from './components/image-profile/image-profile.
 import { PaginadorComponent } from './components/paginador/paginador.component';
 import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
+import { BuscaTextoComponent } from './components/busca-texto/busca-texto.component';
 import { AreaConhecimentoComponent } from './components/cruds/area-conhecimento/area-conhecimento.component';
 import { CadastrarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
 import { VisualizarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component';
@@ -40,6 +41,7 @@ import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-cu
 import { OfertaComponent } from './components/cruds/oferta/oferta.component';
 import { CadastrarOfertaComponent } from './components/cruds/oferta/cadastrar-oferta/cadastrar-oferta.component';
 import { VisualizarOfertaComponent } from './components/cruds/oferta/visualizar-oferta/visualizar-oferta.component';
+import { VisualizarDisciplinasOfertaComponent } from './components/cruds/oferta/visualizar-disciplinas-oferta/visualizar-disciplinas-oferta.component';
 import { DisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/disciplina-oferta.component';
 import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component';
 
@@ -67,6 +69,7 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     PaginadorComponent,
     UploadPlanilhaComponent,
     UserMenuComponent,
+    BuscaTextoComponent,
     VisualizarAreaConhecimentoComponent,
     VisualizarDisciplinaComponent,
     VisualizarDocenteComponent,
@@ -82,6 +85,7 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     OfertaComponent,
     CadastrarOfertaComponent,
     VisualizarOfertaComponent,
+    VisualizarDisciplinasOfertaComponent,
     DisciplinaOfertaComponent,
     CadastrarDisciplinaOfertaComponent
   ],
@@ -104,6 +108,7 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     UnidadeComponent,
     UploadPlanilhaComponent,
     UserMenuComponent,
+    BuscaTextoComponent,
     VisualizarUnidadeComponent,
     VisualizarUnidadeUsuarioComponent
   ]

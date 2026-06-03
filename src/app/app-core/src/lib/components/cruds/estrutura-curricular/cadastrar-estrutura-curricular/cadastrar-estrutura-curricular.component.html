@@ -77,11 +77,17 @@
           </tr>
           </thead>
           <tbody class="fs-6">
-          <tr *ngFor="let oferta of disciplinasCurriculo.controls; let i = index" [formGroupName]="i">
+          <tr *ngFor="let item of disciplinasCurriculoSemGrupoView; trackBy: trackByDisciplinaCurriculo" [formGroupName]="item.index">
             <td>
-              <select [compareWith]="compararDisciplinas" formControlName="disciplina" class="form-select form-select-solid">
+              <select
+                class="form-select form-select-solid"
+                [compareWith]="compararDisciplinas"
+                [ngModel]="encontrarDisciplinaBaseSelecionada(item.index)"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="aplicarDisciplinaBase(item.index, $event)"
+              >
                 <option [ngValue]="null">Selecione...</option>
-                <option *ngFor="let disc of listaDisciplinas" [ngValue]="disc">
+                <option *ngFor="let disc of disciplinasBaseDisponiveisPorItemView(item.index)" [ngValue]="disc">
                   {{ disc.nome }}
                 </option>
               </select>
@@ -90,7 +96,7 @@
             <td>
               <select class="form-select form-select-solid" formControlName="semestre">
                 <option [ngValue]="null">...</option>
-                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ sem }} Semestre</option>
+                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ formatarSemestre(sem) }}</option>
               </select>
             </td>
 
@@ -117,11 +123,72 @@
             </td>
 
             <td class="text-center">
-              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerDisciplinaCurriculo(i)">
+              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerDisciplinaCurriculo(item.index)">
                 <i class="la la-trash fs-3"></i>
               </button>
             </td>
           </tr>
+
+          <ng-container *ngFor="let grupo of gruposDisciplinasCurriculoView; trackBy: trackByGrupo">
+            <tr class="grupo-row">
+              <td colspan="8">
+                <span class="text-gray-700 fw-bold fs-7 text-uppercase">{{ grupo.nome }}</span>
+                <span class="badge badge-light-primary ms-2">{{ grupo.disciplinas.length }}</span>
+              </td>
+            </tr>
+
+            <tr *ngFor="let item of grupo.disciplinas; trackBy: trackByDisciplinaCurriculo" [formGroupName]="item.index">
+              <td>
+                <select
+                  class="form-select form-select-solid"
+                  [compareWith]="compararDisciplinas"
+                  [ngModel]="encontrarDisciplinaBaseSelecionada(item.index)"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="aplicarDisciplinaBase(item.index, $event)"
+                >
+                  <option [ngValue]="null">Selecione...</option>
+                  <option *ngFor="let disc of disciplinasBaseDisponiveisPorItemView(item.index)" [ngValue]="disc">
+                    {{ disc.nome }}
+                  </option>
+                </select>
+              </td>
+
+              <td>
+                <select class="form-select form-select-solid" formControlName="semestre">
+                  <option [ngValue]="null">...</option>
+                  <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ formatarSemestre(sem) }}</option>
+                </select>
+              </td>
+
+              <td>
+                <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaTeorica" min="0" />
+              </td>
+
+              <td>
+                <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaPratica" min="0" />
+              </td>
+
+              <td>
+                <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresTeorica" min="0" />
+              </td>
+
+              <td>
+                <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresPratica" min="0" />
+              </td>
+
+              <td class="text-center">
+                <div class="form-check form-check-custom form-check-solid form-check-sm d-inline-block">
+                  <input class="form-check-input" type="checkbox" formControlName="tutoria" />
+                </div>
+              </td>
+
+              <td class="text-center">
+                <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerDisciplinaCurriculo(item.index)">
+                  <i class="la la-trash fs-3"></i>
+                </button>
+              </td>
+            </tr>
+          </ng-container>
           </tbody>
         </table>
 

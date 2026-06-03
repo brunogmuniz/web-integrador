@@ -55,6 +55,10 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  public get tituloCard(): string {
+    return this.uuidDisciplina ? 'Editar Disciplina' : 'Nova Disciplina';
+  }
+
   private carregarDadosIniciais(uuid?: string): void {
     this.loading = true;
 

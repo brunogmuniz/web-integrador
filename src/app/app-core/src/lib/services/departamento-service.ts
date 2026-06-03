@@ -31,7 +31,9 @@ export class DepartamentoService {
     return this.http.get<any>(this.apiUrl, { params }).pipe(
       map(response => {
         let lista = [];
-        if (response && Array.isArray(response.data)) {
+        if (response && Array.isArray(response.conteudo)) {
+          lista = response.conteudo;
+        } else if (response && Array.isArray(response.data)) {
           lista = response.data;
         } else if (response?.data && Array.isArray(response.data.data)) {
           lista = response.data.data;
@@ -46,10 +48,10 @@ export class DepartamentoService {
         return {
           conteudo: lista,
           meta: {
-            totalElementos: metaData.total ?? metaData.totalElements ?? 0,
-            tamanho: metaData.perPage ?? metaData.size ?? tamanho,
-            paginaAtual: metaData.page ?? metaData.number ?? pagina,
-            totalPaginas: metaData.pages ?? metaData.totalPages ?? 0
+            totalElementos: metaData.totalElementos ?? metaData.total ?? metaData.totalElements ?? 0,
+            tamanho: metaData.tamanho ?? metaData.perPage ?? metaData.size ?? tamanho,
+            paginaAtual: metaData.paginaAtual ?? metaData.page ?? metaData.number ?? pagina,
+            totalPaginas: metaData.totalPaginas ?? metaData.pages ?? metaData.totalPages ?? 0
           }
         } as RespostaPaginada<DepartamentoDTO>;
       }),

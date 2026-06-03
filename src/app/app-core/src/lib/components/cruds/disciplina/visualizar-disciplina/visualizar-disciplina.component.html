@@ -6,6 +6,12 @@
 </div>
 
 <div class="card">
+  <div class="card-header border-0 pt-6">
+    <app-busca-texto
+      placeholder="Buscar disciplina"
+      (buscaChange)="aoBuscar($event)">
+    </app-busca-texto>
+  </div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
@@ -33,7 +39,7 @@
           <td class="text-center">{{ item.cargaHorariaTeorica || 0 }}</td>
           <td class="text-center">{{ item.cargaHorariaPratica || 0 }}</td>
           <td class="text-center fw-bold">{{ item.cargaHoraria }}</td>
-          <td class="text-center">{{ item.tipoDisciplina || 'Regular' }}</td>
+          <td class="text-center">{{ item.tipoDisciplina || '-' }}</td>
           <td class="text-center">
             <a [routerLink]="['/disciplina/form/editar', item.uuid]"
                class="btn btn-icon btn-light-primary btn-sm me-2"

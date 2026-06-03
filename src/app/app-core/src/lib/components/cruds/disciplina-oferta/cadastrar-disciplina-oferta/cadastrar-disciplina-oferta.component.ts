@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -42,6 +42,14 @@ export interface GrupoDisciplina<T extends DisciplinaCurriculoDTO> {
   readonly disciplinas: T[];
 }
 
+interface DisciplinaOfertaEdicaoContexto {
+  uuidOferta: string;
+  uuidCurso: string;
+  uuidEstruturaCurricular: string;
+}
+
+const DISCIPLINA_OFERTA_EDICAO_CONTEXTO_KEY = 'disciplinaOfertaEdicaoContexto';
+
 @Component({
   selector: 'app-cadastrar-disciplina-oferta',
   templateUrl: './cadastrar-disciplina-oferta.component.html',
@@ -58,16 +66,20 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   public disciplinasSelecionadas: DisciplinaOfertaView[] = [];
   public disciplinaSelecionadaUuid: string | null = null;
   public loading = false;
+  public carregandoCombinacao = false;
+  public combinacaoExistente = false;
 
   public gruposDisponiveisView: GrupoDisciplina<DisciplinaCurriculoDTO>[] = [];
   public gruposSelecionadasView: GrupoDisciplina<DisciplinaOfertaView>[] = [];
 
   private destroy$ = new Subject<void>();
   private ofertaEdicaoUuid?: string;
+  private rotaRetornoAposSalvar?: string[];
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
+    private router: Router,
     private ofertaService: OfertaService,
     private cursoService: CursoService,
     private estruturaService: EstruturaCurricularService,
@@ -117,6 +129,10 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   }
 
   private observarMudancasFormulario(): void {
+    this.form.get('oferta')?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((oferta: OfertaDTO | null) => this.lidarComMudancaDeOferta(oferta));
+
     this.form.get('curso')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((curso: CursoDTO | null) => this.lidarComMudancaDeCurso(curso));
@@ -124,6 +140,17 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.form.get('curriculo')?.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((curriculo: EstruturaCurricularDTO | null) => this.lidarComMudancaDeCurriculo(curriculo));
+  }
+
+  private lidarComMudancaDeOferta(oferta: OfertaDTO | null): void {
+    if (!oferta?.uuid) {
+      this.disciplinasSelecionadas = [];
+      this.combinacaoExistente = false;
+      this.atualizarViews();
+      return;
+    }
+
+    this.carregarDisciplinasDaCombinacaoAtual();
   }
 
   private lidarComMudancaDeCurso(curso: CursoDTO | null): void {
@@ -146,6 +173,39 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.resetarSelecaoDisciplinas();
     this.disciplinasDisponiveis = curriculo?.disciplinasCurriculo || [];
     this.atualizarViews();
+    this.carregarDisciplinasDaCombinacaoAtual();
+  }
+
+  private carregarDisciplinasDaCombinacaoAtual(): void {
+    const oferta = this.form.get('oferta')?.value as OfertaDTO | null;
+    const curso = this.form.get('curso')?.value as CursoDTO | null;
+    const curriculo = this.form.get('curriculo')?.value as EstruturaCurricularDTO | null;
+
+    if (!oferta?.uuid || !curso?.uuid || !curriculo?.uuid) {
+      return;
+    }
+
+    if (this.disciplinasDisponiveis.length === 0) {
+      this.disciplinasSelecionadas = [];
+      this.combinacaoExistente = false;
+      this.atualizarViews();
+      return;
+    }
+
+    this.carregandoCombinacao = true;
+    this.ofertaService.buscarDisciplinasPorCombinacao(oferta.uuid, curso.uuid, curriculo.uuid).subscribe({
+      next: lote => {
+        this.disciplinasSelecionadas = this.montarDisciplinasSelecionadas(lote);
+        this.combinacaoExistente = this.disciplinasSelecionadas.length > 0;
+        this.carregandoCombinacao = false;
+        this.atualizarViews();
+      },
+      error: err => {
+        this.carregandoCombinacao = false;
+        console.error('Falha ao carregar disciplinas ofertadas para a combinação selecionada', err);
+        void Swal.fire('Erro', 'Não foi possível carregar as disciplinas ofertadas para esta combinação.', 'error');
+      }
+    });
   }
 
   private carregarOfertaParaEdicao(uuidOferta: string): void {
@@ -159,8 +219,15 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   }
 
   private preencherOfertaParaEdicao(lote: OfertaSalvarDTO): void {
+    const contexto = this.getContextoEdicao(lote.uuidOferta);
+    if (contexto) {
+      this.rotaRetornoAposSalvar = ['/oferta/disciplinas', contexto.uuidOferta];
+    }
+
     const oferta = this.ofertas.find(item => item.uuid === lote.uuidOferta);
-    const curso = this.cursos.find(item => item.uuid === lote.uuidCurso);
+    const uuidCurso = contexto?.uuidCurso || lote.uuidCurso;
+    const uuidEstruturaCurricular = contexto?.uuidEstruturaCurricular || lote.uuidEstruturaCurricular;
+    const curso = this.cursos.find(item => item.uuid === uuidCurso);
 
     if (oferta) {
       this.form.get('oferta')?.setValue(oferta, { emitEvent: false });
@@ -173,8 +240,8 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.form.get('curso')?.setValue(curso, { emitEvent: false });
     this.estruturaService.findByCurso(curso.id).subscribe({
       next: curriculos => {
-        this.curriculos = (curriculos || []).filter(curriculo => curriculo.ativo || curriculo.uuid === lote.uuidEstruturaCurricular);
-        const curriculo = this.curriculos.find(item => item.uuid === lote.uuidEstruturaCurricular);
+        this.curriculos = (curriculos || []).filter(curriculo => curriculo.ativo || curriculo.uuid === uuidEstruturaCurricular);
+        const curriculo = this.curriculos.find(item => item.uuid === uuidEstruturaCurricular);
         if (!curriculo) {
           return;
         }
@@ -182,13 +249,34 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
         this.form.get('curriculo')?.setValue(curriculo, { emitEvent: false });
         this.disciplinasDisponiveis = curriculo.disciplinasCurriculo || [];
         this.disciplinasSelecionadas = this.montarDisciplinasSelecionadas(lote);
+        this.combinacaoExistente = this.disciplinasSelecionadas.length > 0;
         this.atualizarViews();
+        this.limparContextoEdicao();
       },
       error: err => {
         console.error('Falha ao carregar currículos', err);
         void Swal.fire('Erro', 'Não foi possível carregar os currículos do curso.', 'error');
       }
     });
+  }
+
+  private getContextoEdicao(uuidOferta: string): DisciplinaOfertaEdicaoContexto | null {
+    const contextoJson = sessionStorage.getItem(DISCIPLINA_OFERTA_EDICAO_CONTEXTO_KEY);
+    if (!contextoJson) {
+      return null;
+    }
+
+    try {
+      const contexto = JSON.parse(contextoJson) as DisciplinaOfertaEdicaoContexto;
+      return contexto.uuidOferta === uuidOferta ? contexto : null;
+    } catch {
+      this.limparContextoEdicao();
+      return null;
+    }
+  }
+
+  private limparContextoEdicao(): void {
+    sessionStorage.removeItem(DISCIPLINA_OFERTA_EDICAO_CONTEXTO_KEY);
   }
 
   private montarDisciplinasSelecionadas(lote: OfertaSalvarDTO): DisciplinaOfertaView[] {
@@ -213,6 +301,7 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   private resetarSelecaoDisciplinas(): void {
     this.disciplinasDisponiveis  = [];
     this.disciplinasSelecionadas = [];
+    this.combinacaoExistente = false;
     this.atualizarViews();
   }
 
@@ -246,12 +335,12 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   public adicionarDocente(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): void {
     if (tipo === 'teorica') {
       const uuid = disciplina.docenteTeoricaSelecionado;
-      if (!uuid || disciplina.docentesTeorica.includes(uuid)) return;
+      if (!uuid || disciplina.docentesTeorica.includes(uuid) || this.limiteDocentesAtingido(disciplina, tipo)) return;
       disciplina.docentesTeorica = [...disciplina.docentesTeorica, uuid];
       disciplina.docenteTeoricaSelecionado = null;
     } else {
       const uuid = disciplina.docentePraticaSelecionado;
-      if (!uuid || disciplina.docentesPratica.includes(uuid)) return;
+      if (!uuid || disciplina.docentesPratica.includes(uuid) || this.limiteDocentesAtingido(disciplina, tipo)) return;
       disciplina.docentesPratica = [...disciplina.docentesPratica, uuid];
       disciplina.docentePraticaSelecionado = null;
     }
@@ -273,6 +362,16 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     return this.docentes.filter(d => !uuidsSelecionados.includes(d.uuid!));
   }
 
+  public getLimiteDocentes(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): number {
+    const limite = tipo === 'teorica' ? disciplina.maxProfessoresTeorica : disciplina.maxProfessoresPratica;
+    return Number(limite ?? 0);
+  }
+
+  public limiteDocentesAtingido(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): boolean {
+    const selecionados = tipo === 'teorica' ? disciplina.docentesTeorica : disciplina.docentesPratica;
+    return selecionados.length >= this.getLimiteDocentes(disciplina, tipo);
+  }
+
   public getNomeDocente(uuid: string): string {
     return this.docentes.find(d => d.uuid === uuid)?.nome ?? uuid;
   }
@@ -290,19 +389,24 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   }
 
   private isFormularioValido(): boolean {
-    if (this.form.invalid || this.disciplinasSelecionadas.length === 0) {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       void Swal.fire('Aviso', 'Selecione oferta, curso, currículo e ao menos uma disciplina.', 'warning');
       return false;
     }
 
+    if (this.disciplinasSelecionadas.length === 0) {
+      void Swal.fire('Aviso', 'Nenhuma disciplina vinculada.', 'warning');
+      return false;
+    }
+
     const disciplinasInvalidas = this.disciplinasSelecionadas.filter(d =>
-      (this.possuiCargaHoraria(d.cargaHorariaTeorica) && d.docentesTeorica.length === 0) ||
-      (this.possuiCargaHoraria(d.cargaHorariaPratica) && d.docentesPratica.length === 0)
+      d.docentesTeorica.length > this.getLimiteDocentes(d, 'teorica') ||
+      d.docentesPratica.length > this.getLimiteDocentes(d, 'pratica')
     );
 
     if (disciplinasInvalidas.length > 0) {
-      void Swal.fire('Aviso', 'Informe ao menos um docente para cada carga horária maior que zero.', 'warning');
+      void Swal.fire('Aviso', 'A quantidade de docentes excede o limite definido na estrutura curricular.', 'warning');
       return false;
     }
 
@@ -331,9 +435,9 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
 
   private tratarSucessoSalvamento(): void {
     this.loading = false;
-    void Swal.fire('Sucesso', 'Disciplinas ofertadas com sucesso.', 'success');
-    this.resetarSelecaoDisciplinas();
-    this.form.reset();
+    void Swal.fire('Sucesso', 'Disciplinas ofertadas com sucesso.', 'success').then(() => {
+      void this.router.navigate(['/oferta/visualizar']);
+    });
   }
 
   private tratarErroSalvamento(err: any): void {
@@ -344,7 +448,11 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   }
 
   private atualizarViews(): void {
-    this.gruposDisponiveisView  = this.agruparDisciplinas(this.disciplinasDisponiveis);
+    const uuidsSelecionadas = new Set(this.disciplinasSelecionadas.map(disciplina => disciplina.uuid));
+    const disciplinasDisponiveisParaAdicionar = this.disciplinasDisponiveis
+      .filter(disciplina => !uuidsSelecionadas.has(disciplina.uuid));
+
+    this.gruposDisponiveisView  = this.agruparDisciplinas(disciplinasDisponiveisParaAdicionar);
     this.gruposSelecionadasView = this.agruparDisciplinas(this.disciplinasSelecionadas);
   }
 

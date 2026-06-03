@@ -70,6 +70,7 @@ import {CadastrarCursoComponent} from "app-core/lib/components/cruds/curso/cadas
 import { OfertaComponent } from "app-core/lib/components/cruds/oferta/oferta.component";
 import { VisualizarOfertaComponent } from "app-core/lib/components/cruds/oferta/visualizar-oferta/visualizar-oferta.component";
 import { CadastrarOfertaComponent } from "app-core/lib/components/cruds/oferta/cadastrar-oferta/cadastrar-oferta.component";
+import { VisualizarDisciplinasOfertaComponent } from "app-core/lib/components/cruds/oferta/visualizar-disciplinas-oferta/visualizar-disciplinas-oferta.component";
 import { DisciplinaOfertaComponent } from "app-core/lib/components/cruds/disciplina-oferta/disciplina-oferta.component";
 import { CadastrarDisciplinaOfertaComponent } from "app-core/lib/components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component";
 
@@ -200,6 +201,7 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'visualizar', pathMatch: 'full' },
           { path: 'visualizar', component: VisualizarOfertaComponent },
+          { path: 'disciplinas/:uuid', component: VisualizarDisciplinasOfertaComponent },
           { path: 'form/novo', component: CadastrarOfertaComponent },
           { path: 'form/editar/:id', component: CadastrarOfertaComponent }
         ]

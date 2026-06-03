@@ -8,6 +8,7 @@ import {DocenteDTO, DocenteService, MetadadosPaginacao, RespostaPaginada} from "
 })
 export class VisualizarDocenteComponent implements OnInit {
   docentes: DocenteDTO[] = [];
+  busca = '';
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -23,7 +24,7 @@ export class VisualizarDocenteComponent implements OnInit {
   }
 
   carregarDocentes(): void {
-    this.docenteService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.docenteService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<DocenteDTO>) => {
         this.docentes = res.conteudo;
         this.meta = res.meta;
@@ -38,6 +39,12 @@ export class VisualizarDocenteComponent implements OnInit {
   aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarDocentes();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarDocentes();
   }
 

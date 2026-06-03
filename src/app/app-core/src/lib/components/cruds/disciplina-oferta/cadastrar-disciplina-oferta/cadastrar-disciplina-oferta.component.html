@@ -35,6 +35,15 @@
     </div>
 
     <div class="card-body" *ngIf="form.get('curriculo')?.value">
+      <div *ngIf="carregandoCombinacao" class="d-flex align-items-center text-muted fw-semibold mb-5">
+        <span class="spinner-border spinner-border-sm me-3" role="status"></span>
+        Carregando ofertas já realizadas para esta combinação...
+      </div>
+
+      <div *ngIf="!carregandoCombinacao && combinacaoExistente" class="alert bg-light-info border border-info border-dashed p-4 mb-5">
+        Esta combinação de oferta, curso e currículo já possui disciplinas ofertadas. Os registros foram carregados para edição.
+      </div>
+
       <div class="row g-3 align-items-end mb-6">
         <div class="col-lg-9 col-md-8">
           <label class="form-label fw-bold text-gray-700 fs-7">Disciplina</label>
@@ -71,7 +80,7 @@
         </div>
       </div>
 
-      <div class="table-responsive" *ngIf="disciplinasSelecionadas.length > 0; else emptyState">
+      <div class="table-responsive" *ngIf="disciplinasSelecionadas.length > 0">
         <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 disciplina-oferta-table">
           <thead>
           <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
@@ -110,12 +119,12 @@
                         <i class="la la-times"></i>
                       </button>
                     </span>
-                    <span class="text-danger fs-8 fw-semibold" *ngIf="disciplina.docentesTeorica.length === 0">
+                    <span class="text-muted fs-8 fw-semibold" *ngIf="disciplina.docentesTeorica.length === 0">
                       Nenhum docente atribuído
                     </span>
                     </div>
                   <div class="docente-select-row">
-                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docenteTeoricaSelecionado" [ngModelOptions]="{ standalone: true }">
+                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docenteTeoricaSelecionado" [ngModelOptions]="{ standalone: true }" [disabled]="limiteDocentesAtingido(disciplina, 'teorica')">
                       <option [ngValue]="null">Selecionar docente...</option>
                       <option *ngFor="let docente of getDocentesDisponiveis(disciplina.docentesTeorica)" [ngValue]="docente.uuid">
                         {{ docente.nome }}
@@ -124,7 +133,7 @@
                     <button
                       class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
                       type="button"
-                      [disabled]="!disciplina.docenteTeoricaSelecionado"
+                      [disabled]="!disciplina.docenteTeoricaSelecionado || limiteDocentesAtingido(disciplina, 'teorica')"
                       (click)="adicionarDocente(disciplina, 'teorica')"
                     >
                       <i class="la la-plus fs-4"></i>
@@ -151,12 +160,12 @@
                         <i class="la la-times"></i>
                       </button>
                     </span>
-                    <span class="text-danger fs-8 fw-semibold" *ngIf="disciplina.docentesPratica.length === 0">
+                    <span class="text-muted fs-8 fw-semibold" *ngIf="disciplina.docentesPratica.length === 0">
                       Nenhum docente atribuído
                     </span>
                     </div>
                   <div class="docente-select-row">
-                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docentePraticaSelecionado" [ngModelOptions]="{ standalone: true }">
+                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docentePraticaSelecionado" [ngModelOptions]="{ standalone: true }" [disabled]="limiteDocentesAtingido(disciplina, 'pratica')">
                       <option [ngValue]="null">Selecionar docente...</option>
                       <option *ngFor="let docente of getDocentesDisponiveis(disciplina.docentesPratica)" [ngValue]="docente.uuid">
                         {{ docente.nome }}
@@ -165,7 +174,7 @@
                     <button
                       class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
                       type="button"
-                      [disabled]="!disciplina.docentePraticaSelecionado"
+                      [disabled]="!disciplina.docentePraticaSelecionado || limiteDocentesAtingido(disciplina, 'pratica')"
                       (click)="adicionarDocente(disciplina, 'pratica')"
                     >
                       <i class="la la-plus fs-4"></i>
@@ -190,14 +199,6 @@
         </table>
       </div>
 
-      <ng-template #emptyState>
-        <div class="text-center py-10">
-          <div class="d-flex flex-column align-items-center">
-            <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
-            <span class="text-gray-600 fw-semibold fs-5">Nenhuma disciplina vinculada.</span>
-          </div>
-        </div>
-      </ng-template>
     </div>
 
     <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="disciplinasSelecionadas.length > 0">

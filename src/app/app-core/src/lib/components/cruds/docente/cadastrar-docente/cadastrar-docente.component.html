@@ -1,7 +1,7 @@
 <div class="card card-custom">
     <div class="card-header bg-navy-custom text-black">
       <h5 class="mb-0">
-        {{ modoEdicao ? 'Editar Dcente' : 'Cadastrar Docente' }}
+        {{ modoEdicao ? 'Editar Docente' : 'Cadastrar Docente' }}
       </h5>
     </div>
   <form [formGroup]="docenteForm" (ngSubmit)="onSubmit()" class="form">
@@ -61,7 +61,7 @@
           <label class="form-label">Departamento *</label>
           <select formControlName="departamentoId" class="form-select">
             <option [ngValue]="null" disabled>Selecione um departamento</option>
-            <option *ngFor="let item of departamentos" [value]="item.id">
+            <option *ngFor="let item of departamentos" [ngValue]="item.id">
               {{ item.nome }}
             </option>
           </select>

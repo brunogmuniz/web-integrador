@@ -10,6 +10,22 @@ import { DisciplinaService } from "app-core/lib/services/disciplina-service";
 import { EstruturaCurricularDTO } from "app-core/lib/dto/EstruturaCurricular.dto";
 import { CursoDTO } from "app-core/lib/dto/Curso.dto";
 import { DisciplinaDTO } from "app-core/lib/dto/Disciplina.dto";
+import { DisciplinaCurriculoDTO } from "app-core/lib/dto/DisciplinaCurriculo.dto";
+
+interface DisciplinaCurriculoFormView {
+  readonly index: number;
+  readonly control: FormGroup;
+}
+
+interface GrupoDisciplinaCurriculoFormView {
+  readonly nome: string;
+  readonly disciplinas: DisciplinaCurriculoFormView[];
+}
+
+interface GrupoDisciplinaCurriculoOpcaoView {
+  readonly nome: string;
+  readonly disciplinas: DisciplinaCurriculoDTO[];
+}
 
 @Component({
   selector: 'app-cadastrar-estrutura-curricular',
@@ -20,6 +36,7 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
   public form: FormGroup;
   public listaCursos: CursoDTO[] = [];
   public listaDisciplinas: DisciplinaDTO[] = [];
+  public listaDisciplinasCurriculoOpcoes: DisciplinaCurriculoDTO[] = [];
   public listaOpcoesSemestre: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   public isEdicao: boolean = false;
   public loading: boolean = false;
@@ -105,6 +122,8 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
     });
 
     const disciplinasCurriculo = res.disciplinasCurriculo || res.ofertas || [];
+    this.listaDisciplinasCurriculoOpcoes = Array.isArray(disciplinasCurriculo) ? disciplinasCurriculo : [];
+
     if (Array.isArray(disciplinasCurriculo)) {
       disciplinasCurriculo.forEach((o: any) => {
         let discObj = this.listaDisciplinas.find(d => d.uuid === o.disciplinaUuid);
@@ -118,6 +137,54 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
 
   get disciplinasCurriculo(): FormArray {
     return this.form.get('disciplinasCurriculo') as FormArray;
+  }
+
+  public get gruposDisciplinasCurriculoView(): GrupoDisciplinaCurriculoFormView[] {
+    const grupos = new Map<number | null, DisciplinaCurriculoFormView[]>();
+
+    this.disciplinasCurriculo.controls.forEach((control, index) => {
+      const semestre = this.normalizarSemestre(control.get('semestre')?.value);
+      if (semestre === null) {
+        return;
+      }
+
+      const disciplinas = grupos.get(semestre) || [];
+      disciplinas.push({ index, control: control as FormGroup });
+      grupos.set(semestre, disciplinas);
+    });
+
+    return Array.from(grupos.entries())
+      .sort(([semestreA], [semestreB]) => {
+        return Number(semestreA) - Number(semestreB);
+      })
+      .map(([semestre, disciplinas]) => ({
+        nome: this.formatarSemestre(semestre as number),
+        disciplinas
+      }));
+  }
+
+  public get disciplinasCurriculoSemGrupoView(): DisciplinaCurriculoFormView[] {
+    return this.disciplinasCurriculo.controls
+      .map((control, index) => ({ index, control: control as FormGroup }))
+      .filter(item => this.normalizarSemestre(item.control.get('semestre')?.value) === null);
+  }
+
+  public get gruposDisciplinasDisponiveisView(): GrupoDisciplinaCurriculoOpcaoView[] {
+    return this.agruparDisciplinasCurriculo(this.listaDisciplinasCurriculoOpcoes);
+  }
+
+  public gruposDisciplinasDisponiveisPorItemView(index: number): GrupoDisciplinaCurriculoOpcaoView[] {
+    return this.agruparDisciplinasCurriculo(
+      this.listaDisciplinasCurriculoOpcoes.filter(opcao => !this.disciplinaCurriculoJaSelecionadaEmOutroItem(index, opcao))
+    );
+  }
+
+  public disciplinasBaseDisponiveisPorItemView(index: number): DisciplinaDTO[] {
+    return this.listaDisciplinas.filter(disciplina => !this.disciplinaJaSelecionadaEmOutroItem(index, disciplina));
+  }
+
+  public get possuiDisciplinasCurriculoAgrupadas(): boolean {
+    return this.gruposDisciplinasDisponiveisView.length > 0;
   }
 
   public adicionarDisciplinaCurriculo(): void {
@@ -139,8 +206,193 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
     this.disciplinasCurriculo.push(group);
   }
 
+  public aplicarDisciplinaCurriculo(index: number, opcao: DisciplinaCurriculoDTO | null): void {
+    if (!opcao) {
+      this.disciplinasCurriculo.at(index).patchValue({
+        disciplina: null,
+        semestre: null
+      });
+      return;
+    }
+
+    const disciplina = this.listaDisciplinas.find(d => d.id === opcao.disciplinaId || d.uuid === opcao.disciplinaUuid);
+    if (disciplina && this.disciplinaJaSelecionadaEmOutroItem(index, disciplina)) {
+      this.limparDisciplinaCurriculo(index);
+      void Swal.fire('Aviso', 'Esta disciplina ja foi adicionada ao curriculo.', 'warning');
+      return;
+    }
+
+    this.disciplinasCurriculo.at(index).patchValue({
+      disciplina: disciplina || null,
+      semestre: opcao.semestre,
+      maxProfessoresPratica: opcao.maxProfessoresPratica ?? 1,
+      maxProfessoresTeorica: opcao.maxProfessoresTeorica ?? 1,
+      cargaHorariaTeorica: opcao.cargaHorariaTeorica ?? disciplina?.cargaHorariaTeorica ?? 0,
+      cargaHorariaPratica: opcao.cargaHorariaPratica ?? disciplina?.cargaHorariaPratica ?? 0,
+      tutoria: opcao.tutoria || false
+    });
+  }
+
+  public aplicarDisciplinaBase(index: number, disciplina: DisciplinaDTO | null): void {
+    if (!disciplina) {
+      this.disciplinasCurriculo.at(index).patchValue({
+        disciplina: null,
+        semestre: null
+      });
+      return;
+    }
+
+    if (this.disciplinaJaSelecionadaEmOutroItem(index, disciplina)) {
+      this.limparDisciplinaCurriculo(index);
+      void Swal.fire('Aviso', 'Esta disciplina ja foi adicionada ao curriculo.', 'warning');
+      return;
+    }
+
+    this.disciplinasCurriculo.at(index).patchValue({
+      disciplina,
+      cargaHorariaTeorica: disciplina.cargaHorariaTeorica ?? 0,
+      cargaHorariaPratica: disciplina.cargaHorariaPratica ?? 0
+    });
+  }
+
+  public encontrarDisciplinaBaseSelecionada(index: number): DisciplinaDTO | null {
+    return this.disciplinasCurriculo.at(index).get('disciplina')?.value || null;
+  }
+
+  public encontrarDisciplinaCurriculoSelecionada(index: number): DisciplinaCurriculoDTO | null {
+    const group = this.disciplinasCurriculo.at(index);
+    const disciplina = group.get('disciplina')?.value as DisciplinaDTO | null;
+    const semestre = this.normalizarSemestre(group.get('semestre')?.value);
+
+    if (!disciplina || semestre === null) {
+      return null;
+    }
+
+    return this.listaDisciplinasCurriculoOpcoes.find(opcao =>
+      (opcao.disciplinaId === disciplina.id || opcao.disciplinaUuid === disciplina.uuid) &&
+      opcao.semestre === semestre
+    ) || null;
+  }
+
   public removerDisciplinaCurriculo(index: number): void {
     this.disciplinasCurriculo.removeAt(index);
+  }
+
+  public formatarSemestre(semestre: number): string {
+    return `${semestre}º Semestre`;
+  }
+
+  public trackByGrupo(_index: number, grupo: GrupoDisciplinaCurriculoFormView): string {
+    return grupo.nome;
+  }
+
+  public trackByGrupoOpcao(_index: number, grupo: GrupoDisciplinaCurriculoOpcaoView): string {
+    return grupo.nome;
+  }
+
+  public trackByDisciplinaCurriculo(_index: number, item: DisciplinaCurriculoFormView): number {
+    return item.index;
+  }
+
+  public trackByDisciplinaCurriculoOpcao(_index: number, item: DisciplinaCurriculoDTO): string {
+    return item.uuid || `${item.disciplinaId}-${item.semestre}`;
+  }
+
+  private normalizarSemestre(semestre: unknown): number | null {
+    const valor = Number(semestre);
+    return Number.isFinite(valor) && valor > 0 ? valor : null;
+  }
+
+  private limparDisciplinaCurriculo(index: number): void {
+    this.disciplinasCurriculo.at(index).patchValue({
+      disciplina: null,
+      semestre: null
+    });
+  }
+
+  private disciplinaJaSelecionadaEmOutroItem(index: number, disciplina: DisciplinaDTO): boolean {
+    const chave = this.obterChaveDisciplina(disciplina);
+    if (!chave) {
+      return false;
+    }
+
+    return this.disciplinasCurriculo.controls.some((control, controlIndex) => {
+      if (controlIndex === index) {
+        return false;
+      }
+
+      return this.obterChaveDisciplina(control.get('disciplina')?.value) === chave;
+    });
+  }
+
+  private disciplinaCurriculoJaSelecionadaEmOutroItem(index: number, opcao: DisciplinaCurriculoDTO): boolean {
+    const chave = this.obterChaveDisciplinaCurriculo(opcao);
+    if (!chave) {
+      return false;
+    }
+
+    return this.disciplinasCurriculo.controls.some((control, controlIndex) => {
+      if (controlIndex === index) {
+        return false;
+      }
+
+      return this.obterChaveDisciplina(control.get('disciplina')?.value) === chave;
+    });
+  }
+
+  private obterChaveDisciplina(disciplina: DisciplinaDTO | null | undefined): string | null {
+    if (!disciplina) {
+      return null;
+    }
+
+    return disciplina.id != null ? `id:${disciplina.id}` : disciplina.uuid ? `uuid:${disciplina.uuid}` : null;
+  }
+
+  private obterChaveDisciplinaCurriculo(opcao: DisciplinaCurriculoDTO): string | null {
+    return opcao.disciplinaId != null ? `id:${opcao.disciplinaId}` : opcao.disciplinaUuid ? `uuid:${opcao.disciplinaUuid}` : null;
+  }
+
+  private encontrarNomeDisciplinaDuplicada(): string | null {
+    const selecionadas = new Map<string, string>();
+
+    for (const control of this.disciplinasCurriculo.controls) {
+      const disciplina = control.get('disciplina')?.value as DisciplinaDTO | null;
+      const chave = this.obterChaveDisciplina(disciplina);
+      if (!chave) {
+        continue;
+      }
+
+      if (selecionadas.has(chave)) {
+        return disciplina?.nome || selecionadas.get(chave) || 'Disciplina';
+      }
+
+      selecionadas.set(chave, disciplina?.nome || 'Disciplina');
+    }
+
+    return null;
+  }
+
+  private agruparDisciplinasCurriculo(disciplinas: DisciplinaCurriculoDTO[]): GrupoDisciplinaCurriculoOpcaoView[] {
+    const regulares = disciplinas
+      .filter(d => d.tipoDisciplina !== 'DCG' && this.normalizarSemestre(d.semestre) !== null)
+      .sort((a, b) => Number(a.semestre || 0) - Number(b.semestre || 0));
+
+    const dcgs = disciplinas.filter(d => d.tipoDisciplina === 'DCG');
+    const grupos: GrupoDisciplinaCurriculoOpcaoView[] = [];
+    const semestresUnicos = Array.from(new Set(regulares.map(d => d.semestre)));
+
+    semestresUnicos.forEach(semestre => {
+      grupos.push({
+        nome: this.formatarSemestre(semestre),
+        disciplinas: regulares.filter(d => d.semestre === semestre)
+      });
+    });
+
+    if (dcgs.length > 0) {
+      grupos.push({ nome: 'DCG', disciplinas: dcgs });
+    }
+
+    return grupos;
   }
 
   public salvar(): void {
@@ -154,6 +406,12 @@ export class CadastrarEstruturaCurricularComponent implements OnInit, OnDestroy 
 
     if (!formValue.curso?.id) {
       void Swal.fire('Erro', 'O Curso selecionado não possui ID válido. Recarregue a página.', 'error');
+      return;
+    }
+
+    const disciplinaDuplicada = this.encontrarNomeDisciplinaDuplicada();
+    if (disciplinaDuplicada) {
+      void Swal.fire('Aviso', `A disciplina "${disciplinaDuplicada}" ja foi adicionada ao curriculo.`, 'warning');
       return;
     }
 

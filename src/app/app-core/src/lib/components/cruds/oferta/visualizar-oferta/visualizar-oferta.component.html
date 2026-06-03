@@ -1,4 +1,11 @@
 <div class="card mt-3">
+  <div class="card-header border-0 pt-6">
+    <app-busca-texto
+      placeholder="Buscar oferta"
+      (buscaChange)="aoBuscar($event)">
+    </app-busca-texto>
+  </div>
+
   <div class="card-body pt-4">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
@@ -40,9 +47,16 @@
             </button>
 
             <button
+              class="btn btn-icon btn-light-info btn-sm me-2"
+              [routerLink]="['/oferta/disciplinas', oferta.uuid]"
+              title="Ver ofertas de disciplinas">
+              <i class="la la-list-alt fs-3"></i>
+            </button>
+
+            <button
               class="btn btn-icon btn-light-primary btn-sm me-2"
-              [routerLink]="['/disciplina-oferta/form/editar', oferta.uuid]"
-              title="Editar disciplinas ofertadas">
+              [routerLink]="['/oferta/form/editar', oferta.uuid]"
+              title="Editar oferta">
               <i class="la la-edit fs-3"></i>
             </button>
 

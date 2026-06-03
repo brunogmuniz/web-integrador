@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class VisualizarAreaConhecimentoComponent implements OnInit {
   areas: AreaConhecimentoDTO[] = [];
+  busca = '';
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -25,7 +26,7 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
   }
 
   carregarAreas(): void {
-    this.areaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.areaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<AreaConhecimentoDTO>) => {
         this.areas = res.conteudo;
         this.meta = res.meta;
@@ -40,6 +41,12 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
   aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarAreas();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarAreas();
   }
 

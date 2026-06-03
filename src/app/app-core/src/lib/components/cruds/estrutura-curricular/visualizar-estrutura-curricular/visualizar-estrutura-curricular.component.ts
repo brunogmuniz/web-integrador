@@ -18,6 +18,7 @@ interface MetadadosPaginacao {
 export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   listaEstruturas: EstruturaCurricularDTO[] = [];
+  busca = '';
   public loading: boolean = false;
   public meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -36,7 +37,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   public carregarEstruturas(): void {
     this.loading = true;
-    this.service.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.service.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<EstruturaCurricularDTO>) => {
         this.listaEstruturas = res.conteudo || [];
         this.meta = res.meta;
@@ -52,6 +53,12 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
   public aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarEstruturas();
+  }
+
+  public aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarEstruturas();
   }
 

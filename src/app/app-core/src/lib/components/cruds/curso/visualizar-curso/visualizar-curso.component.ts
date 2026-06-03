@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 })
 export class VisualizarCursoComponent implements OnInit {
   cursos: CursoDTO[] = [];
+  busca = '';
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -32,7 +33,7 @@ export class VisualizarCursoComponent implements OnInit {
   }
 
   carregarCursos(): void {
-    this.cursoService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.cursoService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<CursoDTO>) => {
         this.cursos = res.conteudo;
         this.meta = res.meta;
@@ -48,6 +49,16 @@ export class VisualizarCursoComponent implements OnInit {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
     this.carregarCursos();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
+    this.carregarCursos();
+  }
+
+  obterNivelLabel(nivel: string): string {
+    return this.nivelLabel[nivel] || nivel;
   }
 
   onDelete(uuid: string | undefined): void {

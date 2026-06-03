@@ -67,13 +67,11 @@ export class CadastrarDocenteComponent implements OnInit {
   private carregarDocente(uuid: string): void {
     this.docenteService.buscarPorId(uuid).subscribe({
       next: (doc: any) => {
-        this.docenteForm.patchValue(doc);
-
-        if (doc.departamento) {
-          this.docenteForm.get('departamentoId')?.setValue(doc.departamento.id);
-        } else if (doc.departamentoId) {
-          this.docenteForm.get('departamentoId')?.setValue(doc.departamentoId);
-        }
+        const departamentoId = doc.departamentoId ?? doc.idDepartamento ?? doc.departamento?.id ?? null;
+        this.docenteForm.patchValue({
+          ...doc,
+          departamentoId: departamentoId !== null ? Number(departamentoId) : null
+        });
       },
       error: (err) => {
         console.error(err);
