@@ -22,6 +22,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
   public listaDocentesDetalhados: DocenteDetalheDTO[] = [];
   public ofertas: OfertaDTO[] = [];
   public ofertaSelecionadaUuid?: string;
+  public busca = '';
   public loading: boolean = false;
   public exibirModal: boolean = false;
   public docenteSelecionado?: DocenteDetalheDTO;
@@ -48,6 +49,17 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.carregarDados();
   }
 
+  public aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
+    this.carregarDados();
+  }
+
+  public aoSelecionarOferta(): void {
+    this.meta.paginaAtual = 0;
+    this.carregarDados();
+  }
+
   public trackByDocenteUuid(_index: number, item: DocenteDetalheDTO): string {
     return item.uuid;
   }
@@ -66,6 +78,11 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.exibirModal = true;
   }
 
+  public get ofertaSelecionadaLabel(): string {
+    const oferta = this.ofertas.find(item => item.uuid === this.ofertaSelecionadaUuid);
+    return oferta ? `${oferta.ano}/${oferta.semestre}` : '';
+  }
+
   public fecharModal(): void {
     this.exibirModal = false;
     this.docenteSelecionado = undefined;
@@ -78,7 +95,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     }
 
     this.loading = true;
-    this.docenteService.listarTodosDetalhadoPorOferta(this.ofertaSelecionadaUuid, this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.docenteService.listarTodosDetalhadoPorOferta(this.ofertaSelecionadaUuid, this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<DocenteDetalheDTO>) => {
         this.listaDocentesDetalhados = res.conteudo || [];
         this.meta = res.meta;

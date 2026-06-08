@@ -58,12 +58,15 @@ export class CadastrarOfertaComponent implements OnInit {
   }
 
   salvar(): void {
+    this.normalizarCampos();
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      void Swal.fire('Aviso', 'Informe um ano com 4 digitos e selecione o semestre.', 'warning');
       return;
     }
 
-    const payload: OfertaDTO = this.form.value;
+    const payload: OfertaDTO = this.form.getRawValue();
     const request$ = this.modoEdicao && this.uuidOferta
       ? this.ofertaService.update(this.uuidOferta, payload)
       : this.ofertaService.create(payload);
@@ -77,10 +80,17 @@ export class CadastrarOfertaComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        const message = err?.error?.message || 'Não foi possível salvar a oferta.';
+        const message = err?.error?.message || err?.error?.detail || err?.error || 'Nao foi possivel salvar a oferta.';
         void Swal.fire('Erro', message, 'error');
       }
     });
+  }
+
+  private normalizarCampos(): void {
+    const ano = String(this.form.get('ano')?.value ?? '').trim();
+    const semestre = String(this.form.get('semestre')?.value ?? '').trim();
+
+    this.form.patchValue({ ano, semestre }, { emitEvent: false });
   }
 
   cancelar(): void {

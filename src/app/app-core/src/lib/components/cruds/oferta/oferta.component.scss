@@ -2,3 +2,117 @@
   color: #ff4c74 !important;
   text-decoration: line-through;
 }
+
+.oferta-disciplinas-card {
+  .card-header {
+    min-height: auto;
+  }
+
+  .oferta-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .oferta-busca {
+    margin-bottom: 1rem;
+  }
+
+  .oferta-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    width: fit-content;
+    margin-top: 0.75rem;
+    border: 1px solid #d8dbe6;
+    background: #ffffff;
+    color: #181c32;
+    font-weight: 600;
+    transition: background-color 120ms ease, border-color 120ms ease;
+
+    &:hover {
+      border-color: #d8dbe6;
+      background: #f8f9fb;
+      color: #181c32;
+    }
+
+    &:focus {
+      border-color: #d8dbe6;
+      background: #ffffff;
+      color: #181c32;
+      box-shadow: none;
+    }
+  }
+
+  .oferta-empty {
+    border-color: #d8dbe6 !important;
+    background: #f9f9f9;
+    color: #3f4254;
+  }
+
+  .curso-panel {
+    border: 1px solid #e4e6ef;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .curso-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 0;
+    background: #f9f9f9;
+    color: inherit;
+  }
+
+  .curso-panel-body {
+    padding: 0 1.25rem 1.25rem;
+  }
+
+  .curso-panel-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.75rem;
+  }
+
+  .oferta-disciplinas-table {
+    table-layout: fixed;
+    margin-bottom: 0;
+
+    .disciplina-col {
+      width: 30%;
+    }
+
+    .curriculo-col {
+      width: 18%;
+    }
+  }
+
+  .professor-badge {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0.15rem 0.25rem 0.15rem 0;
+    padding: 0.35rem 0.65rem;
+    border: 1px solid #e4e6ef;
+    border-radius: 4px;
+    background-color: #f5f8fa;
+    color: #3f4254;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: normal;
+  }
+}
+
+@media (max-width: 991px) {
+  .oferta-disciplinas-card {
+    .oferta-disciplinas-table {
+      table-layout: auto;
+    }
+  }
+}

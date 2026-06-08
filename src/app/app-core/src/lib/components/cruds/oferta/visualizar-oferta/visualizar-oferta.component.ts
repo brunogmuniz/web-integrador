@@ -10,6 +10,7 @@ import { MetadadosPaginacao, OfertaDTO, OfertaService, RespostaPaginada } from '
 export class VisualizarOfertaComponent implements OnInit {
   ofertas: OfertaDTO[] = [];
   loading = false;
+  busca = '';
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
     tamanho: 15,
@@ -25,7 +26,7 @@ export class VisualizarOfertaComponent implements OnInit {
 
   carregarOfertas(): void {
     this.loading = true;
-    this.ofertaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.ofertaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<OfertaDTO>) => {
         this.ofertas = res.conteudo || [];
         this.meta = res.meta;
@@ -41,6 +42,12 @@ export class VisualizarOfertaComponent implements OnInit {
   aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarOfertas();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarOfertas();
   }
 

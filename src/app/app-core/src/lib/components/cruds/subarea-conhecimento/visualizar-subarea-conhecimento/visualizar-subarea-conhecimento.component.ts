@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 })
 export class VisualizarSubareaConhecimentoComponent implements OnInit {
   subAreas: SubareaConhecimentoDTO[] = [];
+  busca = '';
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -24,7 +25,7 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
   }
 
   carregarSubAreas(): void {
-    this.subareaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.subareaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res) => {
         this.subAreas = res.conteudo;
         this.meta = res.meta;
@@ -38,6 +39,12 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
   aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarSubAreas();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarSubAreas();
   }
 

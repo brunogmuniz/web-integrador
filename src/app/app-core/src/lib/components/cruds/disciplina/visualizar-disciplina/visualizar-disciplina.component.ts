@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 })
 export class VisualizarDisciplinaComponent implements OnInit {
   disciplinas: DisciplinaDTO[] = [];
+  busca = '';
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -24,7 +25,7 @@ export class VisualizarDisciplinaComponent implements OnInit {
   }
 
   carregarDisciplinas(): void {
-    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
       next: (res: RespostaPaginada<DisciplinaDTO>) => {
         this.disciplinas = res.conteudo;
         this.meta = res.meta;
@@ -39,6 +40,12 @@ export class VisualizarDisciplinaComponent implements OnInit {
   onMudancaPagina(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
+    this.carregarDisciplinas();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
     this.carregarDisciplinas();
   }
 

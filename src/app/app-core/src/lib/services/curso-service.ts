@@ -25,10 +25,13 @@ export class CursoService {
     );
   }
 
-  findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<CursoDTO>> {
-    const params = new HttpParams()
+  findAll(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<CursoDTO>> {
+    let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
       map(response => {

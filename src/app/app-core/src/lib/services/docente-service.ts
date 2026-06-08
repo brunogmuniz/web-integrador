@@ -36,10 +36,13 @@ export class DocenteService {
     );
   }
 
-  findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<DocenteDTO>> {
-    const params = new HttpParams()
+  findAll(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDTO>> {
+    let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
       map(response => {
@@ -86,11 +89,14 @@ export class DocenteService {
     );
   }
 
-  listarTodosDetalhado(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<DocenteDetalheDTO>> {
+  listarTodosDetalhado(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDetalheDTO>> {
     const url = `${this.apiUrl}/detalhes`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
 
     return this.http.get<any>(url, { params }).pipe(
       map(response => {
@@ -123,11 +129,14 @@ export class DocenteService {
     );
   }
 
-  listarTodosDetalhadoPorOferta(ofertaUuid: string, pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<DocenteDetalheDTO>> {
+  listarTodosDetalhadoPorOferta(ofertaUuid: string, pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDetalheDTO>> {
     const url = `${this.apiUrl}/detalhes/oferta/${ofertaUuid}`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
 
     return this.http.get<any>(url, { params }).pipe(
       map(response => {

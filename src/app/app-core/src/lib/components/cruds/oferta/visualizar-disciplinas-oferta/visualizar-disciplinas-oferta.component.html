@@ -1,0 +1,112 @@
+<div class="card mt-3 oferta-disciplinas-card">
+  <div class="card-header border-0 pt-6">
+    <div class="d-flex flex-column">
+      <h3 class="card-title mb-1">Ofertas de Disciplinas</h3>
+      <span class="text-muted fs-7" *ngIf="oferta">
+        {{ oferta.ano }}/{{ oferta.semestre }}
+      </span>
+    </div>
+
+    <button type="button" class="btn btn-sm oferta-voltar" (click)="voltar()">
+      <i class="la la-arrow-left"></i> Voltar
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div class="oferta-busca" *ngIf="deveExibirBusca()">
+      <app-busca-texto
+        placeholder="Buscar curso"
+        (buscaChange)="aoBuscar($event)">
+      </app-busca-texto>
+    </div>
+
+    <div *ngIf="loading" class="d-flex align-items-center justify-content-center py-10">
+      <span class="spinner-border spinner-border-sm me-3" role="status"></span>
+      <span class="text-muted fw-semibold">Carregando disciplinas ofertadas...</span>
+    </div>
+
+    <ng-container *ngIf="!loading">
+      <div *ngIf="!oferta?.cursos?.length" class="alert oferta-empty border border-dashed p-5 mb-0">
+        Nenhuma disciplina ofertada para esta oferta.
+      </div>
+
+      <div class="oferta-accordion" *ngIf="oferta?.cursos?.length">
+        <div class="curso-panel" *ngFor="let curso of oferta?.cursos; trackBy: trackByCurso">
+          <button
+            type="button"
+            class="curso-panel-header"
+            (click)="alternarCurso(curso)"
+            [attr.aria-expanded]="cursoAberto(curso)"
+          >
+            <span class="d-flex flex-column text-start">
+              <span class="fw-bold text-gray-800">{{ curso.nomeCurso }}</span>
+              <span class="text-muted fs-8">{{ curso.siglaCurso }} · {{ curso.curriculo }}</span>
+            </span>
+            <span class="d-flex align-items-center gap-3">
+              <span class="badge badge-light-primary">{{ curso.disciplinas.length }}</span>
+              <i class="la fs-2" [ngClass]="cursoAberto(curso) ? 'la-angle-up' : 'la-angle-down'"></i>
+            </span>
+          </button>
+
+          <div class="curso-panel-body" *ngIf="cursoAberto(curso)">
+            <div class="table-responsive">
+              <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 oferta-disciplinas-table">
+                <thead>
+                <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+                  <th class="disciplina-col">Disciplina</th>
+                  <th class="curriculo-col">Currículo</th>
+                  <th>Professores práticos</th>
+                  <th>Professores teoricos</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let disciplina of curso.disciplinas">
+                  <td>
+                    <span class="fw-bold text-gray-800">
+                      {{ disciplina.codigoDisciplina }} - {{ disciplina.nomeDisciplina }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="text-gray-700">{{ disciplina.curriculo }}</span>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="disciplina.professoresPraticos.length; else semPraticos">
+                      <span class="professor-badge" *ngFor="let professor of disciplina.professoresPraticos">
+                        {{ professor }}
+                      </span>
+                    </ng-container>
+                    <ng-template #semPraticos>
+                      <span class="text-muted">Sem professor</span>
+                    </ng-template>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="disciplina.professoresTeoricos.length; else semTeoricos">
+                      <span class="professor-badge" *ngFor="let professor of disciplina.professoresTeoricos">
+                        {{ professor }}
+                      </span>
+                    </ng-container>
+                    <ng-template #semTeoricos>
+                      <span class="text-muted">Sem professor</span>
+                    </ng-template>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="curso-panel-footer">
+              <button
+                type="button"
+                class="btn btn-icon btn-light-primary btn-sm"
+                title="Editar disciplinas ofertadas deste curso e currículo"
+                (click)="editarCursoCurriculo(curso)"
+              >
+                <i class="la la-edit fs-3"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

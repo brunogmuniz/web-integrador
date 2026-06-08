@@ -6,6 +6,12 @@
 </div>
 
 <div class="card">
+  <div class="card-header border-0 pt-6">
+    <app-busca-texto
+      placeholder="Buscar estrutura curricular"
+      (buscaChange)="aoBuscar($event)">
+    </app-busca-texto>
+  </div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">

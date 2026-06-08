@@ -4,7 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from "../../../../../environments/environment";
 import { RespostaPaginada } from '../dto/paginacao/resposta-paginada.dto';
-import { DisciplinaOfertaLoteDTO } from '../dto/DisciplinaOferta.dto';
+import { DisciplinaOfertaLoteDTO, OfertaDisciplinasResumoDTO } from '../dto/DisciplinaOferta.dto';
 import { OfertaDTO } from '../dto/Oferta.dto';
 
 @Injectable({
@@ -27,10 +27,13 @@ export class OfertaService {
     return this.http.get<OfertaDTO>(`${this.apiUrl}/${uuid}`).pipe(catchError(error => throwError(() => error)));
   }
 
-  findAll(pagina: number = 0, tamanho: number = 15): Observable<RespostaPaginada<OfertaDTO>> {
-    const params = new HttpParams()
+  findAll(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<OfertaDTO>> {
+    let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
       map(response => {
@@ -61,5 +64,23 @@ export class OfertaService {
 
   buscarDisciplinas(uuidOferta: string): Observable<DisciplinaOfertaLoteDTO> {
     return this.http.get<DisciplinaOfertaLoteDTO>(`${this.apiUrl}/disciplinas/oferta/${uuidOferta}`).pipe(catchError(error => throwError(() => error)));
+  }
+
+  buscarDisciplinasPorCombinacao(
+    uuidOferta: string,
+    uuidCurso: string,
+    uuidEstruturaCurricular: string
+  ): Observable<DisciplinaOfertaLoteDTO> {
+    return this.http.get<DisciplinaOfertaLoteDTO>(
+      `${this.apiUrl}/${uuidOferta}/cursos/${uuidCurso}/curriculos/${uuidEstruturaCurricular}/disciplinas`
+    ).pipe(catchError(error => throwError(() => error)));
+  }
+
+  listarDisciplinasOferta(uuidOferta: string, busca: string = ''): Observable<OfertaDisciplinasResumoDTO> {
+    let params = new HttpParams();
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
+    return this.http.get<OfertaDisciplinasResumoDTO>(`${this.apiUrl}/${uuidOferta}/disciplinas`, { params }).pipe(catchError(error => throwError(() => error)));
   }
 }

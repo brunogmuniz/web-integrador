@@ -8,14 +8,21 @@
 <div class="card mt-3">
   <div class="card-header border-0 pt-6">
     <div class="row w-100">
-      <div class="col-lg-4 col-md-6">
+      <div class="col-lg-4 col-md-6 docente-encargos-filtro">
         <label class="form-label required fw-bold text-gray-700 fs-7">Oferta</label>
-        <select class="form-select form-select-solid" [(ngModel)]="ofertaSelecionadaUuid" (ngModelChange)="carregarDados()">
+        <select class="form-select form-select-solid docente-encargos-filtro__controle" [(ngModel)]="ofertaSelecionadaUuid" (ngModelChange)="aoSelecionarOferta()">
           <option [ngValue]="undefined" disabled>{{ ofertas.length ? 'Selecione...' : 'Nenhuma oferta ativa encontrada' }}</option>
           <option *ngFor="let oferta of ofertas" [ngValue]="oferta.uuid">
             {{ oferta.ano }}/{{ oferta.semestre }}
           </option>
         </select>
+      </div>
+      <div class="col-lg-4 col-md-6 mt-6 mt-md-0 docente-encargos-filtro">
+        <label class="form-label fw-bold text-gray-700 fs-7">Busca</label>
+        <app-busca-texto
+          placeholder="Buscar docente"
+          (buscaChange)="aoBuscar($event)">
+        </app-busca-texto>
       </div>
     </div>
   </div>
@@ -28,7 +35,6 @@
           <th class="min-w-200px">Docente</th>
           <th class="min-w-150px">Departamento</th>
           <th class="min-w-200px text-center">Áreas de Atuação</th>
-          <th class="min-w-100px text-center">Carga (%)</th>
         </tr>
         </thead>
 
@@ -51,22 +57,12 @@
                 <i class="la la-eye fs-3 text-dark"></i>
               </button>
             </td>
-            <td class="text-center">
-  <span class="badge fw-bold text-dark"
-        [ngClass]="{
-          'badge-light-success': item.totalEncargos === 100,
-          'badge-light-danger': item.totalEncargos > 100,
-          'badge-light-warning': item.totalEncargos < 100
-        }">
-    {{ item.totalEncargos || 0 }}%
-  </span>
-            </td>
           </tr>
         </ng-container>
 
         <ng-template #emptyList>
           <tr>
-            <td colspan="4" class="text-center py-10">
+            <td colspan="3" class="text-center py-10">
               <div class="d-flex flex-column align-items-center">
                 <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
                 <span class="text-gray-600 fw-semibold fs-5">
@@ -103,7 +99,12 @@
         <button type="button" class="btn-close" aria-label="Close" (click)="fecharModal()"></button>
       </div>
       <div class="modal-body p-6">
-        <h6 class="text-gray-800 fw-bold fs-6 mb-3 text-center">Carga na Oferta</h6>
+        <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+          <h6 class="text-gray-800 fw-bold fs-6 mb-0">Carga na Oferta</h6>
+          <span class="badge badge-light-primary text-primary fw-bold" *ngIf="ofertaSelecionadaLabel">
+            {{ ofertaSelecionadaLabel }}
+          </span>
+        </div>
         <div class="table-responsive mb-5">
           <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-3 mb-0">
             <thead>
