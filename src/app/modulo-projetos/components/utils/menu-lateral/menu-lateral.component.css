@@ -260,3 +260,25 @@
 .menu-item:hover > .menu-link .menu-link-bullet span {
   background-color: #3699FF;
 }
+.sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: #a3b2c7;
+  cursor: pointer;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+
+.sidebar-footer:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+}
+
+.sidebar-footer i {
+  font-size: 1.4rem;
+  min-width: 35px;
+  text-align: center;
+}

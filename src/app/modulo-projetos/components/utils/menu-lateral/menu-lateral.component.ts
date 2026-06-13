@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { UsuarioService } from "app-core/lib/services/usuario.service";
+import { Router } from '@angular/router';
+import { ProjetoService } from 'app-core/lib/services/projetos/projeto.service';
 
 @Component({
   selector: 'menu-lateral',
@@ -10,24 +11,23 @@ export class MenuLateralComponent implements OnInit {
   @Output() onSidebarToggle = new EventEmitter<boolean>();
 
   public nome: string = '';
-  public cargo: string = '';
   public menuAberto: string = '';
   public isSidebarMinimized: boolean = false;
 
-  constructor(private readonly usuarioService: UsuarioService) {}
+  constructor(
+    private readonly projetoService: ProjetoService,
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
-    this.nome = this.usuarioService.getNomeLogado() || 'Admin';
-    this.cargo = this.usuarioService.getCargoLogado() || 'Admin';
+    this.nome = this.projetoService.getNomeLogado();
   }
 
   public toggleSidebarSize(): void {
     this.isSidebarMinimized = !this.isSidebarMinimized;
-
     if (this.isSidebarMinimized) {
       this.menuAberto = '';
     }
-
     this.onSidebarToggle.emit(this.isSidebarMinimized);
   }
 
@@ -40,5 +40,10 @@ export class MenuLateralComponent implements OnInit {
 
   public isOpen(nomeMenu: string): boolean {
     return this.menuAberto === nomeMenu;
+  }
+
+  public sair(): void {
+    this.projetoService.logout();
+    this.router.navigate(['/login']);
   }
 }

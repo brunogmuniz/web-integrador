@@ -1,0 +1,79 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-card__logo">
+      <img src="assets/img/brasao-ufsm-politecnico.png" alt="Brasão UFSM">
+    </div>
+
+    <h2 class="login-card__title">Criar Conta</h2>
+    <p class="login-card__subtitle">Preencha os dados para se cadastrar</p>
+
+    <div class="alert-erro" *ngIf="erro">
+      <i class="la la-exclamation-circle"></i>
+      {{ erro }}
+    </div>
+
+    <div class="alert-sucesso" *ngIf="sucesso">
+      <i class="la la-check-circle"></i>
+      Conta criada com sucesso! Redirecionando...
+    </div>
+
+    <ng-container *ngIf="!sucesso">
+
+      <div class="form-group">
+        <label class="form-label">Nome</label>
+        <input
+          type="text"
+          class="form-input"
+          placeholder="Seu nome completo"
+          [(ngModel)]="nome"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input
+          type="email"
+          class="form-input"
+          placeholder="seu@email.com"
+          [(ngModel)]="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input
+          type="password"
+          class="form-input"
+          placeholder="Mínimo 6 caracteres"
+          [(ngModel)]="senha"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Confirmar Senha</label>
+        <input
+          type="password"
+          class="form-input"
+          placeholder="Repita a senha"
+          [(ngModel)]="confirmarSenha"
+          (keyup.enter)="registrar()"
+        />
+      </div>
+
+      <button class="btn-entrar" (click)="registrar()" [disabled]="carregando">
+        <span *ngIf="!carregando">Criar Conta</span>
+        <span *ngIf="carregando">
+          <i class="la la-spinner la-spin"></i> Aguarde...
+        </span>
+      </button>
+
+    </ng-container>
+
+    <div class="login-card__footer">
+      Já tem conta?
+      <a (click)="irParaLogin()">Entrar</a>
+    </div>
+
+  </div>
+</div>

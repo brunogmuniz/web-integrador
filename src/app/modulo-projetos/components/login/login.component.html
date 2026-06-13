@@ -1,0 +1,51 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-card__logo">
+      <img src="assets/img/brasao-ufsm-politecnico.png" alt="Brasão UFSM">
+    </div>
+
+    <h2 class="login-card__title">Entrar no Sistema</h2>
+    <p class="login-card__subtitle">Acesse com sua conta para continuar</p>
+
+    <div class="alert-erro" *ngIf="erro">
+      <i class="la la-exclamation-circle"></i>
+      {{ erro }}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">E-mail</label>
+      <input
+        type="email"
+        class="form-input"
+        placeholder="seu@email.com"
+        [(ngModel)]="email"
+        (keyup.enter)="entrar()"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Senha</label>
+      <input
+        type="password"
+        class="form-input"
+        placeholder="••••••••"
+        [(ngModel)]="senha"
+        (keyup.enter)="entrar()"
+      />
+    </div>
+
+    <button class="btn-entrar" (click)="entrar()" [disabled]="carregando">
+      <span *ngIf="!carregando">Entrar</span>
+      <span *ngIf="carregando">
+        <i class="la la-spinner la-spin"></i> Aguarde...
+      </span>
+    </button>
+
+    <div class="login-card__footer">
+      Não tem conta?
+      <a (click)="irParaRegistro()">Cadastre-se</a>
+    </div>
+
+  </div>
+</div>
