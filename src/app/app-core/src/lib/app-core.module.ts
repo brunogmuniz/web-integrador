@@ -54,6 +54,7 @@ import { DetalhesProjetoComponent } from './components/projetos/detalhes-projeto
 import { ViewInputComponent } from './components/view-input/view-input.component';
 import {LayoutModule} from "../../../modulo-projetos/components/layout/layout.module";
 import { GerenciarInteressesComponent } from './components/projetos/gerenciar-interesses/gerenciar-interesses.component';
+import { ProjetosRecomendadosComponent } from './components/projetos/projetos-recomendados/projetos-recomendados.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import { GerenciarInteressesComponent } from './components/projetos/gerenciar-in
     VisualizarProjetosComponent,
     DetalhesProjetoComponent,
     ViewInputComponent,
-    GerenciarInteressesComponent
+    GerenciarInteressesComponent,
+    ProjetosRecomendadosComponent
   ],
   imports: [
     CommonModule,

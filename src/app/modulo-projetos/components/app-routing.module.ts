@@ -8,6 +8,8 @@ import { PortalAdminComponent } from './portal-admin/portal-admin.component';
 import { GerenciarProjetosComponent } from './portal-admin/gerenciar-projetos/gerenciar-projetos.component';
 import { LoginComponent } from './login/login.component';
 import { RegistroComponent } from './registro/registro.component';
+import { GerenciarInteressesComponent } from 'app-core/lib/components/projetos/gerenciar-interesses/gerenciar-interesses.component';
+import { ProjetosRecomendadosComponent } from 'app-core/lib/components/projetos/projetos-recomendados/projetos-recomendados.component';
 import { ProjetosAuthGuard } from 'app-core/lib/services/projetos/projetosauth.guard';
 
 const routes: Routes = [
@@ -36,6 +38,14 @@ const routes: Routes = [
       {
         path: 'visualizar-detalhes/:id',
         component: DetalhesProjetoComponent
+      },
+      {
+        path: 'projetos-recomendados',
+        component: ProjetosRecomendadosComponent
+      },
+      {
+        path: 'gerenciar-interesses',
+        component: GerenciarInteressesComponent
       },
     ],
   },
