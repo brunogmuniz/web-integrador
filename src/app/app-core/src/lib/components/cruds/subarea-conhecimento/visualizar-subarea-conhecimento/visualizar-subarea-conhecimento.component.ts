@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SubareaConhecimentoService, MetadadosPaginacao, SubareaConhecimentoDTO } from "app-core";
 import Swal from "sweetalert2";
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'app-visualizar-subarea-conhecimento',
@@ -10,6 +11,7 @@ import Swal from "sweetalert2";
 export class VisualizarSubareaConhecimentoComponent implements OnInit {
   subAreas: SubareaConhecimentoDTO[] = [];
   busca = '';
+  ordenacao = new TableSort<'nome' | 'sigla' | 'area'>('nome', 'asc');
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -25,9 +27,9 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
   }
 
   carregarSubAreas(): void {
-    this.subareaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
+    this.subareaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res) => {
-        this.subAreas = res.conteudo;
+        this.subAreas = res.conteudo || [];
         this.meta = res.meta;
       },
       error: (err) => {
@@ -36,6 +38,7 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
       }
     });
   }
+
   aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
@@ -83,6 +86,17 @@ export class VisualizarSubareaConhecimentoComponent implements OnInit {
 
   trackBySubUuid(_index: number, item: SubareaConhecimentoDTO): string | undefined {
     return item.uuid;
+  }
+
+  ordenarPor(coluna: 'nome' | 'sigla' | 'area'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarSubAreas();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'nome' | 'sigla' | 'area'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   private notificarErro(msg: string): void {

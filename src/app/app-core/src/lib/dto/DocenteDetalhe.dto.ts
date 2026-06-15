@@ -12,6 +12,7 @@ export interface DocenteDetalheDTO {
   nomeDepartamento: string;
   idDepartamento: number;
   departamento: string;
+  ativo?: boolean;
   subAreas: DocenteSubAreaPercentualDTO[];
   totalEncargos: number;
   cargaTotal: number;

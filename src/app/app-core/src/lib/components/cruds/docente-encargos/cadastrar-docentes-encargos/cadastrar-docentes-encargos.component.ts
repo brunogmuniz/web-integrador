@@ -12,7 +12,9 @@ import Swal from 'sweetalert2';
 interface EncargoVisual {
   subareaId: number;
   nomeArea: string;
+  siglaArea?: string;
   nomeSubarea: string;
+  siglaSubarea?: string;
   percentual: number;
 }
 
@@ -117,7 +119,9 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
             this.encargosAtuais = response.subAreas.map((sa: DocenteSubAreaPercentualDTO | any) => ({
               subareaId: sa.subareaId || sa.idSubarea || sa.id,
               nomeArea: sa.nomeArea || sa.areaNome || sa.area?.nome || 'Área não identificada',
+              siglaArea: sa.siglaArea || sa.area?.sigla,
               nomeSubarea: sa.nomeSubarea || sa.subareaNome || sa.nome || 'Subárea não identificada',
+              siglaSubarea: sa.siglaSubarea || sa.subarea?.sigla || sa.subArea?.sigla,
               percentual: Number(sa.percentual || sa.percentualAtuacao || 0)
             }));
           }
@@ -165,7 +169,9 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     this.encargosAtuais.push({
       subareaId: subarea.id,
       nomeArea: subarea.area?.nome || 'N/A',
+      siglaArea: subarea.area?.sigla,
       nomeSubarea: subarea.nome,
+      siglaSubarea: subarea.sigla,
       percentual: percentualInformado
     });
 

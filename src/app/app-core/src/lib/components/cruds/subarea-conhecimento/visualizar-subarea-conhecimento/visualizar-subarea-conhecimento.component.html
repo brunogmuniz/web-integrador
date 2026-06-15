@@ -1,60 +1,68 @@
 <div class="mt-4 w-100" *ngIf="subAreas.length > 14">
-  <app-paginador
-    [meta]="meta"
-    (mudancaPagina)="aoMudarPaginacao($event)">
+  <app-paginador [meta]="meta" (mudancaPagina)="aoMudarPaginacao($event)">
   </app-paginador>
 </div>
 
 <div class="card">
   <div class="card-header border-0 pt-6">
-    <app-busca-texto
-      placeholder="Buscar subárea de conhecimento"
-      (buscaChange)="aoBuscar($event)">
+    <app-busca-texto placeholder="Buscar subárea de conhecimento" (buscaChange)="aoBuscar($event)">
     </app-busca-texto>
   </div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
-        <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-          <th class="min-w-200px">-</th>
-          <th class="min-w-150px">Sigla</th>
-          <th class="min-w-200px">Nome</th>
-          <th class="min-w-100px text-center">CHT</th>
-          <th class="min-w-200px">Area</th>
-          <th class="min-w-120px text-center">Ações</th>
-        </tr>
+          <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+            <th class="min-w-200px">-</th>
+            <th class="min-w-150px">
+              <button type="button" class="table-sort-button" (click)="ordenarPor('sigla')">
+                Sigla <i class="la ms-1" [ngClass]="iconeOrdenacao('sigla')"></i>
+              </button>
+            </th>
+            <th class="min-w-200px">
+              <button type="button" class="table-sort-button" (click)="ordenarPor('nome')">
+                Nome <i class="la ms-1" [ngClass]="iconeOrdenacao('nome')"></i>
+              </button>
+            </th>
+            <th class="min-w-200px">
+              <button type="button" class="table-sort-button" (click)="ordenarPor('area')">
+                Área <i class="la ms-1" [ngClass]="iconeOrdenacao('area')"></i>
+              </button>
+            </th>
+            <th class="min-w-120px text-center">Ações</th>
+          </tr>
         </thead>
         <tbody class="fs-6">
-        <ng-container *ngIf="subAreas.length > 0; else emptyList">
-          <tr *ngFor="let sub of subAreas; trackBy: trackBySubUuid; let i = index">
-            <td>
-              <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
-            </td>
-            <td><span class="text-gray-700">{{ sub.sigla }}</span></td>
-            <td><span class="text-gray-700">{{ sub.nome }}</span></td>
-            <td class="text-center">{{ sub.cargaHorariaTotal || 0}}h</td>
-            <td>{{ sub.area?.nome || 'Não informada' }}</td>
-            <td class="text-center">
-              <div class="d-flex justify-content-center gap-2">
-                <button class="btn btn-icon btn-light-primary btn-sm" [routerLink]="['/sub-area/form/editar', sub.uuid]">
-                  <i class="la la-edit fs-3"></i>
-                </button>
-                <button class="btn btn-icon btn-light-danger btn-sm" (click)='onDelete(sub.uuid!)' style="color: #d63e3e">
-                  <i class="la la-trash fs-3"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        </ng-container>
+          <ng-container *ngIf="subAreas.length > 0; else emptyList">
+            <tr *ngFor="let sub of subAreas; trackBy: trackBySubUuid; let i = index">
+              <td>
+                <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
+              </td>
+              <td><span class="text-gray-700">{{ sub.sigla }}</span></td>
+              <td><span class="text-gray-700">{{ sub.nome }}</span></td>
+              <td>{{ sub.area?.nome || 'Não informada' }}</td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center gap-2">
+                  <button class="btn btn-icon btn-light-primary btn-sm"
+                    [routerLink]="['/sub-area/form/editar', sub.uuid]">
+                    <i class="la la-edit fs-3"></i>
+                  </button>
+                  <button class="btn btn-icon btn-light-danger btn-sm" (click)='onDelete(sub.uuid!)'
+                    style="color: #d63e3e">
+                    <i class="la la-trash fs-3"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
 
-        <ng-template #emptyList>
-          <tr>
-            <td colspan="6" class="text-center py-10">
-              <span class="text-gray-600">Nenhum registro encontrado.</span>
-            </td>
-          </tr>
-        </ng-template>
+          <ng-template #emptyList>
+            <tr>
+              <td colspan="5" class="text-center py-10">
+                <span class="text-gray-600">Nenhum registro encontrado.</span>
+              </td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
     </div>
@@ -62,8 +70,6 @@
 </div>
 
 <div class="mt-4 w-100" *ngIf="subAreas.length > 0">
-  <app-paginador
-    [meta]="meta"
-    (mudancaPagina)="aoMudarPaginacao($event)">
+  <app-paginador [meta]="meta" (mudancaPagina)="aoMudarPaginacao($event)">
   </app-paginador>
 </div>

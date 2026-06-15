@@ -36,12 +36,15 @@ export class DocenteService {
     );
   }
 
-  findAll(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDTO>> {
+  findAll(pagina: number = 0, tamanho: number = 15, busca: string = '', sortBy?: string, sortDirection?: string): Observable<RespostaPaginada<DocenteDTO>> {
     let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
     if (busca?.trim()) {
       params = params.set('busca', busca.trim());
+    }
+    if (sortBy) {
+      params = params.set('sortBy', sortBy).set('sortDirection', sortDirection || 'asc');
     }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(
@@ -89,6 +92,17 @@ export class DocenteService {
     );
   }
 
+  alterarStatus(uuid: string, ativo: boolean): Observable<DocenteDTO> {
+    const params = new HttpParams().set('valor', String(ativo));
+    return this.http.patch<DocenteDTO>(`${this.apiUrl}/${uuid}/ativo`, null, { params }).pipe(
+      tap(() => console.log(`Docente ${uuid} ${ativo ? 'ativado' : 'inativado'} com sucesso`)),
+      catchError(error => {
+        console.error('Erro ao alterar status do docente:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   listarTodosDetalhado(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDetalheDTO>> {
     const url = `${this.apiUrl}/detalhes`;
     let params = new HttpParams()
@@ -129,13 +143,27 @@ export class DocenteService {
     );
   }
 
-  listarTodosDetalhadoPorOferta(ofertaUuid: string, pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<DocenteDetalheDTO>> {
+  listarTodosDetalhadoPorOferta(
+    ofertaUuid: string,
+    pagina: number = 0,
+    tamanho: number = 15,
+    busca: string = '',
+    atuandoEmDisciplina: boolean = true,
+    docentesAtivos: boolean = true,
+    sortBy?: string,
+    sortDirection?: string
+  ): Observable<RespostaPaginada<DocenteDetalheDTO>> {
     const url = `${this.apiUrl}/detalhes/oferta/${ofertaUuid}`;
     let params = new HttpParams()
       .set('pagina', pagina.toString())
-      .set('itensPorPagina', tamanho.toString());
+      .set('itensPorPagina', tamanho.toString())
+      .set('atuandoEmDisciplina', String(atuandoEmDisciplina))
+      .set('docentesAtivos', String(docentesAtivos));
     if (busca?.trim()) {
       params = params.set('busca', busca.trim());
+    }
+    if (sortBy) {
+      params = params.set('sortBy', sortBy).set('sortDirection', sortDirection || 'asc');
     }
 
     return this.http.get<any>(url, { params }).pipe(

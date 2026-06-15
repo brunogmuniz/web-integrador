@@ -53,12 +53,15 @@ export class EstruturaCurricularService {
     );
   }
 
-  findAll(pagina: number = 0, tamanho: number = 15, busca: string = ''): Observable<RespostaPaginada<EstruturaCurricularDTO>> {
+  findAll(pagina: number = 0, tamanho: number = 15, busca: string = '', sortBy?: string, sortDirection?: string): Observable<RespostaPaginada<EstruturaCurricularDTO>> {
     let params = new HttpParams()
       .set('pagina', pagina.toString())
       .set('itensPorPagina', tamanho.toString());
     if (busca?.trim()) {
       params = params.set('busca', busca.trim());
+    }
+    if (sortBy) {
+      params = params.set('sortBy', sortBy).set('sortDirection', sortDirection || 'asc');
     }
 
     return this.http.get<any>(this.apiUrl, { params }).pipe(

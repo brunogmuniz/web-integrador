@@ -19,11 +19,18 @@
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
           <th class="min-w-70px">#</th>
-          <th class="min-w-200px">Nome</th>
+          <th class="min-w-200px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('nome')">
+              Nome <i class="la ms-1" [ngClass]="iconeOrdenacao('nome')"></i>
+            </button>
+          </th>
           <th class="min-w-100px">Sigla</th>
-          <th class="min-w-100px">Nível</th>
+          <th class="min-w-100px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('nivel')">
+              Nível <i class="la ms-1" [ngClass]="iconeOrdenacao('nivel')"></i>
+            </button>
+          </th>
           <th class="min-w-120px">Ano Currículo</th>
-          <th class="min-w-150px">Carga Horária</th>
           <th class="min-w-100px text-center">Ações</th>
         </tr>
         </thead>
@@ -44,9 +51,6 @@
           <td>
             <span class="text-gray-800">{{ curso.anoCurriculo }}</span>
           </td>
-          <td>
-            <span class="text-gray-700 fw-semibold">{{ curso.cargaHorariaTotal }}h</span>
-          </td>
           <td class="text-center">
             <button
               class="btn btn-icon btn-light-primary btn-sm me-2" style="color: #303030"
@@ -65,7 +69,7 @@
         </tr>
 
         <tr *ngIf="cursos.length === 0">
-          <td colspan="7" class="text-center py-10">
+          <td colspan="6" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">

@@ -105,8 +105,8 @@
 
           <tbody>
           <tr *ngFor="let enc of encargosAtuais; let i = index">
-            <td>{{ enc.nomeArea }}</td>
-            <td>{{ enc.nomeSubarea }}</td>
+            <td>{{ enc.nomeArea }}<ng-container *ngIf="enc.siglaArea"> ({{ enc.siglaArea }})</ng-container></td>
+            <td>{{ enc.nomeSubarea }}<ng-container *ngIf="enc.siglaSubarea"> ({{ enc.siglaSubarea }})</ng-container></td>
             <td class="text-end">
               <span class="badge badge-light-primary text-black">{{ enc.percentual }}%</span>
             </td>

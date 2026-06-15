@@ -11,7 +11,11 @@
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-          <th>Ano/Semestre</th>
+          <th>
+            <button type="button" class="table-sort-button" (click)="ordenarPor('anoSemestre')">
+              Ano/Semestre <i class="la ms-1" [ngClass]="iconeOrdenacao('anoSemestre')"></i>
+            </button>
+          </th>
           <th>Status</th>
           <th class="text-center">Ações</th>
         </tr>

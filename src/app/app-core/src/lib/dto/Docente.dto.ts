@@ -8,4 +8,5 @@ export interface DocenteDTO {
   origemVaga: string;
   nomeDepartamento: string;
   departamentoId: number;
+  ativo?: boolean;
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DisciplinaService, DisciplinaDTO, MetadadosPaginacao, RespostaPaginada } from "app-core";
 import Swal from "sweetalert2";
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'app-visualizar-disciplina',
@@ -10,6 +11,7 @@ import Swal from "sweetalert2";
 export class VisualizarDisciplinaComponent implements OnInit {
   disciplinas: DisciplinaDTO[] = [];
   busca = '';
+  ordenacao = new TableSort<'nome' | 'subarea' | 'total' | 'tipo'>('nome', 'asc');
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -25,9 +27,9 @@ export class VisualizarDisciplinaComponent implements OnInit {
   }
 
   carregarDisciplinas(): void {
-    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
+    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<DisciplinaDTO>) => {
-        this.disciplinas = res.conteudo;
+        this.disciplinas = res.conteudo || [];
         this.meta = res.meta;
       },
       error: (err: Error) => {
@@ -47,6 +49,17 @@ export class VisualizarDisciplinaComponent implements OnInit {
     this.busca = termo;
     this.meta.paginaAtual = 0;
     this.carregarDisciplinas();
+  }
+
+  ordenarPor(coluna: 'nome' | 'subarea' | 'total' | 'tipo'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarDisciplinas();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'nome' | 'subarea' | 'total' | 'tipo'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   confirmarExclusao(uuid: string | null | undefined): void {
