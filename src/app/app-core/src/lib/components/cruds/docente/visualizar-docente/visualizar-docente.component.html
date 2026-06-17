@@ -74,6 +74,12 @@
                       [title]="docente.ativo === false ? 'Ativar' : 'Inativar'">
                 <i class="la fs-3 text-dark" [ngClass]="docente.ativo === false ? 'la-check-circle' : 'la-ban'"></i>
               </button>
+              <button type="button"
+                      class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
+                      (click)="onDelete(docente.uuid)"
+                      title="Excluir">
+                <i class="la la-trash fs-3"></i>
+              </button>
             </div>
           </td>
         </tr>
