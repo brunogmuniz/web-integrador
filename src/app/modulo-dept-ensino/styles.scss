@@ -6,3 +6,72 @@
 body.sidebar-minimized-global .kt-wrapper {
   margin-left: 75px;
 }
+
+.table-sort-button {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: #181c32;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: inherit;
+}
+
+.table-sort-button:hover,
+.table-sort-button:focus {
+  color: #181c32;
+  text-decoration: none;
+}
+
+.table-sort-button:focus-visible {
+  outline: 2px solid #d9dee8;
+  outline-offset: 3px;
+}
+
+.table-sort-button .la {
+  position: relative;
+  top: 1px;
+  width: 10px;
+  height: 14px;
+  margin-left: 0 !important;
+  color: transparent;
+  flex: 0 0 10px;
+  font-size: 0 !important;
+}
+
+.table-sort-button .la::before,
+.table-sort-button .la::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+}
+
+.table-sort-button .la::before {
+  top: 1px;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-bottom: 5px solid #b5b5c3;
+}
+
+.table-sort-button .la::after {
+  bottom: 1px;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-top: 5px solid #b5b5c3;
+}
+
+.table-sort-button .la-sort-up::before {
+  border-bottom-color: #181c32;
+}
+
+.table-sort-button .la-sort-down::after {
+  border-top-color: #181c32;
+}

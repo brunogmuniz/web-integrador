@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AreaConhecimentoDTO, MetadadosPaginacao, RespostaPaginada } from "app-core";
 import { AreaConhecimentoService } from "app-core";
 import Swal from 'sweetalert2';
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'app-visualizar-area-conhecimento',
@@ -11,6 +12,7 @@ import Swal from 'sweetalert2';
 export class VisualizarAreaConhecimentoComponent implements OnInit {
   areas: AreaConhecimentoDTO[] = [];
   busca = '';
+  ordenacao = new TableSort<'nome' | 'sigla'>('nome', 'asc');
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -26,9 +28,9 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
   }
 
   carregarAreas(): void {
-    this.areaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
+    this.areaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<AreaConhecimentoDTO>) => {
-        this.areas = res.conteudo;
+        this.areas = res.conteudo || [];
         this.meta = res.meta;
       },
       error: (err: Error) => {
@@ -76,6 +78,17 @@ export class VisualizarAreaConhecimentoComponent implements OnInit {
         });
       }
     });
+  }
+
+  ordenarPor(coluna: 'nome' | 'sigla'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarAreas();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'nome' | 'sigla'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   private exibirSucesso(msg: string): void {

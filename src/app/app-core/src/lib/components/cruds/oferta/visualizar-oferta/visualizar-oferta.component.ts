@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { MetadadosPaginacao, OfertaDTO, OfertaService, RespostaPaginada } from 'app-core';
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'app-visualizar-oferta',
@@ -11,6 +12,7 @@ export class VisualizarOfertaComponent implements OnInit {
   ofertas: OfertaDTO[] = [];
   loading = false;
   busca = '';
+  ordenacao = new TableSort<'anoSemestre'>('anoSemestre', 'asc');
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
     tamanho: 15,
@@ -26,7 +28,7 @@ export class VisualizarOfertaComponent implements OnInit {
 
   carregarOfertas(): void {
     this.loading = true;
-    this.ofertaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
+    this.ofertaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<OfertaDTO>) => {
         this.ofertas = res.conteudo || [];
         this.meta = res.meta;
@@ -49,6 +51,17 @@ export class VisualizarOfertaComponent implements OnInit {
     this.busca = termo;
     this.meta.paginaAtual = 0;
     this.carregarOfertas();
+  }
+
+  ordenarPor(coluna: 'anoSemestre'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarOfertas();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'anoSemestre'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   alterarDisponibilidade(oferta: OfertaDTO): void {
@@ -82,4 +95,5 @@ export class VisualizarOfertaComponent implements OnInit {
       });
     });
   }
+
 }

@@ -3,7 +3,8 @@ import { DocenteService } from "app-core/lib/services/docente-service";
 import { DocenteDetalheDTO } from "app-core/lib/dto/DocenteDetalhe.dto";
 import { RespostaPaginada } from "app-core/lib/dto/paginacao/resposta-paginada.dto";
 import Swal from "sweetalert2";
-import {DocenteSubAreaPercentualDTO, OfertaDTO, OfertaService} from "app-core";
+import { DocenteSubAreaPercentualDTO, OfertaDTO, OfertaService } from "app-core";
+import { TableSort } from '../../../../utils/table-sort';
 
 interface MetadadosPaginacao {
   paginaAtual: number;
@@ -23,6 +24,10 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
   public ofertas: OfertaDTO[] = [];
   public ofertaSelecionadaUuid?: string;
   public busca = '';
+  public atuandoEmDisciplina = true;
+  public docentesAtivos = true;
+  public exibirFiltros = false;
+  public ordenacao = new TableSort<'docente'>('docente', 'asc');
   public loading: boolean = false;
   public exibirModal: boolean = false;
   public docenteSelecionado?: DocenteDetalheDTO;
@@ -37,7 +42,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
   constructor(
     private docenteService: DocenteService,
     private ofertaService: OfertaService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarOfertas();
@@ -60,6 +65,26 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.carregarDados();
   }
 
+  public aoAlterarFiltros(): void {
+    this.meta.paginaAtual = 0;
+    this.carregarDados();
+  }
+
+  public alternarFiltros(): void {
+    this.exibirFiltros = !this.exibirFiltros;
+  }
+
+  public ordenarPor(coluna: 'docente'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarDados();
+    });
+  }
+
+  public iconeOrdenacao(coluna: 'docente'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
+  }
+
   public trackByDocenteUuid(_index: number, item: DocenteDetalheDTO): string {
     return item.uuid;
   }
@@ -71,6 +96,11 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     return Array.from(new Set(subAreas.map((sub: any) =>
       sub.nomeSubarea || sub.nomeSubArea || sub.nomeArea || sub.nome || 'Área sem nome'
     )));
+  }
+
+  public nomeComSigla(nome?: string, sigla?: string): string {
+    const nomeTratado = nome || 'N/A';
+    return sigla ? `${nomeTratado} (${sigla})` : nomeTratado;
   }
 
   public abrirModal(docente: DocenteDetalheDTO): void {
@@ -95,7 +125,16 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     }
 
     this.loading = true;
-    this.docenteService.listarTodosDetalhadoPorOferta(this.ofertaSelecionadaUuid, this.meta.paginaAtual, this.meta.tamanho, this.busca).subscribe({
+    this.docenteService.listarTodosDetalhadoPorOferta(
+      this.ofertaSelecionadaUuid,
+      this.meta.paginaAtual,
+      this.meta.tamanho,
+      this.busca,
+      this.atuandoEmDisciplina,
+      this.docentesAtivos,
+      this.ordenacao.coluna,
+      this.ordenacao.direcao
+    ).subscribe({
       next: (res: RespostaPaginada<DocenteDetalheDTO>) => {
         this.listaDocentesDetalhados = res.conteudo || [];
         this.meta = res.meta;

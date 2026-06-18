@@ -9,3 +9,139 @@
   padding-top: 0.65rem;
   padding-bottom: 0.65rem;
 }
+
+.docente-encargos-filtro-menu {
+  min-width: 72px;
+}
+
+.docente-encargos-filtro-menu__botao {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bs-gray-800);
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 4px;
+  padding: 0 12px;
+  font-weight: 600;
+}
+
+.docente-encargos-filtro-menu__botao:hover {
+  background-color: var(--bs-gray-100) !important;
+}
+
+.docente-encargos-filtro-menu__painel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 280px;
+  padding: 16px;
+  background: #fff;
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 4px;
+}
+
+.docente-encargos-filtro-menu__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--bs-gray-800);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.docente-encargos-filtro-menu__lista {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 12px;
+  }
+
+  li:nth-child(odd) {
+    background: #f8f9fa;
+  }
+
+  li.checked {
+    background-color: #f1f4f8;
+  }
+
+  p {
+    margin: 0;
+    color: var(--bs-gray-800);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+}
+
+.docente-encargos-switch {
+  margin-bottom: 0;
+}
+
+.docente-encargos-switch__input {
+  display: none;
+}
+
+.docente-encargos-switch__slider {
+  width: 32px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background-color: #d8dee8;
+  border: 1px solid #c5cfdd;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .3s;
+}
+
+.docente-encargos-switch__slider::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  transform: translateX(0);
+  transition: .3s;
+}
+
+.docente-encargos-switch__input:checked ~ .docente-encargos-switch__slider::before {
+  transform: translateX(14px);
+}
+
+.docente-encargos-switch__input:checked ~ .docente-encargos-switch__slider {
+  background-color: #3699ff;
+  border: 1px solid #2f80ed;
+}
+
+.docente-inativo {
+  color: #ff4c74 !important;
+  text-decoration: line-through;
+}
+
+.docente-encargos-cargas {
+  border: 1px solid var(--bs-gray-300);
+  border-collapse: collapse;
+
+  th,
+  td {
+    border: 1px solid var(--bs-gray-300);
+    vertical-align: middle;
+  }
+
+  thead th {
+    background-color: var(--bs-gray-100);
+    text-align: center;
+  }
+}

@@ -24,6 +24,57 @@
           (buscaChange)="aoBuscar($event)">
         </app-busca-texto>
       </div>
+      <div class="col-lg-2 col-md-12 mt-6 mt-lg-0 docente-encargos-filtro-menu">
+        <label class="form-label fw-bold text-gray-700 fs-7 d-block">&nbsp;</label>
+        <div class="position-relative d-inline-block">
+          <button
+            type="button"
+            class="btn btn-sm docente-encargos-filtro-menu__botao"
+            title="Filtros"
+            aria-label="Filtros"
+            [attr.aria-expanded]="exibirFiltros"
+            (click)="alternarFiltros()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M7.58209 15.5H6.125V7.93213L0.875 1.68212V0.5H15.125V1.67537L10.125 7.92537V12.9571L7.58209 15.5ZM7.125 14.5H7.16791L9.125 12.5429V7.57463L13.9847 1.5H2.02813L7.125 7.56787V14.5Z" fill="currentColor"/>
+            </svg>
+            <span>Filtros</span>
+          </button>
+
+          <div class="docente-encargos-filtro-menu__painel shadow-sm" *ngIf="exibirFiltros">
+            <div class="docente-encargos-filtro-menu__titulo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M7.58209 15.5H6.125V7.93213L0.875 1.68212V0.5H15.125V1.67537L10.125 7.92537V12.9571L7.58209 15.5ZM7.125 14.5H7.16791L9.125 12.5429V7.57463L13.9847 1.5H2.02813L7.125 7.56787V14.5Z" fill="currentColor"/>
+              </svg>
+              <span>FILTRAR</span>
+            </div>
+
+            <ul class="docente-encargos-filtro-menu__lista">
+              <li [ngClass]="{'checked': atuandoEmDisciplina}">
+                <p>Atuando em disciplina</p>
+                <label class="docente-encargos-switch">
+                  <input
+                    class="docente-encargos-switch__input"
+                    type="checkbox"
+                    [(ngModel)]="atuandoEmDisciplina"
+                    (ngModelChange)="aoAlterarFiltros()">
+                  <div class="docente-encargos-switch__slider"></div>
+                </label>
+              </li>
+              <li [ngClass]="{'checked': docentesAtivos}">
+                <p>Docentes ativos</p>
+                <label class="docente-encargos-switch">
+                  <input
+                    class="docente-encargos-switch__input"
+                    type="checkbox"
+                    [(ngModel)]="docentesAtivos"
+                    (ngModelChange)="aoAlterarFiltros()">
+                  <div class="docente-encargos-switch__slider"></div>
+                </label>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -32,7 +83,11 @@
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-          <th class="min-w-200px">Docente</th>
+          <th class="min-w-200px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('docente')">
+              Docente <i class="la ms-1" [ngClass]="iconeOrdenacao('docente')"></i>
+            </button>
+          </th>
           <th class="min-w-150px">Departamento</th>
           <th class="min-w-200px text-center">Áreas de Atuação</th>
         </tr>
@@ -44,11 +99,11 @@
           <tr *ngFor="let item of listaDocentesDetalhados; trackBy: trackByDocenteUuid">
             <td>
               <div class="d-flex flex-column">
-                <span class="text-gray-800 fw-bold">{{ item.nome }}</span>
+                <span class="text-gray-800 fw-bold" [ngClass]="{'docente-inativo': item.ativo === false}">{{ item.nome }}</span>
               </div>
             </td>
             <td>
-              <span class="text-gray-800">{{ item.nomeDepartamento || item.departamento }}</span>
+              <span class="text-gray-800" [ngClass]="{'docente-inativo': item.ativo === false}">{{ item.nomeDepartamento || item.departamento }}</span>
             </td>
             <td class="text-center">
               <button class="btn btn-icon btn-sm bg-transparent"
@@ -125,24 +180,27 @@
         </div>
 
         <div class="table-responsive" *ngIf="docenteSelecionado?.subAreas && docenteSelecionado!.subAreas!.length > 0; else semAreas">
-          <table class="table table-row-dashed table-row-gray-200 align-middle gs-0 gy-4">
+          <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 docente-encargos-cargas">
             <thead>
               <tr class="border-bottom-2 border-gray-200 text-gray-800 fw-bold fs-6">
-                <th class="min-w-150px">Área</th>
-                <th class="min-w-150px">Subárea</th>
-                <th class="min-w-80px text-center">CH Total</th>
-                <th class="min-w-80px text-center">CH Teórica</th>
-                <th class="min-w-80px text-center">CH Prática</th>
-                <th class="min-w-80px text-center">Carga (%)</th>
+                <th class="min-w-180px text-center align-middle" rowspan="2">Área</th>
+                <th class="min-w-180px text-center align-middle" rowspan="2">Subárea</th>
+                <th class="text-center align-middle" colspan="4">Carga Horária</th>
+              </tr>
+              <tr class="border-bottom-2 border-gray-200 text-gray-800 fw-bold fs-7">
+                <th class="min-w-80px text-center align-middle">Total</th>
+                <th class="min-w-80px text-center align-middle">Teórica</th>
+                <th class="min-w-80px text-center align-middle">Prática</th>
+                <th class="min-w-80px text-center align-middle">%</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let sub of docenteSelecionado?.subAreas">
-                <td>
-                  <span class="text-gray-800 fw-semibold">{{ sub.nomeArea || 'N/A' }}</span>
+                <td class="text-center">
+                  <span class="text-gray-800 fw-semibold">{{ nomeComSigla(sub.nomeArea, sub.siglaArea || sub.area?.sigla) }}</span>
                 </td>
-                <td>
-                  <span class="text-gray-800">{{ sub.nomeSubarea || 'N/A' }}</span>
+                <td class="text-center">
+                  <span class="text-gray-800">{{ nomeComSigla(sub.nomeSubarea, sub.siglaSubarea) }}</span>
                 </td>
                 <td class="text-center">
                   <span class="text-gray-800 fw-semibold">{{ sub.cargaHoraria || 0 }}</span>

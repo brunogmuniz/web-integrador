@@ -18,10 +18,26 @@
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
           <th class="min-w-50px">#</th>
-          <th class="min-w-200px">Nome do Currículo</th>
-          <th class="min-w-100px">Curso</th>
-          <th class="min-w-100px">Ano</th>
-          <th class="min-w-80px text-center">Ativo</th>
+          <th class="min-w-200px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('nome')">
+              Nome do Currículo <i class="la ms-1" [ngClass]="iconeOrdenacao('nome')"></i>
+            </button>
+          </th>
+          <th class="min-w-100px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('curso')">
+              Curso <i class="la ms-1" [ngClass]="iconeOrdenacao('curso')"></i>
+            </button>
+          </th>
+          <th class="min-w-100px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('ano')">
+              Ano <i class="la ms-1" [ngClass]="iconeOrdenacao('ano')"></i>
+            </button>
+          </th>
+          <th class="min-w-80px text-center">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('ativo')">
+              Ativo <i class="la ms-1" [ngClass]="iconeOrdenacao('ativo')"></i>
+            </button>
+          </th>
           <th class="min-w-120px text-center">Ações</th>
         </tr>
         </thead>
