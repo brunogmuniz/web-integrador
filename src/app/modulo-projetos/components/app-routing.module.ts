@@ -45,8 +45,9 @@ const routes: Routes = [
       },
       {
         path: 'gerenciar-interesses',
-        component: GerenciarInteressesComponent
-      },
+        component: GerenciarInteressesComponent,
+        canDeactivate: [(component: GerenciarInteressesComponent) => component.podeDesativar()]
+      }
     ],
   },
   {

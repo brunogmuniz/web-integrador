@@ -6,15 +6,12 @@
       </span>
       <h3 class="kt-portlet__head-title">Gerenciar Interesses</h3>
     </div>
+
     <div class="kt-portlet__head-toolbar" *ngIf="!carregando && topicos.length > 0">
       <span class="badge-selecionados">
         <i class="la la-check-circle"></i>
         {{ totalSelecionados }} selecionado{{ totalSelecionados !== 1 ? 's' : '' }}
       </span>
-      <button type="button" class="btn btn-primary btn-sm ms-3" (click)="salvar()" [disabled]="salvando">
-        <i class="la" [class.la-save]="!salvando" [class.la-spinner]="salvando" [class.la-spin]="salvando"></i>
-        {{ salvando ? 'Salvando...' : 'Salvar' }}
-      </button>
     </div>
   </div>
 
@@ -32,6 +29,7 @@
     <div *ngIf="!carregando">
 
       <div class="interesses-toolbar">
+
         <div class="busca-projetos">
           <i class="la la-search busca-projetos__icon"></i>
           <input
@@ -39,8 +37,13 @@
             class="busca-projetos__input"
             placeholder="Buscar tópico..."
             [(ngModel)]="termoBusca"
+            (keyup.enter)="forcarBuscaVisual()"
           />
+          <button type="button" class="busca-projetos__btn" (click)="forcarBuscaVisual()">
+            Buscar
+          </button>
         </div>
+
         <div class="filtro-botoes">
           <button class="filtro-btn" [class.filtro-btn--ativo]="filtro === 'todos'" (click)="filtro = 'todos'">Todos</button>
           <button class="filtro-btn" [class.filtro-btn--ativo]="filtro === 'selecionados'" (click)="filtro = 'selecionados'">
@@ -50,6 +53,19 @@
             <i class="la la-times"></i> Não Selecionados
           </button>
         </div>
+
+        <div class="toolbar-salvar">
+          <button
+            type="button"
+            class="btn btn-sm"
+            [ngClass]="temAlteracoesNaoSalvas ? 'btn-success pulse-btn' : 'btn-primary'"
+            (click)="salvar()"
+            [disabled]="salvando || !temAlteracoesNaoSalvas">
+            <i class="la" [class.la-save]="!salvando" [class.la-spinner]="salvando" [class.la-spin]="salvando"></i>
+            {{ salvando ? 'Salvando...' : (temAlteracoesNaoSalvas ? 'Salvar Alterações*' : 'Salvo') }}
+          </button>
+        </div>
+
       </div>
 
       <div class="topicos-grid">
@@ -98,5 +114,21 @@
       </div>
 
     </div>
+  </div>
+</div>
+
+<div class="barra-flutuante-salvar" *ngIf="temAlteracoesNaoSalvas">
+  <div class="barra-flutuante__aviso">
+    <i class="la la-exclamation-circle"></i>
+    <span>Você tem <strong>mudanças não salvas</strong></span>
+  </div>
+  <div class="barra-flutuante__acoes">
+    <button type="button" class="btn btn-outline-light btn-sm" (click)="descartarAlteracoes()" [disabled]="salvando">
+      Descartar
+    </button>
+    <button type="button" class="btn btn-success btn-sm ms-2" (click)="salvar()" [disabled]="salvando">
+      <i class="la" [class.la-save]="!salvando" [class.la-spinner]="salvando" [class.la-spin]="salvando"></i>
+      {{ salvando ? 'Salvando...' : 'Salvar Preferências' }}
+    </button>
   </div>
 </div>

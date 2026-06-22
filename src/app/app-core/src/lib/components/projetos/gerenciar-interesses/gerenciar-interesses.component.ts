@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import Swal from 'sweetalert2';
 import {
   ProjetoService,
@@ -9,6 +9,7 @@ interface TopicoComPreferencia extends TopicoDTO {
   selecionado: boolean;
   selecionadoOriginal: boolean;
   peso: number;
+  pesoOriginal: number;
 }
 
 @Component({
@@ -38,8 +39,21 @@ export class GerenciarInteressesComponent implements OnInit {
   get totalSelecionados(): number {
     return this.topicos.filter(t => t.selecionado).length;
   }
+  get temAlteracoesNaoSalvas(): boolean {
+    return this.topicos.some(t =>
+      t.selecionado !== t.selecionadoOriginal ||
+      (t.selecionado && t.peso !== t.pesoOriginal)
+    );
+  }
 
   constructor(private projetoService: ProjetoService) {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  onBeforeUnload($event: BeforeUnloadEvent) {
+    if (this.temAlteracoesNaoSalvas) {
+      $event.returnValue = true;
+    }
+  }
 
   ngOnInit(): void {
     this.carregar();
@@ -55,11 +69,13 @@ export class GerenciarInteressesComponent implements OnInit {
             this.topicos = topicos.map(t => {
               const pref = preferencias.find(p => p.topico.id === t.id);
               const selecionado = !!pref;
+              const peso = pref?.peso ?? 1;
               return {
                 ...t,
                 selecionado,
                 selecionadoOriginal: selecionado,
-                peso: pref?.peso ?? 1
+                peso,
+                pesoOriginal: peso
               };
             });
             this.carregando = false;
@@ -69,7 +85,8 @@ export class GerenciarInteressesComponent implements OnInit {
               ...t,
               selecionado: false,
               selecionadoOriginal: false,
-              peso: 1
+              peso: 1,
+              pesoOriginal: 1
             }));
             this.carregando = false;
           }
@@ -92,13 +109,45 @@ export class GerenciarInteressesComponent implements OnInit {
     if (topico.peso > 1) topico.peso--;
   }
 
+  incrementar(topico: TopicoComPreferencia): void {
+    if (topico.peso < 5) topico.peso++;
+  }
+
   pesoLabel(peso: number): string {
     const labels: Record<number, string> = { 1: "Baixa", 2: "Média-baixa", 3: "Média", 4: "Média-alta", 5: "Alta" };
     return labels[peso] ?? "";
   }
 
-  incrementar(topico: TopicoComPreferencia): void {
-    if (topico.peso < 5) topico.peso++;
+  forcarBuscaVisual(): void {
+    this.termoBusca = this.termoBusca.trim();
+  }
+
+  descartarAlteracoes(): void {
+    this.topicos.forEach(t => {
+      t.selecionado = t.selecionadoOriginal;
+      t.peso = t.pesoOriginal;
+    });
+  }
+
+  async podeDesativar(): Promise<boolean> {
+    if (!this.temAlteracoesNaoSalvas) return true;
+
+    const resultado = await Swal.fire({
+      title: 'Descartar mudanças?',
+      text: 'Você possui preferências que ainda não foram salvas. Se sair agora, elas serão perdidas.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sim, descartar',
+      cancelButtonText: 'Continuar editando'
+    });
+
+    if (resultado.isConfirmed) {
+      this.descartarAlteracoes();
+      return true;
+    }
+    return false;
   }
 
   salvar(): void {
@@ -117,7 +166,10 @@ export class GerenciarInteressesComponent implements OnInit {
     ];
 
     Promise.allSettled(operacoes).then(() => {
-      this.topicos.forEach(t => t.selecionadoOriginal = t.selecionado);
+      this.topicos.forEach(t => {
+        t.selecionadoOriginal = t.selecionado;
+        t.pesoOriginal = t.peso;
+      });
       this.salvando = false;
       void Swal.fire({
         title: 'Salvo!',
