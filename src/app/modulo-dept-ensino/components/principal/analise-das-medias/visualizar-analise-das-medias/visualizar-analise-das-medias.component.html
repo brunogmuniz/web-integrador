@@ -1,4 +1,47 @@
 <div class="analise-container">
+  <div class="ofertas-toolbar">
+    <div class="ofertas-toolbar__grupo">
+      <span class="ofertas-toolbar__label">Ofertas selecionadas</span>
+      <div class="ofertas-selecionadas">
+        <span class="oferta-chip" *ngFor="let oferta of ofertasSelecionadas">
+          <span>{{ formatarOferta(oferta) }}</span>
+          <button
+            type="button"
+            class="btn-remover-oferta"
+            title="Remover oferta"
+            (click)="removerOferta(oferta)">
+            <i class="fa fa-times"></i>
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="adicionar-oferta">
+      <div class="oferta-select-wrapper">
+        <label class="oferta-select-label" for="oferta-analise-select">Adicionar oferta</label>
+        <select
+          id="oferta-analise-select"
+          class="form-control oferta-select"
+          [(ngModel)]="ofertaSelecionadaUuid"
+          [disabled]="ofertasDisponiveisParaAdicionar.length === 0">
+          <option value="">Selecionar oferta</option>
+          <option *ngFor="let oferta of ofertasDisponiveisParaAdicionar" [value]="oferta.uuid">
+            {{ formatarOferta(oferta) }}
+          </option>
+        </select>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary btn-adicionar-oferta"
+        title="Adicionar oferta"
+        [disabled]="!ofertaSelecionadaUuid"
+        (click)="adicionarOferta()">
+        <i class="fa fa-plus"></i>
+        Adicionar oferta
+      </button>
+    </div>
+  </div>
+
   <ng-container *ngIf="loading$ | async; else conteudoPronto">
     <div class="spinner-overlay">
       <span>Processando análise...</span>

@@ -66,8 +66,11 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   public disciplinasSelecionadas: DisciplinaOfertaView[] = [];
   public disciplinaSelecionadaUuid: string | null = null;
   public loading = false;
+  public importandoDisciplinas = false;
   public carregandoCombinacao = false;
   public combinacaoExistente = false;
+  public modalImportacaoAberto = false;
+  public ofertaOrigemImportacaoUuid = '';
 
   public gruposDisponiveisView: GrupoDisciplina<DisciplinaCurriculoDTO>[] = [];
   public gruposSelecionadasView: GrupoDisciplina<DisciplinaOfertaView>[] = [];
@@ -109,12 +112,12 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.ofertaEdicaoUuid = this.route.snapshot.paramMap.get('uuid') || undefined;
 
     forkJoin({
-      ofertas:  this.ofertaService.findAll(0, 500),
+      ofertas:  this.ofertaService.buscarParaSelecao(),
       cursos:   this.cursoService.findAll(0, 500),
       docentes: this.docenteService.findAll(0, 500)
     }).subscribe({
       next: (res) => {
-        this.ofertas  = (res.ofertas.conteudo  || []).filter(o => o.ativo || o.uuid === this.ofertaEdicaoUuid);
+        this.ofertas  = (res.ofertas || []).filter(o => o.ativo || o.uuid === this.ofertaEdicaoUuid);
         this.cursos   = (res.cursos.conteudo   || []).filter(c => c.ativo !== false);
         this.docentes =  res.docentes.conteudo || [];
         if (this.ofertaEdicaoUuid) {
@@ -143,6 +146,8 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   }
 
   private lidarComMudancaDeOferta(oferta: OfertaDTO | null): void {
+    this.ofertaOrigemImportacaoUuid = '';
+
     if (!oferta?.uuid) {
       this.disciplinasSelecionadas = [];
       this.combinacaoExistente = false;
@@ -324,6 +329,75 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.disciplinasSelecionadas = [...this.disciplinasSelecionadas, novaDisciplina];
     this.disciplinaSelecionadaUuid = null;
     this.atualizarViews();
+  }
+
+  public abrirModalImportacao(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      void Swal.fire('Aviso', 'Selecione oferta, curso e currículo antes de importar disciplinas.', 'warning');
+      return;
+    }
+
+    this.modalImportacaoAberto = true;
+  }
+
+  public fecharModalImportacao(): void {
+    if (this.importandoDisciplinas) {
+      return;
+    }
+
+    this.modalImportacaoAberto = false;
+  }
+
+  public get ofertasDisponiveisParaImportacao(): OfertaDTO[] {
+    const ofertaDestino = this.form.get('oferta')?.value as OfertaDTO | null;
+    return this.ofertas
+      .filter(oferta => oferta.uuid && oferta.uuid !== ofertaDestino?.uuid)
+      .sort((a, b) => {
+        const anoDiff = Number(b.ano) - Number(a.ano);
+        if (anoDiff !== 0) {
+          return anoDiff;
+        }
+        return Number(b.semestre) - Number(a.semestre);
+      });
+  }
+
+  public importarDisciplinasDaOferta(): void {
+    const ofertaDestino = this.form.get('oferta')?.value as OfertaDTO | null;
+    const curso = this.form.get('curso')?.value as CursoDTO | null;
+    const curriculo = this.form.get('curriculo')?.value as EstruturaCurricularDTO | null;
+
+    if (!ofertaDestino?.uuid || !curso?.uuid || !curriculo?.uuid || !this.ofertaOrigemImportacaoUuid) {
+      void Swal.fire('Aviso', 'Selecione oferta, curso, currículo e a oferta de origem para importar.', 'warning');
+      return;
+    }
+
+    const ofertaOrigem = this.ofertasDisponiveisParaImportacao.find(oferta => oferta.uuid === this.ofertaOrigemImportacaoUuid);
+    if (!ofertaOrigem?.uuid) {
+      void Swal.fire('Aviso', 'Selecione uma oferta de origem válida para importar.', 'warning');
+      return;
+    }
+
+    this.importandoDisciplinas = true;
+    this.ofertaService.importarDisciplinasPorCombinacao(
+      ofertaDestino.uuid,
+      curso.uuid,
+      curriculo.uuid,
+      ofertaOrigem.uuid
+    ).subscribe({
+      next: () => {
+        this.importandoDisciplinas = false;
+        this.modalImportacaoAberto = false;
+        this.ofertaOrigemImportacaoUuid = '';
+        void Swal.fire('Sucesso', 'Disciplinas importadas com sucesso.', 'success');
+        this.carregarDisciplinasDaCombinacaoAtual();
+      },
+      error: err => {
+        this.importandoDisciplinas = false;
+        const message = err?.error?.message || 'Não foi possível importar as disciplinas da oferta selecionada.';
+        void Swal.fire('Erro', message, 'error');
+      }
+    });
   }
 
   public removerDisciplinaPorUuid(uuid?: string): void {

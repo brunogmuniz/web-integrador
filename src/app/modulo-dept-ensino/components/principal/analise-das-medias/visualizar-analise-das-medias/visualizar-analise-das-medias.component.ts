@@ -1,10 +1,13 @@
-import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable, catchError, finalize, of, Subscription } from 'rxjs';
-import { AnaliseService } from 'app-core/lib/services/analise.service';
+import { BehaviorSubject, Observable, Subject, Subscription, catchError, finalize, forkJoin, of, switchMap, takeUntil } from 'rxjs';
+import Swal from 'sweetalert2';
 import { AnaliseParamsDTO } from 'app-core/lib/dto/analiseParams.dto';
-import { AnoSemestreDTO } from 'app-core/lib/dto/anoSemestre.dto';
 import { AreaMediaDTO } from 'app-core/lib/dto/areaMedia.dto';
+import { OfertaDTO } from 'app-core/lib/dto/Oferta.dto';
+import { AnaliseService } from 'app-core/lib/services/analise.service';
+import { OfertaService } from 'app-core/lib/services/oferta-service';
 
 @Component({
   selector: 'app-analise-das-medias',
@@ -13,6 +16,7 @@ import { AreaMediaDTO } from 'app-core/lib/dto/areaMedia.dto';
 })
 export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   private readonly analiseService = inject(AnaliseService);
+  private readonly ofertaService = inject(OfertaService);
   private readonly route = inject(ActivatedRoute);
 
   private readonly stateSubject = new BehaviorSubject<AreaMediaDTO | AreaMediaDTO[] | null>(null);
@@ -21,59 +25,190 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   readonly loading$ = this.loadingSubject.asObservable();
 
+  private readonly recarregarAnaliseSubject = new Subject<void>();
+  private readonly destroySubject = new Subject<void>();
+
   error$: Observable<string | null> = of(null);
+  ofertas: OfertaDTO[] = [];
+  ofertasSelecionadas: OfertaDTO[] = [];
+  ofertaSelecionadaUuid = '';
+
   private routeSub!: Subscription;
+  private areaUuid: string | null = null;
 
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe(params => {
-      const areaUuid = params.get('uuid');
+      this.areaUuid = params.get('uuid');
+      this.carregarOfertas();
+    });
 
-      if (areaUuid) {
-        this.processarRequisicao(
-          this.analiseService.analisarArea(areaUuid, this.montarParametros()),
-          'Ocorreu um erro ao processar a análise da área.'
-        );
-      } else {
-        this.processarRequisicao(
-          this.analiseService.analisarTodas(this.montarParametros()),
-          'Ocorreu um erro ao carregar a análise do departamento.'
-        );
+    this.recarregarAnaliseSubject.pipe(
+      switchMap(() => this.executarRequisicaoAnalise()),
+      takeUntil(this.destroySubject)
+    ).subscribe(resultado => {
+      if (resultado) {
+        this.stateSubject.next(resultado);
       }
     });
   }
 
   ngOnDestroy(): void {
     this.routeSub?.unsubscribe();
+    this.destroySubject.next();
+    this.destroySubject.complete();
+  }
+
+  adicionarOferta(): void {
+    const oferta = this.ofertas.find(item => item.uuid === this.ofertaSelecionadaUuid);
+    if (!oferta || !oferta.uuid || this.ofertasSelecionadas.some(item => item.uuid === oferta.uuid)) {
+      return;
+    }
+
+    this.ofertasSelecionadas = this.ordenarOfertas([...this.ofertasSelecionadas, oferta]);
+    this.ofertaSelecionadaUuid = '';
+    this.buscarAnalise();
+  }
+
+  removerOferta(oferta: OfertaDTO): void {
+    if (this.ofertasSelecionadas.length <= 1) {
+      void Swal.fire('Aviso', 'Mantenha pelo menos uma oferta para fazer a análise.', 'warning');
+      return;
+    }
+
+    void Swal.fire({
+      title: 'Remover oferta?',
+      text: `A coluna ${this.formatarOferta(oferta)} será removida da análise.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Remover',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      this.ofertasSelecionadas = this.ofertasSelecionadas.filter(item => item.uuid !== oferta.uuid);
+      this.buscarAnalise();
+    });
+  }
+
+  formatarOferta(oferta: OfertaDTO): string {
+    return `${oferta.ano}/${oferta.semestre}`;
+  }
+
+  get ofertasDisponiveisParaAdicionar(): OfertaDTO[] {
+    const selecionadas = new Set(this.ofertasSelecionadas.map(oferta => oferta.uuid));
+    return this.ofertas.filter(oferta => oferta.uuid && !selecionadas.has(oferta.uuid));
+  }
+
+  private carregarOfertas(): void {
+    this.loadingSubject.next(true);
+    this.error$ = of(null);
+
+    forkJoin({
+      ofertas: this.ofertaService.buscarParaSelecao(),
+      ofertasMaisRecentes: this.ofertaService.buscarMaisRecentes()
+    }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.stateSubject.next(null);
+        this.ofertas = [];
+        this.ofertasSelecionadas = [];
+        this.ofertaSelecionadaUuid = '';
+        this.error$ = of(this.extrairMensagemErro(error, 'Ocorreu um erro ao carregar as ofertas.'));
+        return of(null);
+      }),
+      finalize(() => this.loadingSubject.next(false))
+    ).subscribe(resposta => {
+      if (!resposta) {
+        return;
+      }
+
+      this.ofertas = this.ordenarOfertas(resposta.ofertas || []);
+      this.ofertasSelecionadas = this.ordenarOfertas(resposta.ofertasMaisRecentes || []);
+      this.buscarAnalise();
+    });
+  }
+
+  private buscarAnalise(): void {
+    if (this.ofertas.length === 0) {
+      this.stateSubject.next(null);
+      this.error$ = of('Nenhuma oferta válida cadastrada para processar a análise.');
+      return;
+    }
+
+    if (this.ofertasSelecionadas.length === 0) {
+      this.stateSubject.next(null);
+      this.error$ = of('Selecione ao menos uma oferta para processar a análise.');
+      return;
+    }
+
+    this.recarregarAnaliseSubject.next();
   }
 
   private montarParametros(): AnaliseParamsDTO {
-    const anosSemestres: AnoSemestreDTO[] = [];
-    const anoInicio = 2024;
-    const anoFim = 2027;
-
-    for (let ano = anoInicio; ano <= anoFim; ano++) {
-      anosSemestres.push({ ano: ano.toString(), semestre: '1', cargaHoraria: 0, demandaDocente: 0 });
-      anosSemestres.push({ ano: ano.toString(), semestre: '2', cargaHoraria: 0, demandaDocente: 0 });
-    }
-
     return {
-      anosSemestres,
+      anosSemestres: this.ofertasSelecionadas.map(oferta => ({
+        ano: oferta.ano,
+        semestre: oferta.semestre,
+        cargaHoraria: 0,
+        demandaDocente: 0
+      })),
+      ofertaUuids: this.ofertasSelecionadas
+        .map(oferta => oferta.uuid)
+        .filter((uuid): uuid is string => !!uuid),
       docentesArea: []
     };
   }
 
-  private processarRequisicao(request$: Observable<AreaMediaDTO | AreaMediaDTO[]>, mensagemErro: string): void {
+  private executarRequisicaoAnalise(): Observable<AreaMediaDTO | AreaMediaDTO[] | null> {
     this.loadingSubject.next(true);
     this.error$ = of(null);
 
-    request$.pipe(
-      catchError(() => {
-        this.error$ = of(mensagemErro);
+    const request$: Observable<AreaMediaDTO | AreaMediaDTO[]> = this.areaUuid
+      ? this.analiseService.analisarArea(this.areaUuid, this.montarParametros())
+      : this.analiseService.analisarTodas(this.montarParametros());
+
+    const mensagemErro = this.areaUuid
+      ? 'Ocorreu um erro ao processar a análise da área.'
+      : 'Ocorreu um erro ao carregar a análise do departamento.';
+
+    return request$.pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.stateSubject.next(null);
+        this.error$ = of(this.extrairMensagemErro(error, mensagemErro));
         return of(null);
       }),
       finalize(() => this.loadingSubject.next(false))
-    ).subscribe((resultado) => {
-      if (resultado) this.stateSubject.next(resultado);
+    );
+  }
+
+  private extrairMensagemErro(error: HttpErrorResponse, fallback: string): string {
+    if (error.error?.message) {
+      return error.error.message;
+    }
+
+    if (error.status === 400) {
+      return 'Revise as ofertas selecionadas para processar a análise.';
+    }
+
+    return fallback;
+  }
+
+  private ordenarOfertas(ofertas: OfertaDTO[]): OfertaDTO[] {
+    return [...ofertas].sort((a, b) => {
+      const anoDiff = this.parseAnoOferta(b) - this.parseAnoOferta(a);
+      if (anoDiff !== 0) {
+        return anoDiff;
+      }
+      return this.parseSemestreOferta(b) - this.parseSemestreOferta(a);
     });
+  }
+
+  private parseAnoOferta(oferta: OfertaDTO): number {
+    return Number.parseInt(oferta.ano, 10);
+  }
+
+  private parseSemestreOferta(oferta: OfertaDTO): number {
+    return Number.parseInt(oferta.semestre, 10);
   }
 }
