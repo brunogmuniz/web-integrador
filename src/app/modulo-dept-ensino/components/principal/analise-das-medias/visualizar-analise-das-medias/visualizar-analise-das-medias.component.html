@@ -18,17 +18,12 @@
 
     <div class="adicionar-oferta">
       <div class="oferta-select-wrapper">
-        <label class="oferta-select-label" for="oferta-analise-select">Adicionar oferta</label>
-        <select
-          id="oferta-analise-select"
-          class="form-control oferta-select"
-          [(ngModel)]="ofertaSelecionadaUuid"
-          [disabled]="ofertasDisponiveisParaAdicionar.length === 0">
-          <option value="">Selecionar oferta</option>
-          <option *ngFor="let oferta of ofertasDisponiveisParaAdicionar" [value]="oferta.uuid">
-            {{ formatarOferta(oferta) }}
-          </option>
-        </select>
+        <app-oferta-search-select
+          label="Adicionar oferta"
+          [ofertasExcluidas]="ofertasSelecionadasUuids"
+          [limparToken]="limparOfertaAdicionarToken"
+          (ofertaSelecionada)="selecionarOfertaAdicionar($event)">
+        </app-oferta-search-select>
       </div>
       <button
         type="button"
@@ -49,13 +44,26 @@
   </ng-container>
 
   <ng-template #conteudoPronto>
-    <div class="alert alert-danger" *ngIf="error$ | async as errorMessage">
-      {{ errorMessage }}
-    </div>
+    <ng-container *ngIf="error$ | async as errorMessage; else tabelaAnalise">
+      <div class="card mt-3">
+        <div class="card-body">
+          <div class="text-center py-10">
+            <div class="d-flex flex-column align-items-center">
+              <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
+              <span class="text-gray-600 fw-semibold fs-5">
+                {{ errorMessage }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
 
-    <app-area-tabela
-      *ngIf="data$ | async as dadosTabela"
-      [dados]="dadosTabela">
-    </app-area-tabela>
+    <ng-template #tabelaAnalise>
+      <app-area-tabela
+        *ngIf="data$ | async as dadosTabela"
+        [dados]="dadosTabela">
+      </app-area-tabela>
+    </ng-template>
   </ng-template>
 </div>

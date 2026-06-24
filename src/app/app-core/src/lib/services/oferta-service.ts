@@ -93,6 +93,13 @@ export class OfertaService {
     ).pipe(catchError(error => throwError(() => error)));
   }
 
+  importarDisciplinasOfertaCompleta(uuidOfertaDestino: string, uuidOfertaOrigem: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/${uuidOfertaDestino}/disciplinas/importar/${uuidOfertaOrigem}`,
+      {}
+    ).pipe(catchError(error => throwError(() => error)));
+  }
+
   buscarDisciplinasPorCombinacao(
     uuidOferta: string,
     uuidCurso: string,

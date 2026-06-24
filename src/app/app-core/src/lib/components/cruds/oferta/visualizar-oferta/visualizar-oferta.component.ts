@@ -11,6 +11,12 @@ import { TableSort } from '../../../../utils/table-sort';
 export class VisualizarOfertaComponent implements OnInit {
   ofertas: OfertaDTO[] = [];
   loading = false;
+  importandoOferta = false;
+  modalImportacaoAberto = false;
+  ofertaOrigemImportacaoUuid = '';
+  ofertaOrigemImportacao?: OfertaDTO;
+  ofertaDestinoImportacao?: OfertaDTO;
+  limparOfertaImportacaoToken = 0;
   busca = '';
   ordenacao = new TableSort<'anoSemestre'>('anoSemestre', 'asc');
   meta: MetadadosPaginacao = {
@@ -64,6 +70,92 @@ export class VisualizarOfertaComponent implements OnInit {
     return this.ordenacao.iconeOrdenacao(coluna);
   }
 
+  abrirModalImportacao(ofertaDestino: OfertaDTO): void {
+    if (!ofertaDestino.uuid) {
+      return;
+    }
+
+    this.modalImportacaoAberto = true;
+    this.ofertaOrigemImportacaoUuid = '';
+    this.ofertaOrigemImportacao = undefined;
+    this.ofertaDestinoImportacao = ofertaDestino;
+    this.limparOfertaImportacaoToken++;
+  }
+
+  fecharModalImportacao(): void {
+    if (this.importandoOferta) {
+      return;
+    }
+
+    this.modalImportacaoAberto = false;
+  }
+
+  selecionarOfertaOrigem(oferta: OfertaDTO | null): void {
+    if (!oferta?.uuid) {
+      this.ofertaOrigemImportacaoUuid = '';
+      this.ofertaOrigemImportacao = undefined;
+      return;
+    }
+
+    this.ofertaOrigemImportacaoUuid = oferta.uuid;
+    this.ofertaOrigemImportacao = oferta;
+  }
+
+  importarOferta(): void {
+    if (!this.ofertaDestinoImportacao?.uuid || !this.ofertaOrigemImportacaoUuid) {
+      void Swal.fire('Aviso', 'Selecione a oferta de origem.', 'warning');
+      return;
+    }
+
+    if (this.ofertaOrigemImportacaoUuid === this.ofertaDestinoImportacao.uuid) {
+      void Swal.fire('Aviso', 'Selecione ofertas diferentes para origem e destino.', 'warning');
+      return;
+    }
+
+    void Swal.fire({
+      title: 'Importar oferta?',
+      text: `As disciplinas atuais da oferta ${this.formatarOferta(this.ofertaDestinoImportacao)} serão substituídas por todas as disciplinas da oferta ${this.formatarOferta(this.ofertaOrigemImportacao)}.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, importar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (!result.isConfirmed) return;
+      this.executarImportacaoOferta();
+    });
+  }
+
+  private executarImportacaoOferta(): void {
+    this.importandoOferta = true;
+    this.ofertaService.importarDisciplinasOfertaCompleta(
+      this.ofertaDestinoImportacao?.uuid || '',
+      this.ofertaOrigemImportacaoUuid
+    ).subscribe({
+      next: () => {
+        this.importandoOferta = false;
+        this.modalImportacaoAberto = false;
+        this.ofertaOrigemImportacaoUuid = '';
+        this.ofertaOrigemImportacao = undefined;
+        this.ofertaDestinoImportacao = undefined;
+        this.limparOfertaImportacaoToken++;
+        void Swal.fire('Sucesso', 'Oferta importada com sucesso.', 'success');
+        this.carregarOfertas();
+      },
+      error: err => {
+        this.importandoOferta = false;
+        const message = err?.error?.message || 'Não foi possível importar a oferta selecionada.';
+        void Swal.fire('Erro', message, 'error');
+      }
+    });
+  }
+
+  formatarOferta(oferta?: OfertaDTO): string {
+    if (!oferta) {
+      return '';
+    }
+    return `${oferta.ano}/${oferta.semestre}`;
+  }
+
   alterarDisponibilidade(oferta: OfertaDTO): void {
     if (!oferta.uuid) return;
 
@@ -95,5 +187,4 @@ export class VisualizarOfertaComponent implements OnInit {
       });
     });
   }
-
 }

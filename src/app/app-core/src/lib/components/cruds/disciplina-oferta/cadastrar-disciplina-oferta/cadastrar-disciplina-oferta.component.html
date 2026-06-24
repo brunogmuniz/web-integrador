@@ -69,15 +69,7 @@
           </div>
 
           <div class="col-lg-3 col-md-4">
-            <div class="d-flex gap-2">
-              <button
-                class="btn btn-light-primary w-100"
-                type="button"
-                (click)="adicionarDisciplina()"
-                [disabled]="!disciplinaSelecionadaUuid"
-              >
-                <i class="la la-plus"></i> Adicionar
-              </button>
+            <div class="d-flex flex-column gap-2">
               <button
                 class="btn btn-light w-100"
                 type="button"
@@ -86,6 +78,14 @@
                 [disabled]="importandoDisciplinas || ofertasDisponiveisParaImportacao.length === 0"
               >
                 <i class="la la-download"></i> Importar
+              </button>
+              <button
+                class="btn btn-light-primary w-100"
+                type="button"
+                (click)="adicionarDisciplina()"
+                [disabled]="!disciplinaSelecionadaUuid"
+              >
+                <i class="la la-plus"></i> Adicionar
               </button>
             </div>
           </div>

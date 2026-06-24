@@ -89,38 +89,7 @@
 .oferta-select-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  min-width: 190px;
-}
-
-.oferta-select-label {
-  color: #555555;
-  font-size: 0.75rem;
-  font-weight: 600;
-  line-height: 1;
-  margin: 0;
-}
-
-.oferta-select {
-  background-color: #ffffff !important;
-  border: 1px solid #d8e0e6 !important;
-  border-radius: 4px !important;
-  color: #555555;
-  font-size: 0.9rem !important;
-  min-height: 38px;
-  padding: 0.45rem 2rem 0.45rem 0.65rem !important;
-}
-
-.oferta-select:focus {
-  border-color: #005290 !important;
-  box-shadow: 0 0 0 0.12rem rgba(0, 82, 144, 0.12) !important;
-  outline: none !important;
-}
-
-.oferta-select:disabled {
-  background-color: #f4f6f8 !important;
-  color: #8c98a3;
-  cursor: not-allowed;
+  min-width: 240px;
 }
 
 .btn-adicionar-oferta {
@@ -173,7 +142,6 @@
     padding: 16px 18px 6px;
   }
 
-  .oferta-select,
   .oferta-select-wrapper,
   .btn-adicionar-oferta {
     width: 100%;

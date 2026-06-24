@@ -32,7 +32,7 @@
           <th *ngFor="let coluna of colunasOfertas" style="width: 5%;">
             {{ coluna.ano }}/{{ coluna.semestre }}
           </th>
-          <th style="width: 7%;">Opções</th>
+<!--          <th style="width: 7%;">Opções</th>-->
         </tr>
         </thead>
         <tbody>
@@ -51,23 +51,23 @@
             </td>
             <td>{{ area.nrDocentes }}</td>
             <td *ngFor="let coluna of colunasOfertas">{{ area[coluna.key] || '-' }}</td>
-            <td>
-              <button [routerLink]="'./' + area.uuid"
-                      class="btn btn-primary btn-sm btn-icon"
-                      title="Adicionar Docente"
-                      [disabled]="true">
-                <i class="fa fa-user-plus"></i>
-                Adicionar Docente
-              </button>
+<!--            <td>-->
+<!--              <button [routerLink]="'./' + area.uuid"-->
+<!--                      class="btn btn-primary btn-sm btn-icon"-->
+<!--                      title="Adicionar Docente"-->
+<!--                      [disabled]="true">-->
+<!--                <i class="fa fa-user-plus"></i>-->
+<!--                Adicionar Docente-->
+<!--              </button>-->
 
-              <button [routerLink]="'./' + area.uuid"
-                      class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
-                      title="Adicionar Ano"
-                      [disabled]="true">
-                <i class="fa fa-calendar-plus"></i>
-                Adicionar Ano
-              </button>
-            </td>
+<!--              <button [routerLink]="'./' + area.uuid"-->
+<!--                      class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"-->
+<!--                      title="Adicionar Ano"-->
+<!--                      [disabled]="true">-->
+<!--                <i class="fa fa-calendar-plus"></i>-->
+<!--                Adicionar Ano-->
+<!--              </button>-->
+<!--            </td>-->
           </tr>
           <tr class="collapse-row">
             <td [attr.colspan]="colunasOfertas.length + 4" class="p-0 border-0">

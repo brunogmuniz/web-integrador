@@ -32,6 +32,8 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   ofertas: OfertaDTO[] = [];
   ofertasSelecionadas: OfertaDTO[] = [];
   ofertaSelecionadaUuid = '';
+  ofertaSelecionada?: OfertaDTO;
+  limparOfertaAdicionarToken = 0;
 
   private routeSub!: Subscription;
   private areaUuid: string | null = null;
@@ -59,13 +61,13 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   }
 
   adicionarOferta(): void {
-    const oferta = this.ofertas.find(item => item.uuid === this.ofertaSelecionadaUuid);
-    if (!oferta || !oferta.uuid || this.ofertasSelecionadas.some(item => item.uuid === oferta.uuid)) {
+    const oferta = this.ofertaSelecionada;
+    if (!oferta?.uuid || this.ofertasSelecionadas.some(item => item.uuid === oferta.uuid)) {
       return;
     }
 
     this.ofertasSelecionadas = this.ordenarOfertas([...this.ofertasSelecionadas, oferta]);
-    this.ofertaSelecionadaUuid = '';
+    this.limparOfertaParaAdicionar();
     this.buscarAnalise();
   }
 
@@ -96,14 +98,27 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
     return `${oferta.ano}/${oferta.semestre}`;
   }
 
-  get ofertasDisponiveisParaAdicionar(): OfertaDTO[] {
-    const selecionadas = new Set(this.ofertasSelecionadas.map(oferta => oferta.uuid));
-    return this.ofertas.filter(oferta => oferta.uuid && !selecionadas.has(oferta.uuid));
+  selecionarOfertaAdicionar(oferta: OfertaDTO | null): void {
+    if (!oferta?.uuid) {
+      this.ofertaSelecionadaUuid = '';
+      this.ofertaSelecionada = undefined;
+      return;
+    }
+
+    this.ofertaSelecionadaUuid = oferta.uuid;
+    this.ofertaSelecionada = oferta;
+  }
+
+  get ofertasSelecionadasUuids(): string[] {
+    return this.ofertasSelecionadas
+      .map(oferta => oferta.uuid)
+      .filter((uuid): uuid is string => !!uuid);
   }
 
   private carregarOfertas(): void {
     this.loadingSubject.next(true);
     this.error$ = of(null);
+    this.limparOfertaParaAdicionar();
 
     forkJoin({
       ofertas: this.ofertaService.buscarParaSelecao(),
@@ -113,7 +128,7 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
         this.stateSubject.next(null);
         this.ofertas = [];
         this.ofertasSelecionadas = [];
-        this.ofertaSelecionadaUuid = '';
+        this.limparOfertaParaAdicionar();
         this.error$ = of(this.extrairMensagemErro(error, 'Ocorreu um erro ao carregar as ofertas.'));
         return of(null);
       }),
@@ -130,15 +145,11 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
   }
 
   private buscarAnalise(): void {
-    if (this.ofertas.length === 0) {
-      this.stateSubject.next(null);
-      this.error$ = of('Nenhuma oferta válida cadastrada para processar a análise.');
-      return;
-    }
-
     if (this.ofertasSelecionadas.length === 0) {
       this.stateSubject.next(null);
-      this.error$ = of('Selecione ao menos uma oferta para processar a análise.');
+      this.error$ = of(this.ofertas.length === 0
+        ? 'Nenhuma oferta válida cadastrada para processar a análise.'
+        : 'Selecione ao menos uma oferta para processar a análise.');
       return;
     }
 
@@ -180,6 +191,12 @@ export class VisualizarAnaliseDasMediasComponent implements OnInit, OnDestroy {
       }),
       finalize(() => this.loadingSubject.next(false))
     );
+  }
+
+  private limparOfertaParaAdicionar(): void {
+    this.ofertaSelecionadaUuid = '';
+    this.ofertaSelecionada = undefined;
+    this.limparOfertaAdicionarToken++;
   }
 
   private extrairMensagemErro(error: HttpErrorResponse, fallback: string): string {
