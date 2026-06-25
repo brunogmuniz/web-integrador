@@ -8,6 +8,7 @@ import { PaginadorComponent } from './components/paginador/paginador.component';
 import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
 import { BuscaTextoComponent } from './components/busca-texto/busca-texto.component';
+import { OfertaSearchSelectComponent } from './components/oferta-search-select/oferta-search-select.component';
 import { AreaConhecimentoComponent } from './components/cruds/area-conhecimento/area-conhecimento.component';
 import { CadastrarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
 import { VisualizarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/visualizar-area-conhecimento/visualizar-area-conhecimento.component';
@@ -70,6 +71,7 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     UploadPlanilhaComponent,
     UserMenuComponent,
     BuscaTextoComponent,
+    OfertaSearchSelectComponent,
     VisualizarAreaConhecimentoComponent,
     VisualizarDisciplinaComponent,
     VisualizarDocenteComponent,
@@ -109,6 +111,7 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     UploadPlanilhaComponent,
     UserMenuComponent,
     BuscaTextoComponent,
+    OfertaSearchSelectComponent,
     VisualizarUnidadeComponent,
     VisualizarUnidadeUsuarioComponent
   ]

@@ -3,6 +3,25 @@
   text-decoration: line-through;
 }
 
+.btn-importar-oferta {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #181c32;
+
+  &:hover,
+  &:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+    color: #181c32;
+  }
+}
+
+.oferta-modal {
+  display: block;
+  z-index: 1060;
+}
+
 .oferta-disciplinas-card {
   .card-header {
     min-height: auto;

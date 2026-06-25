@@ -82,6 +82,11 @@
   }
 }
 
+.disciplina-modal {
+  display: block;
+  z-index: 1060;
+}
+
 @media (max-width: 991px) {
   .disciplina-oferta-card {
     .disciplina-oferta-table {

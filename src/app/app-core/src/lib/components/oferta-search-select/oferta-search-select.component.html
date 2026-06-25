@@ -1,0 +1,48 @@
+<div class="oferta-search-select" (click)="$event.stopPropagation()">
+  <label class="oferta-search-select__label" [class.required]="required">{{ label }}</label>
+
+  <div class="oferta-search-select__controle">
+    <img
+      class="oferta-search-select__icone"
+      src="assets/icons/lupa_icon.png"
+      alt=""
+      aria-hidden="true"
+    />
+    <input
+      class="form-control form-control-solid oferta-search-select__input"
+      type="text"
+      autocomplete="off"
+      [placeholder]="placeholder"
+      [(ngModel)]="busca"
+      [disabled]="disabled"
+      (focus)="abrirCombo()"
+      (ngModelChange)="aoDigitar($event)"
+    />
+    <button
+      class="oferta-search-select__seta"
+      type="button"
+      [disabled]="disabled"
+      (click)="abrirCombo()">
+      <span class="oferta-search-select__seta-icone" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="oferta-search-select__menu" *ngIf="comboAberto">
+    <div *ngIf="carregando" class="oferta-search-select__estado">
+      <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+      Carregando ofertas...
+    </div>
+
+    <button
+      *ngFor="let oferta of ofertasDisponiveis"
+      type="button"
+      class="oferta-search-select__opcao"
+      (click)="selecionarOferta(oferta)">
+      {{ oferta.ano }}/{{ oferta.semestre }}
+    </button>
+
+    <div *ngIf="!carregando && ofertasDisponiveis.length === 0" class="oferta-search-select__estado">
+      Nenhuma oferta encontrada.
+    </div>
+  </div>
+</div>

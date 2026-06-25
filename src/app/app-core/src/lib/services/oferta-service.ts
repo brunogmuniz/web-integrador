@@ -57,6 +57,18 @@ export class OfertaService {
     );
   }
 
+  buscarMaisRecentes(): Observable<OfertaDTO[]> {
+    return this.http.get<OfertaDTO[]>(`${this.apiUrl}/mais-recentes`).pipe(catchError(error => throwError(() => error)));
+  }
+
+  buscarParaSelecao(busca: string = ''): Observable<OfertaDTO[]> {
+    let params = new HttpParams();
+    if (busca?.trim()) {
+      params = params.set('busca', busca.trim());
+    }
+    return this.http.get<OfertaDTO[]>(`${this.apiUrl}/selecao`, { params }).pipe(catchError(error => throwError(() => error)));
+  }
+
   delete(uuid: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${uuid}`).pipe(catchError(error => throwError(() => error)));
   }
@@ -67,6 +79,25 @@ export class OfertaService {
 
   buscarDisciplinas(uuidOferta: string): Observable<DisciplinaOfertaLoteDTO> {
     return this.http.get<DisciplinaOfertaLoteDTO>(`${this.apiUrl}/disciplinas/oferta/${uuidOferta}`).pipe(catchError(error => throwError(() => error)));
+  }
+
+  importarDisciplinasPorCombinacao(
+    uuidOfertaDestino: string,
+    uuidCurso: string,
+    uuidEstruturaCurricular: string,
+    uuidOfertaOrigem: string
+  ): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/${uuidOfertaDestino}/cursos/${uuidCurso}/curriculos/${uuidEstruturaCurricular}/disciplinas/importar/${uuidOfertaOrigem}`,
+      {}
+    ).pipe(catchError(error => throwError(() => error)));
+  }
+
+  importarDisciplinasOfertaCompleta(uuidOfertaDestino: string, uuidOfertaOrigem: string): Observable<void> {
+    return this.http.post<void>(
+      `${this.apiUrl}/${uuidOfertaDestino}/disciplinas/importar/${uuidOfertaOrigem}`,
+      {}
+    ).pipe(catchError(error => throwError(() => error)));
   }
 
   buscarDisciplinasPorCombinacao(

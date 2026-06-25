@@ -35,6 +35,14 @@
           <td class="text-center">
 
             <button
+              class="btn btn-icon btn-sm btn-importar-oferta me-2"
+              type="button"
+              (click)="abrirModalImportacao(oferta)"
+              title="Importar disciplinas para esta oferta">
+              <i class="la la-file-import fs-3"></i>
+            </button>
+
+            <button
               *ngIf="oferta.ativo"
               class="btn btn-icon btn-light-danger text-danger btn-sm me-2"
               title="Tornar indisponível"
@@ -83,3 +91,54 @@
 <div class="mt-4 w-100" *ngIf="ofertas.length > 0">
   <app-paginador [meta]="meta" (mudancaPagina)="aoMudarPaginacao($event)"></app-paginador>
 </div>
+
+<div class="modal fade show oferta-modal" tabindex="-1" role="dialog" *ngIf="modalImportacaoAberto">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title">Importar disciplinas para {{ formatarOferta(ofertaDestinoImportacao) }}</h5>
+          <span class="text-muted fs-7">Selecione a oferta de origem.</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-icon btn-light" aria-label="Fechar" (click)="fecharModalImportacao()">
+          <i class="la la-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert bg-light-warning border border-warning border-dashed p-4 mb-5">
+          Todas as disciplinas atuais de {{ formatarOferta(ofertaDestinoImportacao) }} serão substituídas pelas disciplinas da oferta de origem.
+        </div>
+
+        <div class="mb-5">
+          <app-oferta-search-select
+            label="Oferta de origem"
+            [required]="true"
+            [disabled]="importandoOferta"
+            [ofertasExcluidas]="[ofertaDestinoImportacao?.uuid]"
+            [limparToken]="limparOfertaImportacaoToken"
+            (ofertaSelecionada)="selecionarOfertaOrigem($event)">
+          </app-oferta-search-select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="fecharModalImportacao()" [disabled]="importandoOferta">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="importarOferta()"
+          [disabled]="importandoOferta || !ofertaOrigemImportacaoUuid"
+        >
+          <span *ngIf="!importandoOferta"><i class="la la-download"></i> Importar</span>
+          <span *ngIf="importandoOferta" class="d-flex align-items-center">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>Importando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="modalImportacaoAberto"></div>

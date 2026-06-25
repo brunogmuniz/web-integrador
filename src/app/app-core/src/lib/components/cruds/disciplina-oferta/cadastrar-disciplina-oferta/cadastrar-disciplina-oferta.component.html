@@ -45,39 +45,50 @@
       </div>
 
       <div class="row g-3 align-items-end mb-6">
-        <div class="col-lg-9 col-md-8">
-          <label class="form-label fw-bold text-gray-700 fs-7">Disciplina</label>
-          <select
-            class="form-select form-select-solid"
-            [(ngModel)]="disciplinaSelecionadaUuid"
-            [ngModelOptions]="{ standalone: true }"
-            [disabled]="disciplinasDisponiveis.length === 0"
-          >
-            <option [ngValue]="null">Selecione uma disciplina...</option>
-            <optgroup
-              *ngFor="let grupo of gruposDisponiveisView; trackBy: trackByGrupo"
-              [label]="grupo.nome"
+          <div class="col-lg-9 col-md-8">
+            <label class="form-label fw-bold text-gray-700 fs-7">Disciplina</label>
+            <select
+              class="form-select form-select-solid"
+              [(ngModel)]="disciplinaSelecionadaUuid"
+              [ngModelOptions]="{ standalone: true }"
+              [disabled]="disciplinasDisponiveis.length === 0"
             >
-              <option
-                *ngFor="let disciplina of grupo.disciplinas; trackBy: trackByUuid"
-                [ngValue]="disciplina.uuid"
+              <option [ngValue]="null">Selecione uma disciplina...</option>
+              <optgroup
+                *ngFor="let grupo of gruposDisponiveisView; trackBy: trackByGrupo"
+                [label]="grupo.nome"
               >
-                {{ disciplina.nomeDisciplina }}
-              </option>
-            </optgroup>
-          </select>
-        </div>
+                <option
+                  *ngFor="let disciplina of grupo.disciplinas; trackBy: trackByUuid"
+                  [ngValue]="disciplina.uuid"
+                >
+                  {{ disciplina.nomeDisciplina }}
+                </option>
+              </optgroup>
+            </select>
+          </div>
 
-        <div class="col-lg-3 col-md-4">
-          <button
-            class="btn btn-light-primary w-100"
-            type="button"
-            (click)="adicionarDisciplina()"
-            [disabled]="!disciplinaSelecionadaUuid"
-          >
-            <i class="la la-plus"></i> Adicionar
-          </button>
-        </div>
+          <div class="col-lg-3 col-md-4">
+            <div class="d-flex flex-column gap-2">
+              <button
+                class="btn btn-light w-100"
+                type="button"
+                title="Importar de outra oferta"
+                (click)="abrirModalImportacao()"
+                [disabled]="importandoDisciplinas || ofertasDisponiveisParaImportacao.length === 0"
+              >
+                <i class="la la-download"></i> Importar
+              </button>
+              <button
+                class="btn btn-light-primary w-100"
+                type="button"
+                (click)="adicionarDisciplina()"
+                [disabled]="!disciplinaSelecionadaUuid"
+              >
+                <i class="la la-plus"></i> Adicionar
+              </button>
+            </div>
+          </div>
       </div>
 
       <div class="table-responsive" *ngIf="disciplinasSelecionadas.length > 0">
@@ -221,3 +232,55 @@
     </div>
   </form>
 </div>
+
+<div class="modal fade show disciplina-modal" tabindex="-1" role="dialog" *ngIf="modalImportacaoAberto">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title">Importar disciplinas</h5>
+          <span class="text-muted fs-7">Selecione a oferta de origem para esta combinação.</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-icon btn-light" aria-label="Fechar" (click)="fecharModalImportacao()">
+          <i class="la la-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="alert bg-light-warning border border-warning border-dashed p-4 mb-5">
+          As disciplinas atuais desta oferta, curso e currículo serão substituídas pelas disciplinas da oferta selecionada.
+        </div>
+
+        <label class="form-label required fw-bold text-gray-700 fs-7">Oferta de origem</label>
+        <select
+          class="form-select form-select-solid"
+          [(ngModel)]="ofertaOrigemImportacaoUuid"
+          [disabled]="importandoDisciplinas || ofertasDisponiveisParaImportacao.length === 0"
+        >
+          <option value="">Selecione a oferta de origem...</option>
+          <option *ngFor="let ofertaImportacao of ofertasDisponiveisParaImportacao" [value]="ofertaImportacao.uuid">
+            {{ ofertaImportacao.ano }}/{{ ofertaImportacao.semestre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" (click)="fecharModalImportacao()" [disabled]="importandoDisciplinas">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="importarDisciplinasDaOferta()"
+          [disabled]="importandoDisciplinas || !ofertaOrigemImportacaoUuid"
+        >
+          <span *ngIf="!importandoDisciplinas"><i class="la la-download"></i> Importar</span>
+          <span *ngIf="importandoDisciplinas" class="d-flex align-items-center">
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>Importando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-backdrop fade show" *ngIf="modalImportacaoAberto"></div>
