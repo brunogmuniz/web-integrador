@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import {RespostaPaginada, SubareaConhecimentoService} from "app-core";
-import { AreaConhecimentoService } from "app-core";
-import { AreaConhecimentoDTO } from "app-core";
-import {SubareaConhecimentoDTO} from "app-core";
+import { SubareaConhecimentoService, AreaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
+import { SelectOption } from 'app-core/lib/components/select-input-default/select-input-default.component';
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',
@@ -16,7 +12,7 @@ import {SubareaConhecimentoDTO} from "app-core";
 })
 export class CadastrarSubareaConhecimentoComponent implements OnInit {
   subAreaForm!: FormGroup;
-  areasDeConhecimento$!: Observable<AreaConhecimentoDTO[]>;
+  opcoesAreas: SelectOption[] = [];
   modoEdicao = false;
   subAreaUuid?: string;
 
@@ -31,13 +27,7 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.areasDeConhecimento$ = this.areaService.findAll(0, 500).pipe(
-      map((res: RespostaPaginada<AreaConhecimentoDTO>) => res.conteudo),
-      catchError(err => {
-        console.error('Erro ao carregar áreas:', err);
-        return throwError(() => err);
-      })
-    );
+    this.carregarAreas();
     this.verificarEdicao();
   }
 
@@ -47,6 +37,22 @@ export class CadastrarSubareaConhecimentoComponent implements OnInit {
       nome: ['', [Validators.required, Validators.minLength(3)]],
       sigla: ['', Validators.required],
       areaId: [null, Validators.required]
+    });
+  }
+
+  private carregarAreas(): void {
+    this.areaService.findAll(0, 500).subscribe({
+      next: (res) => {
+        this.opcoesAreas = (res.conteudo || []).map(area => ({
+          id: area.id as string | number,
+          label: `${area.nome} (${area.sigla})`,
+          originalData: area
+        }));
+      },
+      error: (err) => {
+        console.error('Erro ao carregar áreas:', err);
+        this.notificarErro('Não foi possível carregar as áreas de conhecimento.');
+      }
     });
   }
 
