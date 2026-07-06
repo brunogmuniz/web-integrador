@@ -7,6 +7,7 @@ import { SubareaConhecimentoDTO } from "app-core/lib/dto/SubareaConhecimento.dto
 import { DocenteSubAreaPercentualDTO } from "app-core/lib/dto/DocenteSubAreaPercentual.dto";
 import { DocenteSubAreaDTO } from "app-core/lib/dto/DocenteSubArea.dto";
 import { RespostaPaginada } from "app-core/lib/dto/paginacao/resposta-paginada.dto";
+import { SelectOption } from 'app-core';
 import Swal from 'sweetalert2';
 
 interface EncargoVisual {
@@ -34,8 +35,10 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
   subForm!: FormGroup;
 
   docentesDisponiveis: any[] = [];
+  opcoesDocentes: SelectOption[] = [];
   encargosAtuais: EncargoVisual[] = [];
   areasAgrupadas: { nomeArea: string; subareas: SubareaConhecimentoDTO[] }[] = [];
+  opcoesSubareasAgrupadas: SelectOption[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -79,6 +82,10 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
     this.docenteService.findAll(0, 500).subscribe({
       next: (res) => {
         this.docentesDisponiveis = res.conteudo || [];
+        this.opcoesDocentes = this.docentesDisponiveis.map(docente => ({
+          id: docente.uuid,
+          label: `${docente.nome} - ${docente.matricula}`
+        }));
       },
       error: (err) => console.error('Erro ao listar docentes', err)
     });
@@ -102,6 +109,12 @@ export class CadastrarDocentesEncargosComponent implements OnInit {
           nomeArea,
           subareas: subs.sort((a, b) => a.nome.localeCompare(b.nome))
         }));
+        this.opcoesSubareasAgrupadas = this.areasAgrupadas.flatMap(grupo =>
+          grupo.subareas.map(subarea => ({
+            id: subarea.id,
+            label: `${grupo.nomeArea} - ${subarea.nome}`
+          }))
+        );
       },
       error: () => { void Swal.fire('Erro', 'Não foi possível carregar as subáreas.', 'error'); }
     });

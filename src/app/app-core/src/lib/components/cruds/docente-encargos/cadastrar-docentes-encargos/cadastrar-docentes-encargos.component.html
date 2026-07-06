@@ -9,13 +9,14 @@
 
     <form [formGroup]="encargoForm">
       <div class="mb-5">
-        <label class="form-label text-gray-700 fw-semibold required">Docente</label>
-        <select formControlName="idDocente" class="form-select">
-          <option [value]="null">Selecione um docente</option>
-          <option *ngFor="let d of docentesDisponiveis" [value]="d.uuid">
-            {{ d.nome }} - {{ d.matricula }}
-          </option>
-        </select>
+        <lib-select-input-default
+          label="Docente"
+          formControlName="idDocente"
+          placeholder="Selecione um docente"
+          [required]="true"
+          [disabled]="modoEdicao"
+          [opcoes]="opcoesDocentes">
+        </lib-select-input-default>
 
         <div *ngIf="encargoForm.get('idDocente')?.invalid && encargoForm.get('idDocente')?.touched"
              class="invalid-feedback d-block">
@@ -36,20 +37,14 @@
         <div class="row align-items-end g-4">
 
           <div class="col-md-6">
-            <label class="form-label text-gray-700 fw-semibold required">Subárea</label>
-            <select
+            <lib-select-input-default
+              label="Subárea"
               formControlName="subareaIdSelecionada"
-              class="form-select form-select-solid"
-              [class.is-invalid]="cSub['subareaIdSelecionada'].invalid && cSub['subareaIdSelecionada'].touched">
+              placeholder="Selecione uma subárea..."
+              [required]="true"
+              [opcoes]="opcoesSubareasAgrupadas">
 
-              <option [ngValue]="null" disabled>Selecione uma subárea...</option>
-
-              <optgroup *ngFor="let grupo of areasAgrupadas" [label]="grupo.nomeArea">
-                <option *ngFor="let sub of grupo.subareas" [value]="sub.id">
-                  {{ sub.nome }}
-                </option>
-              </optgroup>
-            </select>
+            </lib-select-input-default>
 
             <div *ngIf="cSub['subareaIdSelecionada'].invalid && cSub['subareaIdSelecionada'].touched"
                  class="invalid-feedback d-block">

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { OfertaDTO, OfertaService } from 'app-core';
+import { OfertaDTO, OfertaService, SelectOption } from 'app-core';
 
 @Component({
   selector: 'app-cadastrar-oferta',
@@ -19,6 +19,10 @@ export class CadastrarOfertaComponent implements OnInit {
     { valor: '1', label: '1º Semestre' },
     { valor: '2', label: '2º Semestre' }
   ];
+  opcoesSemestres: SelectOption[] = this.semestres.map(semestre => ({
+    id: semestre.valor,
+    label: semestre.label
+  }));
 
   constructor(
     private fb: FormBuilder,
@@ -30,7 +34,7 @@ export class CadastrarOfertaComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       ano: ['', [Validators.required, Validators.pattern(/^\d{4}$/)]],
-      semestre: ['1', Validators.required],
+      semestre: [null, Validators.required],
       ativo: [true]
     });
 

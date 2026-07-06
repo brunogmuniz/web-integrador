@@ -23,7 +23,13 @@
     </div>
 
     <div class="table-responsive" style="background-color: #ffffff">
-      <table class="table">
+      <table class="table analise-table">
+        <colgroup>
+          <col class="col-identificacao">
+          <col class="col-media">
+          <col class="col-docentes">
+          <col *ngFor="let coluna of colunasOfertas" class="col-oferta">
+        </colgroup>
         <thead class="thead-light text-center text-bg-dark">
         <tr class="active">
           <th style="width: 5%;">ÁREA</th>
@@ -70,10 +76,16 @@
 <!--            </td>-->
           </tr>
           <tr class="collapse-row">
-            <td [attr.colspan]="colunasOfertas.length + 4" class="p-0 border-0">
+            <td [attr.colspan]="colunasOfertas.length + 3" class="p-0 border-0">
               <div class="collapse" [id]="'subareas-' + i">
-                <div class="p-4" style="background: #ffffff;">
-                  <table class="table table-sm table-striped">
+                <div class="subarea-table-wrapper">
+                  <table class="table table-sm table-striped analise-table subarea-table">
+                    <colgroup>
+                      <col class="col-identificacao">
+                      <col class="col-media">
+                      <col class="col-docentes">
+                      <col *ngFor="let coluna of colunasOfertas" class="col-oferta">
+                    </colgroup>
                     <thead class="thead-light">
                     <tr class="text-center" style="font-size: 12px">
                       <th style="width: 5%;">SUBÁREA</th>

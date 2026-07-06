@@ -7,27 +7,26 @@
       <div class="row g-4">
         <div class="col-md-6">
           <label class="form-label required">Nome</label>
-          <input type="text" class="form-control form-control-solid" formControlName="nome"
+          <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Digite o nome"
                  [class.is-invalid]="form.get('nome')?.invalid && (form.get('nome')?.touched || form.get('nome')?.dirty)"/>
           <div class="invalid-feedback">Campo obrigatório (min. 3 caracteres)</div>
         </div>
 
         <div class="col-md-3">
           <label class="form-label required">Código</label>
-          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina"
+          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina" placeholder="Digite o código"
                  [class.is-invalid]="form.get('codigoDisciplina')?.invalid && (form.get('codigoDisciplina')?.touched || form.get('codigoDisciplina')?.dirty)"/>
           <div class="invalid-feedback">Campo obrigatório</div>
         </div>
 
         <div class="col-md-3">
-          <label for="subarea">Subárea do Conhecimento</label>
-          <select class="form-select" formControlName="subareaId" id="subarea">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let item of subareas" [value]="item.id">
-              {{ item.nome }}
-            </option>
-          </select>
-          <div class="invalid-feedback">Campo obrigatório</div>
+          <lib-select-input-default
+            label="Subárea do Conhecimento"
+            formControlName="subareaId"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesSubareas">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-2">
@@ -41,11 +40,15 @@
         </div>
 
         <div class="col-md-2">
-          <label class="form-label required">Tipo</label>
-          <select class="form-select form-select-solid" formControlName="tipoDisciplina">
-            <option value="Regular">Regular</option>
-            <option value="DCG">DCG</option>
-          </select>
+          <lib-select-input-default
+            label="Tipo"
+            formControlName="tipoDisciplina"
+            placeholder="Selecione..."
+            [required]="true"
+            [clearable]="false"
+            [searchable]="false"
+            [opcoes]="opcoesTipoDisciplina">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-2 d-flex align-items-center mt-auto pb-2">

@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { SubareaConhecimentoService, AreaConhecimentoService, SubareaConhecimentoDTO } from "app-core";
-import { SelectOption } from 'app-core/lib/components/select-input-default/select-input-default.component';
+import { SubareaConhecimentoService, AreaConhecimentoService, SubareaConhecimentoDTO, SelectOption } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-subarea-conhecimento',

@@ -3,33 +3,33 @@
     <div class="card-header border-0 pt-6">
       <div class="row w-100 g-4">
         <div class="col-lg-4 col-md-6">
-          <label class="form-label required fw-bold text-gray-700 fs-7">Oferta</label>
-          <select class="form-select form-select-solid" formControlName="oferta">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let oferta of ofertas" [ngValue]="oferta">
-              {{ oferta.ano }}/{{ oferta.semestre }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Oferta"
+            formControlName="oferta"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesOfertas">
+          </lib-select-input-default>
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <label class="form-label required fw-bold text-gray-700 fs-7">Curso</label>
-          <select class="form-select form-select-solid" formControlName="curso">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let curso of cursos" [ngValue]="curso">
-              {{ curso.nome }} ({{ curso.sigla }})
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Curso"
+            formControlName="curso"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesCursos">
+          </lib-select-input-default>
         </div>
 
         <div class="col-lg-4 col-md-6">
-          <label class="form-label required fw-bold text-gray-700 fs-7">Currículo</label>
-          <select class="form-select form-select-solid" formControlName="curriculo">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let curriculo of curriculos" [ngValue]="curriculo">
-              {{ curriculo.codigo }} - {{ curriculo.ano }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Currículo"
+            formControlName="curriculo"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesCurriculos">
+          </lib-select-input-default>
         </div>
       </div>
     </div>
@@ -46,26 +46,15 @@
 
       <div class="row g-3 align-items-end mb-6">
           <div class="col-lg-9 col-md-8">
-            <label class="form-label fw-bold text-gray-700 fs-7">Disciplina</label>
-            <select
-              class="form-select form-select-solid"
+            <lib-select-input-default
+              label="Disciplina"
               [(ngModel)]="disciplinaSelecionadaUuid"
               [ngModelOptions]="{ standalone: true }"
-              [disabled]="disciplinasDisponiveis.length === 0"
-            >
-              <option [ngValue]="null">Selecione uma disciplina...</option>
-              <optgroup
-                *ngFor="let grupo of gruposDisponiveisView; trackBy: trackByGrupo"
-                [label]="grupo.nome"
-              >
-                <option
-                  *ngFor="let disciplina of grupo.disciplinas; trackBy: trackByUuid"
-                  [ngValue]="disciplina.uuid"
-                >
-                  {{ disciplina.nomeDisciplina }}
-                </option>
-              </optgroup>
-            </select>
+              placeholder="Selecione uma disciplina..."
+              [disabled]="opcoesDisciplinasDisponiveis.length === 0"
+              [opcoes]="opcoesDisciplinasDisponiveis"
+              groupClass="mb-0">
+            </lib-select-input-default>
           </div>
 
           <div class="col-lg-3 col-md-4">
@@ -75,7 +64,7 @@
                 type="button"
                 title="Importar de outra oferta"
                 (click)="abrirModalImportacao()"
-                [disabled]="importandoDisciplinas || ofertasDisponiveisParaImportacao.length === 0"
+                [disabled]="importandoDisciplinas"
               >
                 <i class="la la-download"></i> Importar
               </button>
@@ -83,7 +72,7 @@
                 class="btn btn-light-primary w-100"
                 type="button"
                 (click)="adicionarDisciplina()"
-                [disabled]="!disciplinaSelecionadaUuid"
+                [disabled]="!disciplinaSelecionadaUuid || opcoesDisciplinasDisponiveis.length === 0"
               >
                 <i class="la la-plus"></i> Adicionar
               </button>
@@ -135,16 +124,18 @@
                     </span>
                     </div>
                   <div class="docente-select-row">
-                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docenteTeoricaSelecionado" [ngModelOptions]="{ standalone: true }" [disabled]="limiteDocentesAtingido(disciplina, 'teorica')">
-                      <option [ngValue]="null">Selecionar docente...</option>
-                      <option *ngFor="let docente of getDocentesDisponiveis(disciplina.docentesTeorica)" [ngValue]="docente.uuid">
-                        {{ docente.nome }}
-                      </option>
-                    </select>
+	                    <lib-select-input-default
+	                      [(ngModel)]="disciplina.docenteTeoricaSelecionado"
+	                      [ngModelOptions]="{ standalone: true }"
+	                      placeholder="Selecionar docente..."
+	                      [disabled]="docenteSelectDesabilitado(disciplina, 'teorica')"
+	                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesTeorica)"
+	                      groupClass="mb-0">
+	                    </lib-select-input-default>
                     <button
                       class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
                       type="button"
-                      [disabled]="!disciplina.docenteTeoricaSelecionado || limiteDocentesAtingido(disciplina, 'teorica')"
+                      [disabled]="!disciplina.docenteTeoricaSelecionado || docenteSelectDesabilitado(disciplina, 'teorica')"
                       (click)="adicionarDocente(disciplina, 'teorica')"
                     >
                       <i class="la la-plus fs-4"></i>
@@ -176,16 +167,18 @@
                     </span>
                     </div>
                   <div class="docente-select-row">
-                    <select class="form-select form-select-sm form-select-solid" [(ngModel)]="disciplina.docentePraticaSelecionado" [ngModelOptions]="{ standalone: true }" [disabled]="limiteDocentesAtingido(disciplina, 'pratica')">
-                      <option [ngValue]="null">Selecionar docente...</option>
-                      <option *ngFor="let docente of getDocentesDisponiveis(disciplina.docentesPratica)" [ngValue]="docente.uuid">
-                        {{ docente.nome }}
-                      </option>
-                    </select>
+	                    <lib-select-input-default
+	                      [(ngModel)]="disciplina.docentePraticaSelecionado"
+	                      [ngModelOptions]="{ standalone: true }"
+	                      placeholder="Selecionar docente..."
+	                      [disabled]="docenteSelectDesabilitado(disciplina, 'pratica')"
+	                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesPratica)"
+	                      groupClass="mb-0">
+	                    </lib-select-input-default>
                     <button
                       class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
                       type="button"
-                      [disabled]="!disciplina.docentePraticaSelecionado || limiteDocentesAtingido(disciplina, 'pratica')"
+                      [disabled]="!disciplina.docentePraticaSelecionado || docenteSelectDesabilitado(disciplina, 'pratica')"
                       (click)="adicionarDocente(disciplina, 'pratica')"
                     >
                       <i class="la la-plus fs-4"></i>
@@ -251,17 +244,20 @@
           As disciplinas atuais desta oferta, curso e currículo serão substituídas pelas disciplinas da oferta selecionada.
         </div>
 
-        <label class="form-label required fw-bold text-gray-700 fs-7">Oferta de origem</label>
-        <select
-          class="form-select form-select-solid"
-          [(ngModel)]="ofertaOrigemImportacaoUuid"
-          [disabled]="importandoDisciplinas || ofertasDisponiveisParaImportacao.length === 0"
-        >
-          <option value="">Selecione a oferta de origem...</option>
-          <option *ngFor="let ofertaImportacao of ofertasDisponiveisParaImportacao" [value]="ofertaImportacao.uuid">
-            {{ ofertaImportacao.ano }}/{{ ofertaImportacao.semestre }}
-          </option>
-        </select>
+	        <lib-select-input-default
+	          label="Oferta de origem"
+	          [(ngModel)]="ofertaOrigemImportacaoUuid"
+	          [ngModelOptions]="{ standalone: true }"
+	          [placeholder]="carregandoOfertasImportacao ? 'Carregando ofertas...' : 'Selecione a oferta de origem...'"
+	          [required]="true"
+	          [disabled]="importandoDisciplinas || carregandoOfertasImportacao || opcoesOfertasImportacao.length === 0"
+	          [appendTo]="'.disciplina-modal .modal-content'"
+	          [opcoes]="opcoesOfertasImportacao"
+	          groupClass="mb-0">
+	        </lib-select-input-default>
+          <span class="text-muted fs-8 mt-2 d-block" *ngIf="!carregandoOfertasImportacao && opcoesOfertasImportacao.length === 0">
+            Nenhuma outra oferta disponÃ­vel para importar.
+          </span>
       </div>
 
       <div class="modal-footer">
@@ -272,7 +268,7 @@
           type="button"
           class="btn btn-primary"
           (click)="importarDisciplinasDaOferta()"
-          [disabled]="importandoDisciplinas || !ofertaOrigemImportacaoUuid"
+          [disabled]="importandoDisciplinas || carregandoOfertasImportacao || !ofertaOrigemImportacaoUuid"
         >
           <span *ngIf="!importandoDisciplinas"><i class="la la-download"></i> Importar</span>
           <span *ngIf="importandoDisciplinas" class="d-flex align-items-center">

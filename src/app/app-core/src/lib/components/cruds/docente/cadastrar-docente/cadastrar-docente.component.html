@@ -1,9 +1,9 @@
 <div class="card card-custom">
-    <div class="card-header bg-navy-custom text-black">
-      <h5 class="mb-0">
-        {{ modoEdicao ? 'Editar Docente' : 'Cadastrar Docente' }}
-      </h5>
-    </div>
+  <div class="card-header bg-navy-custom text-black">
+    <h5 class="mb-0">
+      {{ modoEdicao ? 'Editar Docente' : 'Cadastrar Docente' }}
+    </h5>
+  </div>
   <form [formGroup]="docenteForm" (ngSubmit)="onSubmit()" class="form">
     <div class="card-body">
 
@@ -11,14 +11,16 @@
         <div class="col-md-6">
           <lib-form-input-padrao
             label="Nome Completo *"
-            [control]="c['nome']"
+            [control]="controlesFormulario['nome']"
+            placeholder="Digite o nome completo"
             supportText="">
           </lib-form-input-padrao>
         </div>
         <div class="col-md-6">
           <lib-form-input-padrao
             label="Matrícula *"
-            [control]="c['matricula']"
+            [control]="controlesFormulario['matricula']"
+            placeholder="Digite a matrícula"
             supportText="">
           </lib-form-input-padrao>
         </div>
@@ -26,52 +28,56 @@
 
       <div class="row mt-3">
         <div class="col-md-4">
-          <label class="form-label">Tipo Vaga *</label>
-          <select [formControl]="c['tipoVaga']" class="form-select">
-            <option [ngValue]="null" disabled>Selecione...</option>
-            <option value="Efetivo">Efetivo</option>
-            <option value="Substituto">Substituto</option>
-            <option value="Visitante">Visitante</option>
-          </select>
+          <lib-select-input-default
+            label="Tipo Vaga"
+            formControlName="tipoVaga"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesTipoVaga">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-4">
-          <label class="form-label">Formação *</label>
-          <select [formControl]="c['tipoFormacao']" class="form-select">
-            <option [ngValue]="null" disabled>Selecione...</option>
-            <option value="Graduação">Graduação</option>
-            <option value="Especialização">Especialização</option>
-            <option value="Mestrado">Mestrado</option>
-            <option value="Doutorado">Doutorado</option>
-          </select>
+          <lib-select-input-default
+            label="Formação"
+            formControlName="tipoFormacao"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesTipoFormacao">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-4">
-          <label class="form-label">Origem Vaga *</label>
-          <select [formControl]="c['origemVaga']" class="form-select">
-            <option [ngValue]="null" disabled>Selecione...</option>
-            <option value="Concurso Público">Concurso Público</option>
-            <option value="Processo Seletivo">Processo Seletivo</option>
-          </select>
+          <lib-select-input-default
+            label="Origem Vaga"
+            formControlName="origemVaga"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesOrigemVaga">
+          </lib-select-input-default>
         </div>
       </div>
 
       <div class="row mt-3">
         <div class="col-md-6">
-          <label class="form-label">Departamento *</label>
-          <select formControlName="departamentoId" class="form-select">
-            <option [ngValue]="null" disabled>Selecione um departamento</option>
-            <option *ngFor="let item of departamentos" [ngValue]="item.id">
-              {{ item.nome }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Departamento"
+            formControlName="departamentoId"
+            placeholder="Selecione um departamento"
+            [required]="true"
+            [opcoes]="opcoesDepartamentos">
+          </lib-select-input-default>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Possui Licenciatura?</label>
-          <select [formControl]="c['licenciatura']" class="form-select">
-            <option [ngValue]="true">Sim</option>
-            <option [ngValue]="false">Não</option>
-          </select>
+          <lib-select-input-default
+            label="Possui Licenciatura?"
+            formControlName="licenciatura"
+            placeholder="Selecione..."
+            [required]="true"
+            [clearable]="false"
+            [searchable]="false"
+            [opcoes]="opcoesLicenciatura">
+          </lib-select-input-default>
         </div>
       </div>
 

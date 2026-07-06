@@ -3,14 +3,17 @@
   <div>
     <div *ngIf="seletorQuantidade" class="pagination-flex kt-padding-b-5">
       <span class="pagination-label font-weight-bold">Itens por página</span>
-      <select [ngModel]="meta.tamanho"
-              (change)="mudaMax($event)"
-              class="form-control kt-font-brand"
-              style="width: 80px;">
-        <option *ngFor="let op of opcoesTamanho" [value]="op">{{ op }}</option>
-      </select>
+      <lib-select-input-default
+        [ngModel]="meta.tamanho"
+        (valueChange)="mudaMax($event)"
+        [opcoes]="opcoesTamanhoSelect"
+        [clearable]="false"
+        [searchable]="false"
+        groupClass="mb-0"
+        selectClass="paginador-select">
+      </lib-select-input-default>
       <span class="pagination-label">
-         Mostrando {{ meta.tamanho }} de {{ meta.totalElementos }} registos
+         Mostrando {{ meta.tamanho }} de {{ meta.totalElementos }} registros
       </span>
     </div>
   </div>

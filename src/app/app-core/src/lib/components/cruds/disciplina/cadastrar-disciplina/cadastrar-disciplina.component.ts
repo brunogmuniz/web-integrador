@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO } from "app-core";
+import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO, SelectOption } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-disciplina',
@@ -14,6 +14,11 @@ import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, 
 export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public subareas: SubareaConhecimentoDTO[] = [];
+  public opcoesSubareas: SelectOption[] = [];
+  public opcoesTipoDisciplina: SelectOption[] = [
+    { id: 'Regular', label: 'Regular' },
+    { id: 'DCG', label: 'DCG' }
+  ];
   public uuidDisciplina?: string;
   public loading: boolean = false;
 
@@ -33,7 +38,7 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],
       cargaHoraria: [{ value: 0, disabled: true }],
-      tipoDisciplina: ['Regular', Validators.required],
+      tipoDisciplina: [null, Validators.required],
       ead: [false]
     });
   }
@@ -73,6 +78,10 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.subareas = res.subareas.conteudo || [];
+          this.opcoesSubareas = this.subareas.map(subarea => ({
+            id: subarea.id as number,
+            label: subarea.nome || ''
+          }));
 
           if (res.disciplina) {
             this.preencherFormulario(res.disciplina);

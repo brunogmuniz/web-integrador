@@ -9,13 +9,16 @@
   <div class="card-header border-0 pt-6">
     <div class="row w-100">
       <div class="col-lg-4 col-md-6 docente-encargos-filtro">
-        <label class="form-label required fw-bold text-gray-700 fs-7">Oferta</label>
-        <select class="form-select form-select-solid docente-encargos-filtro__controle" [(ngModel)]="ofertaSelecionadaUuid" (ngModelChange)="aoSelecionarOferta()">
-          <option [ngValue]="undefined" disabled>{{ ofertas.length ? 'Selecione...' : 'Nenhuma oferta ativa encontrada' }}</option>
-          <option *ngFor="let oferta of ofertas" [ngValue]="oferta.uuid">
-            {{ oferta.ano }}/{{ oferta.semestre }}
-          </option>
-        </select>
+        <lib-select-input-default
+          label="Oferta"
+          [(ngModel)]="ofertaSelecionadaUuid"
+          (ngModelChange)="aoSelecionarOferta()"
+          [placeholder]="ofertas.length ? 'Selecione...' : 'Nenhuma oferta ativa encontrada'"
+          [required]="true"
+          [clearable]="false"
+          [opcoes]="opcoesOfertas"
+          groupClass="mb-0">
+        </lib-select-input-default>
       </div>
       <div class="col-lg-4 col-md-6 mt-6 mt-md-0 docente-encargos-filtro">
         <label class="form-label fw-bold text-gray-700 fs-7">Busca</label>

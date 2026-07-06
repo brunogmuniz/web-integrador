@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnidadeService } from '../../../../services/unidade.service';
 import { TiposUnidade, UnidadeDTO, UnidadeFormDTO } from '../../../../dto/Unidade.dto';
+import { SelectOption } from 'app-core';
 
 @Component({
   selector: 'lib-cadastrar-unidade',
@@ -23,6 +24,11 @@ export class CadastrarUnidadeComponent implements OnInit {
   };
 
   public unidadesPai: UnidadeDTO[] = [];
+  public opcoesTiposDeUnidade: SelectOption[] = this.tiposDeUnidade.map(tipo => ({
+    id: tipo,
+    label: this.getTipoLabel(tipo)
+  }));
+  public opcoesUnidadesPai: SelectOption[] = [];
   public uuidEdicao: string | null = null;
   public isSubmetendo: boolean = false;
   public errorMessage: string = '';
@@ -60,6 +66,7 @@ export class CadastrarUnidadeComponent implements OnInit {
       next: (unidades) => {
         this.unidadesPai = unidades.filter(unidade => unidade.ativo);
         this.removerUnidadeAtualDaLista();
+        this.atualizarOpcoesUnidadesPai();
       },
       error: (err) => console.error('Erro ao buscar unidades para o select', err)
     });
@@ -91,7 +98,15 @@ export class CadastrarUnidadeComponent implements OnInit {
       this.unidadesPai = this.unidadesPai.filter(
         unidade => unidade.uuid !== this.uuidEdicao
       );
+      this.atualizarOpcoesUnidadesPai();
     }
+  }
+
+  private atualizarOpcoesUnidadesPai(): void {
+    this.opcoesUnidadesPai = this.unidadesPaiAtivas.map(unidade => ({
+      id: unidade.uuid || '',
+      label: `${unidade.nome} (${unidade.tipo})`
+    }));
   }
 
   public salvar(): void {

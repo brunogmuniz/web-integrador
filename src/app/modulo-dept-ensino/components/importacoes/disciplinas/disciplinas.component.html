@@ -22,21 +22,15 @@
     <div class="kt-portlet__body pt-3">
       <div class="row">
         <div class="col-md-6">
-          <div class="form-group mb-md-0">
-            <label class="kt-font-bold">
-              Subárea de Conhecimento <span class="text-danger">*</span>
-            </label>
-            <select
-              class="form-control form-control-sm"
-              [(ngModel)]="subareaId"
-              [disabled]="isUploading"
-            >
-              <option [ngValue]="null" disabled selected>Selecione uma subárea...</option>
-              <option *ngFor="let subarea of subareas" [ngValue]="subarea.id">
-                {{ subarea.nome }}
-              </option>
-            </select>
-          </div>
+          <lib-select-input-default
+            label="Subárea de Conhecimento"
+            [(ngModel)]="subareaId"
+            placeholder="Selecione uma subárea..."
+            [required]="true"
+            [disabled]="isUploading"
+            [opcoes]="opcoesSubareas"
+            groupClass="form-group mb-md-0">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-6">

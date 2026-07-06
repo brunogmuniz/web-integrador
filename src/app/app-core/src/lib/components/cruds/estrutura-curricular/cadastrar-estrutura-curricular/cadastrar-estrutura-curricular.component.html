@@ -36,13 +36,13 @@
           </div>
 
           <div class="col-lg-4">
-            <label class="form-label text-gray-700 fw-semibold required">Curso</label>
-            <select [compareWith]="compararCursos" formControlName="curso" class="form-select form-select-solid">
-              <option [ngValue]="null">Selecione...</option>
-              <option *ngFor="let curso of listaCursos" [ngValue]="curso">
-                {{ curso.nome }} ({{ curso.sigla }})
-              </option>
-            </select>
+            <lib-select-input-default
+              label="Curso"
+              formControlName="curso"
+              placeholder="Selecione..."
+              [required]="true"
+              [opcoes]="opcoesCursos">
+            </lib-select-input-default>
             <div *ngIf="form.get('curso')?.invalid && form.get('curso')?.touched" class="invalid-feedback d-block">
               Selecione um curso válido
             </div>
@@ -63,7 +63,7 @@
       </div>
 
       <div class="table-responsive" formArrayName="disciplinasCurriculo">
-        <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4" *ngIf="disciplinasCurriculo.controls.length > 0; else nenhumaOferta">
+        <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 estrutura-curricular-table" *ngIf="disciplinasCurriculo.controls.length > 0; else nenhumaOferta">
           <thead>
           <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
             <th class="min-w-300px required">Disciplina</th>
@@ -77,87 +77,40 @@
           </tr>
           </thead>
           <tbody class="fs-6">
-          <tr *ngFor="let item of disciplinasCurriculoSemGrupoView; trackBy: trackByDisciplinaCurriculo" [formGroupName]="item.index">
-            <td>
-              <select
-                class="form-select form-select-solid"
-                [compareWith]="compararDisciplinas"
-                [ngModel]="encontrarDisciplinaBaseSelecionada(item.index)"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="aplicarDisciplinaBase(item.index, $event)"
-              >
-                <option [ngValue]="null">Selecione...</option>
-                <option *ngFor="let disc of disciplinasBaseDisponiveisPorItemView(item.index)" [ngValue]="disc">
-                  {{ disc.nome }}
-                </option>
-              </select>
-            </td>
-
-            <td>
-              <select class="form-select form-select-solid" formControlName="semestre">
-                <option [ngValue]="null">...</option>
-                <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ formatarSemestre(sem) }}</option>
-              </select>
-            </td>
-
-            <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaTeorica" min="0" />
-            </td>
-
-            <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="cargaHorariaPratica" min="0" />
-            </td>
-
-            <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresTeorica" min="0" />
-            </td>
-
-            <td>
-              <input type="number" class="form-control form-control-solid text-center" formControlName="maxProfessoresPratica" min="0" />
-            </td>
-
-            <td class="text-center">
-              <div class="form-check form-check-custom form-check-solid form-check-sm d-inline-block">
-                <input class="form-check-input" type="checkbox" formControlName="tutoria" />
-              </div>
-            </td>
-
-            <td class="text-center">
-              <button type="button" class="btn btn-icon btn-light-danger btn-sm" (click)="removerDisciplinaCurriculo(item.index)">
-                <i class="la la-trash fs-3"></i>
-              </button>
-            </td>
-          </tr>
-
-          <ng-container *ngFor="let grupo of gruposDisciplinasCurriculoView; trackBy: trackByGrupo">
-            <tr class="grupo-row">
+          <ng-container *ngFor="let item of disciplinasCurriculoLinhaView; trackBy: trackByDisciplinaCurriculo">
+            <tr *ngIf="item.nomeGrupo" class="grupo-row">
               <td colspan="8">
-                <span class="text-gray-700 fw-bold fs-7 text-uppercase">{{ grupo.nome }}</span>
-                <span class="badge badge-light-primary ms-2">{{ grupo.disciplinas.length }}</span>
+                <span class="text-gray-700 fw-bold fs-7 text-uppercase">{{ item.nomeGrupo }}</span>
               </td>
             </tr>
 
-            <tr *ngFor="let item of grupo.disciplinas; trackBy: trackByDisciplinaCurriculo" [formGroupName]="item.index">
+            <tr [formGroup]="item.control">
               <td>
-                <select
-                  class="form-select form-select-solid"
-                  [compareWith]="compararDisciplinas"
-                  [ngModel]="encontrarDisciplinaBaseSelecionada(item.index)"
-                  [ngModelOptions]="{ standalone: true }"
-                  (ngModelChange)="aplicarDisciplinaBase(item.index, $event)"
-                >
-                  <option [ngValue]="null">Selecione...</option>
-                  <option *ngFor="let disc of disciplinasBaseDisponiveisPorItemView(item.index)" [ngValue]="disc">
-                    {{ disc.nome }}
-                  </option>
-                </select>
+                <ng-select
+                  [items]="opcoesDisciplinasBasePorItem(item.control)"
+                  bindLabel="label"
+                  bindValue="id"
+                  formControlName="disciplinaChave"
+                  class="ng-select-outline"
+                  placeholder="Selecione..."
+                  notFoundText="Nenhum registro encontrado"
+                  [clearable]="false"
+                  [appendTo]="'body'">
+                </ng-select>
               </td>
 
               <td>
-                <select class="form-select form-select-solid" formControlName="semestre">
-                  <option [ngValue]="null">...</option>
-                  <option *ngFor="let sem of listaOpcoesSemestre" [ngValue]="sem">{{ formatarSemestre(sem) }}</option>
-                </select>
+                <ng-select
+                  [items]="opcoesSemestre"
+                  bindLabel="label"
+                  bindValue="id"
+                  formControlName="semestre"
+                  class="ng-select-outline"
+                  placeholder="..."
+                  notFoundText="Nenhum registro encontrado"
+                  [clearable]="false"
+                  [appendTo]="'body'">
+                </ng-select>
               </td>
 
               <td>

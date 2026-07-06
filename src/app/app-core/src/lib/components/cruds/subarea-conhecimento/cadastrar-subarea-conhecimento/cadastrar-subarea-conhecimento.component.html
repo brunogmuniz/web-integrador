@@ -12,6 +12,7 @@
           <lib-form-input-padrao
             label="Nome"
             [control]="c['nome']"
+            placeholder="Digite o nome"
             supportText="">
           </lib-form-input-padrao>
         </div>
@@ -20,6 +21,7 @@
           <lib-form-input-padrao
             label="Sigla"
             [control]="c['sigla']"
+            placeholder="Digite a sigla"
             supportText="">
           </lib-form-input-padrao>
         </div>
@@ -29,7 +31,7 @@
         <div class="col-md-6">
           <lib-select-input-default
             label="Área de Conhecimento"
-            [control]="c['areaId']"
+            formControlName="areaId"
             placeholder="Selecione uma área..."
             [required]="true"
             [opcoes]="opcoesAreas">
