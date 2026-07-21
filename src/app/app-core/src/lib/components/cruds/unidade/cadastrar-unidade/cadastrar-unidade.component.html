@@ -28,21 +28,24 @@
 
       <div class="form-group row form-row-pdsa">
         <div class="col-lg-6">
-          <label class="pdsa-label">Tipo <span class="text-danger">*</span></label>
-          <select class="form-control pdsa-control kt-selectpicker" formControlName="tipo">
-            <option [ngValue]="null" disabled>Selecione um tipo...</option>
-            <option *ngFor="let tipo of tiposDeUnidade" [value]="tipo">{{ getTipoLabel(tipo) }}</option>
-          </select>
+          <lib-select-input-default
+            label="Tipo"
+            formControlName="tipo"
+            placeholder="Selecione um tipo..."
+            [required]="true"
+            [opcoes]="opcoesTiposDeUnidade"
+            groupClass="mb-0">
+          </lib-select-input-default>
           <span class="form-text text-danger" *ngIf="formulario.get('tipo')?.touched && formulario.get('tipo')?.errors?.['required']">O tipo é obrigatório.</span>
         </div>
         <div class="col-lg-6">
-          <label class="pdsa-label">Unidade Gerenciadora (Pai)</label>
-          <select class="form-control pdsa-control kt-selectpicker" formControlName="unidadeGerenciadoraUuid">
-            <option [ngValue]="null">Nenhuma (Unidade Raiz)</option>
-            <option *ngFor="let unidade of unidadesPaiAtivas" [value]="unidade.uuid">
-              {{ unidade.nome }} ({{ unidade.tipo }})
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Unidade Gerenciadora (Pai)"
+            formControlName="unidadeGerenciadoraUuid"
+            placeholder="Nenhuma (Unidade Raiz)"
+            [opcoes]="opcoesUnidadesPai"
+            groupClass="mb-0">
+          </lib-select-input-default>
         </div>
       </div>
 

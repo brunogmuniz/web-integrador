@@ -14,3 +14,32 @@
   padding-top: 0.85rem;
   padding-bottom: 0.85rem;
 }
+
+.estrutura-curricular-table {
+  min-width: 1280px;
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 30%;
+    min-width: 300px;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 130px;
+    min-width: 130px;
+  }
+
+  th:nth-child(7),
+  td:nth-child(7),
+  th:nth-child(8),
+  td:nth-child(8) {
+    width: 80px;
+  }
+
+  lib-select-input-default,
+  ::ng-deep .ng-select {
+    display: block;
+    width: 100%;
+  }
+}

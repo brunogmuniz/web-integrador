@@ -13,7 +13,8 @@ import {
   EstruturaCurricularDTO,
   EstruturaCurricularService,
   OfertaDTO,
-  OfertaService
+  OfertaService,
+  SelectOption
 } from 'app-core';
 
 export interface DisciplinaOfertaItemDTO {
@@ -67,6 +68,7 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   public disciplinaSelecionadaUuid: string | null = null;
   public loading = false;
   public importandoDisciplinas = false;
+  public carregandoOfertasImportacao = false;
   public carregandoCombinacao = false;
   public combinacaoExistente = false;
   public modalImportacaoAberto = false;
@@ -74,10 +76,16 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
 
   public gruposDisponiveisView: GrupoDisciplina<DisciplinaCurriculoDTO>[] = [];
   public gruposSelecionadasView: GrupoDisciplina<DisciplinaOfertaView>[] = [];
+  public opcoesOfertas: SelectOption[] = [];
+  public opcoesCursos: SelectOption[] = [];
+  public opcoesCurriculos: SelectOption[] = [];
+  public opcoesDisciplinasDisponiveis: SelectOption[] = [];
+  public opcoesOfertasImportacao: SelectOption[] = [];
 
   private destroy$ = new Subject<void>();
   private ofertaEdicaoUuid?: string;
   private rotaRetornoAposSalvar?: string[];
+  private opcoesDocentesDisponiveisCache = new Map<string, SelectOption[]>();
 
   constructor(
     private fb: FormBuilder,
@@ -120,6 +128,8 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
         this.ofertas  = (res.ofertas || []).filter(o => o.ativo || o.uuid === this.ofertaEdicaoUuid);
         this.cursos   = (res.cursos.conteudo   || []).filter(c => c.ativo !== false);
         this.docentes =  res.docentes.conteudo || [];
+        this.opcoesDocentesDisponiveisCache.clear();
+        this.atualizarOpcoesOfertasECursos();
         if (this.ofertaEdicaoUuid) {
           this.carregarOfertaParaEdicao(this.ofertaEdicaoUuid);
         }
@@ -147,6 +157,7 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
 
   private lidarComMudancaDeOferta(oferta: OfertaDTO | null): void {
     this.ofertaOrigemImportacaoUuid = '';
+    this.atualizarOpcoesOfertasImportacao();
 
     if (!oferta?.uuid) {
       this.disciplinasSelecionadas = [];
@@ -160,13 +171,17 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
 
   private lidarComMudancaDeCurso(curso: CursoDTO | null): void {
     this.curriculos = [];
+    this.atualizarOpcoesCurriculos();
     this.resetarSelecaoDisciplinas();
     this.form.get('curriculo')?.setValue(null, { emitEvent: false });
 
     if (!curso?.id) return;
 
     this.estruturaService.findByCurso(curso.id).subscribe({
-      next:  curriculos => this.curriculos = (curriculos || []).filter(c => c.ativo),
+      next:  curriculos => {
+        this.curriculos = (curriculos || []).filter(c => c.ativo);
+        this.atualizarOpcoesCurriculos();
+      },
       error: (err) => {
         console.error('Falha ao carregar currículos', err);
         void Swal.fire('Erro', 'Não foi possível carregar os currículos do curso.', 'error');
@@ -246,6 +261,7 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.estruturaService.findByCurso(curso.id).subscribe({
       next: curriculos => {
         this.curriculos = (curriculos || []).filter(curriculo => curriculo.ativo || curriculo.uuid === uuidEstruturaCurricular);
+        this.atualizarOpcoesCurriculos();
         const curriculo = this.curriculos.find(item => item.uuid === uuidEstruturaCurricular);
         if (!curriculo) {
           return;
@@ -338,7 +354,9 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.ofertaOrigemImportacaoUuid = '';
     this.modalImportacaoAberto = true;
+    this.carregarOfertasParaImportacao();
   }
 
   public fecharModalImportacao(): void {
@@ -360,6 +378,43 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
         }
         return Number(b.semestre) - Number(a.semestre);
       });
+  }
+
+  private carregarOfertasParaImportacao(): void {
+    this.carregandoOfertasImportacao = true;
+    this.atualizarOpcoesOfertasImportacao();
+
+    this.ofertaService.findAll(0, 500)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: res => {
+          const ofertas = res.conteudo || [];
+          this.ofertas = ofertas.filter(oferta => oferta.ativo || oferta.uuid === this.ofertaEdicaoUuid);
+          this.atualizarOpcoesOfertasECursos();
+          this.atualizarOpcoesOfertasImportacao();
+          this.carregandoOfertasImportacao = false;
+        },
+        error: err => {
+          this.carregandoOfertasImportacao = false;
+          console.error('Falha ao carregar ofertas para importação', err);
+          void Swal.fire('Erro', 'Não foi possível carregar as ofertas para importação.', 'error');
+        }
+      });
+  }
+
+  public opcoesDocentesDisponiveis(uuidsSelecionados: string[]): SelectOption[] {
+    const chaveCache = this.obterChaveCacheDocentesDisponiveis(uuidsSelecionados);
+    const opcoesCacheadas = this.opcoesDocentesDisponiveisCache.get(chaveCache);
+    if (opcoesCacheadas) {
+      return opcoesCacheadas;
+    }
+
+    const opcoes = this.getDocentesDisponiveis(uuidsSelecionados).map(docente => ({
+      id: docente.uuid || null,
+      label: docente.nome || ''
+    }));
+    this.opcoesDocentesDisponiveisCache.set(chaveCache, opcoes);
+    return opcoes;
   }
 
   public importarDisciplinasDaOferta(): void {
@@ -419,6 +474,7 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
       disciplina.docentePraticaSelecionado = null;
     }
     this.disciplinasSelecionadas = [...this.disciplinasSelecionadas];
+    this.opcoesDocentesDisponiveisCache.clear();
     this.atualizarViews();
   }
 
@@ -429,11 +485,16 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
       disciplina.docentesPratica = disciplina.docentesPratica.filter(u => u !== uuid);
     }
     this.disciplinasSelecionadas = [...this.disciplinasSelecionadas];
+    this.opcoesDocentesDisponiveisCache.clear();
     this.atualizarViews();
   }
 
   public getDocentesDisponiveis(uuidsSelecionados: string[]): DocenteDTO[] {
     return this.docentes.filter(d => !uuidsSelecionados.includes(d.uuid!));
+  }
+
+  private obterChaveCacheDocentesDisponiveis(uuidsSelecionados: string[]): string {
+    return `${this.docentes.length}:${[...uuidsSelecionados].sort().join('|')}`;
   }
 
   public getLimiteDocentes(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): number {
@@ -444,6 +505,12 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
   public limiteDocentesAtingido(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): boolean {
     const selecionados = tipo === 'teorica' ? disciplina.docentesTeorica : disciplina.docentesPratica;
     return selecionados.length >= this.getLimiteDocentes(disciplina, tipo);
+  }
+
+  public docenteSelectDesabilitado(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): boolean {
+    const uuidsSelecionados = tipo === 'teorica' ? disciplina.docentesTeorica : disciplina.docentesPratica;
+    return this.limiteDocentesAtingido(disciplina, tipo)
+      || this.opcoesDocentesDisponiveis(uuidsSelecionados).length === 0;
   }
 
   public getNomeDocente(uuid: string): string {
@@ -528,6 +595,50 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
 
     this.gruposDisponiveisView  = this.agruparDisciplinas(disciplinasDisponiveisParaAdicionar);
     this.gruposSelecionadasView = this.agruparDisciplinas(this.disciplinasSelecionadas);
+    this.atualizarOpcoesDisciplinasDisponiveis();
+    this.atualizarOpcoesOfertasImportacao();
+  }
+
+  private atualizarOpcoesOfertasECursos(): void {
+    this.opcoesOfertas = this.ofertas.map(oferta => ({
+      id: oferta,
+      label: `${oferta.ano}/${oferta.semestre}`
+    }));
+
+    this.opcoesCursos = this.cursos.map(curso => ({
+      id: curso,
+      label: `${curso.nome} (${curso.sigla})`
+    }));
+  }
+
+  private atualizarOpcoesCurriculos(): void {
+    this.opcoesCurriculos = this.curriculos.map(curriculo => ({
+      id: curriculo,
+      label: this.formatarCurriculo(curriculo),
+      originalData: curriculo
+    }));
+  }
+
+  private formatarCurriculo(curriculo: EstruturaCurricularDTO): string {
+    return [curriculo.codigo, curriculo.ano]
+      .filter(valor => valor !== undefined && valor !== null && String(valor).trim() !== '')
+      .join(' - ');
+  }
+
+  private atualizarOpcoesDisciplinasDisponiveis(): void {
+    this.opcoesDisciplinasDisponiveis = this.gruposDisponiveisView.flatMap(grupo =>
+      grupo.disciplinas.map(disciplina => ({
+        id: disciplina.uuid || null,
+        label: `${grupo.nome} - ${disciplina.nomeDisciplina}`
+      }))
+    );
+  }
+
+  private atualizarOpcoesOfertasImportacao(): void {
+    this.opcoesOfertasImportacao = this.ofertasDisponiveisParaImportacao.map(oferta => ({
+      id: oferta.uuid || null,
+      label: `${oferta.ano}/${oferta.semestre}`
+    }));
   }
 
   public possuiCargaHoraria(cargaHoraria?: number | string): boolean {

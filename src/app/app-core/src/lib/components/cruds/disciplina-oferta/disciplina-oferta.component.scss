@@ -85,6 +85,15 @@
 .disciplina-modal {
   display: block;
   z-index: 1060;
+
+  .modal-content,
+  .modal-body {
+    overflow: visible;
+  }
+
+  .modal-content {
+    position: relative;
+  }
 }
 
 @media (max-width: 991px) {

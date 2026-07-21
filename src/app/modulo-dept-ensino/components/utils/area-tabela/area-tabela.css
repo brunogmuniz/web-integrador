@@ -169,6 +169,12 @@
   text-align: center !important;
 }
 
+.analise-table { table-layout: fixed; width: 100%; }
+.analise-table th { width: auto !important; }
+.collapse-row > td,
+.subarea-table-wrapper { background-color: #ffffff !important; }
+.subarea-table-wrapper { padding: 16px 0 20px; }
+
 .table-sm th,
 .table-sm td {
   text-align: center !important;

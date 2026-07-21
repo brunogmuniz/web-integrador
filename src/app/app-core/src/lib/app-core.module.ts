@@ -45,6 +45,8 @@ import { VisualizarOfertaComponent } from './components/cruds/oferta/visualizar-
 import { VisualizarDisciplinasOfertaComponent } from './components/cruds/oferta/visualizar-disciplinas-oferta/visualizar-disciplinas-oferta.component';
 import { DisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/disciplina-oferta.component';
 import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component';
+import { SelectInputDefaultComponent } from './components/select-input-default/select-input-default.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -89,14 +91,16 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     VisualizarOfertaComponent,
     VisualizarDisciplinasOfertaComponent,
     DisciplinaOfertaComponent,
-    CadastrarDisciplinaOfertaComponent
+    CadastrarDisciplinaOfertaComponent,
+    SelectInputDefaultComponent
   ],
   imports: [
     CommonModule,
     FormInput,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    NgSelectModule
   ],
   exports: [
     CadastrarUnidadeComponent,
@@ -113,7 +117,8 @@ import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplin
     BuscaTextoComponent,
     OfertaSearchSelectComponent,
     VisualizarUnidadeComponent,
-    VisualizarUnidadeUsuarioComponent
+    VisualizarUnidadeUsuarioComponent,
+    SelectInputDefaultComponent
   ]
 })
 export class AppCoreModule { }

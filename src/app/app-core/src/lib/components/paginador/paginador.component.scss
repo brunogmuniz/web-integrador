@@ -43,3 +43,7 @@
   margin: 0;
   color: #595d6e;
 }
+
+::ng-deep .paginador-select.ng-select {
+  width: 80px;
+}

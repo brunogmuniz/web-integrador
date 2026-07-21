@@ -7,6 +7,7 @@ export * from './lib/app-core.module';
 export * from './lib/dto/paginacao/resposta-paginada.dto';
 export * from './lib/components/user-menu/user-menu.component';
 export * from './lib/components/oferta-search-select/oferta-search-select.component';
+export * from './lib/components/select-input-default/select-input-default.component';
 
 //unidades usuario
 export * from './lib/components/cruds/unidade-usuario/unidade-usuario.component';

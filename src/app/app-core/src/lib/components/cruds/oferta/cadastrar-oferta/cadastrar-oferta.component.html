@@ -10,10 +10,15 @@
           <input type="text" class="form-control form-control-solid" formControlName="ano" placeholder="2026" />
         </div>
         <div class="col-md-4">
-          <label class="form-label required">Semestre</label>
-          <select class="form-select form-select-solid" formControlName="semestre">
-            <option *ngFor="let semestre of semestres" [value]="semestre.valor">{{ semestre.label }}</option>
-          </select>
+          <lib-select-input-default
+            label="Semestre"
+            formControlName="semestre"
+            placeholder="Selecione..."
+            [required]="true"
+            [clearable]="false"
+            [searchable]="false"
+            [opcoes]="opcoesSemestres">
+          </lib-select-input-default>
         </div>
         <div class="col-md-4 d-flex align-items-end">
           <div class="form-check form-check-custom form-check-solid">

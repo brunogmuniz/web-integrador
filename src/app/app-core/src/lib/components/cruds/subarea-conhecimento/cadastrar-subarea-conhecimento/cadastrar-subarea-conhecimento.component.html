@@ -10,33 +10,32 @@
       <div class="row mb-3">
         <div class="col-md-8">
           <lib-form-input-padrao
-            [label]="'Nome'"
+            label="Nome"
             [control]="c['nome']"
-            [supportText]="''">
+            placeholder="Digite o nome"
+            supportText="">
           </lib-form-input-padrao>
         </div>
 
         <div class="col-md-4">
           <lib-form-input-padrao
-            [label]="'Sigla'"
+            label="Sigla"
             [control]="c['sigla']"
-            [supportText]="''">
+            placeholder="Digite a sigla"
+            supportText="">
           </lib-form-input-padrao>
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-6">
-          <label class="form-label">Área de Conhecimento</label>
-          <select class="form-select" formControlName="areaId">
-            <option [ngValue]="null" disabled>Selecione uma área...</option>
-            <option *ngFor="let area of areasDeConhecimento$ | async" [ngValue]="area.id">
-              {{ area.nome }} ({{ area.sigla }})
-            </option>
-          </select>
-          <div *ngIf="c['areaId'].touched && c['areaId'].invalid" class="text-danger small mt-1">
-            A área é obrigatória.
-          </div>
+          <lib-select-input-default
+            label="Área de Conhecimento"
+            formControlName="areaId"
+            placeholder="Selecione uma área..."
+            [required]="true"
+            [opcoes]="opcoesAreas">
+          </lib-select-input-default>
         </div>
       </div>
 

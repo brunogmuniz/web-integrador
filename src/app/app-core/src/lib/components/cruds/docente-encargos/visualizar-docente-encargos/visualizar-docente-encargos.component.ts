@@ -3,7 +3,7 @@ import { DocenteService } from "app-core/lib/services/docente-service";
 import { DocenteDetalheDTO } from "app-core/lib/dto/DocenteDetalhe.dto";
 import { RespostaPaginada } from "app-core/lib/dto/paginacao/resposta-paginada.dto";
 import Swal from "sweetalert2";
-import { DocenteSubAreaPercentualDTO, OfertaDTO, OfertaService } from "app-core";
+import { DocenteSubAreaPercentualDTO, OfertaDTO, OfertaService, SelectOption } from "app-core";
 import { TableSort } from '../../../../utils/table-sort';
 
 interface MetadadosPaginacao {
@@ -22,6 +22,7 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
 
   public listaDocentesDetalhados: DocenteDetalheDTO[] = [];
   public ofertas: OfertaDTO[] = [];
+  public opcoesOfertas: SelectOption[] = [];
   public ofertaSelecionadaUuid?: string;
   public busca = '';
   public atuandoEmDisciplina = true;
@@ -151,6 +152,10 @@ export class VisualizarDocenteEncargosComponent implements OnInit {
     this.ofertaService.findAll(0, 500).subscribe({
       next: (res) => {
         this.ofertas = (res.conteudo || []).filter(oferta => oferta.ativo);
+        this.opcoesOfertas = this.ofertas.map(oferta => ({
+          id: oferta.uuid || null,
+          label: `${oferta.ano}/${oferta.semestre}`
+        }));
         const ultimaOferta = [...this.ofertas].sort((a, b) => `${b.ano}${b.semestre}`.localeCompare(`${a.ano}${a.semestre}`))[0];
         this.ofertaSelecionadaUuid = ultimaOferta?.uuid;
         this.carregarDados();

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MetadadosPaginacao } from 'app-core';
+import { MetadadosPaginacao, SelectOption, SelectOptionValue } from 'app-core';
 
 @Component({
   selector: 'app-paginador',
@@ -14,9 +14,15 @@ export class PaginadorComponent {
 
   @Output() mudancaPagina = new EventEmitter<{ pagina: number; tamanho: number }>();
 
-  mudaMax(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const novoTamanho = Number(select.value);
+  get opcoesTamanhoSelect(): SelectOption[] {
+    return this.opcoesTamanho.map(opcao => ({
+      id: opcao,
+      label: String(opcao)
+    }));
+  }
+
+  mudaMax(valor: SelectOptionValue): void {
+    const novoTamanho = Number(valor);
     this.mudancaPagina.emit({ pagina: 0, tamanho: novoTamanho });
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
-import { DocenteImportacaoService, DepartamentoService, DepartamentoDTO, UploadPlanilhaComponent } from 'app-core';
+import { DocenteImportacaoService, DepartamentoService, DepartamentoDTO, SelectOption, UploadPlanilhaComponent } from 'app-core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -14,6 +14,7 @@ export class DocentesComponent implements OnInit {
   isUploading = false;
   departamentoId: number | null = null;
   departamentos: DepartamentoDTO[] = [];
+  opcoesDepartamentos: SelectOption[] = [];
 
   constructor(
     private readonly importService: DocenteImportacaoService,
@@ -28,6 +29,10 @@ export class DocentesComponent implements OnInit {
     this.departamentoService.findAll(0, 500).subscribe({
       next: (res) => {
         this.departamentos = res.conteudo;
+        this.opcoesDepartamentos = this.departamentos.map(departamento => ({
+          id: departamento.id as number,
+          label: departamento.nome || ''
+        }));
       },
       error: (err) => {
         console.error('Erro ao carregar departamentos:', err);
