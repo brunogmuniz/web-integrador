@@ -26,6 +26,7 @@
           <th class="min-w-150px">Matrícula</th>
           <th class="min-w-100px">Vaga</th>
           <th class="min-w-100px">Formação</th>
+          <th class="min-w-200px">Formação completa</th>
           <th class="min-w-120px">Departamento</th>
           <th class="min-w-80px text-center">Ativo</th>
           <th class="min-w-120px text-center">Ações</th>
@@ -46,7 +47,10 @@
             <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.tipoVaga }}</span>
           </td>
           <td>
-            <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.tipoFormacao }}</span>
+            <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.tipoFormacao || '-' }}</span>
+          </td>
+          <td>
+            <span class="text-gray-700 formacao-completa" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.formacaoCompleta || '-' }}</span>
           </td>
           <td>
             <span class="text-center text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.nomeDepartamento }}</span>
@@ -86,7 +90,7 @@
 
 
         <tr *ngIf="!docentes || docentes.length === 0">
-          <td colspan="8" class="text-center py-10">
+          <td colspan="9" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">

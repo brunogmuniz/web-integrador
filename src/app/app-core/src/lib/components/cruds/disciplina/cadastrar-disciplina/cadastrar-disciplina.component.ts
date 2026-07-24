@@ -19,6 +19,13 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     { id: 'Regular', label: 'Regular' },
     { id: 'DCG', label: 'DCG' }
   ];
+  public opcoesClassificacao: SelectOption[] = [
+    { id: 'Acumulativa total', label: 'Acumulativa total' },
+    { id: 'Acumulativa parcial', label: 'Acumulativa parcial' },
+    { id: 'Estágio não supervisionado', label: 'Estágio não supervisionado' },
+    { id: 'Estágio supervisionado', label: 'Estágio supervisionado' },
+    { id: 'Trabalho de conclusão de curso', label: 'Trabalho de conclusão de curso' }
+  ];
   public uuidDisciplina?: string;
   public loading: boolean = false;
 
@@ -34,6 +41,8 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoDisciplina: [null, Validators.required],
+      numero: [null],
+      classificacao: [null],
       subareaId: [null, Validators.required],
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],

@@ -3,6 +3,8 @@ export interface DisciplinaDTO {
   uuid?: string;
   nome: string;
   codigoDisciplina: string;
+  numero?: string | null;
+  classificacao?: string | null;
   cargaHoraria: number;
   subareaId: number;
   nomeSubarea: string;

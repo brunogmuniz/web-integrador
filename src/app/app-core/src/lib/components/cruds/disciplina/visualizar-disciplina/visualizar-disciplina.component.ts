@@ -62,6 +62,19 @@ export class VisualizarDisciplinaComponent implements OnInit {
     return this.ordenacao.iconeOrdenacao(coluna);
   }
 
+  obterSiglaClassificacao(classificacao?: string | null): string {
+    const siglas: Record<string, string> = {
+      'acumulativa total': 'ACT',
+      'acumulativa parcial': 'ACP',
+      'estágio não supervisionado': 'ESTnS',
+      'estágio supervisionado': 'ESTS',
+      'trabalho de conclusão de curso': 'TCC'
+    };
+
+    const chave = classificacao?.trim().toLocaleLowerCase('pt-BR');
+    return chave ? siglas[chave] || classificacao!.trim() : '-';
+  }
+
   confirmarExclusao(uuid: string | null | undefined): void {
     if (!uuid) {
       void Swal.fire('Erro', 'Identificador inválido.', 'error');
