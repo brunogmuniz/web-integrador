@@ -3,7 +3,8 @@ export interface DocenteDTO {
   nome: string;
   matricula: string;
   tipoVaga: string;
-  tipoFormacao: string;
+  tipoFormacao: string | null;
+  formacaoCompleta?: string | null;
   licenciatura: boolean;
   origemVaga: string;
   nomeDepartamento: string;

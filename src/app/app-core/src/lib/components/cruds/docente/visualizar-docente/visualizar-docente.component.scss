@@ -40,6 +40,12 @@
   color: #181c32;
 }
 
+.formacao-completa {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .docente-status-action:hover {
   background-color: var(--bs-gray-100) !important;
 }

@@ -13,19 +13,33 @@
         </div>
 
         <div class="col-md-3">
-          <label class="form-label required">Código</label>
-          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina" placeholder="Digite o código"
+          <label class="form-label required">Sigla</label>
+          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina" placeholder="Digite a sigla"
                  [class.is-invalid]="form.get('codigoDisciplina')?.invalid && (form.get('codigoDisciplina')?.touched || form.get('codigoDisciplina')?.dirty)"/>
           <div class="invalid-feedback">Campo obrigatório</div>
         </div>
 
         <div class="col-md-3">
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control form-control-solid" formControlName="numero" placeholder="Digite o código"/>
+        </div>
+
+        <div class="col-md-6">
           <lib-select-input-default
             label="Subárea do Conhecimento"
             formControlName="subareaId"
             placeholder="Selecione..."
             [required]="true"
             [opcoes]="opcoesSubareas">
+          </lib-select-input-default>
+        </div>
+
+        <div class="col-md-6">
+          <lib-select-input-default
+            label="Classificação"
+            formControlName="classificacao"
+            placeholder="Selecione..."
+            [opcoes]="opcoesClassificacao">
           </lib-select-input-default>
         </div>
 

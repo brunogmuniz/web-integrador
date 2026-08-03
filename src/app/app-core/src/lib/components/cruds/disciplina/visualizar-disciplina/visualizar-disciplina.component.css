@@ -1,0 +1,5 @@
+.classification-popover {
+  display: inline-block;
+  cursor: help;
+  font-weight: 600;
+}

@@ -40,12 +40,18 @@
               Tipo <i class="la ms-1" [ngClass]="iconeOrdenacao('tipo')"></i>
             </button>
           </th>
+          <th class="min-w-120px text-center">Classificação</th>
           <th class="min-w-100px text-center">Ações</th>
         </tr>
         </thead>
         <tbody class="fs-6">
         <tr *ngFor="let item of disciplinas">
-          <td><span class="text-gray-800 fw-bold">{{ item.codigoDisciplina }}</span></td>
+          <td>
+            <div class="d-flex flex-column">
+              <span class="text-gray-800 fw-bold">{{ item.codigoDisciplina }}</span>
+              <span class="text-gray-600 fs-8" *ngIf="item.numero">({{ item.numero }})</span>
+            </div>
+          </td>
           <td>{{ item.nome }}</td>
           <td>
             <span class="text-dark fw-semibold fs-8" *ngIf="item.nomeSubarea">
@@ -56,6 +62,17 @@
           <td class="text-center">{{ item.cargaHorariaPratica || 0 }}</td>
           <td class="text-center fw-bold">{{ item.cargaHoraria }}</td>
           <td class="text-center">{{ item.tipoDisciplina || '-' }}</td>
+          <td class="text-center">
+            <span
+              *ngIf="item.classificacao; else semClassificacao"
+              class="classification-popover"
+              tabindex="0"
+              [attr.title]="item.classificacao"
+              [attr.aria-label]="item.classificacao">
+              {{ obterSiglaClassificacao(item.classificacao) }}
+            </span>
+            <ng-template #semClassificacao>-</ng-template>
+          </td>
           <td class="text-center">
             <a [routerLink]="['/disciplina/form/editar', item.uuid]"
                class="btn btn-icon btn-light-primary btn-sm me-2"
@@ -70,7 +87,7 @@
           </td>
         </tr>
         <tr *ngIf="disciplinas.length === 0">
-          <td colspan="8" class="text-center py-10">
+          <td colspan="9" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">Nenhum registro encontrado.</span>
