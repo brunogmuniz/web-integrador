@@ -40,7 +40,10 @@
             <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
           </td>
           <td>
-            <span class="text-gray-800 fw-bold">{{ curso.nome }}</span>
+            <div class="d-flex flex-column">
+              <span class="text-gray-800 fw-bold">{{ curso.nome }}</span>
+              <span *ngIf="curso.codigo" class="text-muted fs-7">({{ curso.codigo }})</span>
+            </div>
           </td>
           <td>
             <span class="text-gray-800">{{ curso.sigla }}</span>

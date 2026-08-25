@@ -40,6 +40,7 @@ export class CadastrarCursoComponent implements OnInit {
       uuid: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
+      codigo: ['', Validators.maxLength(50)],
       anoCurriculo: ['', [Validators.required, Validators.min(1900), Validators.max(2100)]],
       cargaHorariaTotal: ['', [Validators.required, Validators.min(1)]],
       nivel: ['', Validators.required],
