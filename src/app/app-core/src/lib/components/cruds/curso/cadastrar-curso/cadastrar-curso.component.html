@@ -8,7 +8,7 @@
     <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()" *ngIf="cursoForm">
 
       <div class="form-row mb-3">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <lib-form-input-padrao
             [label]="'Nome'"
             [control]="controlesFormulario['nome']"
@@ -17,11 +17,20 @@
           </lib-form-input-padrao>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <lib-form-input-padrao
             [label]="'Sigla'"
             [control]="controlesFormulario['sigla']"
             [placeholder]="'Digite a sigla'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-3">
+          <lib-form-input-padrao
+            [label]="'Código'"
+            [control]="controlesFormulario['codigo']"
+            [placeholder]="'Digite o código'"
             [supportText]="''">
           </lib-form-input-padrao>
         </div>
