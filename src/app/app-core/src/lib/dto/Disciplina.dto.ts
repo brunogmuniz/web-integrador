@@ -12,4 +12,7 @@ export interface DisciplinaDTO {
   ead?: boolean;
   cargaHorariaTeorica: number;
   cargaHorariaPratica: number;
+  cargaHorariaEad: number;
+  cargaHorariaExtensaoPratica: number;
+  cargaHorariaExtensaoTeorica: number;
 }
