@@ -22,6 +22,16 @@ export interface DisciplinaOfertaItemDTO {
   uuidDisciplinaCurriculo: string;
   docentesTeorica?: string[];
   docentesPratica?: string[];
+  docentesParcial?: DocenteCreditosOfertaDTO[];
+}
+
+export interface DocenteCreditosOfertaDTO {
+  uuidDocente: string;
+  creditosTeorica?: number;
+  creditosPratica?: number;
+  creditosEad?: number;
+  creditosExtensaoPratica?: number;
+  creditosExtensaoTeorica?: number;
 }
 
 export interface OfertaSalvarDTO {
@@ -36,6 +46,10 @@ export interface DisciplinaOfertaView extends DisciplinaCurriculoDTO {
   docentesPratica: string[];
   docenteTeoricaSelecionado: string | null;
   docentePraticaSelecionado: string | null;
+  docentesParcial: DocenteCreditosOfertaDTO[];
+  docenteParcialSelecionado: string | null;
+  cargaLegadaTeorica: boolean;
+  cargaLegadaPratica: boolean;
 }
 
 export interface GrupoDisciplina<T extends DisciplinaCurriculoDTO> {
@@ -312,11 +326,36 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
           ...disciplina,
           docentesTeorica: item.docentesTeorica || [],
           docentesPratica: item.docentesPratica || [],
+          docentesParcial: this.montarDocentesParcial(item, disciplina),
+          cargaLegadaTeorica: (item.docentesParcial || []).some(docente =>
+            (item.docentesTeorica || []).includes(docente.uuidDocente) &&
+            (docente.creditosTeorica == null || docente.creditosTeorica > 0)),
+          cargaLegadaPratica: (item.docentesParcial || []).some(docente =>
+            (item.docentesPratica || []).includes(docente.uuidDocente) &&
+            (docente.creditosPratica == null || docente.creditosPratica > 0)),
+          docenteParcialSelecionado: null,
           docenteTeoricaSelecionado: null,
           docentePraticaSelecionado: null
         } as DisciplinaOfertaView;
       })
       .filter((item): item is DisciplinaOfertaView => !!item);
+  }
+
+  private montarDocentesParcial(item: DisciplinaOfertaItemDTO, disciplina: DisciplinaCurriculoDTO): DocenteCreditosOfertaDTO[] {
+    if (disciplina.classificacao !== 'Acumulativa parcial') return [];
+    const docentes: DocenteCreditosOfertaDTO[] = item.docentesParcial?.length ? item.docentesParcial :
+      [...new Set([...(item.docentesTeorica || []), ...(item.docentesPratica || [])])]
+        .map(uuidDocente => ({ uuidDocente }));
+    return docentes.map(docente => ({
+      uuidDocente: docente.uuidDocente,
+      creditosTeorica: docente.creditosTeorica ??
+        (item.docentesTeorica?.includes(docente.uuidDocente) ? Number(disciplina.cargaHorariaTeorica || 0) : 0),
+      creditosPratica: docente.creditosPratica ??
+        (item.docentesPratica?.includes(docente.uuidDocente) ? Number(disciplina.cargaHorariaPratica || 0) : 0),
+      creditosEad: docente.creditosEad ?? 0,
+      creditosExtensaoPratica: docente.creditosExtensaoPratica ?? 0,
+      creditosExtensaoTeorica: docente.creditosExtensaoTeorica ?? 0
+    }));
   }
 
   private resetarSelecaoDisciplinas(): void {
@@ -338,6 +377,10 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
       ...disciplina,
       docentesTeorica:            [],
       docentesPratica:            [],
+      docentesParcial:            [],
+      cargaLegadaTeorica:        false,
+      cargaLegadaPratica:        false,
+      docenteParcialSelecionado:  null,
       docenteTeoricaSelecionado:  null,
       docentePraticaSelecionado:  null
     };
@@ -489,6 +532,39 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     this.atualizarViews();
   }
 
+  public isParcial(disciplina: DisciplinaOfertaView): boolean {
+    return disciplina.classificacao === 'Acumulativa parcial';
+  }
+
+  public cargaHorariaParcial(disciplina: DisciplinaOfertaView, tipo: 'teorica' | 'pratica'): number {
+    const cargaDisciplina = tipo === 'teorica'
+      ? disciplina.cargaHorariaDisciplinaTeorica : disciplina.cargaHorariaDisciplinaPratica;
+    const cargaCurriculo = tipo === 'teorica'
+      ? disciplina.cargaHorariaTeorica : disciplina.cargaHorariaPratica;
+    const cargaLegada = tipo === 'teorica' ? disciplina.cargaLegadaTeorica : disciplina.cargaLegadaPratica;
+    return Number(cargaDisciplina && cargaDisciplina > 0 ? cargaDisciplina : cargaLegada ? cargaCurriculo || 0 : 0);
+  }
+
+  public adicionarDocenteParcial(disciplina: DisciplinaOfertaView): void {
+    const uuid = disciplina.docenteParcialSelecionado;
+    if (!uuid || disciplina.docentesParcial.some(docente => docente.uuidDocente === uuid)) return;
+    disciplina.docentesParcial = [...disciplina.docentesParcial, {
+      uuidDocente: uuid, creditosTeorica: 0, creditosPratica: 0, creditosEad: 0,
+      creditosExtensaoPratica: 0, creditosExtensaoTeorica: 0
+    }];
+    disciplina.docenteParcialSelecionado = null;
+    this.opcoesDocentesDisponiveisCache.clear();
+  }
+
+  public opcoesDocentesParcialDisponiveis(disciplina: DisciplinaOfertaView): SelectOption[] {
+    return this.opcoesDocentesDisponiveis(disciplina.docentesParcial.map(docente => docente.uuidDocente));
+  }
+
+  public removerDocenteParcial(disciplina: DisciplinaOfertaView, uuid: string): void {
+    disciplina.docentesParcial = disciplina.docentesParcial.filter(docente => docente.uuidDocente !== uuid);
+    this.opcoesDocentesDisponiveisCache.clear();
+  }
+
   public getDocentesDisponiveis(uuidsSelecionados: string[]): DocenteDTO[] {
     return this.docentes.filter(d => !uuidsSelecionados.includes(d.uuid!));
   }
@@ -542,12 +618,28 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     }
 
     const disciplinasInvalidas = this.disciplinasSelecionadas.filter(d =>
-      d.docentesTeorica.length > this.getLimiteDocentes(d, 'teorica') ||
-      d.docentesPratica.length > this.getLimiteDocentes(d, 'pratica')
+      !this.isParcial(d) && (d.docentesTeorica.length > this.getLimiteDocentes(d, 'teorica') ||
+      d.docentesPratica.length > this.getLimiteDocentes(d, 'pratica'))
     );
 
     if (disciplinasInvalidas.length > 0) {
       void Swal.fire('Aviso', 'A quantidade de docentes excede o limite definido na estrutura curricular.', 'warning');
+      return false;
+    }
+
+    if (this.disciplinasSelecionadas.some(d => this.isParcial(d) && d.docentesParcial.some(docente =>
+      [docente.creditosTeorica, docente.creditosPratica, docente.creditosEad,
+        docente.creditosExtensaoPratica, docente.creditosExtensaoTeorica].some(valor => !Number.isInteger(Number(valor)) || Number(valor) < 0)))) {
+      void Swal.fire('Aviso', 'Informe créditos inteiros e não negativos para os docentes.', 'warning');
+      return false;
+    }
+
+    const parciaisAcimaDoLimite = this.disciplinasSelecionadas.some(d => this.isParcial(d) && (
+      d.docentesParcial.filter(docente => Number(docente.creditosTeorica) > 0).length > this.getLimiteDocentes(d, 'teorica') ||
+      d.docentesParcial.filter(docente => Number(docente.creditosPratica) > 0).length > this.getLimiteDocentes(d, 'pratica')
+    ));
+    if (parciaisAcimaDoLimite) {
+      void Swal.fire('Aviso', 'A quantidade de docentes teóricos ou práticos excede o limite definido na estrutura curricular.', 'warning');
       return false;
     }
 
@@ -562,8 +654,9 @@ export class CadastrarDisciplinaOfertaComponent implements OnInit, OnDestroy {
     const disciplinas: DisciplinaOfertaItemDTO[] = this.disciplinasSelecionadas.map(d => ({
       uuidDisciplina:         d.disciplinaUuid            || '',
       uuidDisciplinaCurriculo: d.uuid                     || '',
-      docentesTeorica:         d.docentesTeorica,
-      docentesPratica:         d.docentesPratica
+      docentesTeorica:         this.isParcial(d) ? undefined : d.docentesTeorica,
+      docentesPratica:         this.isParcial(d) ? undefined : d.docentesPratica,
+      docentesParcial:         this.isParcial(d) ? d.docentesParcial : undefined
     }));
 
     return {

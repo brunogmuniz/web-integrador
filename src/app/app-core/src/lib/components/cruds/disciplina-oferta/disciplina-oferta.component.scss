@@ -3,41 +3,237 @@
     min-height: auto;
   }
 
-  .disciplina-oferta-table {
-    table-layout: fixed;
+  .oferta-grupos {
+    display: grid;
+    gap: 2rem;
+  }
 
-    .disciplina-col {
-      width: 24%;
+  .oferta-grupo {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .oferta-grupo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.25rem 0.5rem;
+    border-bottom: 1px solid #dce3ed;
+
+    h4 {
+      margin: 0;
+      color: #334155;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .carga-col {
-      width: 34%;
-    }
-
-    .acoes-col {
-      width: 8%;
+    > span {
+      color: #64748b;
+      font-size: 0.8rem;
+      white-space: nowrap;
     }
   }
 
-  .grupo-row td {
-    background-color: #f9f9f9;
-    padding-top: 0.85rem;
-    padding-bottom: 0.85rem;
+  .oferta-disciplina {
+    overflow: hidden;
+    border: 1px solid #dce3ed;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   }
 
-  .carga-bloco {
-    max-width: 520px;
+  .oferta-disciplina-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e9edf3;
+    background: #fbfcfe;
+  }
+
+  .oferta-disciplina-identidade {
+    min-width: 0;
+
+    p {
+      margin: 0.35rem 0 0;
+      color: #64748b;
+      font-size: 0.82rem;
+    }
+  }
+
+  .oferta-disciplina-titulo {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+
+    h5 {
+      margin: 0;
+      color: #1e293b;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+  }
+
+  .classificacao-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    background: #eaf1ff;
+    color: #2357a6;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .classificacao-parcial {
+    background: #eaf1ff;
+    color: #2357a6;
+  }
+
+  .oferta-total-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .oferta-carga-panel {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.6rem;
+    background: #fff;
+  }
+
+  .oferta-carga-header,
+  .oferta-parcial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+
+    h6 {
+      margin: 0;
+      color: #334155;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+  }
+
+  .oferta-carga-horas {
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+    background: #eef2f7;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .oferta-docentes-atribuidos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .oferta-vazio {
+    color: #94a3b8;
+    font-size: 0.82rem;
+  }
+
+  .oferta-parcial {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .oferta-parcial-header > span {
+    color: #64748b;
+    font-size: 0.8rem;
+  }
+
+  .oferta-docente-card {
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #dce3ed;
+    border-radius: 0.6rem;
+    background: #fbfcfe;
+  }
+
+  .oferta-docente-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.8rem;
+
+    strong {
+      color: #1e293b;
+      font-size: 0.9rem;
+    }
+  }
+
+  .oferta-creditos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .oferta-credito-field {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+    color: #475569;
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    input {
+      background: #fff;
+    }
+  }
+
+  .oferta-adicionar-docente {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.35rem;
+
+    > label {
+      color: #475569;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
   }
 
   .docente-select-row {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0.5rem;
-    max-width: 440px;
+    max-width: 520px;
+
+    lib-select-input-default {
+      flex: 1 1 0;
+      min-width: 0;
+    }
 
     .form-select {
       min-width: 0;
     }
+  }
+
+  .oferta-add-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    flex-shrink: 0;
+    min-height: 2.75rem;
   }
 
   .disc-pill {
@@ -69,7 +265,7 @@
     }
 
     i {
-      font-size: 0.75rem;
+      font-size: 0.9rem;
     }
   }
 
@@ -98,13 +294,27 @@
 
 @media (max-width: 991px) {
   .disciplina-oferta-card {
-    .disciplina-oferta-table {
-      table-layout: auto;
+    .oferta-total-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 575px) {
+  .disciplina-oferta-card {
+    .oferta-disciplina-header,
+    .oferta-total-grid,
+    .oferta-parcial {
+      padding: 1rem;
     }
 
-    .carga-bloco,
     .docente-select-row {
+      flex-wrap: wrap;
       max-width: none;
+    }
+
+    .oferta-add-button {
+      width: 100%;
     }
   }
 }
