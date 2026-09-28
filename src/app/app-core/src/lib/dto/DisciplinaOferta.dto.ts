@@ -9,6 +9,16 @@ export interface DisciplinaOfertaItemDTO {
   uuidDisciplinaCurriculo: string;
   docentesTeorica?: string[];
   docentesPratica?: string[];
+  docentesParcial?: DocenteCreditosOfertaDTO[];
+}
+
+export interface DocenteCreditosOfertaDTO {
+  uuidDocente: string;
+  creditosTeorica?: number;
+  creditosPratica?: number;
+  creditosEad?: number;
+  creditosExtensaoPratica?: number;
+  creditosExtensaoTeorica?: number;
 }
 
 export interface DisciplinaOfertaLoteDTO {

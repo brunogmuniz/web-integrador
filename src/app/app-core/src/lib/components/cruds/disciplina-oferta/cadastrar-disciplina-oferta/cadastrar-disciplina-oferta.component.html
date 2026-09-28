@@ -80,129 +80,157 @@
           </div>
       </div>
 
-      <div class="table-responsive" *ngIf="disciplinasSelecionadas.length > 0">
-        <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 disciplina-oferta-table">
-          <thead>
-          <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-            <th class="disciplina-col">Disciplina</th>
-            <th class="carga-col">Carga teórica</th>
-            <th class="carga-col">Carga prática</th>
-            <th class="acoes-col text-center">Ações</th>
-          </tr>
-          </thead>
+      <div class="oferta-grupos" *ngIf="disciplinasSelecionadas.length > 0">
+        <section class="oferta-grupo" *ngFor="let grupo of gruposSelecionadasView; trackBy: trackByGrupo">
+          <div class="oferta-grupo-header">
+            <h4>{{ grupo.nome }}</h4>
+            <span>{{ grupo.disciplinas.length }} disciplina{{ grupo.disciplinas.length !== 1 ? 's' : '' }}</span>
+          </div>
 
-          <tbody class="fs-6">
-          <ng-container *ngFor="let grupo of gruposSelecionadasView; trackBy: trackByGrupo">
-            <tr class="grupo-row">
-              <td colspan="4">
-                <span class="text-gray-700 fw-bold fs-7 text-uppercase">{{ grupo.nome }}</span>
-                <span class="badge badge-light-primary ms-2">{{ grupo.disciplinas.length }}</span>
-              </td>
-            </tr>
+          <article class="oferta-disciplina" *ngFor="let disciplina of grupo.disciplinas; trackBy: trackByUuid"
+                   [class.oferta-disciplina-parcial]="isParcial(disciplina)">
+            <div class="oferta-disciplina-header">
+              <div class="oferta-disciplina-identidade">
+                <div class="oferta-disciplina-titulo">
+                  <h5>{{ disciplina.nomeDisciplina }}</h5>
+                  <span class="classificacao-badge" [class.classificacao-parcial]="isParcial(disciplina)">
+                    {{ disciplina.classificacao || 'Sem classificação' }}
+                  </span>
+                </div>
+                <p *ngIf="isParcial(disciplina)">Selecione docentes e distribua os créditos por tipo de carga.</p>
+                <p *ngIf="!isParcial(disciplina)">Atribua docentes às cargas teórica e prática.</p>
+              </div>
+              <button class="btn btn-icon btn-light-danger btn-sm" type="button"
+                      (click)="removerDisciplinaPorUuid(disciplina.uuid)"
+                      [attr.aria-label]="'Remover ' + disciplina.nomeDisciplina" title="Remover disciplina">
+                <i class="la la-trash fs-3"></i>
+              </button>
+            </div>
 
-            <tr *ngFor="let disciplina of grupo.disciplinas; trackBy: trackByUuid">
-              <td class="align-top">
-                <span class="text-gray-800 fw-bold">{{ disciplina.nomeDisciplina }}</span>
-              </td>
-
-              <td class="align-top">
+            <div class="oferta-total-grid" *ngIf="!isParcial(disciplina)">
+              <section class="oferta-carga-panel">
+                <div class="oferta-carga-header">
+                  <h6>Carga teórica</h6>
+                  <span class="oferta-carga-horas" *ngIf="possuiCargaHoraria(disciplina.cargaHorariaTeorica)">{{ disciplina.cargaHorariaTeorica }}h</span>
+                </div>
                 <ng-container *ngIf="possuiCargaHoraria(disciplina.cargaHorariaTeorica); else semCargaTeorica">
-                  <div class="carga-bloco">
-                    <div class="text-muted fs-8 fw-semibold mb-2">{{ disciplina.cargaHorariaTeorica }}h</div>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span
-                      *ngFor="let uuidDocente of disciplina.docentesTeorica"
-                      class="disc-pill"
-                    >
+                  <div class="oferta-docentes-atribuidos">
+                    <span *ngFor="let uuidDocente of disciplina.docentesTeorica" class="disc-pill">
                       <span>{{ getNomeDocente(uuidDocente) }}</span>
-                      <button type="button" class="btn-pill-remove" (click)="removerDocente(disciplina, 'teorica', uuidDocente)">
-                        <i class="la la-times"></i>
+                      <button type="button" class="btn-pill-remove" (click)="removerDocente(disciplina, 'teorica', uuidDocente)"
+                              [attr.aria-label]="'Remover ' + getNomeDocente(uuidDocente) + ' da carga teórica'">
+                        <i class="la la-trash"></i>
                       </button>
                     </span>
-                    <span class="text-muted fs-8 fw-semibold" *ngIf="disciplina.docentesTeorica.length === 0">
-                      Nenhum docente atribuído
-                    </span>
-                    </div>
+                    <span class="oferta-vazio" *ngIf="disciplina.docentesTeorica.length === 0">Nenhum docente atribuído</span>
+                  </div>
                   <div class="docente-select-row">
-	                    <lib-select-input-default
-	                      [(ngModel)]="disciplina.docenteTeoricaSelecionado"
-	                      [ngModelOptions]="{ standalone: true }"
-	                      placeholder="Selecionar docente..."
-	                      [disabled]="docenteSelectDesabilitado(disciplina, 'teorica')"
-	                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesTeorica)"
-	                      groupClass="mb-0">
-	                    </lib-select-input-default>
-                    <button
-                      class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
-                      type="button"
+                    <lib-select-input-default [(ngModel)]="disciplina.docenteTeoricaSelecionado"
+                      [ngModelOptions]="{ standalone: true }" placeholder="Selecionar docente..."
+                      [disabled]="docenteSelectDesabilitado(disciplina, 'teorica')"
+                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesTeorica)" groupClass="mb-0">
+                    </lib-select-input-default>
+                    <button class="btn btn-sm btn-light-primary oferta-add-button" type="button"
                       [disabled]="!disciplina.docenteTeoricaSelecionado || docenteSelectDesabilitado(disciplina, 'teorica')"
-                      (click)="adicionarDocente(disciplina, 'teorica')"
-                    >
-                      <i class="la la-plus fs-4"></i>
+                      (click)="adicionarDocente(disciplina, 'teorica')" title="Adicionar docente à carga teórica">
+                      <i class="la la-plus"></i><span>Adicionar</span>
                     </button>
                   </div>
-                  </div>
                 </ng-container>
-                <ng-template #semCargaTeorica>
-                  <span class="text-muted">Sem carga teórica</span>
-                </ng-template>
-              </td>
+                <ng-template #semCargaTeorica><span class="oferta-vazio">Sem carga teórica nesta disciplina</span></ng-template>
+              </section>
 
-              <td class="align-top">
+              <section class="oferta-carga-panel">
+                <div class="oferta-carga-header">
+                  <h6>Carga prática</h6>
+                  <span class="oferta-carga-horas" *ngIf="possuiCargaHoraria(disciplina.cargaHorariaPratica)">{{ disciplina.cargaHorariaPratica }}h</span>
+                </div>
                 <ng-container *ngIf="possuiCargaHoraria(disciplina.cargaHorariaPratica); else semCargaPratica">
-                  <div class="carga-bloco">
-                    <div class="text-muted fs-8 fw-semibold mb-2">{{ disciplina.cargaHorariaPratica }}h</div>
-                    <div class="d-flex flex-wrap gap-2 mb-3">
-                    <span
-                      *ngFor="let uuidDocente of disciplina.docentesPratica"
-                      class="disc-pill"
-                    >
+                  <div class="oferta-docentes-atribuidos">
+                    <span *ngFor="let uuidDocente of disciplina.docentesPratica" class="disc-pill">
                       <span>{{ getNomeDocente(uuidDocente) }}</span>
-                      <button type="button" class="btn-pill-remove" (click)="removerDocente(disciplina, 'pratica', uuidDocente)">
-                        <i class="la la-times"></i>
+                      <button type="button" class="btn-pill-remove" (click)="removerDocente(disciplina, 'pratica', uuidDocente)"
+                              [attr.aria-label]="'Remover ' + getNomeDocente(uuidDocente) + ' da carga prática'">
+                        <i class="la la-trash"></i>
                       </button>
                     </span>
-                    <span class="text-muted fs-8 fw-semibold" *ngIf="disciplina.docentesPratica.length === 0">
-                      Nenhum docente atribuído
-                    </span>
-                    </div>
+                    <span class="oferta-vazio" *ngIf="disciplina.docentesPratica.length === 0">Nenhum docente atribuído</span>
+                  </div>
                   <div class="docente-select-row">
-	                    <lib-select-input-default
-	                      [(ngModel)]="disciplina.docentePraticaSelecionado"
-	                      [ngModelOptions]="{ standalone: true }"
-	                      placeholder="Selecionar docente..."
-	                      [disabled]="docenteSelectDesabilitado(disciplina, 'pratica')"
-	                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesPratica)"
-	                      groupClass="mb-0">
-	                    </lib-select-input-default>
-                    <button
-                      class="btn btn-sm btn-icon btn-light-primary flex-shrink-0"
-                      type="button"
+                    <lib-select-input-default [(ngModel)]="disciplina.docentePraticaSelecionado"
+                      [ngModelOptions]="{ standalone: true }" placeholder="Selecionar docente..."
+                      [disabled]="docenteSelectDesabilitado(disciplina, 'pratica')"
+                      [opcoes]="opcoesDocentesDisponiveis(disciplina.docentesPratica)" groupClass="mb-0">
+                    </lib-select-input-default>
+                    <button class="btn btn-sm btn-light-primary oferta-add-button" type="button"
                       [disabled]="!disciplina.docentePraticaSelecionado || docenteSelectDesabilitado(disciplina, 'pratica')"
-                      (click)="adicionarDocente(disciplina, 'pratica')"
-                    >
-                      <i class="la la-plus fs-4"></i>
+                      (click)="adicionarDocente(disciplina, 'pratica')" title="Adicionar docente à carga prática">
+                      <i class="la la-plus"></i><span>Adicionar</span>
                     </button>
                   </div>
-                  </div>
                 </ng-container>
-                <ng-template #semCargaPratica>
-                  <span class="text-muted">Sem carga prática</span>
-                </ng-template>
-              </td>
+                <ng-template #semCargaPratica><span class="oferta-vazio">Sem carga prática nesta disciplina</span></ng-template>
+              </section>
+            </div>
 
-              <td class="text-center align-top">
-                <button class="btn btn-icon btn-light-danger btn-sm" type="button"
-                        (click)="removerDisciplinaPorUuid(disciplina.uuid)" title="Remover disciplina">
-                  <i class="la la-trash fs-3"></i>
-                </button>
-              </td>
-            </tr>
-          </ng-container>
-          </tbody>
-        </table>
+            <div class="oferta-parcial" *ngIf="isParcial(disciplina)">
+              <div class="oferta-parcial-header">
+                <h6>Docentes e créditos</h6>
+                <span>{{ disciplina.docentesParcial.length }} docente{{ disciplina.docentesParcial.length !== 1 ? 's' : '' }}</span>
+              </div>
+              <p class="oferta-vazio" *ngIf="disciplina.docentesParcial.length === 0">
+                Nenhum docente atribuído. Selecione um docente abaixo para informar os créditos.
+              </p>
+
+              <div class="oferta-docente-card" *ngFor="let docente of disciplina.docentesParcial">
+                <div class="oferta-docente-header">
+                  <strong>{{ getNomeDocente(docente.uuidDocente) }}</strong>
+                  <button type="button" class="btn btn-icon btn-sm btn-light-danger" (click)="removerDocenteParcial(disciplina, docente.uuidDocente)"
+                          [attr.aria-label]="'Remover ' + getNomeDocente(docente.uuidDocente) + ' da disciplina'" title="Remover docente">
+                    <i class="la la-trash"></i>
+                  </button>
+                </div>
+                <div class="oferta-creditos-grid">
+                  <label class="oferta-credito-field" *ngIf="possuiCargaHoraria(cargaHorariaParcial(disciplina, 'teorica'))">
+                    <span>Teórica</span>
+                    <input class="form-control form-control-sm" type="number" min="0" step="1" [(ngModel)]="docente.creditosTeorica" [ngModelOptions]="{ standalone: true }">
+                  </label>
+                  <label class="oferta-credito-field" *ngIf="possuiCargaHoraria(cargaHorariaParcial(disciplina, 'pratica'))">
+                    <span>Prática</span>
+                    <input class="form-control form-control-sm" type="number" min="0" step="1" [(ngModel)]="docente.creditosPratica" [ngModelOptions]="{ standalone: true }">
+                  </label>
+                  <label class="oferta-credito-field" *ngIf="possuiCargaHoraria(disciplina.cargaHorariaEad)">
+                    <span>EAD</span>
+                    <input class="form-control form-control-sm" type="number" min="0" step="1" [(ngModel)]="docente.creditosEad" [ngModelOptions]="{ standalone: true }">
+                  </label>
+                  <label class="oferta-credito-field" *ngIf="possuiCargaHoraria(disciplina.cargaHorariaExtensaoPratica)">
+                    <span>Extensão prática</span>
+                    <input class="form-control form-control-sm" type="number" min="0" step="1" [(ngModel)]="docente.creditosExtensaoPratica" [ngModelOptions]="{ standalone: true }">
+                  </label>
+                  <label class="oferta-credito-field" *ngIf="possuiCargaHoraria(disciplina.cargaHorariaExtensaoTeorica)">
+                    <span>Extensão teórica</span>
+                    <input class="form-control form-control-sm" type="number" min="0" step="1" [(ngModel)]="docente.creditosExtensaoTeorica" [ngModelOptions]="{ standalone: true }">
+                  </label>
+                </div>
+              </div>
+
+              <div class="oferta-adicionar-docente">
+                <label>Adicionar docente</label>
+                <div class="docente-select-row">
+                  <lib-select-input-default [(ngModel)]="disciplina.docenteParcialSelecionado"
+                    [ngModelOptions]="{ standalone: true }" placeholder="Selecionar docente..."
+                    [opcoes]="opcoesDocentesParcialDisponiveis(disciplina)" groupClass="mb-0">
+                  </lib-select-input-default>
+                  <button class="btn btn-sm btn-light-primary oferta-add-button" type="button"
+                    [disabled]="!disciplina.docenteParcialSelecionado" (click)="adicionarDocenteParcial(disciplina)">
+                    <i class="la la-plus"></i><span>Adicionar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
       </div>
-
     </div>
 
     <div class="card-footer d-flex justify-content-between align-items-center" *ngIf="disciplinasSelecionadas.length > 0">

@@ -30,6 +30,9 @@
           </th>
           <th class="min-w-100px text-center">Teórica</th>
           <th class="min-w-100px text-center">Prática</th>
+          <th class="min-w-100px text-center">EAD</th>
+          <th class="min-w-100px text-center">Ext. Prática</th>
+          <th class="min-w-100px text-center">Ext. Teórica</th>
           <th class="min-w-100px text-center">
             <button type="button" class="table-sort-button" (click)="ordenarPor('total')">
               Total <i class="la ms-1" [ngClass]="iconeOrdenacao('total')"></i>
@@ -60,6 +63,9 @@
           </td>
           <td class="text-center">{{ item.cargaHorariaTeorica || 0 }}</td>
           <td class="text-center">{{ item.cargaHorariaPratica || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaEad || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaExtensaoPratica || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaExtensaoTeorica || 0 }}</td>
           <td class="text-center fw-bold">{{ item.cargaHoraria }}</td>
           <td class="text-center">{{ item.tipoDisciplina || '-' }}</td>
           <td class="text-center">
@@ -87,7 +93,7 @@
           </td>
         </tr>
         <tr *ngIf="disciplinas.length === 0">
-          <td colspan="9" class="text-center py-10">
+          <td colspan="12" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">Nenhum registro encontrado.</span>

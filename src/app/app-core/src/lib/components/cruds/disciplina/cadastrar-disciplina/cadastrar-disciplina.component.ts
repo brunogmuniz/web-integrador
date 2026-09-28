@@ -46,6 +46,9 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
       subareaId: [null, Validators.required],
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaEad: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaExtensaoPratica: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaExtensaoTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHoraria: [{ value: 0, disabled: true }],
       tipoDisciplina: [null, Validators.required],
       ead: [false]
@@ -107,24 +110,28 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
   }
 
   private preencherFormulario(disciplina: DisciplinaDTO): void {
-    this.form.patchValue(disciplina);
+    this.form.patchValue({
+      ...disciplina,
+      cargaHorariaEad: disciplina.cargaHorariaEad ?? 0,
+      cargaHorariaExtensaoPratica: disciplina.cargaHorariaExtensaoPratica ?? 0,
+      cargaHorariaExtensaoTeorica: disciplina.cargaHorariaExtensaoTeorica ?? 0
+    });
     this.form.get('cargaHoraria')?.setValue(disciplina.cargaHoraria || 0, { emitEvent: false });
   }
 
   private configurarCalculoAutomatico(): void {
-    const ctrlTeorica = this.form.get('cargaHorariaTeorica');
-    const ctrlPratica = this.form.get('cargaHorariaPratica');
-
-    if (!ctrlTeorica || !ctrlPratica) return;
-
-    ctrlTeorica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
-    ctrlPratica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
+    ['cargaHorariaTeorica', 'cargaHorariaPratica', 'cargaHorariaEad',
+      'cargaHorariaExtensaoPratica', 'cargaHorariaExtensaoTeorica'].forEach(campo => {
+      this.form.get(campo)?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.atualizarCargaTotal());
+    });
   }
 
   private atualizarCargaTotal(): void {
-    const teorica = Number(this.form.get('cargaHorariaTeorica')?.value) || 0;
-    const pratica = Number(this.form.get('cargaHorariaPratica')?.value) || 0;
-    this.form.get('cargaHoraria')?.setValue(teorica + pratica, { emitEvent: false });
+    const total = ['cargaHorariaTeorica', 'cargaHorariaPratica', 'cargaHorariaEad',
+      'cargaHorariaExtensaoPratica', 'cargaHorariaExtensaoTeorica']
+      .reduce((soma, campo) => soma + (Number(this.form.get(campo)?.value) || 0), 0);
+    this.form.get('cargaHoraria')?.setValue(total, { emitEvent: false });
   }
 
   public salvar(): void {
