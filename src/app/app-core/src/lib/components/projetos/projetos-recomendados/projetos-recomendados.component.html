@@ -1,21 +1,17 @@
 <div class="kt-portlet kt-portlet--tabs m-0">
   <div class="kt-portlet__head">
     <div class="kt-portlet__head-label">
-      <span class="kt-portlet__head-icon">
-        <i class="la la-star text-warning"></i>
-      </span>
-      <h3 class="kt-portlet__head-title">Projetos Recomendados</h3>
+      <h3 class="kt-portlet__head-title">Projetos Curtidos</h3>
     </div>
   </div>
 
   <div class="kt-portlet__body">
-
     <div class="loading-state" *ngIf="carregando">
-      <i class="la la-spinner la-spin"></i> Carregando recomendações...
+      <i class="la la-spinner la-spin"></i>
+      Carregando projetos curtidos...
     </div>
 
     <ng-container *ngIf="!carregando">
-
       <div class="table-shell">
         <div class="table-responsive">
           <table class="table table-hover align-middle mb-0 projetos-layout-table">
@@ -25,41 +21,72 @@
               <th class="col-titulo-header">Título</th>
               <th class="text-center col-responsavel-header">Responsável</th>
               <th class="text-center col-situacao-header">Situação</th>
-              <th class="text-center col-score-header">Score</th>
               <th class="text-center col-acoes-header">Ações</th>
             </tr>
             </thead>
 
             <tbody *ngIf="projetos.length > 0">
-            <tr *ngFor="let projeto of projetos">
-              <td class="text-center col-numero-cell">{{ projeto.numero }}</td>
-              <td>{{ projeto.titulo }}</td>
-              <td class="text-center">{{ projeto.responsavel || 'Não consta' }}</td>
-              <td class="text-center">{{ projeto.situacao || 'Não informado' }}</td>
-              <td class="text-center">
-                <span class="score-badge">{{ projeto.score | number:'1.1-1' }}</span>
+            <tr *ngFor="let projeto of projetos" [class.linha-removendo]="saindoId === projeto.id">
+              <td class="text-center col-numero-cell">
+                {{ projeto.numero }}
               </td>
-              <td class="text-center col-acoes-cell">
-                <button
-                  class="btn btn-icon btn-light-primary btn-sm"
-                  title="Visualizar"
-                  (click)="visualizarProjeto(projeto.id)">
-                  <i class="la la-eye fs-3"></i>
-                </button>
+
+              <td>{{ projeto.titulo }}</td>
+
+              <td class="text-center">
+                {{ projeto.responsavel || 'Não consta' }}
+              </td>
+
+              <td class="text-center">
+                {{ projeto.situacao || 'Não informado' }}
+              </td>
+
+              <td class="col-acoes-cell">
+                <div class="acoes-linha">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    title="Visualizar projeto"
+                    [disabled]="removendoId === projeto.id"
+                    (click)="visualizarProjeto(projeto.id)">
+                    <i class="la la-eye"></i>Ver
+                  </button>
+
+                  <button
+                    class="btn btn-sm btn-outline-danger"
+                    title="Remover dos curtidos"
+                    [disabled]="removendoId !== null"
+                    (click)="removerCurtida(projeto)">
+                    <i
+                      class="la"
+                      [ngClass]="removendoId === projeto.id
+                          ? 'la-spinner la-spin'
+                          : 'la-heart'">
+                    </i>Descurtir
+                  </button>
+                </div>
               </td>
             </tr>
             </tbody>
 
             <tbody *ngIf="projetos.length === 0">
             <tr>
-              <td colspan="6" class="empty-state">
-                <i class="la la-star-o empty-state-icon"></i>
-                <div class="empty-state-title">Nenhuma recomendação disponível.</div>
-                <div class="empty-state-text">
-                  Configure seus interesses para receber sugestões de projetos.
+              <td colspan="5" class="empty-state">
+                <i class="la la-heart-o empty-state-icon"></i>
+
+                <div class="empty-state-title">
+                  Você ainda não curtiu nenhum projeto.
                 </div>
-                <a routerLink="/gerenciar-interesses" class="btn btn-primary btn-sm mt-3">
-                  <i class="la la-sliders"></i> Configurar Interesses
+
+                <div class="empty-state-text">
+                  Explore os projetos acadêmicos e curta aqueles que
+                  despertarem seu interesse.
+                </div>
+
+                <a
+                  routerLink="/recomendacoes-projetos"
+                  class="btn btn-primary btn-sm mt-3">
+                  <i class="la la-search"></i>
+                  Explorar projetos
                 </a>
               </td>
             </tr>
@@ -67,7 +94,6 @@
           </table>
         </div>
       </div>
-
     </ng-container>
   </div>
 </div>

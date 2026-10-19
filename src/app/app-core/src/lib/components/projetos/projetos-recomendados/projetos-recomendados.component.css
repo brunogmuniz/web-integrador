@@ -80,21 +80,26 @@
 
 .col-acoes-header,
 .col-acoes-cell {
-  width: 80px;
+  width: 230px;
 }
 
-.col-acoes-cell .btn {
-  border-radius: 0;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+.acoes-linha {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
-.col-acoes-cell .btn i {
-  font-size: 1rem;
+.acoes-linha .btn {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
 }
 
-.col-acoes-cell .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px rgba(36, 52, 78, 0.12);
+.acoes-linha .btn i {
+  font-size: 1.15rem;
+  line-height: 1;
+  padding-right: 0.4rem;
 }
 
 .score-badge {
@@ -129,4 +134,13 @@
 
 .empty-state-text {
   font-size: 0.95rem;
+}
+
+tr td {
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+tr.linha-removendo td {
+  background-color: #fff5f8;
+  opacity: 0;
 }

@@ -1,0 +1,126 @@
+<div class="project-page">
+
+  <div class="d-flex align-items-end justify-content-between mb-4">
+    <div>
+      <h3 class="section-title mb-1">Recomendados para você</h3>
+      <span class="text-muted">Curta ou descarte para refinar suas recomendações.</span>
+    </div>
+    <span class="label label-lg label-light-primary label-inline font-weight-bold" *ngIf="recomendado">
+      {{ indice + 1 }} de {{ fila.length }}
+    </span>
+  </div>
+
+  <div class="progress mb-5" *ngIf="fila.length > 0" style="height: 6px;">
+    <div class="progress-bar bg-primary" [style.width.%]="progresso"></div>
+  </div>
+
+  <div class="loading-state" *ngIf="carregando || (recomendado && !projeto)">
+    <i class="la la-spinner la-spin"></i> {{ carregando ? 'Buscando recomendações...' : 'Carregando projeto...' }}
+  </div>
+
+  <div class="card card-custom gutter-b card-projeto"
+       *ngIf="!carregando && projeto as p"
+       [class.card-projeto--like]="saindo === 'like'"
+       [class.card-projeto--dislike]="saindo === 'dislike'">
+
+    <div class="card-body border-bottom">
+
+      <div class="d-flex align-items-center justify-content-between flex-wrap">
+        <div class="d-flex align-items-center">
+          <span class="numero-projeto text-muted mr-3">Projeto #{{ p.numero }}</span>
+          <span class="label label-light-info label-inline font-weight-bold" *ngIf="p.situacao">
+            {{ p.situacao }}
+          </span>
+        </div>
+        <span class="label label-lg label-light-success label-inline font-weight-bold" *ngIf="afinidade !== null">
+          {{ afinidade }}% de afinidade
+        </span>
+      </div>
+
+      <h2 class="project-title">
+        {{ p.titulo }}
+      </h2>
+
+      <div class="project-meta">
+
+        <div class="meta-item">
+          <i class="la la-user"></i>
+          {{ p.responsavel || 'Responsável não informado' }}
+        </div>
+
+        <div class="meta-item" *ngIf="p.dataInicio">
+          <i class="la la-calendar"></i>
+          {{ p.dataInicio }} até {{ p.dataFim || 'Em andamento' }}
+        </div>
+
+        <div class="meta-item" *ngIf="p.classificacaoCNPQ">
+          <i class="la la-university"></i>
+          {{ p.classificacaoCNPQ }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="mb-8">
+        <h4 class="section-title">Resumo do Projeto</h4>
+        <div class="project-content">
+          {{ p.resumo || 'Nenhum resumo informado.' }}
+        </div>
+      </div>
+
+      <div *ngIf="p.topicos?.length">
+        <h4 class="section-title">Palavras-chave</h4>
+        <div class="topics-container">
+          <span *ngFor="let topico of p.topicos" class="topic-tag">
+            {{ topico }}
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      <div class="acoes">
+        <button type="button" class="btn btn-danger btn-lg acao-btn" (click)="descartar()" [disabled]="processando">
+          <i class="la la-thumbs-down"></i>Não tenho interesse
+        </button>
+        <button type="button" class="btn btn-success btn-lg acao-btn" (click)="curtir()" [disabled]="processando">
+          <i class="la la-thumbs-up"></i>Curtir
+        </button>
+      </div>
+      <p class="text-center text-muted small mt-4 mb-0">
+        Atalhos do teclado: ← não tenho interesse · → curtir
+      </p>
+      <div class="text-center mt-2" *ngIf="podeDesfazer">
+        <button type="button" class="btn btn-link btn-sm text-muted" (click)="desfazer()" [disabled]="processando">
+          <i class="la la-undo"></i> Desfazer última curtida
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card card-custom" *ngIf="!carregando && !recomendado">
+    <div class="card-body text-center py-15">
+      <i class="la la-check-circle text-success empty-icon"></i>
+      <h4 class="section-title mt-3">
+        {{ fila.length ? 'Você viu todas as recomendações' : 'Nenhuma recomendação disponível' }}
+      </h4>
+      <p class="text-muted">
+        {{ fila.length ? 'Suas curtidas já atualizaram seus interesses.' : 'Curta projetos ou defina seus interesses para receber sugestões.' }}
+      </p>
+      <button type="button" class="btn btn-primary" (click)="carregar()">
+        <i class="la la-refresh"></i> Buscar novas recomendações
+      </button>
+      <div class="mt-3" *ngIf="podeDesfazer">
+        <button type="button" class="btn btn-link" (click)="desfazer()" [disabled]="processando">
+          Desfazer última curtida
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

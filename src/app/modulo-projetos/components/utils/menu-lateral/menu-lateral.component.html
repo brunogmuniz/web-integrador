@@ -27,6 +27,13 @@
         </a>
       </li>
 
+      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
+        <a class="menu-link" routerLink="recomendacoes">
+          <i class="menu-link-icon la la-star-of-life"></i>
+          <span class="menu-link-text">Recomendar!</span>
+        </a>
+      </li>
+
       <li class="menu-section">
         <h4 class="menu-section-text">Projetos</h4>
       </li>
@@ -40,21 +47,16 @@
 
       <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
         <a class="menu-link" routerLink="projetos-recomendados">
-          <i class="menu-link-icon la la-star"></i>
-          <span class="menu-link-text">Projetos Recomendados</span>
+          <i class="menu-link-icon la la-heart"></i>
+          <span class="menu-link-text">Projetos Curtidos</span>
         </a>
       </li>
 
       <li class="menu-section">
-        <h4 class="menu-section-text">Gerenciamento</h4>
+        <h4 class="menu-section-text">Interesses</h4>
       </li>
 
-      <li class="menu-item" [routerLinkActive]="'menu-item-active'" [routerLinkActiveOptions]="{ exact: true }">
-        <a class="menu-link" routerLink="gerenciar-interesses">
-          <i class="menu-link-icon la la-sliders"></i>
-          <span class="menu-link-text">Gerenciar Interesses</span>
-        </a>
-      </li>
+
 
     </ul>
 

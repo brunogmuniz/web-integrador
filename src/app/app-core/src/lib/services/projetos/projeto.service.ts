@@ -219,4 +219,34 @@ export class ProjetoService {
       })
     );
   }
+
+  curtir(projetoId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${projetoId}/like`, null, { headers: this.getHeaders() }).pipe(
+      catchError(error => {
+        console.error('Erro ao curtir projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  removerCurtida(projetoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projetoId}/like`, { headers: this.getHeaders() }).pipe(
+      catchError(error => {
+        console.error('Erro ao remover curtida:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  listarProjetosCurtidos(): Observable<ProjetoRecomendadoDTO[]> {
+    return this.http.get<ProjetoRecomendadoDTO[]>(
+      `${this.apiUrl}/curtidos`,
+      { headers: this.getHeaders() }
+    ).pipe(
+      catchError(error => {
+        console.error('Erro ao listar projetos curtidos:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }

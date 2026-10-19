@@ -1,0 +1,148 @@
+.project-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.numero-projeto {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.project-title {
+  margin-top: 15px;
+  margin-bottom: 20px;
+
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+
+  color: #181c32;
+  word-break: break-word;
+}
+
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 25px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #7e8299;
+}
+
+.meta-item i {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  color: #181c32;
+}
+
+.project-content {
+  max-height: 320px;
+  overflow-y: auto;
+
+  background: #fafbfd;
+
+  border-left: 4px solid #3699ff;
+  border-radius: 8px;
+
+  padding: 25px;
+
+  font-size: 15px;
+  line-height: 1.9;
+
+  color: #3f4254;
+
+  white-space: pre-line;
+}
+
+.topics-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.topic-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 16px;
+
+  background: #f1faff;
+  border: 1px solid #d8ecff;
+  border-radius: 30px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #3699ff;
+}
+
+.loading-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #7e8299;
+  font-size: 14px;
+  padding: 48px 0;
+}
+
+.loading-state i {
+  font-size: 1.4rem;
+}
+
+.card-projeto {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.card-projeto--like {
+  transform: translateX(80px) rotate(3deg);
+  opacity: 0;
+}
+
+.card-projeto--dislike {
+  transform: translateX(-80px) rotate(-3deg);
+  opacity: 0;
+}
+
+.acoes {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.acao-btn {
+  flex: 1;
+  max-width: 280px;
+  font-weight: 600;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.acao-btn i {
+  font-size: 1.6rem;
+  line-height: 1;
+  padding-right: 0.6rem;
+}
+
+.acao-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.empty-icon {
+  font-size: 3.5rem;
+}

@@ -11,6 +11,9 @@ import { RegistroComponent } from './registro/registro.component';
 import { GerenciarInteressesComponent } from 'app-core/lib/components/projetos/gerenciar-interesses/gerenciar-interesses.component';
 import { ProjetosRecomendadosComponent } from 'app-core/lib/components/projetos/projetos-recomendados/projetos-recomendados.component';
 import { ProjetosAuthGuard } from 'app-core/lib/services/projetos/projetosauth.guard';
+import {
+  RecomendacoesProjetosComponent
+} from "app-core/lib/components/projetos/recomendacoes-projetos/recomendacoes-projetos.component";
 
 const routes: Routes = [
   {
@@ -47,7 +50,10 @@ const routes: Routes = [
         path: 'gerenciar-interesses',
         component: GerenciarInteressesComponent,
         canDeactivate: [(component: GerenciarInteressesComponent) => component.podeDesativar()]
-      }
+      },
+      { path: 'recomendacoes',
+        component: RecomendacoesProjetosComponent,
+        canActivate: [ProjetosAuthGuard] }
     ],
   },
   {
