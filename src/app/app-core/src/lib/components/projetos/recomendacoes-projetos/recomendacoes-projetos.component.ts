@@ -21,7 +21,7 @@ export class RecomendacoesProjetosComponent implements OnInit {
   carregando: boolean = true;
   processando: boolean = false;
   saindo: Acao | null = null;
-  ultimoCurtido: ProjetoRecomendadoDTO | null = null;
+  ultimaAcao: { tipo: Acao; recomendado: ProjetoRecomendadoDTO } | null = null;
 
   private detalhes = new Map<number, ProjetosDTO>();
 
@@ -44,7 +44,9 @@ export class RecomendacoesProjetosComponent implements OnInit {
   }
 
   get podeDesfazer(): boolean {
-    return !!this.ultimoCurtido && this.indice > 0 && this.fila[this.indice - 1] === this.ultimoCurtido;
+    return !!this.ultimaAcao
+      && this.indice > 0
+      && this.fila[this.indice - 1] === this.ultimaAcao.recomendado;
   }
 
   constructor(private projetoService: ProjetoService) {}
@@ -70,7 +72,7 @@ export class RecomendacoesProjetosComponent implements OnInit {
 
         this.fila = recomendados ?? [];
         this.indice = 0;
-        this.ultimoCurtido = null;
+        this.ultimaAcao = null;
         this.detalhes.clear();
         this.carregarDetalhe(0);
         this.carregarDetalhe(1);
@@ -90,7 +92,7 @@ export class RecomendacoesProjetosComponent implements OnInit {
     this.processando = true;
     this.projetoService.curtir(recomendado.id).subscribe({
       next: () => {
-        this.ultimoCurtido = recomendado;
+        this.ultimaAcao = { tipo: 'like', recomendado };
         this.avancar('like');
       },
       error: () => {
@@ -101,26 +103,41 @@ export class RecomendacoesProjetosComponent implements OnInit {
   }
 
   descartar(): void {
-    if (!this.recomendado || this.processando) return;
+    const recomendado = this.recomendado;
+    if (!recomendado || this.processando) return;
 
     this.processando = true;
-    this.avancar('dislike');
+    this.projetoService.descartar(recomendado.id).subscribe({
+      next: () => {
+        this.ultimaAcao = { tipo: 'dislike', recomendado };
+        this.avancar('dislike');
+      },
+      error: () => {
+        this.processando = false;
+        void Swal.fire('Erro!', 'Não foi possível registrar o descarte.', 'error');
+      }
+    });
   }
 
   desfazer(): void {
-    const recomendado = this.ultimoCurtido;
-    if (!recomendado || !this.podeDesfazer || this.processando) return;
+    const acao = this.ultimaAcao;
+    if (!acao || !this.podeDesfazer || this.processando) return;
 
     this.processando = true;
-    this.projetoService.removerCurtida(recomendado.id).subscribe({
+
+    const requisicao = acao.tipo === 'like'
+      ? this.projetoService.removerCurtida(acao.recomendado.id)
+      : this.projetoService.removerDescarte(acao.recomendado.id);
+
+    requisicao.subscribe({
       next: () => {
         this.indice--;
-        this.ultimoCurtido = null;
+        this.ultimaAcao = null;
         this.processando = false;
       },
       error: () => {
         this.processando = false;
-        void Swal.fire('Erro!', 'Não foi possível remover a curtida.', 'error');
+        void Swal.fire('Erro!', 'Não foi possível desfazer a ação.', 'error');
       }
     });
   }

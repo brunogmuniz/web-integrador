@@ -249,4 +249,22 @@ export class ProjetoService {
       })
     );
   }
+
+  descartar(projetoId: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${projetoId}/dislike`, null, { headers: this.getHeaders() }).pipe(
+      catchError(error => {
+        console.error('Erro ao descartar projeto:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  removerDescarte(projetoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${projetoId}/dislike`, { headers: this.getHeaders() }).pipe(
+      catchError(error => {
+        console.error('Erro ao remover descarte:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }
