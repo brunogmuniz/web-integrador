@@ -15,30 +15,30 @@
       </div>
 
       <div class="form-group row form-row-pdsa">
-        <!-- UNIDADE -->
         <div class="col-lg-6">
-          <label class="pdsa-label">Unidade <span class="text-danger">*</span></label>
-          <select class="form-control pdsa-control" formControlName="unidadeUuid">
-            <option value="" disabled>Selecione uma unidade...</option>
-            <option *ngFor="let unidade of unidades" [value]="unidade.uuid">
-              {{ unidade.nome }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Unidade"
+            formControlName="unidadeUuid"
+            placeholder="Selecione uma unidade..."
+            [required]="true"
+            [opcoes]="opcoesUnidades"
+            groupClass="mb-0">
+          </lib-select-input-default>
           <span class="form-text text-danger"
-                *ngIf="form.get('unidadeId')?.touched && form.get('unidadeId')?.invalid">
+                *ngIf="form.get('unidadeUuid')?.touched && form.get('unidadeUuid')?.invalid">
             A unidade é obrigatória.
           </span>
         </div>
 
-        <!-- USUARIO -->
         <div class="col-lg-6">
-          <label class="pdsa-label">Usuário <span class="text-danger">*</span></label>
-          <select class="form-control pdsa-control" formControlName="usuarioId">
-            <option [ngValue]="null" disabled>Selecione um usuário...</option>
-            <option *ngFor="let usuario of usuarios" [ngValue]="usuario.id">
-              {{ usuario.nome }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Usuário"
+            formControlName="usuarioId"
+            placeholder="Selecione um usuário..."
+            [required]="true"
+            [opcoes]="opcoesUsuarios"
+            groupClass="mb-0">
+          </lib-select-input-default>
           <span class="form-text text-danger"
                 *ngIf="form.get('usuarioId')?.touched && form.get('usuarioId')?.invalid">
             O usuário é obrigatório.
@@ -47,22 +47,20 @@
       </div>
 
       <div class="form-group row form-row-pdsa">
-        <!-- PAPEL -->
         <div class="col-lg-6">
-          <label class="pdsa-label">Papel na Unidade <span class="text-danger">*</span></label>
-          <select class="form-control pdsa-control" formControlName="papel">
-            <option [ngValue]="null" disabled>Selecione o papel...</option>
-            <option *ngFor="let papel of papeis" [value]="papel">
-              {{ formatarPapel(papel) }}
-            </option>
-          </select>
+          <lib-select-input-default
+            label="Papel na Unidade"
+            formControlName="papel"
+            placeholder="Selecione o papel..."
+            [required]="true"
+            [opcoes]="opcoesPapeis"
+            groupClass="mb-0">
+          </lib-select-input-default>
           <span class="form-text text-danger"
                 *ngIf="form.get('papel')?.touched && form.get('papel')?.invalid">
             O papel é obrigatório.
           </span>
         </div>
-
-        <!-- ATIVO -->
       </div>
 
     </div>

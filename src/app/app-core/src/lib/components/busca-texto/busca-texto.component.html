@@ -1,0 +1,19 @@
+<div class="busca-texto">
+  <i class="la la-search busca-texto__icon"></i>
+  <input
+    type="text"
+    class="form-control form-control-solid busca-texto__input"
+    [placeholder]="placeholder"
+    [ngModel]="termo"
+    (ngModelChange)="aoDigitar($event)"
+  />
+  <button
+    *ngIf="termo"
+    type="button"
+    class="btn btn-icon btn-sm busca-texto__clear"
+    title="Limpar busca"
+    (click)="limpar()"
+  >
+    <i class="la la-times"></i>
+  </button>
+</div>

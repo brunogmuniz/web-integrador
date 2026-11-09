@@ -7,7 +7,9 @@ export interface DocenteSubAreaDTO {
   idDocente?: number;
   nomeDocente?: string;
   nomeArea?: string;
+  siglaArea?: string;
   nomeSubarea?: string;
+  siglaSubarea?: string;
   subAreaPercentual?: DocenteSubAreaPercentualDTO[];
   percentualAtuacao?: number;
   docente?: DocenteDTO;

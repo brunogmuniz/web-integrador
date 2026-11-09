@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CursoDTO, RespostaPaginada } from "app-core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { CursoService } from "app-core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CursoDTO, CursoService, RespostaPaginada, SelectOption } from 'app-core';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,6 +23,10 @@ export class CadastrarCursoComponent implements OnInit {
     { valor: 'GRADUACAO', label: 'Graduação' },
     { valor: 'POS_GRADUACAO', label: 'Pós Graduação' },
   ];
+  opcoesNiveis: SelectOption[] = this.niveis.map(nivel => ({
+    id: nivel.valor,
+    label: nivel.label
+  }));
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +40,7 @@ export class CadastrarCursoComponent implements OnInit {
       uuid: [],
       nome: ['', Validators.required],
       sigla: ['', Validators.required],
+      codigo: ['', Validators.maxLength(50)],
       anoCurriculo: ['', [Validators.required, Validators.min(1900), Validators.max(2100)]],
       cargaHorariaTotal: ['', [Validators.required, Validators.min(1)]],
       nivel: ['', Validators.required],
@@ -59,7 +63,7 @@ export class CadastrarCursoComponent implements OnInit {
     this.loadCursos();
   }
 
-  get c(): { [key: string]: FormControl } {
+  get controlesFormulario(): { [key: string]: FormControl } {
     return this.cursoForm.controls as { [key: string]: FormControl };
   }
 
@@ -70,6 +74,7 @@ export class CadastrarCursoComponent implements OnInit {
       },
       error: (err: any) => {
         console.error('Falha ao carregar os cursos no formulário:', err);
+        this.exibirErro('Não foi possível carregar a lista de cursos.');
       }
     });
   }
@@ -81,6 +86,7 @@ export class CadastrarCursoComponent implements OnInit {
       },
       error: (err: Error) => {
         console.error(`Falha ao carregar dados do curso ${uuid} para edição:`, err);
+        this.exibirErro('Não foi possível carregar os dados do curso.');
       }
     });
   }
@@ -91,7 +97,7 @@ export class CadastrarCursoComponent implements OnInit {
       return;
     }
 
-    const cursoDto: CursoDTO = this.cursoForm.value;
+    const cursoDto: CursoDTO = this.cursoForm.getRawValue();
 
     if (this.modoEdicao && this.cursoUuid) {
       cursoDto.uuid = this.cursoUuid;
@@ -121,7 +127,7 @@ export class CadastrarCursoComponent implements OnInit {
     }
   }
 
-  private exibirSucesso(titulo: string) {
+  private exibirSucesso(titulo: string): void {
     void Swal.fire({
       title: titulo,
       text: `Curso ${titulo.toLowerCase()} com sucesso.`,
@@ -131,7 +137,7 @@ export class CadastrarCursoComponent implements OnInit {
     });
   }
 
-  private exibirErro(mensagem: string) {
+  private exibirErro(mensagem: string): void {
     void Swal.fire({
       title: 'Erro!',
       text: mensagem,

@@ -3,11 +3,16 @@ export interface DisciplinaDTO {
   uuid?: string;
   nome: string;
   codigoDisciplina: string;
+  numero?: string | null;
+  classificacao?: string | null;
   cargaHoraria: number;
   subareaId: number;
   nomeSubarea: string;
   tipoDisciplina?: string;
-  ead: boolean;
+  ead?: boolean;
   cargaHorariaTeorica: number;
   cargaHorariaPratica: number;
+  cargaHorariaEad: number;
+  cargaHorariaExtensaoPratica: number;
+  cargaHorariaExtensaoTeorica: number;
 }

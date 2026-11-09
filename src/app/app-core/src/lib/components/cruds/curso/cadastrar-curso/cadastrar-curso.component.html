@@ -8,18 +8,29 @@
     <form [formGroup]="cursoForm" (ngSubmit)="onSubmit()" *ngIf="cursoForm">
 
       <div class="form-row mb-3">
-        <div class="col-md-8">
+        <div class="col-md-6">
           <lib-form-input-padrao
             [label]="'Nome'"
-            [control]="c['nome']"
+            [control]="controlesFormulario['nome']"
+            [placeholder]="'Digite o nome'"
             [supportText]="''">
           </lib-form-input-padrao>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
           <lib-form-input-padrao
             [label]="'Sigla'"
-            [control]="c['sigla']"
+            [control]="controlesFormulario['sigla']"
+            [placeholder]="'Digite a sigla'"
+            [supportText]="''">
+          </lib-form-input-padrao>
+        </div>
+
+        <div class="col-md-3">
+          <lib-form-input-padrao
+            [label]="'Código'"
+            [control]="controlesFormulario['codigo']"
+            [placeholder]="'Digite o código'"
             [supportText]="''">
           </lib-form-input-padrao>
         </div>
@@ -29,8 +40,9 @@
         <div class="col-md-4">
           <lib-form-input-padrao
             [label]="'Ano Currículo'"
-            [control]="c['anoCurriculo']"
+            [control]="controlesFormulario['anoCurriculo']"
             [type]="'number'"
+            [placeholder]="'Digite o ano'"
             [supportText]="''">
           </lib-form-input-padrao>
         </div>
@@ -38,24 +50,22 @@
         <div class="col-md-4">
           <lib-form-input-padrao
             [label]="'Carga Horária Total'"
-            [control]="c['cargaHorariaTotal']"
+            [control]="controlesFormulario['cargaHorariaTotal']"
             [type]="'number'"
+            [placeholder]="'Digite a carga horária total'"
             [supportText]="''">
           </lib-form-input-padrao>
         </div>
 
         <div class="col-md-4">
-          <label class="form-label">Nível</label>
-          <select
-            class="form-control"
+          <lib-select-input-default
+            label="Nível"
             formControlName="nivel"
-            [class.is-invalid]="c['nivel'].invalid && c['nivel'].touched">
-            <option value="" disabled selected>Selecione...</option>
-            <option *ngFor="let n of niveis" [value]="n.valor">{{ n.label }}</option>
-          </select>
-          <div class="invalid-feedback" *ngIf="c['nivel'].invalid && c['nivel'].touched">
-            Nível é obrigatório.
-          </div>
+            placeholder="Selecione..."
+            [required]="true"
+            [clearable]="false"
+            [opcoes]="opcoesNiveis">
+          </lib-select-input-default>
         </div>
       </div>
 

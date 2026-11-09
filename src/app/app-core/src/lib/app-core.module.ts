@@ -8,6 +8,8 @@ import { ImageProfileComponent } from './components/image-profile/image-profile.
 import { PaginadorComponent } from './components/paginador/paginador.component';
 import { UploadPlanilhaComponent } from './components/upload-planilha/upload-planilha.component';
 import { UserMenuComponent } from './components/user-menu/user-menu.component';
+import { BuscaTextoComponent } from './components/busca-texto/busca-texto.component';
+import { OfertaSearchSelectComponent } from './components/oferta-search-select/oferta-search-select.component';
 
 import { AreaConhecimentoComponent } from './components/cruds/area-conhecimento/area-conhecimento.component';
 import { CadastrarAreaConhecimentoComponent } from './components/cruds/area-conhecimento/cadastrar-area-conhecimento/cadastrar-area-conhecimento.component';
@@ -48,6 +50,14 @@ import { VisualizarUsuarioComponent } from './components/cruds/usuario/visualiza
 import { CursoComponent } from './components/cruds/curso/curso.component';
 import { CadastrarCursoComponent } from './components/cruds/curso/cadastrar-curso/cadastrar-curso.component';
 import { VisualizarCursoComponent } from './components/cruds/curso/visualizar-curso/visualizar-curso.component';
+import { OfertaComponent } from './components/cruds/oferta/oferta.component';
+import { CadastrarOfertaComponent } from './components/cruds/oferta/cadastrar-oferta/cadastrar-oferta.component';
+import { VisualizarOfertaComponent } from './components/cruds/oferta/visualizar-oferta/visualizar-oferta.component';
+import { VisualizarDisciplinasOfertaComponent } from './components/cruds/oferta/visualizar-disciplinas-oferta/visualizar-disciplinas-oferta.component';
+import { DisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/disciplina-oferta.component';
+import { CadastrarDisciplinaOfertaComponent } from './components/cruds/disciplina-oferta/cadastrar-disciplina-oferta/cadastrar-disciplina-oferta.component';
+import { SelectInputDefaultComponent } from './components/select-input-default/select-input-default.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { VisualizarProjetosComponent } from './components/projetos/visualizar-projetos/visualizar-projetos.component';
 import { DetalhesProjetoComponent } from './components/projetos/detalhes-projeto/detalhes-projeto.component';
@@ -63,22 +73,16 @@ import {
   declarations: [
     AreaConhecimentoComponent,
     CadastrarAreaConhecimentoComponent,
-
     DisciplinaComponent,
     CadastrarDisciplinaComponent,
-
     DocenteComponent,
     CadastrarDocenteComponent,
-
     DocenteEncargosComponent,
     CadastrarDocentesEncargosComponent,
-
     EstruturaCurricularComponent,
     CadastrarEstruturaCurricularComponent,
-
     SubareaConhecimentoComponent,
     CadastrarSubareaConhecimentoComponent,
-
     UnidadeComponent,
     CadastrarUnidadeComponent,
 
@@ -95,7 +99,8 @@ import {
     PaginadorComponent,
     UploadPlanilhaComponent,
     UserMenuComponent,
-
+    BuscaTextoComponent,
+    OfertaSearchSelectComponent,
     VisualizarAreaConhecimentoComponent,
     VisualizarDisciplinaComponent,
     VisualizarDocenteComponent,
@@ -106,20 +111,30 @@ import {
     VisualizarUnidadeUsuarioComponent,
     VisualizarUsuarioComponent,
     VisualizarCursoComponent,
-
     VisualizarProjetosComponent,
     DetalhesProjetoComponent,
     ViewInputComponent,
     GerenciarInteressesComponent,
     ProjetosRecomendadosComponent,
-    RecomendacoesProjetosComponent
+    RecomendacoesProjetosComponent,
+    CursoComponent,
+    CadastrarCursoComponent,
+    VisualizarCursoComponent,
+    OfertaComponent,
+    CadastrarOfertaComponent,
+    VisualizarOfertaComponent,
+    VisualizarDisciplinasOfertaComponent,
+    DisciplinaOfertaComponent,
+    CadastrarDisciplinaOfertaComponent,
+    SelectInputDefaultComponent
   ],
   imports: [
     CommonModule,
     FormInput,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    NgSelectModule
   ],
   exports: [
     CadastrarUnidadeComponent,
@@ -133,8 +148,11 @@ import {
     UnidadeComponent,
     UploadPlanilhaComponent,
     UserMenuComponent,
+    BuscaTextoComponent,
+    OfertaSearchSelectComponent,
     VisualizarUnidadeComponent,
-    VisualizarUnidadeUsuarioComponent
+    VisualizarUnidadeUsuarioComponent,
+    SelectInputDefaultComponent
   ]
 })
 export class AppCoreModule { }

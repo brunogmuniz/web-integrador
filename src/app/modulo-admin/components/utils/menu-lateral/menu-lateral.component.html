@@ -135,10 +135,34 @@
                 <span class="menu-link-text">Listar Encargos</span>
               </a>
             </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="menu-item menu-item-submenu" [class.menu-item-open]="isOpen('oferta')">
+        <a class="menu-link" (click)="toggleMenu('oferta')" tabindex="0" aria-label="Menu Ofertas">
+          <i class="menu-link-icon la la-calendar-check"></i>
+          <span class="menu-link-text">Ofertas</span>
+          <i class="menu-arrow la la-angle-right"></i>
+        </a>
+        <div class="menu-submenu">
+          <ul class="menu-subnav">
             <li class="menu-item" [routerLinkActive]="'menu-item-active'">
-              <a routerLink="/docente-encargos/form/novo" class="menu-link">
+              <a routerLink="/oferta/visualizar" class="menu-link">
                 <i class="menu-link-bullet"><span></span></i>
-                <span class="menu-link-text">Cadastrar Encargo</span>
+                <span class="menu-link-text">Listar Ofertas</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/oferta/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Cadastrar Oferta</span>
+              </a>
+            </li>
+            <li class="menu-item" [routerLinkActive]="'menu-item-active'">
+              <a routerLink="/disciplina-oferta/form/novo" class="menu-link">
+                <i class="menu-link-bullet"><span></span></i>
+                <span class="menu-link-text">Ofertar Disciplinas</span>
               </a>
             </li>
           </ul>

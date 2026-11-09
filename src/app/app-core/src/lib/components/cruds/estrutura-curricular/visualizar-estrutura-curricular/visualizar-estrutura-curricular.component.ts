@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {EstruturaCurricularService, RespostaPaginada} from "app-core";
+import { Component, OnInit } from '@angular/core';
+import { EstruturaCurricularService, RespostaPaginada } from "app-core";
 import Swal from 'sweetalert2';
 import { EstruturaCurricularDTO } from 'app-core';
+import { TableSort } from '../../../../utils/table-sort';
 
 interface MetadadosPaginacao {
   paginaAtual: number;
@@ -18,6 +19,8 @@ interface MetadadosPaginacao {
 export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   listaEstruturas: EstruturaCurricularDTO[] = [];
+  busca = '';
+  ordenacao = new TableSort<'nome' | 'curso' | 'ano' | 'ativo'>('nome', 'asc');
   public loading: boolean = false;
   public meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -28,7 +31,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   constructor(
     private service: EstruturaCurricularService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarEstruturas();
@@ -36,7 +39,7 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
 
   public carregarEstruturas(): void {
     this.loading = true;
-    this.service.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.service.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<EstruturaCurricularDTO>) => {
         this.listaEstruturas = res.conteudo || [];
         this.meta = res.meta;
@@ -49,10 +52,28 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
       }
     });
   }
+
   public aoMudarPaginacao(evento: { pagina: number; tamanho: number }): void {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
     this.carregarEstruturas();
+  }
+
+  public aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
+    this.carregarEstruturas();
+  }
+
+  public ordenarPor(coluna: 'nome' | 'curso' | 'ano' | 'ativo'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarEstruturas();
+    });
+  }
+
+  public iconeOrdenacao(coluna: 'nome' | 'curso' | 'ano' | 'ativo'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   public onDelete(uuid: string, nome: string): void {
@@ -89,4 +110,5 @@ export class VisualizarEstruturaCurricularComponent implements OnInit {
   trackByEstruturaUuid(_index: number, item: EstruturaCurricularDTO) {
     return item.uuid;
   }
+
 }

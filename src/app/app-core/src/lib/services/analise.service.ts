@@ -9,7 +9,7 @@ import { environment } from "../../../../../environments/environment";
   providedIn: 'root'
 })
 export class AnaliseService {
-  private readonly baseUrl = `${environment.apiUrl}/analise`;
+  private readonly baseUrl = `${environment.apiUrl}/analise-depto`;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -18,10 +18,10 @@ export class AnaliseService {
   }
 
   analisarTodas(params: AnaliseParamsDTO): Observable<AreaMediaDTO[]> {
-    return this.http.post<AreaMediaDTO[]>(`${environment.apiUrl}/analise-depto/todas`, params);
+    return this.http.post<AreaMediaDTO[]>(`${this.baseUrl}/todas`, params);
   }
 
   analisarArea(uuid: string, params: AnaliseParamsDTO): Observable<AreaMediaDTO> {
-    return this.http.post<AreaMediaDTO>(`${environment.apiUrl}/analise-depto/area/${uuid}`, params);
+    return this.http.post<AreaMediaDTO>(`${this.baseUrl}/area/${uuid}`, params);
   }
 }

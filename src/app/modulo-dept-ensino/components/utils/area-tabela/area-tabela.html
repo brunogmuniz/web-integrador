@@ -1,46 +1,44 @@
 <div class="kt-portlet">
   <div class="kt-portlet__body">
-    <br>
-    <div class="search-wrapper">
-      <span class="search-icon">
-        <img ngSrc="assets/icons/lupa_icon.png"
-          alt="Ícone de busca"
-          width="18"
-          height="18">
-      </span>
-      <input type="text"
-             class="form-control kt-form__input"
-             placeholder="Buscar por área"
-             [(ngModel)]="inputBusca"/>
+    <div class="tabela-controles">
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <img ngSrc="assets/icons/lupa_icon.png"
+            alt="Ícone de busca"
+            width="18"
+            height="18">
+        </span>
+        <input type="text"
+               class="form-control kt-form__input"
+               placeholder="Buscar por área"
+               [(ngModel)]="inputBusca"/>
+      </div>
+
+      <div class="legenda-cores">
+        <span class="legenda-item excelente">Excelente</span>
+        <span class="legenda-item bom">Bom</span>
+        <span class="legenda-item cuidado">Cuidado</span>
+        <span class="legenda-item pessimo">Péssimo</span>
+      </div>
     </div>
-    <div class="legenda-cores mb-3">
-      <span class="legenda-item excelente">Excelente</span>
-      <span class="legenda-item bom">Bom</span>
-      <span class="legenda-item cuidado">Cuidado</span>
-      <span class="legenda-item pessimo">Péssimo</span>
-    </div>
+
     <div class="table-responsive" style="background-color: #ffffff">
-      <table class="table ">
+      <table class="table analise-table">
+        <colgroup>
+          <col class="col-identificacao">
+          <col class="col-media">
+          <col class="col-docentes">
+          <col *ngFor="let coluna of colunasOfertas" class="col-oferta">
+        </colgroup>
         <thead class="thead-light text-center text-bg-dark">
         <tr class="active">
-          <th rowspan="2" style="width: 5%;">AREA</th>
-          <th rowspan="2" style="width: 5%;">MÉDIA</th>
-          <th rowspan="2" style="width: 5%;">NR DOCENTES</th>
-          <th colspan="2" style="width: 5%;">2024</th>
-          <th colspan="2" style="width: 5%;">2025</th>
-          <th colspan="2" style="width: 5%;">2026</th>
-          <th colspan="2" style="width: 5%;">2027</th>
-          <th rowspan="2" style="width: 7%;">Opções</th>
-        </tr>
-        <tr class="active">
-          <th>1</th>
-          <th>2</th>
-          <th>1</th>
-          <th>2</th>
-          <th>1</th>
-          <th>2</th>
-          <th>1</th>
-          <th>2</th>
+          <th style="width: 5%;">ÁREA</th>
+          <th style="width: 5%;">MÉDIA</th>
+          <th style="width: 5%;">NR DOCENTES</th>
+          <th *ngFor="let coluna of colunasOfertas" style="width: 5%;">
+            {{ coluna.ano }}/{{ coluna.semestre }}
+          </th>
+<!--          <th style="width: 7%;">Opções</th>-->
         </tr>
         </thead>
         <tbody>
@@ -58,56 +56,44 @@
           }">{{ area.media }}
             </td>
             <td>{{ area.nrDocentes }}</td>
-            <td>{{ area.ano2024s1 || '-' }}</td>
-            <td>{{ area.ano2024s2 || '-' }}</td>
-            <td>{{ area.ano2025s1 || '-' }}</td>
-            <td>{{ area.ano2025s2 || '-' }}</td>
-            <td>{{ area.ano2026s1 || '-' }}</td>
-            <td>{{ area.ano2026s2 || '-' }}</td>
-            <td>{{ area.ano2027s1 || '-' }}</td>
-            <td>{{ area.ano2027s2 || '-' }}</td>
-            <td>
-              <button [routerLink]="'./' + area.uuid"
-                      class="btn btn-primary btn-sm btn-icon"
-                      title="Adicionar Docente"
-                      [disabled]="true">
-                <i class="fa fa-user-plus"></i>
-                Adicionar Docente
-              </button>
+            <td *ngFor="let coluna of colunasOfertas">{{ area[coluna.key] || '-' }}</td>
+<!--            <td>-->
+<!--              <button [routerLink]="'./' + area.uuid"-->
+<!--                      class="btn btn-primary btn-sm btn-icon"-->
+<!--                      title="Adicionar Docente"-->
+<!--                      [disabled]="true">-->
+<!--                <i class="fa fa-user-plus"></i>-->
+<!--                Adicionar Docente-->
+<!--              </button>-->
 
-              <button [routerLink]="'./' + area.uuid"
-                      class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"
-                      title="Adicionar Ano"
-                      [disabled]="true">
-                <i class="fa fa-calendar-plus"></i>
-                Adicionar Ano
-              </button>
-            </td>
+<!--              <button [routerLink]="'./' + area.uuid"-->
+<!--                      class="btn btn-primary btn-secondary btn-sm btn-icon btn-invert"-->
+<!--                      title="Adicionar Ano"-->
+<!--                      [disabled]="true">-->
+<!--                <i class="fa fa-calendar-plus"></i>-->
+<!--                Adicionar Ano-->
+<!--              </button>-->
+<!--            </td>-->
           </tr>
           <tr class="collapse-row">
-            <td colspan="12" class="p-0 border-0">
+            <td [attr.colspan]="colunasOfertas.length + 3" class="p-0 border-0">
               <div class="collapse" [id]="'subareas-' + i">
-                <div class="p-4" style="background: #ffffff;">
-                  <table class="table table-sm table-striped">
+                <div class="subarea-table-wrapper">
+                  <table class="table table-sm table-striped analise-table subarea-table">
+                    <colgroup>
+                      <col class="col-identificacao">
+                      <col class="col-media">
+                      <col class="col-docentes">
+                      <col *ngFor="let coluna of colunasOfertas" class="col-oferta">
+                    </colgroup>
                     <thead class="thead-light">
                     <tr class="text-center" style="font-size: 12px">
-                      <th rowspan="2" style="width: 5%;">SUBAREA</th>
-                      <th rowspan="2" style="width: 10%;">MÉDIA</th>
-                      <th rowspan="2" style="width: 5%;">NR DOCENTES</th>
-                      <th colspan="2" style="width: 5%;">2024 </th>
-                      <th colspan="2" style="width: 5%;">2025</th>
-                      <th colspan="2" style="width: 5%;">2026</th>
-                      <th colspan="2" style="width: 5%;">2027</th>
-                    </tr>
-                    <tr class="active text-center" style="font-size: 12px">
-                      <th>1</th>
-                      <th>2</th>
-                      <th>1</th>
-                      <th>2</th>
-                      <th>1</th>
-                      <th>2</th>
-                      <th>1</th>
-                      <th>2</th>
+                      <th style="width: 5%;">SUBÁREA</th>
+                      <th style="width: 10%;">MÉDIA</th>
+                      <th style="width: 5%;">NR DOCENTES</th>
+                      <th *ngFor="let coluna of colunasOfertas" style="width: 5%;">
+                        {{ coluna.ano }}/{{ coluna.semestre }}
+                      </th>
                     </tr>
                     </thead>
                     <tbody>
@@ -121,14 +107,7 @@
                     }">{{ sub.media }}
                       </td>
                       <td>{{ sub.nrDocentes }}</td>
-                      <td>{{ sub.ano2024s1 || '-' }}</td>
-                      <td>{{ sub.ano2024s2 || '-' }}</td>
-                      <td>{{ sub.ano2025s1 || '-' }}</td>
-                      <td>{{ sub.ano2025s2 || '-' }}</td>
-                      <td>{{ sub.ano2026s1 || '-' }}</td>
-                      <td>{{ sub.ano2026s2 || '-' }}</td>
-                      <td>{{ sub.ano2027s1 || '-' }}</td>
-                      <td>{{ sub.ano2027s2 || '-' }}</td>
+                      <td *ngFor="let coluna of colunasOfertas">{{ sub[coluna.key] || '-' }}</td>
                     </tr>
                     </tbody>
                   </table>

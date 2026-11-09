@@ -31,11 +31,12 @@ export function initializeAppFactory(
             timeout(5000),
             catchError((error: unknown) => {
               if (error instanceof HttpErrorResponse && error.status === 401) {
-                console.warn('[AuthFactory] Sincronização cancelada: Token rejeitado pela API (401 Unauthorized). A sessão local será abatida.');
-              } else {
-                console.error('[AuthFactory] Sincronização bloqueada por falha interna ou de rede:', error);
+                console.warn('[AuthFactory] Token rejeitado pela API (401). Terminando sessão.');
+                loginService.logout();
+                return of(null);
               }
-              return of(null);
+              console.warn('[AuthFactory] Sincronização falhou transitoriamente. Usando usuário em cache:', error);
+              return of(loginService.getUsuarioLogado());
             })
           )
         );
@@ -54,8 +55,6 @@ export function initializeAppFactory(
           if (isCallbackAutenticacao) {
             loginService.tratarPosLogin();
           }
-        } else {
-          loginService.logout();
         }
       }
     } catch (error: unknown) {

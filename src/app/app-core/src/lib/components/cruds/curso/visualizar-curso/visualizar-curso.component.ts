@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CursoDTO, MetadadosPaginacao, RespostaPaginada } from "app-core";
 import { CursoService } from "app-core";
 import Swal from 'sweetalert2';
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'lib-visualizar-curso',
@@ -10,6 +11,8 @@ import Swal from 'sweetalert2';
 })
 export class VisualizarCursoComponent implements OnInit {
   cursos: CursoDTO[] = [];
+  busca = '';
+  ordenacao = new TableSort<'nome' | 'nivel'>('nome', 'asc');
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -32,9 +35,9 @@ export class VisualizarCursoComponent implements OnInit {
   }
 
   carregarCursos(): void {
-    this.cursoService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.cursoService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<CursoDTO>) => {
-        this.cursos = res.conteudo;
+        this.cursos = res.conteudo || [];
         this.meta = res.meta;
       },
       error: (err: Error) => {
@@ -48,6 +51,27 @@ export class VisualizarCursoComponent implements OnInit {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
     this.carregarCursos();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
+    this.carregarCursos();
+  }
+
+  obterNivelLabel(nivel: string): string {
+    return this.nivelLabel[nivel] || nivel;
+  }
+
+  ordenarPor(coluna: 'nome' | 'nivel'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarCursos();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'nome' | 'nivel'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
   }
 
   onDelete(uuid: string | undefined): void {
@@ -85,4 +109,5 @@ export class VisualizarCursoComponent implements OnInit {
   private exibirErro(msg: string): void {
     void Swal.fire('Erro!', msg, 'error');
   }
+
 }

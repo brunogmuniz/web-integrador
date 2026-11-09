@@ -363,7 +363,10 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/css/demo-12/style.bundle.min.css",
               "src/assets/css/demo-12/wizard-2.min.css",
-              "src/assets/icons/line-awesome/css/line-awesome.css"
+              "src/assets/icons/fontawesome-free/css/all.css",
+              "src/assets/icons/line-awesome/css/line-awesome.css",
+              "src/assets/icons/flaticon/flaticon.css",
+              "src/assets/icons/flaticon2/flaticon.css"
             ],
             "scripts": [
               "src/assets/js/jquery-1.12.4.min.js",

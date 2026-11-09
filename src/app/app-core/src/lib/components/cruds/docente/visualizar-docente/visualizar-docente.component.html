@@ -6,16 +6,29 @@
 </div>
 
 <div class="card">
+  <div class="card-header border-0 pt-6">
+    <app-busca-texto
+      placeholder="Buscar docente"
+      (buscaChange)="aoBuscar($event)">
+    </app-busca-texto>
+  </div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
+      <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4 docente-table">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
-          <th class="min-w-100px">-</th> <th class="min-w-150px">Nome</th>
+          <th class="min-w-80px text-center">#</th>
+          <th class="min-w-150px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('nome')">
+              Nome <i class="la ms-1" [ngClass]="iconeOrdenacao('nome')"></i>
+            </button>
+          </th>
           <th class="min-w-150px">Matrícula</th>
           <th class="min-w-100px">Vaga</th>
           <th class="min-w-100px">Formação</th>
+          <th class="min-w-200px">Formação completa</th>
           <th class="min-w-120px">Departamento</th>
+          <th class="min-w-80px text-center">Ativo</th>
           <th class="min-w-120px text-center">Ações</th>
         </tr>
         </thead>
@@ -25,27 +38,45 @@
             <span class="text-gray-800 fw-bold">{{ (meta.paginaAtual * meta.tamanho) + i + 1 }}</span>
           </td>
           <td>
-            <span class="text-gray-800 fw-bold">{{ docente.nome }}</span>
+            <span class="text-gray-800 fw-bold" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.nome }}</span>
           </td>
           <td>
-            <span class="text-gray-700">{{ docente.matricula }}</span>
+            <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.matricula }}</span>
           </td>
           <td>
-            <span class="text-gray-700">{{ docente.tipoVaga }}</span>
+            <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.tipoVaga }}</span>
           </td>
           <td>
-            <span class="text-gray-700">{{ docente.tipoFormacao }}</span>
+            <span class="text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.tipoFormacao || '-' }}</span>
           </td>
           <td>
-            <span class="text-center text-gray-700">{{ docente.nomeDepartamento }}</span>
+            <span class="text-gray-700 formacao-completa" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.formacaoCompleta || '-' }}</span>
+          </td>
+          <td>
+            <span class="text-center text-gray-700" [ngClass]="{'docente-inativo': docente.ativo === false}">{{ docente.nomeDepartamento }}</span>
           </td>
           <td class="text-center">
-            <div class="d-flex justify-content-center gap-2">
+            <div class="d-inline-flex align-items-center justify-content-center gap-2">
+              <span
+                class="status-dot"
+                [ngClass]="docente.ativo === false ? 'status-dot--inativo' : 'status-dot--ativo'"
+                [title]="docente.ativo === false ? 'Inativo' : 'Ativo'">
+              </span>
+            </div>
+          </td>
+          <td class="text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2 docente-acoes">
               <button
-                class="btn btn-icon btn-light-primary btn-sm me-2"
+                class="btn btn-icon btn-light-primary btn-sm"
                 [routerLink]="['/docente/form/editar', docente.uuid]"
               >
                 <i class="la la-edit fs-3"></i>
+              </button>
+              <button type="button"
+                      class="btn btn-icon btn-sm bg-transparent docente-status-action"
+                      (click)="confirmarStatus(docente, docente.ativo === false)"
+                      [title]="docente.ativo === false ? 'Ativar' : 'Inativar'">
+                <i class="la fs-3 text-dark" [ngClass]="docente.ativo === false ? 'la-check-circle' : 'la-ban'"></i>
               </button>
               <button type="button"
                       class="btn btn-icon btn-light-danger btn-sm" style="color: #d63e3e"
@@ -59,7 +90,7 @@
 
 
         <tr *ngIf="!docentes || docentes.length === 0">
-          <td colspan="7" class="text-center py-10">
+          <td colspan="9" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService, PortalKey } from 'app-core';
+import { LoginService, PortalKey, SelectOption } from 'app-core';
 
 @Component({
   selector: 'app-selecionar-modulo',
@@ -8,6 +8,10 @@ import { LoginService, PortalKey } from 'app-core';
 })
 export class SelecionarModuloComponent implements OnInit {
   public modulos: PortalKey[] = ['admin', 'ensino'];
+  public opcoesModulos: SelectOption[] = this.modulos.map(modulo => ({
+    id: modulo,
+    label: this.formatarModulo(modulo)
+  }));
   public moduloSelecionado: PortalKey | null = null;
   public carregando = true;
   public erroPermissao = false;

@@ -1,0 +1,26 @@
+.busca-texto {
+  position: relative;
+  max-width: 420px;
+}
+
+.busca-texto__icon {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  transform: translateY(-50%);
+  color: #7e8299;
+  font-size: 1.2rem;
+}
+
+.busca-texto__input {
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
+.busca-texto__clear {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  transform: translateY(-50%);
+  color: #7e8299;
+}

@@ -7,6 +7,9 @@ export * from './lib/app-core.module';
 export * from './lib/dto/paginacao/resposta-paginada.dto';
 export * from './lib/components/user-menu/user-menu.component';
 export * from './lib/components/projetos/visualizar-projetos/visualizar-projetos.component';
+export * from './lib/components/oferta-search-select/oferta-search-select.component';
+export * from './lib/components/select-input-default/select-input-default.component';
+
 //unidades usuario
 export * from './lib/components/cruds/unidade-usuario/unidade-usuario.component';
 export * from './lib/components/cruds/unidade-usuario/visualizar-unidade-usuario/visualizar-unidade-usuario.component';
@@ -22,6 +25,7 @@ export * from './lib/services/subarea-conhecimento-service';
 export * from './lib/services/disciplina-service';
 export * from './lib/services/docente-service';
 export * from './lib/services/estrutura-curricular-service';
+export * from './lib/services/oferta-service';
 export * from './lib/services/importacoes/docente-importacao.service';
 export * from './lib/services/importacoes/disciplina-importacao.service';
 export * from './lib/services/importacoes/curso-importacao.service';
@@ -34,6 +38,8 @@ export * from './lib/dto/areaMedia.dto';
 export * from './lib/dto/AreaConhecimento.dto';
 export * from './lib/dto/Curso.dto';
 export * from './lib/dto/Disciplina.dto';
+export * from './lib/dto/DisciplinaCurriculo.dto';
+export * from './lib/dto/DisciplinaOferta.dto';
 export * from './lib/dto/Oferta.dto';
 export * from './lib/dto/Docente.dto';
 export * from './lib/dto/Departamento.dto';

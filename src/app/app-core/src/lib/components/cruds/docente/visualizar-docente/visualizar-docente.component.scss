@@ -1,0 +1,75 @@
+.status-dot {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+.status-dot--ativo {
+  background: #28c7c1;
+}
+
+.status-dot--inativo {
+  background: #ff417d;
+}
+
+.docente-table {
+  th,
+  td {
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    min-height: 48px;
+  }
+
+  tbody td > span,
+  tbody td > div {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+}
+
+.docente-inativo {
+  color: #ff4c74 !important;
+  text-decoration: line-through;
+}
+
+.docente-status-action {
+  color: #181c32;
+}
+
+.formacao-completa {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.docente-status-action:hover {
+  background-color: var(--bs-gray-100) !important;
+}
+
+.docente-acoes {
+  line-height: 1;
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  .btn i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1em;
+    height: 1em;
+    line-height: 1;
+  }
+}

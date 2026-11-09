@@ -24,7 +24,7 @@ export const PORTAIS: Record<PortalKey, PortalConfig> = {
   ensino: {
     key: 'ensino',
     port: '4203',
-    path: '/geral/',
+    path: '/dept-ensino/',
     roles: ['ROLE_ENSINO', 'ENSINO', 'ensino']
   }
 };

@@ -1,15 +1,14 @@
 <div class="selecao-modulo">
   <div class="selecao-card" *ngIf="!carregando">
     <div class="campo">
-      <label for="modulo">Módulo</label>
-      <select
-        id="modulo"
-        class="form-select"
-        [(ngModel)]="moduloSelecionado">
-        <option *ngFor="let modulo of modulos" [ngValue]="modulo">
-          {{ formatarModulo(modulo) }}
-        </option>
-      </select>
+      <lib-select-input-default
+        label="Módulo"
+        [(ngModel)]="moduloSelecionado"
+        [opcoes]="opcoesModulos"
+        [clearable]="false"
+        [searchable]="false"
+        groupClass="form-group mb-0">
+      </lib-select-input-default>
     </div>
 
     <div class="acoes">

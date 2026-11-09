@@ -16,5 +16,7 @@ export class FormInput {
 
   @Input() type: string = 'text';
 
+  @Input() placeholder: string = '';
+
   @Input() supportText: string = 'Support Text';
 }

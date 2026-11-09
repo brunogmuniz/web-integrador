@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DisciplinaService, DisciplinaDTO, MetadadosPaginacao, RespostaPaginada } from "app-core";
 import Swal from "sweetalert2";
+import { TableSort } from '../../../../utils/table-sort';
 
 @Component({
   selector: 'app-visualizar-disciplina',
@@ -9,6 +10,8 @@ import Swal from "sweetalert2";
 })
 export class VisualizarDisciplinaComponent implements OnInit {
   disciplinas: DisciplinaDTO[] = [];
+  busca = '';
+  ordenacao = new TableSort<'nome' | 'subarea' | 'total' | 'tipo'>('nome', 'asc');
 
   meta: MetadadosPaginacao = {
     paginaAtual: 0,
@@ -24,14 +27,14 @@ export class VisualizarDisciplinaComponent implements OnInit {
   }
 
   carregarDisciplinas(): void {
-    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho).subscribe({
+    this.disciplinaService.findAll(this.meta.paginaAtual, this.meta.tamanho, this.busca, this.ordenacao.coluna, this.ordenacao.direcao).subscribe({
       next: (res: RespostaPaginada<DisciplinaDTO>) => {
-        this.disciplinas = res.conteudo;
+        this.disciplinas = res.conteudo || [];
         this.meta = res.meta;
       },
       error: (err: Error) => {
         console.error('Falha ao carregar a página de disciplinas:', err);
-        void Swal.fire('Erro', 'Não foi possível carregar os registos. Tente novamente mais tarde.', 'error');
+        void Swal.fire('Erro', 'Não foi possível carregar os registros. Tente novamente mais tarde.', 'error');
       }
     });
   }
@@ -40,6 +43,36 @@ export class VisualizarDisciplinaComponent implements OnInit {
     this.meta.paginaAtual = evento.pagina;
     this.meta.tamanho = evento.tamanho;
     this.carregarDisciplinas();
+  }
+
+  aoBuscar(termo: string): void {
+    this.busca = termo;
+    this.meta.paginaAtual = 0;
+    this.carregarDisciplinas();
+  }
+
+  ordenarPor(coluna: 'nome' | 'subarea' | 'total' | 'tipo'): void {
+    this.ordenacao.ordenarPor(coluna, () => {
+      this.meta.paginaAtual = 0;
+      this.carregarDisciplinas();
+    });
+  }
+
+  iconeOrdenacao(coluna: 'nome' | 'subarea' | 'total' | 'tipo'): string {
+    return this.ordenacao.iconeOrdenacao(coluna);
+  }
+
+  obterSiglaClassificacao(classificacao?: string | null): string {
+    const siglas: Record<string, string> = {
+      'acumulativa total': 'ACT',
+      'acumulativa parcial': 'ACP',
+      'estágio não supervisionado': 'ESTnS',
+      'estágio supervisionado': 'ESTS',
+      'trabalho de conclusão de curso': 'TCC'
+    };
+
+    const chave = classificacao?.trim().toLocaleLowerCase('pt-BR');
+    return chave ? siglas[chave] || classificacao!.trim() : '-';
   }
 
   confirmarExclusao(uuid: string | null | undefined): void {
@@ -70,10 +103,18 @@ export class VisualizarDisciplinaComponent implements OnInit {
         void Swal.fire('Excluído!', 'A disciplina foi removida.', 'success');
         this.carregarDisciplinas();
       },
-      error: (_err: any) => {
-        console.error('Erro ao excluir disciplina:', _err);
-        void Swal.fire('Erro', 'Não foi possível excluir o registro.', 'error');
+      error: (err: any) => {
+        console.error('Erro ao excluir disciplina:', err);
+        void Swal.fire('Erro', this.obterMensagemErroExclusao(err), 'error');
       }
     });
+  }
+
+  private obterMensagemErroExclusao(err: any): string {
+    if (err?.status === 409) {
+      return err?.error?.message || err?.error?.detail || err?.error || 'Não é possível excluir esta disciplina porque ela possui vínculos.';
+    }
+
+    return 'Não foi possível excluir o registro.';
   }
 }

@@ -5,6 +5,7 @@ import { forkJoin } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { UnidadeUsuarioService, UnidadeUsuarioRequestDTO } from '../../../../services/unidade-usuario.service';
 import { UnidadeService } from '../../../../services/unidade.service';
+import { SelectOption } from 'app-core';
 
 @Component({
   selector: 'app-cadastrar-unidade-usuario',
@@ -16,12 +17,18 @@ export class CadastrarUnidadeUsuarioComponent implements OnInit {
 
   public unidades: any[] = [];
   public usuarios: any[] = [];
+  public opcoesUnidades: SelectOption[] = [];
+  public opcoesUsuarios: SelectOption[] = [];
 
   public readonly papeis: string[] = [
     'RESPONSAVEL',
     'PARTICIPANTE',
     'RESPONSAVEL_ADJUNTO',
   ];
+  public opcoesPapeis: SelectOption[] = this.papeis.map(papel => ({
+    id: papel,
+    label: this.formatarPapel(papel)
+  }));
 
   public isLoading = false;
   public errorMessage: string | null = null;
@@ -66,6 +73,14 @@ export class CadastrarUnidadeUsuarioComponent implements OnInit {
         next: (res: any) => {
           this.unidades = res.unidades?.content || res.unidades || [];
           this.usuarios = res.usuarios?.content || res.usuarios || [];
+          this.opcoesUnidades = this.unidades.map(unidade => ({
+            id: unidade.uuid,
+            label: unidade.nome || ''
+          }));
+          this.opcoesUsuarios = this.usuarios.map(usuario => ({
+            id: usuario.id,
+            label: usuario.nome || ''
+          }));
 
           if (this.isEdicao && this.uuidEdicao) {
             this.carregarVinculo(this.uuidEdicao);

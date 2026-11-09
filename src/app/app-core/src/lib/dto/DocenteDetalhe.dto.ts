@@ -6,12 +6,17 @@ export interface DocenteDetalheDTO {
   nome: string;
   matricula: string;
   tipoVaga: string;
-  tipoFormacao: string;
+  tipoFormacao: string | null;
+  formacaoCompleta?: string | null;
   licenciatura: boolean;
   origemVaga: string;
   nomeDepartamento: string;
   idDepartamento: number;
   departamento: string;
+  ativo?: boolean;
   subAreas: DocenteSubAreaPercentualDTO[];
   totalEncargos: number;
+  cargaTotal: number;
+  cargaTeorica: number;
+  cargaPratica: number;
 }

@@ -1,0 +1,27 @@
+<div [ngClass]="groupClass">
+  <label *ngIf="label" class="form-label text-gray-700 fs-7" [ngClass]="{'required': required}">
+    {{ label }}
+  </label>
+
+  <ng-select
+    [items]="opcoes"
+    bindLabel="label"
+    bindValue="id"
+    [placeholder]="placeholder"
+    [formControl]="internalControl"
+    (blur)="markAsTouched()"
+    (change)="onSelectChange($event)"
+    (clear)="onSelectChange(null)"
+    [searchable]="searchable"
+    [clearable]="isClearable"
+    [appendTo]="appendTo"
+    [compareWith]="compareWith"
+    [notFoundText]="notFoundText"
+    [ngClass]="{'is-invalid': showInvalidFeedback}"
+    class="ng-select-outline {{ selectClass }}">
+  </ng-select>
+
+  <div *ngIf="showInvalidFeedback" class="invalid-feedback d-block mt-1">
+    <span *ngIf="activeControl?.errors?.['required']">Este campo é de preenchimento obrigatório.</span>
+  </div>
+</div>

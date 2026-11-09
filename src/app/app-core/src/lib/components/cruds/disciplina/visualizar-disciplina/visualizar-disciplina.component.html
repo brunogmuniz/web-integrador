@@ -6,24 +6,55 @@
 </div>
 
 <div class="card">
+  <div class="card-header border-0 pt-6">
+    <app-busca-texto
+      placeholder="Buscar disciplina"
+      (buscaChange)="aoBuscar($event)">
+    </app-busca-texto>
+  </div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-row-bordered table-row-gray-300 align-middle gs-3 gy-4">
         <thead>
         <tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">
           <th class="min-w-100px">#</th>
-          <th class="min-w-200px">Nome</th>
-          <th class="min-w-150px">Subárea</th>
+          <th class="min-w-200px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('nome')">
+              Nome <i class="la ms-1" [ngClass]="iconeOrdenacao('nome')"></i>
+            </button>
+          </th>
+          <th class="min-w-150px">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('subarea')">
+              Subárea <i class="la ms-1" [ngClass]="iconeOrdenacao('subarea')"></i>
+            </button>
+          </th>
           <th class="min-w-100px text-center">Teórica</th>
           <th class="min-w-100px text-center">Prática</th>
-          <th class="min-w-100px text-center">Total</th>
-          <th class="min-w-50px text-center">EAD</th>
+          <th class="min-w-100px text-center">EAD</th>
+          <th class="min-w-100px text-center">Ext. Prática</th>
+          <th class="min-w-100px text-center">Ext. Teórica</th>
+          <th class="min-w-100px text-center">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('total')">
+              Total <i class="la ms-1" [ngClass]="iconeOrdenacao('total')"></i>
+            </button>
+          </th>
+          <th class="min-w-100px text-center">
+            <button type="button" class="table-sort-button" (click)="ordenarPor('tipo')">
+              Tipo <i class="la ms-1" [ngClass]="iconeOrdenacao('tipo')"></i>
+            </button>
+          </th>
+          <th class="min-w-120px text-center">Classificação</th>
           <th class="min-w-100px text-center">Ações</th>
         </tr>
         </thead>
         <tbody class="fs-6">
         <tr *ngFor="let item of disciplinas">
-          <td><span class="text-gray-800 fw-bold">{{ item.codigoDisciplina }}</span></td>
+          <td>
+            <div class="d-flex flex-column">
+              <span class="text-gray-800 fw-bold">{{ item.codigoDisciplina }}</span>
+              <span class="text-gray-600 fs-8" *ngIf="item.numero">({{ item.numero }})</span>
+            </div>
+          </td>
           <td>{{ item.nome }}</td>
           <td>
             <span class="text-dark fw-semibold fs-8" *ngIf="item.nomeSubarea">
@@ -32,10 +63,21 @@
           </td>
           <td class="text-center">{{ item.cargaHorariaTeorica || 0 }}</td>
           <td class="text-center">{{ item.cargaHorariaPratica || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaEad || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaExtensaoPratica || 0 }}</td>
+          <td class="text-center">{{ item.cargaHorariaExtensaoTeorica || 0 }}</td>
           <td class="text-center fw-bold">{{ item.cargaHoraria }}</td>
+          <td class="text-center">{{ item.tipoDisciplina || '-' }}</td>
           <td class="text-center">
-            <span *ngIf="item.ead">Sim</span>
-            <span *ngIf="!item.ead">Não</span>
+            <span
+              *ngIf="item.classificacao; else semClassificacao"
+              class="classification-popover"
+              tabindex="0"
+              [attr.title]="item.classificacao"
+              [attr.aria-label]="item.classificacao">
+              {{ obterSiglaClassificacao(item.classificacao) }}
+            </span>
+            <ng-template #semClassificacao>-</ng-template>
           </td>
           <td class="text-center">
             <a [routerLink]="['/disciplina/form/editar', item.uuid]"
@@ -51,7 +93,7 @@
           </td>
         </tr>
         <tr *ngIf="disciplinas.length === 0">
-          <td colspan="8" class="text-center py-10">
+          <td colspan="12" class="text-center py-10">
             <div class="d-flex flex-column align-items-center">
               <i class="la la-info-circle fs-3x text-gray-400 mb-3"></i>
               <span class="text-gray-600 fw-semibold fs-5">Nenhum registro encontrado.</span>

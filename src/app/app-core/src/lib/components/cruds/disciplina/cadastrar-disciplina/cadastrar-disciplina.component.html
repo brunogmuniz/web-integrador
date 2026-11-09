@@ -1,33 +1,46 @@
 <div class="card card-custom">
   <div class="card-header">
-    <h3 class="card-title">Nova Disciplina</h3>
+    <h3 class="card-title">{{ tituloCard }}</h3>
   </div>
   <div class="card-body">
     <form [formGroup]="form">
       <div class="row g-4">
         <div class="col-md-6">
           <label class="form-label required">Nome</label>
-          <input type="text" class="form-control form-control-solid" formControlName="nome"
+          <input type="text" class="form-control form-control-solid" formControlName="nome" placeholder="Digite o nome"
                  [class.is-invalid]="form.get('nome')?.invalid && (form.get('nome')?.touched || form.get('nome')?.dirty)"/>
           <div class="invalid-feedback">Campo obrigatório (min. 3 caracteres)</div>
         </div>
 
         <div class="col-md-3">
-          <label class="form-label required">Código</label>
-          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina"
+          <label class="form-label required">Sigla</label>
+          <input type="text" class="form-control form-control-solid" formControlName="codigoDisciplina" placeholder="Digite a sigla"
                  [class.is-invalid]="form.get('codigoDisciplina')?.invalid && (form.get('codigoDisciplina')?.touched || form.get('codigoDisciplina')?.dirty)"/>
           <div class="invalid-feedback">Campo obrigatório</div>
         </div>
 
         <div class="col-md-3">
-          <label for="subarea">Subárea do Conhecimento</label>
-          <select class="form-select" formControlName="subareaId" id="subarea">
-            <option [ngValue]="null">Selecione...</option>
-            <option *ngFor="let item of subareas" [value]="item.id">
-              {{ item.nome }}
-            </option>
-          </select>
-          <div class="invalid-feedback">Campo obrigatório</div>
+          <label class="form-label">Código</label>
+          <input type="text" class="form-control form-control-solid" formControlName="numero" placeholder="Digite o código"/>
+        </div>
+
+        <div class="col-md-6">
+          <lib-select-input-default
+            label="Subárea do Conhecimento"
+            formControlName="subareaId"
+            placeholder="Selecione..."
+            [required]="true"
+            [opcoes]="opcoesSubareas">
+          </lib-select-input-default>
+        </div>
+
+        <div class="col-md-6">
+          <lib-select-input-default
+            label="Classificação"
+            formControlName="classificacao"
+            placeholder="Selecione..."
+            [opcoes]="opcoesClassificacao">
+          </lib-select-input-default>
         </div>
 
         <div class="col-md-2">
@@ -40,10 +53,37 @@
           <input type="number" class="form-control form-control-solid" formControlName="cargaHorariaPratica" min="0"/>
         </div>
 
-        <div class="col-md-2 d-flex align-items-center mt-8">
+        <div class="col-md-2">
+          <label class="form-label required">CH EAD</label>
+          <input type="number" class="form-control form-control-solid" formControlName="cargaHorariaEad" min="0"/>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label required">CH Extensão Prática</label>
+          <input type="number" class="form-control form-control-solid" formControlName="cargaHorariaExtensaoPratica" min="0"/>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label required">CH Extensão Teórica</label>
+          <input type="number" class="form-control form-control-solid" formControlName="cargaHorariaExtensaoTeorica" min="0"/>
+        </div>
+
+        <div class="col-md-2">
+          <lib-select-input-default
+            label="Tipo"
+            formControlName="tipoDisciplina"
+            placeholder="Selecione..."
+            [required]="true"
+            [clearable]="false"
+            [searchable]="false"
+            [opcoes]="opcoesTipoDisciplina">
+          </lib-select-input-default>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-center mt-auto pb-2">
           <div class="form-check form-check-custom form-check-solid">
-            <input class="form-check-input" type="checkbox" formControlName="ead" id="chkEad"/>
-            <label class="form-check-label fw-bold cursor-pointer" for="chkEad">
+            <input class="form-check-input" type="checkbox" id="ead" formControlName="ead" />
+            <label class="form-check-label ms-2" for="ead">
               EAD
             </label>
           </div>

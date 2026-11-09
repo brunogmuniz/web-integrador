@@ -1,8 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .kt-portlet {
+  background: #ffffff;
+  border: 1px solid #e7edf2;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 82, 144, 0.05);
   font-family: "Barlow", sans-serif;
   font-weight: 200;
+}
+
+.kt-portlet__body {
+  padding: 26px 24px 20px;
+}
+
+.tabela-controles {
+  align-items: flex-start;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
 
 .search-wrapper {position: relative;width: 300px;}
@@ -124,9 +140,9 @@
 .legenda-cores {
   display: flex;
   gap: 25px;
-  justify-content: flex-start;
+  justify-content: flex-end;
   font-size: 0.85rem;
-  margin-top: 15px;
+  margin: 4px 0 0;
 }
 
 .legenda-item {
@@ -153,6 +169,12 @@
   text-align: center !important;
 }
 
+.analise-table { table-layout: fixed; width: 100%; }
+.analise-table th { width: auto !important; }
+.collapse-row > td,
+.subarea-table-wrapper { background-color: #ffffff !important; }
+.subarea-table-wrapper { padding: 16px 0 20px; }
+
 .table-sm th,
 .table-sm td {
   text-align: center !important;
@@ -160,5 +182,20 @@
 
 .btn.btn-secondary.btn-sm.btn-icon i {
   color: #005290 !important;
+}
+
+@media (max-width: 768px) {
+  .tabela-controles {
+    flex-direction: column;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .legenda-cores {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
 }
 

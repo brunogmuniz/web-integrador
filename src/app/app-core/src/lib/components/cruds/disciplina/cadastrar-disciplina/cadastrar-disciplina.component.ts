@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO } from "app-core";
+import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, DisciplinaDTO, SelectOption } from "app-core";
 
 @Component({
   selector: 'app-cadastrar-disciplina',
@@ -14,6 +14,18 @@ import { DisciplinaService, SubareaConhecimentoService, SubareaConhecimentoDTO, 
 export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public subareas: SubareaConhecimentoDTO[] = [];
+  public opcoesSubareas: SelectOption[] = [];
+  public opcoesTipoDisciplina: SelectOption[] = [
+    { id: 'Regular', label: 'Regular' },
+    { id: 'DCG', label: 'DCG' }
+  ];
+  public opcoesClassificacao: SelectOption[] = [
+    { id: 'Acumulativa total', label: 'Acumulativa total' },
+    { id: 'Acumulativa parcial', label: 'Acumulativa parcial' },
+    { id: 'Estágio não supervisionado', label: 'Estágio não supervisionado' },
+    { id: 'Estágio supervisionado', label: 'Estágio supervisionado' },
+    { id: 'Trabalho de conclusão de curso', label: 'Trabalho de conclusão de curso' }
+  ];
   public uuidDisciplina?: string;
   public loading: boolean = false;
 
@@ -29,10 +41,16 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       nome: [null, [Validators.required, Validators.minLength(3)]],
       codigoDisciplina: [null, Validators.required],
+      numero: [null],
+      classificacao: [null],
       subareaId: [null, Validators.required],
       cargaHorariaTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHorariaPratica: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaEad: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaExtensaoPratica: [0, [Validators.required, Validators.min(0)]],
+      cargaHorariaExtensaoTeorica: [0, [Validators.required, Validators.min(0)]],
       cargaHoraria: [{ value: 0, disabled: true }],
+      tipoDisciplina: [null, Validators.required],
       ead: [false]
     });
   }
@@ -54,6 +72,10 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  public get tituloCard(): string {
+    return this.uuidDisciplina ? 'Editar Disciplina' : 'Nova Disciplina';
+  }
+
   private carregarDadosIniciais(uuid?: string): void {
     this.loading = true;
 
@@ -68,6 +90,10 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.subareas = res.subareas.conteudo || [];
+          this.opcoesSubareas = this.subareas.map(subarea => ({
+            id: subarea.id as number,
+            label: subarea.nome || ''
+          }));
 
           if (res.disciplina) {
             this.preencherFormulario(res.disciplina);
@@ -84,24 +110,28 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
   }
 
   private preencherFormulario(disciplina: DisciplinaDTO): void {
-    this.form.patchValue(disciplina);
+    this.form.patchValue({
+      ...disciplina,
+      cargaHorariaEad: disciplina.cargaHorariaEad ?? 0,
+      cargaHorariaExtensaoPratica: disciplina.cargaHorariaExtensaoPratica ?? 0,
+      cargaHorariaExtensaoTeorica: disciplina.cargaHorariaExtensaoTeorica ?? 0
+    });
     this.form.get('cargaHoraria')?.setValue(disciplina.cargaHoraria || 0, { emitEvent: false });
   }
 
   private configurarCalculoAutomatico(): void {
-    const ctrlTeorica = this.form.get('cargaHorariaTeorica');
-    const ctrlPratica = this.form.get('cargaHorariaPratica');
-
-    if (!ctrlTeorica || !ctrlPratica) return;
-
-    ctrlTeorica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
-    ctrlPratica.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.atualizarCargaTotal());
+    ['cargaHorariaTeorica', 'cargaHorariaPratica', 'cargaHorariaEad',
+      'cargaHorariaExtensaoPratica', 'cargaHorariaExtensaoTeorica'].forEach(campo => {
+      this.form.get(campo)?.valueChanges.pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.atualizarCargaTotal());
+    });
   }
 
   private atualizarCargaTotal(): void {
-    const teorica = Number(this.form.get('cargaHorariaTeorica')?.value) || 0;
-    const pratica = Number(this.form.get('cargaHorariaPratica')?.value) || 0;
-    this.form.get('cargaHoraria')?.setValue(teorica + pratica, { emitEvent: false });
+    const total = ['cargaHorariaTeorica', 'cargaHorariaPratica', 'cargaHorariaEad',
+      'cargaHorariaExtensaoPratica', 'cargaHorariaExtensaoTeorica']
+      .reduce((soma, campo) => soma + (Number(this.form.get(campo)?.value) || 0), 0);
+    this.form.get('cargaHoraria')?.setValue(total, { emitEvent: false });
   }
 
   public salvar(): void {
@@ -115,7 +145,6 @@ export class CadastrarDisciplinaComponent implements OnInit, OnDestroy {
     const payload: DisciplinaDTO = {
       ...formValue,
       uuid: this.uuidDisciplina,
-      tipoDisciplina: formValue.ead ? 'EAD' : 'PRESENCIAL',
     };
 
     this.loading = true;

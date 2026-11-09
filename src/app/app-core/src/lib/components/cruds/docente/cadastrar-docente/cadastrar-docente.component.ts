@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { DepartamentoDTO, DocenteService, DepartamentoService } from "app-core";
+import { DepartamentoDTO, DocenteService, DepartamentoService, SelectOption } from "app-core";
 import { Router, ActivatedRoute } from "@angular/router";
 import Swal from 'sweetalert2';
 
@@ -12,6 +12,26 @@ import Swal from 'sweetalert2';
 export class CadastrarDocenteComponent implements OnInit {
   docenteForm!: FormGroup;
   departamentos: DepartamentoDTO[] = [];
+  opcoesDepartamentos: SelectOption[] = [];
+  opcoesTipoVaga: SelectOption[] = [
+    { id: 'Efetivo', label: 'Efetivo' },
+    { id: 'Substituto', label: 'Substituto' },
+    { id: 'Visitante', label: 'Visitante' }
+  ];
+  opcoesTipoFormacao: SelectOption[] = [
+    { id: 'Graduação', label: 'Graduação' },
+    { id: 'Especialização', label: 'Especialização' },
+    { id: 'Mestrado', label: 'Mestrado' },
+    { id: 'Doutorado', label: 'Doutorado' }
+  ];
+  opcoesOrigemVaga: SelectOption[] = [
+    { id: 'Concurso Público', label: 'Concurso Público' },
+    { id: 'Processo Seletivo', label: 'Processo Seletivo' }
+  ];
+  opcoesLicenciatura: SelectOption[] = [
+    { id: true, label: 'Sim' },
+    { id: false, label: 'Não' }
+  ];
   modoEdicao = false;
   docenteUuid?: string;
 
@@ -29,13 +49,14 @@ export class CadastrarDocenteComponent implements OnInit {
     this.verificarEdicao();
   }
 
-  private initForm() {
+  private initForm(): void {
     this.docenteForm = this.fb.group({
       nome: ['', Validators.required],
       matricula: ['', Validators.required],
       tipoVaga: [null, Validators.required],
       tipoFormacao: [null, Validators.required],
-      licenciatura: [false, Validators.required],
+      formacaoCompleta: [null],
+      licenciatura: [null, Validators.required],
       origemVaga: [null, Validators.required],
       departamentoId: [null, Validators.required],
     });
@@ -45,6 +66,10 @@ export class CadastrarDocenteComponent implements OnInit {
     this.departamentoService.findAll(0, 500).subscribe({
       next: (res) => {
         this.departamentos = res.conteudo;
+        this.opcoesDepartamentos = this.departamentos.map(departamento => ({
+          id: departamento.id as number,
+          label: departamento.nome || ''
+        }));
       },
       error: (err) => {
         console.error('Erro ao carregar departamentos:', err);
@@ -67,13 +92,11 @@ export class CadastrarDocenteComponent implements OnInit {
   private carregarDocente(uuid: string): void {
     this.docenteService.buscarPorId(uuid).subscribe({
       next: (doc: any) => {
-        this.docenteForm.patchValue(doc);
-
-        if (doc.departamento) {
-          this.docenteForm.get('departamentoId')?.setValue(doc.departamento.id);
-        } else if (doc.departamentoId) {
-          this.docenteForm.get('departamentoId')?.setValue(doc.departamentoId);
-        }
+        const departamentoId = doc.departamentoId ?? doc.idDepartamento ?? doc.departamento?.id ?? null;
+        this.docenteForm.patchValue({
+          ...doc,
+          departamentoId: departamentoId !== null ? Number(departamentoId) : null
+        });
       },
       error: (err) => {
         console.error(err);
@@ -83,7 +106,7 @@ export class CadastrarDocenteComponent implements OnInit {
     });
   }
 
-  get c() {
+  get controlesFormulario() {
     return this.docenteForm.controls as { [key: string]: FormControl };
   }
 
@@ -94,8 +117,10 @@ export class CadastrarDocenteComponent implements OnInit {
       return;
     }
 
+    const docenteDto = this.docenteForm.getRawValue();
+
     if (this.modoEdicao && this.docenteUuid) {
-      this.docenteService.update(this.docenteUuid, this.docenteForm.value).subscribe({
+      this.docenteService.update(this.docenteUuid, docenteDto).subscribe({
         next: () => {
           void Swal.fire('Sucesso', 'Docente atualizado com sucesso!', 'success');
           void this.router.navigate(['/docente']);
@@ -106,13 +131,14 @@ export class CadastrarDocenteComponent implements OnInit {
         }
       });
     } else {
-      this.docenteService.create(this.docenteForm.value).subscribe({
+      this.docenteService.create(docenteDto).subscribe({
         next: () => {
           void Swal.fire('Sucesso', 'Docente cadastrado com sucesso!', 'success');
           void this.router.navigate(['/docente']);
         },
-        error: () => {
-          console.error('error');
+        error: (erro) => {
+          console.error(erro);
+          void Swal.fire('Erro', 'Não foi possível cadastrar o docente.', 'error');
         }
       });
     }

@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import {
   DisciplinaImportacaoService,
+  SelectOption,
   SubareaConhecimentoService,
   SubareaConhecimentoDTO,
   UploadPlanilhaComponent
@@ -19,6 +20,7 @@ export class DisciplinasComponent implements OnInit {
   isUploading = false;
   subareaId: number | null = null;
   subareas: SubareaConhecimentoDTO[] = [];
+  opcoesSubareas: SelectOption[] = [];
 
   constructor(
     private readonly importService: DisciplinaImportacaoService,
@@ -33,6 +35,10 @@ export class DisciplinasComponent implements OnInit {
     this.subareaService.findAll(0, 500).subscribe({
       next: (res) => {
         this.subareas = res.conteudo;
+        this.opcoesSubareas = this.subareas.map(subarea => ({
+          id: subarea.id as number,
+          label: subarea.nome || ''
+        }));
       },
       error: (err) => {
         console.error('Erro ao carregar departamentos:', err);
